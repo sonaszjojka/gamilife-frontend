@@ -66,7 +66,7 @@ For more information on using the Angular CLI, including detailed command refere
 
 Init project structure in `src/app`. It might change depending on our needs.
 
-![alt text](project-structure-ss.png)
+![alt text](./public/project-structure-ss.png)
 
 ### External Material Libraries
 
