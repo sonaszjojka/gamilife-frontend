@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { AuthService } from '../../services/auth.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -26,9 +26,10 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./navigation.component.css'],
 })
 export class NavigationComponent {
-  isDarkTheme = signal(true);
+  public authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(public authService: AuthService) {}
+  isDarkTheme = signal(true);
 
   toggleTheme() {
     this.isDarkTheme.update((prev) => !prev);
