@@ -16,6 +16,7 @@
 .navbar .logo {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .navbar .logo img {
@@ -60,6 +61,13 @@
     background-color: var(--bg-hover);
     border-bottom-color: var(--fifth-color);
     border-radius: var(--border-radius);
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+    flex-shrink: 0;
 }
 
 .nav-switch-mode {
@@ -125,19 +133,86 @@
 
 @media (max-width: 768px) {
     .navbar {
-        padding: 0 var(--spacing-small);
+        padding: 0 4px;
+        height: 56px;
+    }
+
+    .navbar .logo {
+        margin-right: 0;
     }
 
     .navbar .logo img {
-        height: 80px;
-        padding: 0 var(--spacing-small);
+        height: 60px;
+        padding: 0 4px;
+    }
+
+    .nav-menu {
+        padding-left: 0;
+        flex: 0 0 auto;
+        gap: 0;
     }
 
     .nav-menu>li {
-        padding: 0 var(--spacing-small);
+        padding: 0 4px;
+        font-size: var(--font-size-small);
+    }
+
+    .navbar-actions {
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .user-menu {
+        padding: 4px;
+        gap: 2px;
+    }
+
+    .user-menu-text {
+        display: none;
     }
 
     .nav-switch-mode {
-        padding: 0 var(--spacing-small);
+        padding: 0 4px;
+    }
+
+    ::ng-deep .ant-switch {
+        transform: scale(0.85);
+    }
+
+    .user-menu nz-icon[nzType="down"] {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0 2px;
+        height: 52px;
+    }
+
+    .navbar .logo img {
+        height: 50px;
+        padding: 0 2px;
+    }
+
+    .nav-menu>li {
+        padding: 0 2px;
+        font-size: var(--font-size-xs);
+    }
+
+    .navbar-actions {
+        gap: 2px;
+    }
+
+    .user-menu {
+        padding: 2px;
+    }
+
+    .nav-switch-mode {
+        padding: 0 2px;
+    }
+
+    ::ng-deep .ant-switch {
+        transform: scale(0.75);
     }
 }
