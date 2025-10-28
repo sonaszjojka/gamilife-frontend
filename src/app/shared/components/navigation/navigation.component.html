@@ -1,0 +1,42 @@
+<nav class="navbar">
+  <div class="logo">
+    <img src="/logo_gl.png" alt="GamiLife Logo" />
+  </div>
+
+  <ul nz-menu nzMode="horizontal" class="nav-menu" [nzSelectable]="false">
+    <li nz-menu-item routerLink="/">Home</li>
+    <li nz-menu-item routerLink="/about">About us</li>
+  </ul>
+
+  <nz-switch
+    class="nav-switch-mode"
+    [ngModel]="isDarkTheme()"
+    (click)="toggleTheme()"
+    [nzCheckedChildren]="checkedTemplate"
+    [nzUnCheckedChildren]="unCheckedTemplate"
+    nzControl
+  >
+  </nz-switch>
+  <ng-template #checkedTemplate
+    ><nz-icon nzType="moon" nzTheme="outline"
+  /></ng-template>
+  <ng-template #unCheckedTemplate
+    ><nz-icon nzType="sun" nzTheme="outline"
+  /></ng-template>
+
+  <a nz-dropdown [nzDropdownMenu]="menu" class="user-menu">
+    <span>Account</span>
+    <nz-icon nzType="user" nzTheme="outline"></nz-icon>
+    <nz-icon nzType="down"></nz-icon>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu" class="navbar-dropdown-menu">
+    <ul nz-menu class="navbar-dropdown-ul">
+      <li nz-menu-item routerLink="/login" class="navbar-dropdown-item">
+        Login
+      </li>
+      <li nz-menu-item routerLink="/register" class="navbar-dropdown-item">
+        Register
+      </li>
+    </ul>
+  </nz-dropdown-menu>
+</nav>
