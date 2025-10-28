@@ -1,1 +1,71 @@
-<p>guest-home works!</p>
+<div class="guest-page">
+  <div class="guest-overlay"></div>
+
+  <div class="guest-content">
+    <nz-card
+      class="guest-card"
+      nzBordered="false"
+      [nzBodyStyle]="{ padding: '0' }"
+    >
+      <div class="guest-card-inner">
+        <h1 class="guest-title">Welcome to GamiLife</h1>
+
+        <p class="guest-subtitle">
+          Organize your habits, stay motivated, and track your progress — all in
+          one place.
+        </p>
+
+        <div class="guest-features">
+          <div class="guest-feature-item">
+            <nz-icon nzType="trophy" nzTheme="outline"></nz-icon>
+            <span>Gamified Progress Tracking</span>
+          </div>
+          <div class="guest-feature-item">
+            <nz-icon nzType="calendar" nzTheme="outline"></nz-icon>
+            <span>Daily Habit Builder</span>
+          </div>
+          <div class="guest-feature-item">
+            <nz-icon nzType="rise" nzTheme="outline"></nz-icon>
+            <span>Achievement System</span>
+          </div>
+        </div>
+
+        <div class="guest-actions">
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
+            class="guest-button guest-button-primary"
+            (click)="goToRegister()"
+          >
+            <nz-icon nzType="user-add" nzTheme="outline"></nz-icon>
+            <span>Sign Up Now</span>
+          </button>
+
+          <button
+            nz-button
+            nzSize="large"
+            class="guest-button guest-button-secondary"
+            (click)="goToLogin()"
+          >
+            <nz-icon nzType="login" nzTheme="outline"></nz-icon>
+            <span>Login</span>
+          </button>
+        </div>
+
+        <div class="guest-learn-more">
+          <a routerLink="/about" class="guest-link">
+            Learn more about GamiLife
+            <nz-icon nzType="arrow-right" nzTheme="outline"></nz-icon>
+          </a>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+
+  <div class="background-decoration">
+    <div class="decoration-circle decoration-circle-1"></div>
+    <div class="decoration-circle decoration-circle-2"></div>
+    <div class="decoration-circle decoration-circle-3"></div>
+  </div>
+</div>
