@@ -1,0 +1,208 @@
+.div-login-page {
+    width: 100%;
+    min-height: calc(100vh - 64px);
+    background: url('/background_guest_page.png') center center / cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: var(--spacing-large);
+    gap: var(--spacing-xl);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.div-left-panel,
+.div-right-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-medium);
+    animation: fadeIn 0.8s ease-in;
+}
+
+.card-inner {
+    width: 100%;
+    max-width: 450px;
+}
+
+.card-sign-up-title {
+    font-size: var(--font-size-xlarge);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-secondary-color);
+    margin-bottom: var(--spacing-small);
+}
+
+.card-sign-up-subtitle {
+    font-size: var(--font-size-medium);
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-large);
+    line-height: var(--line-height-base);
+}
+
+.signup-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-medium);
+}
+
+.login-button,
+.login-form-button {
+    width: 100%;
+    height: 44px;
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-small);
+    transition: all var(--transition-speed);
+}
+
+.login-button-primary,
+::ng-deep .login-form-button.ant-btn-primary {
+    background: var(--third-color);
+    color: var(--text-secondary-color);
+    border: none;
+}
+
+.login-button-primary:hover,
+::ng-deep .login-form-button.ant-btn-primary:hover {
+    background: var(--fifth-color);
+    transform: translateY(-2px);
+}
+
+.login-title {
+    font-size: var(--font-size-xxlarge);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-secondary-color);
+    margin-bottom: var(--spacing-large);
+    text-align: center;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(30, 30, 40, 0.9);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.login-form-margin {
+    margin-bottom: var(--spacing-medium);
+}
+
+.login-form-forgot {
+    font-size: var(--font-size-small);
+    color: var(--third-color);
+    transition: color var(--transition-speed);
+}
+
+.login-form-forgot:hover {
+    color: var(--fifth-color);
+}
+
+.ant-input-password-icon,
+::ng-deep .ant-input-password-icon {
+    cursor: pointer;
+    color: var(--third-color);
+}
+
+::ng-deep .login-form .ant-input-affix-wrapper,
+::ng-deep .login-form .ant-input {
+    font-size: var(--font-size-medium);
+    background: rgba(0, 0, 0, 0.3) !important;
+    color: var(--text-secondary-color) !important;
+}
+
+::ng-deep .login-form .ant-input-affix-wrapper-focused,
+::ng-deep .login-form .ant-input:focus,
+::ng-deep .login-form .ant-input-affix-wrapper:focus-within {
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+::ng-deep .login-form .ant-input::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+::ng-deep .login-form .ant-input-prefix {
+    color: var(--third-color) !important;
+}
+
+::ng-deep .login-form .ant-form-item-label>label {
+    color: var(--text-secondary-color);
+}
+
+::ng-deep .login-form .ant-form-item-explain-error {
+    font-size: var(--font-size-small);
+}
+
+::ng-deep .login-card .ant-card-body {
+    padding: 0 !important;
+}
+
+/* --- RESPONSYWNOŚĆ --- */
+
+@media (max-width: 992px) {
+    .div-login-page {
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-medium);
+        gap: var(--spacing-medium);
+    }
+
+    .div-left-panel,
+    .div-right-panel {
+        padding: var(--spacing-small);
+    }
+
+    .card-inner {
+        max-width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .div-login-page {
+        padding: var(--spacing-small);
+        gap: var(--spacing-small);
+    }
+
+    .div-left-panel,
+    .div-right-panel {
+        padding: var(--spacing-small);
+        margin: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .div-login-page {
+        padding: var(--spacing-small);
+        gap: var(--spacing-xsmall);
+    }
+
+    .div-left-panel,
+    .div-right-panel {
+        padding: 0;
+        margin: 0;
+    }
+}

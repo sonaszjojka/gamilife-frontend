@@ -1,1 +1,84 @@
-<p>login works!</p>
+<div class="div-login-page">
+  <div class="div-left-panel">
+    <div class="card-inner">
+      <h1 class="card-sign-up-title">No account yet?</h1>
+      <p class="card-sign-up-subtitle">
+        Join GamiLife today and start building better habits with our smart and
+        easy-to-use tools.
+      </p>
+      <div class="signup-actions">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          class="login-button login-button-primary"
+          (click)="goToRegister()"
+        >
+          <nz-icon nzType="user-add" nzTheme="outline"></nz-icon>
+          <span>Sign Up Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="div-right-panel">
+    <form
+      nz-form
+      [formGroup]="validateForm"
+      class="login-form"
+      (ngSubmit)="submitForm()"
+    >
+      <h2 class="login-title">Log in</h2>
+      <nz-form-item>
+        <nz-form-control
+          nzRequired
+          nzFor="email"
+          nzErrorTip="Please input valid e-mail!"
+        >
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="text"
+              nz-input
+              formControlName="email"
+              placeholder="E-mail"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your password!">
+          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixVisibility">
+            <input
+              type="password"
+              nz-input
+              formControlName="password"
+              placeholder="Password"
+              [type]="isPasswordVisible() ? 'text' : 'password'"
+            />
+          </nz-input-group>
+          <ng-template #suffixVisibility>
+            <nz-icon
+              class="ant-input-password-icon"
+              [nzType]="isPasswordVisible() ? 'eye-invisible' : 'eye'"
+              (click)="changePasswordVisibility()"
+            />
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-row class="login-form-margin">
+        <div nz-col [nzSpan]="12">
+          <a class="login-form-forgot" routerLink="/forgot-password"
+            >Forgot password</a
+          >
+        </div>
+      </div>
+      <button
+        nz-button
+        class="login-form-button login-form-margin"
+        [nzType]="'primary'"
+      >
+        <nz-icon nzType="login" nzTheme="outline"></nz-icon>
+        <span>Login</span>
+      </button>
+    </form>
+  </div>
+</div>
