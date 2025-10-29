@@ -122,6 +122,13 @@
     color: var(--third-color);
 }
 
+.ant-input-password-icon:hover,
+::ng-deep .ant-input-password-icon:hover {
+    cursor: pointer;
+    color: var(--fifth-color);
+}
+
+
 ::ng-deep .login-form .ant-input-affix-wrapper,
 ::ng-deep .login-form .ant-input {
     font-size: var(--font-size-medium);
@@ -154,8 +161,6 @@
 ::ng-deep .login-card .ant-card-body {
     padding: 0 !important;
 }
-
-/* --- RESPONSYWNOŚĆ --- */
 
 @media (max-width: 992px) {
     .div-login-page {
