@@ -44,7 +44,7 @@
     gap: var(--spacing-medium);
 }
 
-.info-box {
+.email-info {
     display: flex;
     align-items: flex-start;
     gap: var(--spacing-medium);
@@ -54,57 +54,22 @@
     border-left: 3px solid var(--third-color);
 }
 
-.info-icon {
+.email-icon {
     font-size: 24px;
     color: var(--third-color);
     margin-top: 2px;
 }
 
-.info-text {
+.email-text {
     margin: 0;
     line-height: var(--line-height-base);
     color: var(--text-secondary-color);
     flex: 1;
 }
 
-/* Stylowanie formularza w modalu */
-::ng-deep .modal-content .ant-form-item {
-    margin-bottom: 0;
-}
-
-::ng-deep .modal-content .ant-input-affix-wrapper,
-::ng-deep .modal-content .ant-input {
-    width: 100% !important;
-    font-size: var(--font-size-medium);
-    background: rgba(0, 0, 0, 0.3) !important;
-    color: var(--text-secondary-color) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-::ng-deep .modal-content .ant-input-affix-wrapper:hover,
-::ng-deep .modal-content .ant-input:hover {
-    border-color: var(--third-color) !important;
-}
-
-::ng-deep .modal-content .ant-input-affix-wrapper-focused,
-::ng-deep .modal-content .ant-input:focus,
-::ng-deep .modal-content .ant-input-affix-wrapper:focus-within {
-    background: rgba(0, 0, 0, 0.4) !important;
-    border-color: var(--third-color) !important;
-    box-shadow: 0 0 0 2px rgba(var(--third-color-rgb), 0.2) !important;
-}
-
-::ng-deep .modal-content .ant-input::placeholder {
-    color: rgba(255, 255, 255, 0.4) !important;
-}
-
-::ng-deep .modal-content .ant-input-prefix {
-    color: var(--third-color) !important;
-}
-
-::ng-deep .modal-content .ant-form-item-explain-error {
-    font-size: var(--font-size-small);
-    color: #ff4d4f;
+.email-text strong {
+    color: var(--third-color);
+    font-weight: var(--font-weight-semibold);
 }
 
 .status-message {
@@ -116,13 +81,13 @@
     font-size: var(--font-size-medium);
 }
 
-.sending-msg {
+.resending-msg {
     background: rgba(255, 193, 7, 0.1);
     color: #ffc107;
     border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
-.sending-msg nz-icon {
+.resending-msg nz-icon {
     font-size: 18px;
 }
 
@@ -136,13 +101,13 @@
     font-size: 18px;
 }
 
-.error-msg {
-    background: rgba(244, 67, 54, 0.1);
-    color: #f44336;
-    border: 1px solid rgba(244, 67, 54, 0.3);
+.failure-msg {
+    background: rgba(234, 82, 82, 0.1);
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
 }
 
-.error-msg nz-icon {
+.failure-msg nz-icon {
     font-size: 18px;
 }
 

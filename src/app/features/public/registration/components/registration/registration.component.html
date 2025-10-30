@@ -8,6 +8,16 @@
     >
       <h2 class="registration-title">Register</h2>
 
+      <div
+        class="api-error-div"
+        *ngIf="validateForm.hasError('apiError')"
+        class="api-error"
+      >
+        <p class="api-error-p">
+          {{ validateForm.getError("apiError") }}
+        </p>
+      </div>
+
       <nz-form-item>
         <nz-form-label nzRequired nzFor="firstName">First name</nz-form-label>
         <nz-form-control
@@ -77,10 +87,7 @@
 
       <nz-form-item>
         <nz-form-label nzRequired nzFor="password">Password</nz-form-label>
-        <nz-form-control
-          nzErrorTip="Password must be min. 8, max. 128 characters long, 
-          contain at least 1 letter, 1 digit and 1 special character."
-        >
+        <nz-form-control [nzErrorTip]="passwordErrorTpl">
           <nz-input-group [nzSuffix]="suffixVisibility">
             <input
               nz-input
@@ -98,11 +105,19 @@
             ></nz-icon>
           </ng-template>
         </nz-form-control>
+        <ng-template #passwordErrorTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Please input your password!
+          </ng-container>
+          <ng-container *ngIf="control.hasError('passwordStrength')">
+            Password must be 8–128 characters long and include at least one
+            letter, one digit, and one special character.
+          </ng-container>
+        </ng-template>
       </nz-form-item>
-
       <nz-form-item>
         <nz-form-control>
-          <p nz-checkbox formControlName="publicProfile">
+          <p nz-checkbox formControlName="isPublicProfile">
             I want to have a public profile
           </p>
         </nz-form-control>
@@ -110,7 +125,7 @@
 
       <nz-form-item>
         <nz-form-control>
-          <p nz-checkbox formControlName="budgetReports">
+          <p nz-checkbox formControlName="isBudgetReports">
             I want to receive budget reports
           </p>
         </nz-form-control>
@@ -120,9 +135,16 @@
         nz-button
         class="registration-form-button registration-form-margin"
         [nzType]="'primary'"
+        [nzLoading]="isSubmitting()"
+        [disabled]="isSubmitting()"
       >
-        <nz-icon nzType="check" nzTheme="outline"></nz-icon>
-        <span>Register</span>
+        <ng-container *ngIf="!isSubmitting()">
+          <nz-icon nzType="check" nzTheme="outline"></nz-icon>
+          <span>Register</span>
+        </ng-container>
+        <ng-container *ngIf="isSubmitting()">
+          <span>Processing...</span>
+        </ng-container>
       </button>
     </form>
   </div>

@@ -1,8 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzFormModule } from 'ng-zorro-antd/form';
+import { Router, RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import {
   AbstractControl,
   NonNullableFormBuilder,
@@ -10,14 +8,19 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-
+import { environment } from '../../../../../../environments/environment.development';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-registration',
+  standalone: true,
   imports: [
     NzCardModule,
     NzIconModule,
@@ -29,15 +32,18 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     NzPopoverModule,
     RouterModule,
     NzDatePickerModule,
+    CommonModule,
   ],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.css',
+  styleUrls: ['./registration.component.css'],
 })
 export class RegistrationComponent {
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
+  private http = inject(HttpClient);
+  isSubmitting = signal(false);
   isPasswordVisible = signal(false);
-  private password? = signal<string>('');
+  private password = signal<string>('');
 
   validateForm = this.fb.group({
     firstName: this.fb.control('', [
@@ -61,15 +67,36 @@ export class RegistrationComponent {
       Validators.required,
       Validators.minLength(8),
       Validators.maxLength(128),
-      this.passwordValidator.bind(this),
+      this.isPasswordValidator.bind(this),
     ]),
-    publicProfile: this.fb.control(false),
-    budgetReports: this.fb.control(false),
+    isPublicProfile: this.fb.control(false),
+    isBudgetReports: this.fb.control(false),
   });
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
+      this.isSubmitting.update(() => true);
+      const formData = this.validateForm.value;
+      const url = `${environment.apiUrl}/auth/register`;
+
+      this.http.post(url, formData).subscribe({
+        next: (response) => {
+          console.log('Registration successful', response);
+          this.isSubmitting.update(() => false);
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          this.isSubmitting.update(() => false);
+          if (err.status === 400 || err.status === 409) {
+            const detailMessage = err.error?.detail || 'Something went wrong';
+            this.validateForm.setErrors({
+              apiError: detailMessage,
+            });
+          } else {
+            this.validateForm.setErrors({ apiError: 'Something went wrong' });
+          }
+        },
+      });
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -80,11 +107,11 @@ export class RegistrationComponent {
     }
   }
 
-  goToLogin() {
+  goToLogin(): void {
     this.router.navigate(['/login']);
   }
 
-  changePasswordVisibility() {
+  changePasswordVisibility(): void {
     this.isPasswordVisible.update((prev) => !prev);
   }
 
@@ -97,12 +124,12 @@ export class RegistrationComponent {
     return current > today || current < minDate;
   };
 
-  passwordValidator(control: AbstractControl): ValidationErrors | null {
+  isPasswordValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return { required: true };
 
     const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,128}$/;
 
     const valid = passwordRegex.test(value);
     return valid ? null : { passwordStrength: true };
