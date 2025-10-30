@@ -1,1 +1,151 @@
-<p>registration works!</p>
+<div class="div-registration-page">
+  <div class="div-left-panel">
+    <form
+      nz-form
+      [formGroup]="validateForm"
+      class="registration-form"
+      (ngSubmit)="submitForm()"
+    >
+      <h2 class="registration-title">Register</h2>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="firstName">First name</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please provide valid first name - min. 3, max. 50 letters."
+        >
+          <input
+            nz-input
+            id="firstName"
+            formControlName="firstName"
+            placeholder="John"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="lastName">Last name</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please provide valid last name - min. 3, max. 50 letters."
+        >
+          <input
+            nz-input
+            id="lastName"
+            formControlName="lastName"
+            placeholder="Doe"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="username">Username</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please provide valid username - min. 3, max. 20 letters."
+        >
+          <input
+            nz-input
+            id="username"
+            formControlName="username"
+            placeholder="e.g. JohnDoe7"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="email">E-mail</nz-form-label>
+        <nz-form-control nzErrorTip="Please provide valid e-mail!">
+          <input
+            nz-input
+            id="email"
+            formControlName="email"
+            placeholder="e.g. johndoe@gmail.com"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="dateOfBirth"
+          >Date of birth</nz-form-label
+        >
+        <nz-form-control nzErrorTip="Please select your date of birth!">
+          <nz-date-picker
+            formControlName="dateOfBirth"
+            [nzDisabledDate]="disabledFutureDate"
+            nzPlaceHolder="2002-01-01"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="password">Password</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Password must be min. 8, max. 128 characters long, 
+          contain at least 1 letter, 1 digit and 1 special character."
+        >
+          <nz-input-group [nzSuffix]="suffixVisibility">
+            <input
+              nz-input
+              id="password"
+              formControlName="password"
+              [type]="isPasswordVisible() ? 'text' : 'password'"
+              placeholder="Password"
+            />
+          </nz-input-group>
+          <ng-template #suffixVisibility>
+            <nz-icon
+              class="ant-input-password-icon"
+              [nzType]="isPasswordVisible() ? 'eye-invisible' : 'eye'"
+              (click)="changePasswordVisibility()"
+            ></nz-icon>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <p nz-checkbox formControlName="publicProfile">
+            I want to have a public profile
+          </p>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <p nz-checkbox formControlName="budgetReports">
+            I want to receive budget reports
+          </p>
+        </nz-form-control>
+      </nz-form-item>
+
+      <button
+        nz-button
+        class="registration-form-button registration-form-margin"
+        [nzType]="'primary'"
+      >
+        <nz-icon nzType="check" nzTheme="outline"></nz-icon>
+        <span>Register</span>
+      </button>
+    </form>
+  </div>
+
+  <div class="div-right-panel">
+    <div class="card-inner-login">
+      <h1 class="card-login-title">Already have an account?</h1>
+      <p class="card-login-subtitle">
+        Log in to your GamiLife account and start building better habits today
+        with our smart, easy-to-use tools.
+      </p>
+      <div class="login-actions">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          class="login-button login-button-primary"
+          (click)="goToLogin()"
+        >
+          <nz-icon nzType="login" nzTheme="outline"></nz-icon>
+          <span>Log In</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -128,18 +128,38 @@
     color: var(--fifth-color);
 }
 
+::ng-deep .login-form .ant-form-item {
+    margin-bottom: var(--spacing-medium);
+}
+
+::ng-deep .login-form .ant-form-item-label {
+    padding: 0 0 4px;
+}
+
+::ng-deep .login-form .ant-form-item-control {
+    width: 100%;
+}
 
 ::ng-deep .login-form .ant-input-affix-wrapper,
 ::ng-deep .login-form .ant-input {
+    width: 100% !important;
     font-size: var(--font-size-medium);
     background: rgba(0, 0, 0, 0.3) !important;
     color: var(--text-secondary-color) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+::ng-deep .login-form .ant-input-affix-wrapper:hover,
+::ng-deep .login-form .ant-input:hover {
+    border-color: var(--third-color) !important;
 }
 
 ::ng-deep .login-form .ant-input-affix-wrapper-focused,
 ::ng-deep .login-form .ant-input:focus,
 ::ng-deep .login-form .ant-input-affix-wrapper:focus-within {
     background: rgba(0, 0, 0, 0.4) !important;
+    border-color: var(--third-color) !important;
+    box-shadow: 0 0 0 2px rgba(var(--third-color-rgb), 0.2) !important;
 }
 
 ::ng-deep .login-form .ant-input::placeholder {
