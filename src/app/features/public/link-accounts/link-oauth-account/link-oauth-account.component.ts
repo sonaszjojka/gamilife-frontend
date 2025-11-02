@@ -53,20 +53,12 @@ export class LinkOAuthAccountComponent {
   });
 
   open(provider: string, providerId: string, userId: number): void {
-    console.log('LinkOAuthAccountComponent.open() called with:', {
-      provider,
-      providerId,
-      userId,
-    });
-
     this.provider.set(provider);
     this.providerId.set(providerId);
     this.userId.set(userId);
     this.isVisible.set(true);
     this.errorMessage.set(null);
     this.validateForm.reset();
-
-    console.log('Modal visibility set to:', this.isVisible());
   }
 
   close(): void {

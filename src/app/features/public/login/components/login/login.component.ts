@@ -67,17 +67,7 @@ export class LoginComponent implements OnInit {
 
     const state = navigationState || historyState;
 
-    console.log('Login component navigation state:', navigationState);
-    console.log('Login component history state:', historyState);
-    console.log('Login component final state:', state);
-
     if (state?.['linkAccount']) {
-      console.log('Opening link account modal with:', {
-        provider: state['provider'],
-        providerId: state['providerId'],
-        userId: state['userId'],
-      });
-
       setTimeout(() => {
         if (this.linkAccountModal) {
           this.linkAccountModal.open(
@@ -85,20 +75,14 @@ export class LoginComponent implements OnInit {
             state['providerId'],
             state['userId'],
           );
-        } else {
-          console.error('linkAccountModal is not initialized!');
         }
       }, 100);
     }
 
     if (state?.['showEmailVerification']) {
-      console.log('Opening email verification modal for:', state['email']);
-
       setTimeout(() => {
         if (this.verificationModal) {
           this.verificationModal.open(state['email']);
-        } else {
-          console.error('verificationModal is not initialized!');
         }
       }, 100);
     }

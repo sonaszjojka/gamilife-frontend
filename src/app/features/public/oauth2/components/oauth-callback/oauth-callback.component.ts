@@ -73,13 +73,8 @@ export class OAuthCallbackComponent implements OnInit {
         }
       },
       error: (err: HttpErrorResponse) => {
-        console.log('OAuth Error Status:', err.status);
-        console.log('OAuth Error Body:', err.error);
-
         if (err.status === 409) {
           const conflictData = err.error;
-
-          console.log('Conflict data:', conflictData);
 
           const providerName =
             conflictData?.providerName || conflictData?.provider || 'google';
@@ -88,8 +83,6 @@ export class OAuthCallbackComponent implements OnInit {
           const userId = conflictData?.userId || conflictData?.user_id;
 
           if (providerId && userId) {
-            console.log('Navigating to login with link account state');
-
             this.router.navigateByUrl('/login', {
               state: {
                 linkAccount: true,
@@ -99,12 +92,6 @@ export class OAuthCallbackComponent implements OnInit {
               },
             });
             return;
-          } else {
-            console.error('Missing required fields in 409 response:', {
-              providerName,
-              providerId,
-              userId,
-            });
           }
         }
 
