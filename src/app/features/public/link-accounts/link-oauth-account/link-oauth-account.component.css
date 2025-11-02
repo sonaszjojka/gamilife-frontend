@@ -106,6 +106,33 @@
     color: #ff4d4f;
 }
 
+.password-toggle-btn {
+    padding: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    line-height: 1 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.password-toggle-btn:hover,
+.password-toggle-btn:focus {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.password-toggle-btn span {
+    color: var(--third-color) !important;
+    transition: color 0.3s;
+    font-size: 16px;
+}
+
+.password-toggle-btn:hover span {
+    color: var(--fifth-color) !important;
+}
+
 .status-message {
     display: flex;
     align-items: center;
@@ -164,7 +191,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-::ng-deep .modal-button.ant-btn:hover {
+::ng-deep .modal-button.ant-btn:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.15) !important;
     border-color: var(--third-color) !important;
     transform: translateY(-2px);
@@ -181,9 +208,11 @@
     transform: translateY(-2px);
 }
 
+::ng-deep .modal-button.ant-btn:disabled,
 ::ng-deep .modal-button-primary.ant-btn-primary:disabled {
     background: rgba(255, 255, 255, 0.1) !important;
     color: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
     cursor: not-allowed;
     transform: none;
 }

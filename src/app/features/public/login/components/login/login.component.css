@@ -182,6 +182,20 @@
     padding: 0 !important;
 }
 
+.login-button-google,
+::ng-deep .login-form-button-google.ant-btn {
+    background: #fff !important;
+    color: #757575 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.login-button-google:hover,
+::ng-deep .login-form-button-google.ant-btn:hover {
+    background: #f8f8f8 !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-2px);
+}
+
 @media (max-width: 992px) {
     .div-login-page {
         flex-direction: column-reverse;

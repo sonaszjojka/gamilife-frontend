@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -17,6 +17,9 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { VerifyEmailComponent } from '../verify-email/verify-email.component';
 import { ForgotPasswordComponent } from '../../../forgot-password/components/forgot-password/forgot-password.component';
+import { OAuth2Service } from '../../../../shared/services/oauth2.service';
+import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
+
 @Component({
   selector: 'app-login',
   imports: [
@@ -32,29 +35,79 @@ import { ForgotPasswordComponent } from '../../../forgot-password/components/for
     CommonModule,
     VerifyEmailComponent,
     ForgotPasswordComponent,
+    LinkOAuthAccountComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   @ViewChild(VerifyEmailComponent)
   verificationModal!: VerifyEmailComponent;
   @ViewChild(ForgotPasswordComponent)
   forgotPasswordModal!: ForgotPasswordComponent;
+  @ViewChild(LinkOAuthAccountComponent)
+  linkAccountModal!: LinkOAuthAccountComponent;
+
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
-  isPasswordVisible = signal(false);
-  private password? = signal<string>('');
   private http = inject(HttpClient);
+  private oauth2Service = inject(OAuth2Service);
+
+  isPasswordVisible = signal(false);
 
   validateForm = this.fb.group({
     email: this.fb.control('', [Validators.email, Validators.required]),
     password: this.fb.control('', [Validators.required]),
   });
 
+  ngOnInit(): void {
+    const navigation = this.router.getCurrentNavigation();
+    const navigationState = navigation?.extras?.state;
+    const historyState = window.history.state;
+
+    const state = navigationState || historyState;
+
+    console.log('Login component navigation state:', navigationState);
+    console.log('Login component history state:', historyState);
+    console.log('Login component final state:', state);
+
+    if (state?.['linkAccount']) {
+      console.log('Opening link account modal with:', {
+        provider: state['provider'],
+        providerId: state['providerId'],
+        userId: state['userId'],
+      });
+
+      setTimeout(() => {
+        if (this.linkAccountModal) {
+          this.linkAccountModal.open(
+            state['provider'],
+            state['providerId'],
+            state['userId'],
+          );
+        } else {
+          console.error('linkAccountModal is not initialized!');
+        }
+      }, 100);
+    }
+
+    if (state?.['showEmailVerification']) {
+      console.log('Opening email verification modal for:', state['email']);
+
+      setTimeout(() => {
+        if (this.verificationModal) {
+          this.verificationModal.open(state['email']);
+        } else {
+          console.error('verificationModal is not initialized!');
+        }
+      }, 100);
+    }
+  }
+
   openForgotPassword() {
     this.forgotPasswordModal.open();
   }
+
   submitForm(): void {
     if (this.validateForm.valid) {
       const formData = this.validateForm.value;
@@ -96,6 +149,10 @@ export class LoginComponent {
 
   changePasswordVisibility() {
     this.isPasswordVisible.update((prev) => !prev);
+  }
+
+  loginWithGoogle(): void {
+    this.oauth2Service.startGoogleLogin();
   }
 }
 

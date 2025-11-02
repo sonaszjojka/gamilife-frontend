@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -18,6 +18,9 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { environment } from '../../../../../../environments/environment.development';
 import { CommonModule } from '@angular/common';
+import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
+import { OAuth2Service } from '../../../../shared/services/oauth2.service';
+
 @Component({
   selector: 'app-registration',
   standalone: true,
@@ -33,6 +36,7 @@ import { CommonModule } from '@angular/common';
     RouterModule,
     NzDatePickerModule,
     CommonModule,
+    LinkOAuthAccountComponent,
   ],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
@@ -44,7 +48,9 @@ export class RegistrationComponent {
   isSubmitting = signal(false);
   isPasswordVisible = signal(false);
   private password = signal<string>('');
-
+  private oauth2Service = inject(OAuth2Service);
+  @ViewChild(LinkOAuthAccountComponent)
+  linkAccountModal!: LinkOAuthAccountComponent;
   validateForm = this.fb.group({
     firstName: this.fb.control('', [
       Validators.required,
@@ -133,5 +139,9 @@ export class RegistrationComponent {
 
     const valid = passwordRegex.test(value);
     return valid ? null : { passwordStrength: true };
+  }
+
+  registerWithGoogle(): void {
+    this.oauth2Service.startGoogleLogin();
   }
 }

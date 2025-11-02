@@ -146,6 +146,16 @@
           <span>Processing...</span>
         </ng-container>
       </button>
+      <button
+        nz-button
+        nzSize="large"
+        class="login-button login-button-google"
+        (click)="registerWithGoogle()"
+      >
+        <nz-icon nzType="google" nzTheme="outline"></nz-icon>
+        <span>Continue with Google</span>
+      </button>
+      <app-link-oauth-account></app-link-oauth-account>
     </form>
   </div>
 

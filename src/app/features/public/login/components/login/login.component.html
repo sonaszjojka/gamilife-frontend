@@ -97,7 +97,17 @@
         <nz-icon nzType="login" nzTheme="outline"></nz-icon>
         <span>Login</span>
       </button>
+      <button
+        nz-button
+        nzSize="large"
+        class="login-button login-button-google"
+        (click)="loginWithGoogle()"
+      >
+        <nz-icon nzType="google" nzTheme="outline"></nz-icon>
+        <span>Continue with Google</span>
+      </button>
     </form>
     <app-verify-email></app-verify-email>
+    <app-link-oauth-account></app-link-oauth-account>
   </div>
 </div>
