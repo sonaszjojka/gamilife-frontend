@@ -130,7 +130,6 @@
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
     transform: translate(-50%, -50%);
     transition: width var(--transition-speed), height var(--transition-speed);
 }
@@ -150,7 +149,6 @@
 .guest-button-primary:hover {
     background: var(--fifth-color);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(5, 217, 232, 0.4);
 }
 
 .guest-button-primary:active {
