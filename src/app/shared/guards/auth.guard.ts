@@ -6,14 +6,14 @@ import { AuthService } from '../services/auth/auth.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  canActivate(): boolean {
-    const auth = inject(AuthService);
-    const router = inject(Router);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
-    if (auth.isLoggedIn()) {
+  canActivate(): boolean {
+
+    if (this.auth.isLoggedIn()) {
       return true;
     } else {
-      router.navigate(['/login']);
       return false;
     }
   }

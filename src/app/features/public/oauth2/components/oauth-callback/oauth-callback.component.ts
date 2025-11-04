@@ -8,6 +8,7 @@ import {
   AfterLoginResponse,
 } from '../../../../shared/services/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -20,7 +21,7 @@ export class OAuthCallbackComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private oauth2Service = inject(OAuth2Service);
-
+  private authService = inject(AuthService);
   error: string | null = null;
 
   ngOnInit(): void {
@@ -50,6 +51,7 @@ export class OAuthCallbackComponent implements OnInit {
 
         if ('providerName' in response) {
           const linkResponse = response as OAuth2LinkResponse;
+          this.authService.login();
           this.router.navigateByUrl('/login', {
             state: {
               linkAccount: true,
@@ -61,6 +63,7 @@ export class OAuthCallbackComponent implements OnInit {
         } else {
           const loginResponse = response as AfterLoginResponse;
           if (!loginResponse.isEmailVerified) {
+            this.authService.logout();
             this.router.navigateByUrl('/login', {
               state: {
                 showEmailVerification: true,
@@ -68,6 +71,7 @@ export class OAuthCallbackComponent implements OnInit {
               },
             });
           } else {
+            this.authService.login();
             this.router.navigate(['/dashboard']);
           }
         }
