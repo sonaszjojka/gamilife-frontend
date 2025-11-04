@@ -19,6 +19,7 @@ import { VerifyEmailComponent } from '../verify-email/verify-email.component';
 import { ForgotPasswordComponent } from '../../../forgot-password/components/forgot-password/forgot-password.component';
 import { OAuth2Service } from '../../../../shared/services/oauth2.service';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);
   private oauth2Service = inject(OAuth2Service);
+  private authService = inject(AuthService);
 
   isPasswordVisible = signal(false);
 
@@ -103,11 +105,14 @@ export class LoginComponent implements OnInit {
           next: (res) => {
             if (!res.isEmailVerified) {
               this.verificationModal.open(res.email);
+              this.authService.logout();
             } else {
-              this.router.navigate(['/dashboard']);
+              this.authService.login();
+              this.router.navigate(['/app/dashboard']);
             }
           },
           error: (err) => {
+            this.authService.logout();
             if (err.status === 401) {
               this.validateForm.controls['password'].setErrors({
                 apiError: 'Invalid credentials',
@@ -118,6 +123,7 @@ export class LoginComponent implements OnInit {
           },
         });
     } else {
+      this.authService.logout();
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
