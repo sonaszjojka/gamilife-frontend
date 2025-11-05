@@ -24,12 +24,16 @@
     ><nz-icon nzType="sun" nzTheme="outline"
   /></ng-template>
 
+
+
   <a nz-dropdown [nzDropdownMenu]="menu" [nzClickHide]="true" class="user-menu">
     <span class="user-menu-text">Account</span>
     <nz-icon nzType="user" nzTheme="outline"></nz-icon>
     <nz-icon nzType="down"></nz-icon>
   </a>
-  <nz-dropdown-menu #menu="nzDropdownMenu" class="navbar-dropdown-menu">
+
+
+  <nz-dropdown-menu #menu="nzDropdownMenu" class="navbar-dropdown-menu" >
     <ul nz-menu class="navbar-dropdown-ul">
       <li nz-menu-item routerLink="/login" class="navbar-dropdown-item">
         Login
@@ -39,4 +43,5 @@
       </li>
     </ul>
   </nz-dropdown-menu>
+
 </nav>

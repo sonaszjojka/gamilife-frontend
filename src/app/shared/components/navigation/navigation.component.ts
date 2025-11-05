@@ -28,10 +28,11 @@ import { FormsModule } from '@angular/forms';
 export class NavigationComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
-
+  isLoggedIn = this.authService.isLoggedIn();
   isDarkTheme = signal(true);
 
   toggleTheme() {
     this.isDarkTheme.update((prev) => !prev);
   }
+
 }

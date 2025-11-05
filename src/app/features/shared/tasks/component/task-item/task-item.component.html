@@ -1,0 +1,20 @@
+
+<nz-card [nzTitle]="task?.title">
+  <p *ngIf="task?.description">{{ task?.description }}</p>
+
+  <div>
+    Czas:
+    <span *ngIf="task?.startTime">{{ task?.startTime }}</span>
+    <span *ngIf="task?.endTime"> - {{ task?.endTime }}</span>
+    @if(task?.completedAt!=null){
+    <div> (Zakończone) - {{task?.completedAt}}</div>
+    }
+  </div>
+  @if(task?.completedAt==null){
+    <label  nz-checkbox [(nzChecked)]="isCompleted" (nzCheckedChange)="completeTask($event)">
+      Finish Task
+    </label>
+  }
+
+
+</nz-card>

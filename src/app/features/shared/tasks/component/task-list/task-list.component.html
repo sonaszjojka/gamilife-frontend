@@ -1,0 +1,19 @@
+
+<div class="task-list-container">
+  <h2>Moje zadania</h2>
+
+
+  <div *ngIf="loading">Ładowanie...</div>
+
+
+  <div *ngIf="!loading && tasks.length === 0">
+    Nie masz jeszcze żadnych zadań
+  </div>
+
+
+  <app-task-item
+    *ngFor="let task of tasks"
+    [task]="task"
+    (taskUpdated)="loadTasks()">
+  </app-task-item>
+</div>
