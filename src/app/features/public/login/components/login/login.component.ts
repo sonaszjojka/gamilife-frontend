@@ -98,32 +98,8 @@ export class LoginComponent implements OnInit {
     if (this.validateForm.valid) {
       const formData = this.validateForm.value;
       const url = `${environment.apiUrl}/auth/login`;
-
-      this.http
-        .post<AfterLoginResponse>(url, formData, { withCredentials: true })
-        .subscribe({
-          next: (res) => {
-            if (!res.isEmailVerified) {
-              this.verificationModal.open(res.email);
-              this.authService.logout();
-            } else {
-              this.authService.login();
-              this.router.navigate(['/app/dashboard']);
-            }
-          },
-          error: (err) => {
-            this.authService.logout();
-            if (err.status === 401) {
-              this.validateForm.controls['password'].setErrors({
-                apiError: 'Invalid credentials',
-              });
-            } else {
-              this.validateForm.setErrors({ apiError: 'Something went wrong' });
-            }
-          },
-        });
+      this.handleStandardLogin(formData, url);
     } else {
-      this.authService.logout();
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
@@ -131,6 +107,31 @@ export class LoginComponent implements OnInit {
         }
       });
     }
+  }
+
+  private handleStandardLogin(formData: unknown, url: string) {
+    this.http
+      .post<AfterLoginResponse>(url, formData, { withCredentials: true })
+      .subscribe({
+        next: (res) => {
+          if (!res.isEmailVerified) {
+            this.verificationModal.open(res.email);
+          } else {
+            localStorage.setItem('userId', res.userId);
+            this.authService.tryToLogIn();
+            this.router.navigate(['/app/dashboard']);
+          }
+        },
+        error: (err) => {
+          if (err.status === 401) {
+            this.validateForm.controls['password'].setErrors({
+              apiError: 'Invalid credentials',
+            });
+          } else {
+            this.validateForm.setErrors({ apiError: 'Something went wrong' });
+          }
+        },
+      });
   }
 
   goToRegister() {
@@ -147,7 +148,7 @@ export class LoginComponent implements OnInit {
 }
 
 interface AfterLoginResponse {
-  userId: number;
+  userId: string;
   email: string;
   username: string;
   isEmailVerified: boolean;

@@ -18,7 +18,7 @@ export interface LinkOAuthAccountRequest {
 }
 
 export interface AfterLoginResponse {
-  userId: number;
+  userId: string;
   email: string;
   username: string;
   isEmailVerified: boolean;

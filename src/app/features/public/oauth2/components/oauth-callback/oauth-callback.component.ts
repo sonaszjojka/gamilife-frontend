@@ -5,6 +5,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import {
   OAuth2Service,
   OAuth2LinkResponse,
+  AfterLoginResponse,
 } from '../../../../shared/services/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
@@ -58,7 +59,9 @@ export class OAuthCallbackComponent implements OnInit {
             },
           });
         } else {
-          this.authService.login();
+          const res = response as AfterLoginResponse;
+          localStorage.setItem('userId', res.userId);
+          this.authService.tryToLogIn();
           this.router.navigate(['/app/dashboard']);
         }
       },

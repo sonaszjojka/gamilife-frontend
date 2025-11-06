@@ -1,4 +1,5 @@
-import { Injectable, signal, Signal } from '@angular/core';
+import { inject, Injectable, signal, Signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 export interface IAuthService {
   isLoggedIn: Signal<boolean>;
@@ -9,15 +10,16 @@ export interface IAuthService {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = signal(false);
+  loggedIn = signal<boolean>(!!localStorage.getItem('userId'));
+  private router = inject(Router);
 
-  login() {
-    this.loggedIn.set(true);
-  }
   logout() {
+    localStorage.removeItem('userId');
     this.loggedIn.set(false);
+    this.router.navigate(['/login']);
   }
-  isLoggedIn() {
+  tryToLogIn() {
+    this.loggedIn.set(!!localStorage.getItem('userId'));
     return this.loggedIn;
   }
 }
