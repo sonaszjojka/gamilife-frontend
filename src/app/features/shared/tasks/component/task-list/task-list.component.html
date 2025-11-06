@@ -1,19 +1,20 @@
-
 <div class="task-list-container">
-  <h2>Moje zadania</h2>
+  <h2>My Tasks</h2>
 
-
-  <div *ngIf="loading">Ładowanie...</div>
-
-
-  <div *ngIf="!loading && tasks.length === 0">
-    Nie masz jeszcze żadnych zadań
+  <div *ngIf="loading" class="loading-initial">
+    <div class="spinner"></div>
+    <p>Loading tasks...</p>
   </div>
 
+  <div *ngIf="!loading && tasks.length === 0" class="empty-state">
+    You have no tasks yet
+  </div>
 
-  <app-task-item
-    *ngFor="let task of tasks"
-    [task]="task"
-    (taskUpdated)="loadTasks()">
-  </app-task-item>
+  <div class="tasks-grid">
+    <app-task-item
+      *ngFor="let task of tasks; trackBy: trackByTaskId"
+      [task]="task"
+      (taskUpdated)="onTaskUpdated()">
+    </app-task-item>
+  </div>
 </div>

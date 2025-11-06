@@ -1,12 +1,10 @@
-
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { Task } from '../../model/task.model';
-import {IndividualTaskService} from '../../service/individual-task.service';
-import {NzFloatButtonComponent} from 'ng-zorro-antd/float-button';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
+import { IndividualTaskService } from '../../service/individual-task.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: 'app-task-item',
@@ -14,7 +12,6 @@ import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
   imports: [
     CommonModule,
     NzCardModule,
-    NzFloatButtonComponent,
     FormsModule,
     NzCheckboxComponent,
     ReactiveFormsModule
@@ -22,19 +19,18 @@ import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css'
 })
-export class TaskItemComponent {
+export class TaskItemComponent implements OnInit {
   @Input() task!: Task;
   @Output() taskUpdated = new EventEmitter<void>();
   isCompleted: boolean = false;
 
+  constructor(private taskService: IndividualTaskService) {}
+
   ngOnInit(): void {
-    this.isCompleted= this.task.completedAt != null;
+    this.isCompleted = this.task.completedAt != null;
   }
 
-  constructor(private taskService: IndividualTaskService,) {}
-
-
-  completeTask(checked:boolean): void {
+  completeTask(checked: boolean): void {
     this.isCompleted = checked;
     this.taskService.finishTask(this.task).subscribe({
       next: (response) => {
@@ -42,10 +38,9 @@ export class TaskItemComponent {
         this.taskUpdated.emit();
       },
       error: (error) => {
-        console.error('Błąd:', error);
+        console.error('Error:', error);
         this.isCompleted = !checked;
       }
-    })
+    });
   }
-
 }
