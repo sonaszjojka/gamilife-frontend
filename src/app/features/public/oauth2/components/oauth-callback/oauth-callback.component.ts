@@ -5,7 +5,6 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import {
   OAuth2Service,
   OAuth2LinkResponse,
-  AfterLoginResponse,
 } from '../../../../shared/services/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
@@ -34,7 +33,6 @@ export class OAuthCallbackComponent implements OnInit {
         setTimeout(() => this.router.navigate(['/login']), 3000);
         return;
       }
-
       if (code) {
         this.handleCallback(code);
       } else {
@@ -51,7 +49,6 @@ export class OAuthCallbackComponent implements OnInit {
 
         if ('providerName' in response) {
           const linkResponse = response as OAuth2LinkResponse;
-          this.authService.login();
           this.router.navigateByUrl('/login', {
             state: {
               linkAccount: true,
@@ -61,19 +58,8 @@ export class OAuthCallbackComponent implements OnInit {
             },
           });
         } else {
-          const loginResponse = response as AfterLoginResponse;
-          if (!loginResponse.isEmailVerified) {
-            this.authService.logout();
-            this.router.navigateByUrl('/login', {
-              state: {
-                showEmailVerification: true,
-                email: loginResponse.email,
-              },
-            });
-          } else {
-            this.authService.login();
-            this.router.navigate(['/dashboard']);
-          }
+          this.authService.login();
+          this.router.navigate(['/app/dashboard']);
         }
       },
       error: (err: HttpErrorResponse) => {
