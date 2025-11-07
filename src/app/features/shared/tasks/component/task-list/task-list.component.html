@@ -1,20 +1,27 @@
-<div class="task-list-container">
-  <h2>My Tasks</h2>
+<h1>My Tasks</h1>
 
-  <div *ngIf="loading" class="loading-initial">
-    <div class="spinner"></div>
-    <p>Loading tasks...</p>
-  </div>
+<div class="task-layout">
+  <aside class="filter-panel">
+    <app-task-filter></app-task-filter>
+  </aside>
 
-  <div *ngIf="!loading && tasks.length === 0" class="empty-state">
-    You have no tasks yet
-  </div>
+  <div class="task-list">
+    <div *ngIf="!loading && tasks.length === 0" class="empty-state">
+      You have no tasks yet
+    </div>
 
-  <div class="tasks-grid">
-    <app-task-item
-      *ngFor="let task of tasks; trackBy: trackByTaskId"
-      [task]="task"
-      (taskUpdated)="onTaskUpdated()">
-    </app-task-item>
+    <ng-container *ngIf="!loading && tasks.length > 0">
+      <div *ngFor="let date of getGroupKeys()" class="task-group">
+        <h3 class="task-group-title">{{ date }}</h3>
+
+        <div class="tasks-grid">
+          <app-task-item
+            *ngFor="let task of groupedTasks[date]; trackBy: trackByTaskId"
+            [task]="task"
+            (taskUpdated)="onTaskUpdated()">
+          </app-task-item>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>

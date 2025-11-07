@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { Task } from '../../model/task.model';
@@ -22,16 +22,16 @@ import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
 export class TaskItemComponent implements OnInit {
   @Input() task!: Task;
   @Output() taskUpdated = new EventEmitter<void>();
-  isCompleted: boolean = false;
+  isCompleted = signal(false);
 
   constructor(private taskService: IndividualTaskService) {}
 
   ngOnInit(): void {
-    this.isCompleted = this.task.completedAt != null;
+    this.isCompleted = signal(this.task.completedAt != null);
   }
 
   completeTask(checked: boolean): void {
-    this.isCompleted = checked;
+    this.isCompleted = signal(checked);
     this.taskService.finishTask(this.task).subscribe({
       next: (response) => {
         this.task = response.task;
@@ -39,8 +39,10 @@ export class TaskItemComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error:', error);
-        this.isCompleted = !checked;
+        this.isCompleted = signal(!checked);
       }
     });
   }
+
+  protected readonly Date = Date;
 }

@@ -4,7 +4,7 @@ import {DashboardComponent} from '../dashboard/dashboard.component';
 import {TaskListComponent} from '../../../../shared/tasks/component/task-list/task-list.component';
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet,DashboardComponent,TaskListComponent],
+  imports: [RouterOutlet],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })

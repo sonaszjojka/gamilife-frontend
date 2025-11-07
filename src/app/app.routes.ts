@@ -8,6 +8,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { ForgotPasswordComponent } from './features/public/forgot-password/components/forgot-password/forgot-password.component';
 import { OAuthCallbackComponent } from './features/public/oauth2/components/oauth-callback/oauth-callback.component';
 import {TaskListComponent} from './features/shared/tasks/component/task-list/task-list.component';
+import {AppComponent} from './app.component';
 
 export const routes: Routes = [
   { path: '', component: GuestHomeComponent },
@@ -20,9 +21,12 @@ export const routes: Routes = [
   },
   {
     path: 'app',
-    component: LayoutComponent,
     canActivate: [AuthGuard],
-    children: [{ path: 'dashboard', component: DashboardComponent },{path: 'tasks',component: TaskListComponent}],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'tasks', component: TaskListComponent },
+    ],
   },
 
 
