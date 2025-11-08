@@ -97,8 +97,7 @@ export class LoginComponent implements OnInit {
   submitForm(): void {
     if (this.validateForm.valid) {
       const formData = this.validateForm.value;
-      const url = `${environment.apiUrl}/auth/login`;
-      this.handleStandardLogin(formData, url);
+      this.handleStandardLogin(formData);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -109,7 +108,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private handleStandardLogin(formData: unknown, url: string) {
+  // might move to authService
+  private handleStandardLogin(formData: unknown) {
+    const url = `${environment.apiUrl}/auth/login`;
     this.http
       .post<AfterLoginResponse>(url, formData, { withCredentials: true })
       .subscribe({
