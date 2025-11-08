@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Task } from '../model/task.model';
+import {EditTaskResponse} from '../model/edit-task-response';
 import {environment} from '../../../../../environments/environment';
-
-export interface EditTaskResponse {
-  task: Task;
-}
 
 export interface Page<T> {
   content: T[];
@@ -70,9 +67,10 @@ export class IndividualTaskService {
     };
 
     return this.http.put<EditTaskResponse>(
-      `http://localhost:8080/api/v1/tasks/${task.taskId}`,
+      `${environment.apiUrl}/tasks/${task.taskId}`,
       body,
       { withCredentials: true }
     );
+
   }
 }

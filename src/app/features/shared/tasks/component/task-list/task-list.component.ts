@@ -136,18 +136,9 @@ export class TaskListComponent implements OnInit {
     return Object.keys(this.groupedTasks);
   }
 
-  onTaskUpdated(): void {
-    this.currentPage = 0;
-    this.loadTasks();
-
+  onTaskFinished(taskId:string): void {
+    this.tasks = this.tasks.filter(t=>t.taskId!=taskId)
+    this.groupTasksByDate()
   }
 
-
-  trackByTaskId(index: number, task: Task): string {
-    return task.taskId;
-  }
-
-  trackByGroupKey(index: number, key: string): string {
-    return key;
-  }
 }

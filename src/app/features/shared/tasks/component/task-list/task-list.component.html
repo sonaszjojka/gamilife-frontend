@@ -13,15 +13,15 @@
     }
 
     @if (!loading && tasks.length > 0) {
-      @for (date of getGroupKeys(); track trackByGroupKey ) {
+      @for (date of getGroupKeys(); track getGroupKeys().keys() ) {
         <div class="task-group">
           <h3 class="task-group-title">{{ date }}</h3>
 
           <div class="tasks-grid">
-            @for (task of groupedTasks[date]; track trackByTaskId) {
+            @for (task of groupedTasks[date]; track task.taskId) {
               <app-task-item
                 [task]="task"
-                (taskUpdated)="onTaskUpdated()">
+                (taskFinished)=onTaskFinished(task.taskId)>
               </app-task-item>
             }
           </div>
