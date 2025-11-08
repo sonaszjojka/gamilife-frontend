@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit, HostListener } from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { TaskFilterComponent } from '../task-filter/task-filter.component';
@@ -11,7 +11,8 @@ import { Task } from '../../model/task.model';
   standalone: true,
   imports: [CommonModule, TaskItemComponent, TaskFilterComponent],
   templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.css'
+  styleUrl: './task-list.component.css',
+
 })
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
@@ -138,10 +139,15 @@ export class TaskListComponent implements OnInit {
   onTaskUpdated(): void {
     this.currentPage = 0;
     this.loadTasks();
+
   }
 
 
   trackByTaskId(index: number, task: Task): string {
     return task.taskId;
+  }
+
+  trackByGroupKey(index: number, key: string): string {
+    return key;
   }
 }

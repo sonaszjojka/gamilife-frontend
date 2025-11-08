@@ -6,16 +6,16 @@
   </div>
 
   <div>
-    Time:
-    <span >{{ task.startTime }}</span>
-    <span > - {{ task.endTime }}</span>
+    <span > Start -{{ task.startTime | date}}</span>
+    <span> | </span>
+    <span >Finish  - {{ task.endTime | date }}</span>
     @if(task.completedAt != null){
-      <div>(Finished At) - {{task.completedAt}}</div>
+      <div>(Finished At) - {{task.completedAt| date}}</div>
     }
 
   </div>
 
-  @if(task.completedAt == null && task.endTime<= Date.now()){
+  @if(!isExpired()){
     <label nz-checkbox [nzChecked]="!isCompleted" (nzCheckedChange)="completeTask($event)">
       Finish Task
     </label>

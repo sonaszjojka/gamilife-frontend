@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, Output, OnInit, signal} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { Task } from '../../model/task.model';
 import { IndividualTaskService } from '../../service/individual-task.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
+import {getTimeConfig} from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'app-task-item',
@@ -14,7 +15,8 @@ import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
     NzCardModule,
     FormsModule,
     NzCheckboxComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DatePipe
   ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css'
@@ -44,5 +46,7 @@ export class TaskItemComponent implements OnInit {
     });
   }
 
-  protected readonly Date = Date;
+  isExpired(): boolean {
+    return !!this.task.completedAt &&  new Date(this.task.endTime!) < new Date(Date.now());
+  }
 }
