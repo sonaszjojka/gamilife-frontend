@@ -56,7 +56,7 @@ export class ResetPasswordComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.code = this.route.snapshot.queryParamMap.get('token');
+    this.code = this.route.snapshot.queryParamMap.get('code');
 
     if (!this.code) {
       this.status.set('error');
@@ -94,13 +94,13 @@ export class ResetPasswordComponent implements OnInit {
     this.status.set('sending');
     this.isSubmitting.set(true);
 
-    const password = this.validateForm.value.password!;
+    const newPassword = this.validateForm.value.password!;
     const code = this.code;
 
     this.http
       .post(`${environment.apiUrl}/auth/reset-password`, {
         code,
-        password,
+        newPassword,
       })
       .subscribe({
         next: () => {
