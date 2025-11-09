@@ -1,17 +1,11 @@
 <aside class="sidebar">
-  <h4>Active Tasks</h4>
-  <button nz-button (click)="activeTaskSelected();">Active Tasks</button>
-
   <h4>Difficulty</h4>
-  <button nz-button (click)="difficultySelected(1)">Easy</button>
-  <button nz-button (click)="difficultySelected(2)">Medium</button>
-  <button nz-button (click)="difficultySelected(3)">Hard</button>
-
+  <button nz-button (click)="difficultyId?.set(1)">Easy</button>
+  <button nz-button (click)="difficultyId?.set(2)">Manageable</button>
+  <button nz-button (click)="difficultyId?.set(3)">Demanding</button>
   <h4>Category</h4>
-  <button nz-button (click)="categorySelected(1)">Work</button>
-  <button nz-button (click)="categorySelected(2)">Personal</button>
-  <button nz-button (click)="categorySelected(3)">Health</button>
-  <h4>Completed Tasks</h4>
-  <button nz-button (click)="inactiveTaskSelected()">Hall Of Fame</button>
-
+  <button nz-button (click)="categoryId?.set(1)">Personal</button>
+  <button nz-button (click)="categoryId?.set(2)">Work</button>
+  <button nz-button (click)="categoryId?.set(3)">Health</button>
+  <h4 (click)="isCompleted?.set(true)">Completed Tasks</h4>
 </aside>

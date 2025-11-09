@@ -23,7 +23,7 @@ import {getTimeConfig} from 'ng-zorro-antd/date-picker';
 })
 export class TaskItemComponent implements OnInit {
   @Input() task!: Task;
-  @Output() taskUpdated = new EventEmitter<string>();
+  @Output() taskFinished = new EventEmitter<string>();
   isCompleted = signal(false);
 
   constructor(private taskService: IndividualTaskService) {}
@@ -37,7 +37,7 @@ export class TaskItemComponent implements OnInit {
     this.taskService.finishTask(this.task).subscribe({
       next: (response) => {
         this.task.completedAt = response.completedAt;
-        this.taskUpdated.emit(this.task.taskId);
+        this.taskFinished.emit(this.task.taskId);
       },
       error: (error) => {
         console.error('Error:', error);
@@ -47,7 +47,7 @@ export class TaskItemComponent implements OnInit {
     );
   }
 
-  isInactive(): boolean {
+  isExpired(): boolean {
     return !!this.task.completedAt ||  new Date(this.task.endTime!) < new Date(Date.now());
   }
 }

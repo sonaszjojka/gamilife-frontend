@@ -27,10 +27,10 @@ export class IndividualTaskService {
   getUserTasks(
     page: number = 0,
     size: number = 10,
-    categoryId?: number | null,
-    difficultyId?: number | null,
-    isCompleted?: boolean | null,
-    isGroupTask?: boolean | null
+    categoryId?: number,
+    difficultyId?: number,
+    isCompleted?: boolean ,
+    isGroupTask?: boolean
   ): Observable<Page<Task>> {
     let params = new HttpParams()
       .set('page', page.toString())

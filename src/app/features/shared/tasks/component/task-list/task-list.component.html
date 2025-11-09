@@ -2,13 +2,7 @@
 
 <div class="task-layout">
   <aside class="filter-panel">
-    <app-task-filter
-      [categoryId]="categoryId"
-      [difficultyId]="difficultyId"
-      [isGroupTask]="isGroupTask"
-      [isCompleted]="isCompleted"
-    >
-    </app-task-filter>
+    <app-task-filter></app-task-filter>
   </aside>
 
   <div class="task-list">
@@ -27,7 +21,7 @@
             @for (task of groupedTasks[date]; track task.taskId) {
               <app-task-item
                 [task]="task"
-                (taskUpdated)=onTaskUpdated(task.taskId)>
+                (taskFinished)=onTaskFinished(task.taskId)>
               </app-task-item>
             }
           </div>

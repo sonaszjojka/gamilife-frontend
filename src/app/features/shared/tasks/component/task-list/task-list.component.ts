@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import {Component, OnInit, HostListener, signal, effect} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { TaskFilterComponent } from '../task-filter/task-filter.component';
@@ -14,35 +14,31 @@ import { Task } from '../../model/task.model';
   styleUrl: './task-list.component.css',
 
 })
-export class TaskListComponent{
+export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
   groupedTasks: { [date: string]: Task[] } = {};
 
   loading = false;
   loadingMore = false;
 
-  categoryId = signal<number | null>(null);
-  difficultyId = signal<number | null>(null);
-  isCompleted = signal<boolean | null>(false);
-  isGroupTask = signal<boolean | null>(null);
+  params: any = {
+    categoryId: null,
+    difficultyId: null,
+    isCompleted: null,
+    isGroupTask: null
+  };
 
   currentPage = 0;
   pageSize = 4;
   totalPages = 0;
   hasMore = true;
 
-  private changeFilterEffect =    effect(()=>{
-    this.categoryId();
-    this.difficultyId();
-    this.isCompleted();
-    this.isGroupTask();
-
-    this.currentPage=0;
-    this.loadTasks();
-  });
-
   constructor(private taskService: IndividualTaskService) {}
 
+  ngOnInit(): void {
+    this.params.isCompleted = false;
+    this.loadTasks();
+  }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
@@ -60,10 +56,10 @@ export class TaskListComponent{
     this.taskService.getUserTasks(
       this.currentPage,
       this.pageSize,
-      this.categoryId(),
-      this.difficultyId(),
-      this.isCompleted(),
-      this.isGroupTask()
+      this.params.categoryId,
+      this.params.difficultyId,
+      this.params.isCompleted,
+      this.params.isGroupTask
     ).subscribe({
       next: (response: Page<Task>) => {
         this.tasks = response.content;
@@ -86,7 +82,14 @@ export class TaskListComponent{
     this.loadingMore = true;
     const nextPage = this.currentPage + 1;
 
-    this.taskService.getUserTasks(nextPage, this.pageSize, this.categoryId(), this.difficultyId(), this.isCompleted(), this.isGroupTask()).subscribe({
+    this.taskService.getUserTasks(
+      nextPage,
+      this.pageSize,
+      this.params.categoryId,
+      this.params.difficultyId,
+      this.params.isCompleted,
+      this.params.isGroupTask
+    ).subscribe({
       next: (response: Page<Task>) => {
         this.tasks = [...this.tasks, ...response.content];
         this.groupTasksByDate();
@@ -133,22 +136,9 @@ export class TaskListComponent{
     return Object.keys(this.groupedTasks);
   }
 
-
-  onTaskUpdated(taskId:string):void
-  {
-    const changedTask = this.tasks.find(t=>t.taskId==taskId)!;
-    const isTaskNoneActive:Boolean = (changedTask.completedAt!=null||new Date(changedTask.endTime!)<new Date(Date.now()))
-
-    if (
-        changedTask.categoryId!=this.categoryId()||
-        changedTask.difficultyId!=this.difficultyId()||
-        changedTask.isGroupTask!=this.isGroupTask()||
-        isTaskNoneActive!=this.isCompleted() //rename filter param
-    )
-    {
-      this.tasks = this.tasks.filter(t=>t.taskId!=taskId)
-      this.groupTasksByDate()
-    }
-
+  onTaskFinished(taskId:string): void {
+    this.tasks = this.tasks.filter(t=>t.taskId!=taskId)
+    this.groupTasksByDate()
   }
+
 }
