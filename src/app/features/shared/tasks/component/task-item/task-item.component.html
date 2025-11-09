@@ -15,7 +15,7 @@
 
   </div>
 
-  @if(!isExpired()){
+  @if(!isInactive()){
     <label nz-checkbox [nzChecked]="!isCompleted" (nzCheckedChange)="completeTask($event)">
       Finish Task
     </label>
