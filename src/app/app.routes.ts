@@ -9,11 +9,23 @@ import { OAuthCallbackComponent } from './features/public/oauth2/components/oaut
 import { TaskListComponent } from './features/shared/tasks/component/task-list/task-list.component';
 import { environment } from '../environments/environment';
 import { GuestGuard } from './shared/guards/guest.guard';
+import { EmailVerificationResultComponent } from './features/public/email-verification-result/components/email-verification-result/email-verification-result.component';
+import { ResetPasswordComponent } from './features/public/reset-password/components/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: GuestHomeComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'verify-email',
+    component: EmailVerificationResultComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
     canActivate: [GuestGuard],
   },
   {

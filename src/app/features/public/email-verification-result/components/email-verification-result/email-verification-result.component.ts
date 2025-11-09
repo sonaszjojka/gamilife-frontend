@@ -24,7 +24,7 @@ export class EmailVerificationResultComponent implements OnInit {
   protected status: 'loading' | 'success' | 'error' = 'loading';
 
   private http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/email-verifications/confirm`;
+  private readonly apiUrl = `${environment.apiUrl}/auth/email-verifications/confirm`;
   private route = inject(ActivatedRoute);
   ngOnInit(): void {
     const code = this.route.snapshot.queryParamMap.get('code');
