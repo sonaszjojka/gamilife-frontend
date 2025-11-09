@@ -10,7 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(cloned).pipe(
     catchError((error: HttpErrorResponse) => {
-      const code = error.error?.code;
+      const code = Number(error.error?.code);
       const url = req.url;
 
       if (error.status === 401 || error.status === 403) {
@@ -21,7 +21,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return throwError(() => error);
         }
 
-        if (code === 1019 && !isAuthEndpoint) {
+        if ((code === 1019 || code === 2013) && !isAuthEndpoint) {
+          console.log('3');
           return authService.refreshToken().pipe(
             switchMap(() => next(cloned)),
             catchError(() => {
