@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Task } from '../model/task.model';
 import {EditTaskResponse} from '../model/edit-task-response';
 import {environment} from '../../../../../environments/environment';
+import {EditTaskRequest} from '../model/edit-task-request';
+import {CreateTaskResponse} from '../model/create-task-response';
 
 export interface Page<T> {
   content: T[];
@@ -22,15 +24,16 @@ export interface Page<T> {
 export class IndividualTaskService {
   private API_URL = `${environment.apiUrl}/tasks`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getUserTasks(
     page: number = 0,
     size: number = 10,
-    categoryId?: number,
-    difficultyId?: number,
-    isCompleted?: boolean ,
-    isGroupTask?: boolean
+    categoryId?: number | null,
+    difficultyId?: number | null,
+    isCompleted?: boolean | null,
+    isGroupTask?: boolean | null
   ): Observable<Page<Task>> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -55,22 +58,44 @@ export class IndividualTaskService {
     });
   }
 
-  finishTask(task: Task): Observable<EditTaskResponse> {
+  editTask(taskId: string, request: EditTaskRequest): Observable<EditTaskResponse> {
     const body = {
-      title: task.title,
-      startTime: task.startTime,
-      endTime: task.endTime,
-      categoryId: task.categoryId,
-      difficultyId: task.difficultyId,
-      completedAt: new Date().toISOString(),
-      description: task.description
+      title: request.title,
+      startTime: request.startTime,
+      endTime: request.endTime,
+      categoryId: request.categoryId,
+      difficultyId: request.difficultyId,
+      completedAt: request.completedAt,
+      description: request.description
     };
 
     return this.http.put<EditTaskResponse>(
-      `${environment.apiUrl}/tasks/${task.taskId}`,
+      `${environment.apiUrl}/tasks/${taskId}`,
       body,
-      { withCredentials: true }
+      {withCredentials: true}
     );
 
   }
+  createTask(request:EditTaskRequest): Observable<CreateTaskResponse>
+  {
+    const body = {
+      title: request.title,
+      startTime: request.startTime,
+      endTime: request.endTime,
+      categoryId: request.categoryId,
+      difficultyId: request.difficultyId,
+      completedAt: request.completedAt,
+      description: request.description
+    };
+    return this.http.post<EditTaskResponse>(
+      `${environment.apiUrl}/tasks`,
+      body,
+      {withCredentials: true}
+    );
+
+  }
+
 }
+
+
+

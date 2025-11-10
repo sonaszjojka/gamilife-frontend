@@ -1,4 +1,7 @@
 <nz-card [nzTitle]="task.title">
+  <div>
+  <button nz-button (click)="onTaskEdit()" ><nz-icon nzType="setting" nzTheme="outline" /></button>
+  </div>
   <p *ngIf="task.description">{{ task.description }}</p>
   <div class="task-tags">
     <p> <span>{{task.categoryName}}</span></p>
@@ -15,9 +18,9 @@
 
   </div>
 
-  @if(!isExpired()){
-    <label nz-checkbox [nzChecked]="!isCompleted" (nzCheckedChange)="completeTask($event)">
-      Finish Task
-    </label>
+  @if(!isInactive()){
+   <button (click)=completeTask()>
+     <nz-icon nzType="check-circle" nzTheme="outline" />
+   </button>
   }
 </nz-card>

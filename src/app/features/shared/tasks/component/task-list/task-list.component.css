@@ -1,4 +1,6 @@
-
+.task-panel{
+  background: url('/background_guest_page.png') center center / cover no-repeat;
+}
 h1 {
   text-align: center;
   margin-bottom: 2rem;
@@ -35,6 +37,14 @@ h1 {
   flex: 1;
 }
 
+.task-form {
+  flex: 0 0 250px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 
 
 @media (max-width: 768px) {
@@ -42,3 +52,4 @@ h1 {
     flex-direction: column;
   }
 }
+
