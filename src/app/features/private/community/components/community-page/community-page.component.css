@@ -1,6 +1,6 @@
 .search-container {
     flex: 1;
-    height: 80vh;
+
 }
 
 .paging-div {
@@ -8,22 +8,4 @@
     align-items: center;
     justify-content: center;
     padding: var(--spacing-medium) 0;
-}
-
-@media (max-width: 768px) {
-    .search-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .paging-div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: var(--spacing-medium) 0;
-    }
-
 }

@@ -3,9 +3,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { GroupFilterParams } from '../../models/group-filter-params.model';
-import { Page } from '../../models/page.model';
+import { GetGroupsResult } from '../../models/groups.model';
 import { Group } from '../../models/group.model';
 import { GroupType } from '../../models/group-type.model';
+import { CreateGroupMemberInOpenGroupResult } from '../../models/group-member.model';
+import { CreateGroupRequestResult } from '../../models/group-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,7 @@ export class GroupApiService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
-  getGroups(params: GroupFilterParams): Observable<Page<Group>> {
+  getGroups(params: GroupFilterParams): Observable<GetGroupsResult> {
     let httpParams = new HttpParams();
 
     if (params.joinCode) {
@@ -33,9 +35,36 @@ export class GroupApiService {
       httpParams = httpParams.set('size', params.size.toString());
     }
 
-    return this.http.get<Page<Group>>(`${this.apiUrl}/groups`, {
+    return this.http.get<GetGroupsResult>(`${this.apiUrl}/groups`, {
       params: httpParams,
     });
+  }
+
+  getGroupById(groupId: string, isForLoggedUser = true): Observable<Group> {
+    const params = new HttpParams().set(
+      'isForLoggedUser',
+      String(isForLoggedUser),
+    );
+
+    return this.http.get<Group>(`${this.apiUrl}/groups/${groupId}`, { params });
+  }
+
+  joinGroup(groupId: string) {
+    const params = {
+      userId: localStorage.getItem('userId'),
+    };
+
+    return this.http.post<CreateGroupMemberInOpenGroupResult>(
+      `${this.apiUrl}/groups/${groupId}/members`,
+      params,
+    );
+  }
+
+  sendRequest(groupId: string) {
+    return this.http.post<CreateGroupRequestResult>(
+      `${this.apiUrl}/groups/${groupId}/requests`,
+      {},
+    );
   }
 
   getGroupTypes(): Observable<GroupType[]> {

@@ -5,8 +5,10 @@ export interface Group {
   joinCode: string;
   groupName: string;
   adminId: string;
-  groupCurrencySymbol: string;
-  membersLimit: number;
+  groupCurrencySymbol: string | null;
+  membersLimit: number | null;
   groupType: GroupType;
   membersCount: number;
+  isMember: boolean | null;
+  hasActiveGroupRequest: boolean | null;
 }

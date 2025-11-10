@@ -12,7 +12,9 @@
   </ng-template>
 
   <ng-template #extraTemplate>
-    <nz-tag [nzColor]="'blue'">{{ group.groupType.title }}</nz-tag>
+    <app-group-type-tag
+      [typeTitle]="group.groupType.title"
+    ></app-group-type-tag>
   </ng-template>
 
   <div class="group-info">
@@ -38,7 +40,7 @@
   </div>
 
   <div class="card-actions">
-    <button nz-button nzType="primary" nzBlock>
+    <button nz-button nzType="primary" nzBlock="" (click)="goToPreview()">
       <span nz-icon nzType="login" nzTheme="outline"></span>
       Preview
     </button>

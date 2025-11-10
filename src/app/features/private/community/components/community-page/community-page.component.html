@@ -11,7 +11,15 @@
 
   <div class="search-result-container">
     <div nz-row [nzGutter]="[16, 16]">
-      <div nz-col [nzSpan]="8" *ngFor="let group of groups()">
+      <div
+        nz-col
+        *ngFor="let group of groups()"
+        [nzXs]="24"
+        [nzSm]="24"
+        [nzMd]="8"
+        [nzLg]="6"
+        [nzXl]="6"
+      >
         <app-group-card [group]="group"></app-group-card>
       </div>
     </div>

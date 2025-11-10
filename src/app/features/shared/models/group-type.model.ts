@@ -1,4 +1,4 @@
 export interface GroupType {
-  id: number;
+  id?: number;
   title: string;
 }
