@@ -34,10 +34,10 @@ export class CommunityPageComponent implements OnInit {
   groupTypeId = signal<number | undefined>(undefined);
 
   ngOnInit() {
-    this.loadGroups(0);
+    this.loadGroups(0, 0);
   }
 
-  loadGroups(page: number) {
+  loadGroups(page: number, timeout: number) {
     const params: GroupFilterParams = {
       page: page,
       size: 9,
@@ -51,23 +51,23 @@ export class CommunityPageComponent implements OnInit {
           this.groups.set(response.content);
           this.totalPages.set(response.totalPages - 1);
           this.currentPage.set(page);
-        }, 350);
+        }, timeout);
       },
       error: (err) => console.error(err),
     });
   }
 
   onPageChange(page: number) {
-    this.loadGroups(page);
+    this.loadGroups(page, 350);
   }
 
   onInputChange(inputValue: string) {
     this.groupName.set(inputValue);
-    this.loadGroups(0);
+    this.loadGroups(0, 350);
   }
 
   onGroupTypeChange(groupTypeId: string | null) {
     this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
-    this.loadGroups(0);
+    this.loadGroups(0, 350);
   }
 }

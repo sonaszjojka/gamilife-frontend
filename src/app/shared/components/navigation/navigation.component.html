@@ -23,6 +23,11 @@
     <ng-template #unCheckedTemplate
       ><nz-icon nzType="sun" nzTheme="outline"
     /></ng-template>
+  } @else {
+    <ul nz-menu nzMode="horizontal" class="nav-menu" [nzSelectable]="false">
+      <li nz-menu-item routerLink="/app/dashboard">Home</li>
+      <li nz-menu-item routerLink="/app/community">Community</li>
+    </ul>
   }
   <a nz-dropdown [nzDropdownMenu]="menu" [nzClickHide]="true" class="user-menu">
     <span class="user-menu-text">
