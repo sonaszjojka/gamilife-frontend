@@ -6,7 +6,7 @@ import {
   OAuth2Service,
   OAuth2LinkResponse,
   AfterLoginResponse,
-} from '../../../../shared/services/oauth2.service';
+} from '../../../../shared/services/oauth2/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 

@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { AuthService } from '../../../shared/services/auth/auth.service';
+import { environment } from '../../../../../environments/environment.development';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 
 export interface OAuthCodeRequest {
   code: string;

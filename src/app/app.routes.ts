@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { GuestGuard } from './shared/guards/guest.guard';
 import { EmailVerificationResultComponent } from './features/public/email-verification-result/components/email-verification-result/email-verification-result.component';
 import { ResetPasswordComponent } from './features/public/reset-password/components/reset-password/reset-password.component';
+import { CommunityPageComponent } from './features/private/community/components/community-page/community-page.component';
 
 export const routes: Routes = [
   {
@@ -54,6 +55,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'tasks', component: TaskListComponent },
+      { path: 'community', component: CommunityPageComponent },
     ],
   },
   { path: '**', redirectTo: '' },

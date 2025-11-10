@@ -1,0 +1,44 @@
+ .group-card {
+     margin-bottom: 16px;
+ }
+
+ .card-title {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     font-size: 16px;
+     font-weight: 600;
+ }
+
+ .group-info {
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+     margin-bottom: 16px;
+ }
+
+ .info-row {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     font-size: 14px;
+ }
+
+ .info-row .label {
+     color: rgba(0, 0, 0, 0.45);
+     min-width: 80px;
+ }
+
+ .info-row .value {
+     color: rgba(0, 0, 0, 0.85);
+     font-weight: 500;
+ }
+
+ .join-code {
+     padding: 2px 8px;
+     border-radius: 4px;
+ }
+
+ .card-actions {
+     margin-top: 16px;
+ }

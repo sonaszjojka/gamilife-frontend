@@ -1,0 +1,27 @@
+<div class="search-container">
+  <div class="search-bar-container">
+    <div class="search-bar">
+      <app-input-search
+        (inputChange)="onInputChange($event)"
+        (groupTypeChange)="onGroupTypeChange($event)"
+      >
+      </app-input-search>
+    </div>
+  </div>
+
+  <div class="search-result-container">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col [nzSpan]="8" *ngFor="let group of groups()">
+        <app-group-card [group]="group"></app-group-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="paging-div">
+    <app-pagination-more
+      [maxPageIndex]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination-more>
+  </div>
+</div>

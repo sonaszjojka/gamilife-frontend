@@ -1,0 +1,46 @@
+<nz-card
+  class="group-card"
+  [nzTitle]="cardTitle"
+  [nzExtra]="extraTemplate"
+  [nzHoverable]="true"
+>
+  <ng-template #cardTitle>
+    <div class="card-title">
+      <span nz-icon nzType="team" nzTheme="outline"></span>
+      <span class="group-name">{{ group.groupName }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #extraTemplate>
+    <nz-tag [nzColor]="'blue'">{{ group.groupType.title }}</nz-tag>
+  </ng-template>
+
+  <div class="group-info">
+    <div class="info-row">
+      <span nz-icon nzType="key" nzTheme="outline"></span>
+      <span class="label">Join Code:</span>
+      <span class="value join-code">{{ group.joinCode }}</span>
+    </div>
+
+    <div class="info-row">
+      <span nz-icon nzType="user" nzTheme="outline"></span>
+      <span class="label">Members:</span>
+      <span class="value">
+        {{ group.membersCount }} / {{ group.membersLimit }}
+      </span>
+    </div>
+
+    <div class="info-row" *ngIf="group.groupCurrencySymbol">
+      <span nz-icon nzType="dollar" nzTheme="outline"></span>
+      <span class="label">Currency:</span>
+      <span class="value">{{ group.groupCurrencySymbol }}</span>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button nz-button nzType="primary" nzBlock>
+      <span nz-icon nzType="login" nzTheme="outline"></span>
+      Preview
+    </button>
+  </div>
+</nz-card>

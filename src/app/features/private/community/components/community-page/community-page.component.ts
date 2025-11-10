@@ -1,0 +1,76 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Group,
+  GroupApiService,
+  GroupFilterParams,
+} from '../../services/groups-api/group-api.service';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
+import { GroupCardComponent } from '../../../shared/components/group-card/group-card.component';
+import { CommonModule } from '@angular/common';
+import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+
+@Component({
+  selector: 'app-community-page',
+  imports: [
+    NzInputModule,
+    NzIconModule,
+    InputSearchComponent,
+    GroupCardComponent,
+    CommonModule,
+    PaginationMoreComponent,
+    NzGridModule,
+  ],
+  templateUrl: './community-page.component.html',
+  styleUrl: './community-page.component.css',
+  standalone: true,
+})
+export class CommunityPageComponent implements OnInit {
+  private groupApiService = inject(GroupApiService);
+  readonly value = signal('');
+  groups = signal<Group[]>([]);
+  totalPages = signal<number>(0);
+  currentPage = signal<number>(0);
+  groupName = signal<string | undefined>(undefined);
+  groupTypeId = signal<number | undefined>(undefined);
+
+  ngOnInit() {
+    this.loadGroups(0);
+  }
+
+  loadGroups(page: number) {
+    const params: GroupFilterParams = {
+      page: page,
+      size: 9,
+      groupName: this.groupName() ?? undefined,
+      groupType: this.groupTypeId() ?? undefined,
+    };
+
+    this.groupApiService.getGroups(params).subscribe({
+      next: (response) => {
+        setTimeout(() => {
+          this.groups.set(response.content);
+          this.totalPages.set(response.totalPages - 1);
+          this.currentPage.set(page);
+        }, 350);
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  onPageChange(page: number) {
+    this.loadGroups(page);
+  }
+
+  onInputChange(inputValue: string) {
+    this.groupName.set(inputValue);
+    this.loadGroups(0);
+  }
+
+  onGroupTypeChange(groupTypeId: string | null) {
+    this.groupTypeId.set(Number(groupTypeId));
+    this.loadGroups(0);
+  }
+}

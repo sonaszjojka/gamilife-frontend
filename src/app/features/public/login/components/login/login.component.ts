@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { VerifyEmailComponent } from '../verify-email/verify-email.component';
 import { ForgotPasswordComponent } from '../../../forgot-password/components/forgot-password/forgot-password.component';
-import { OAuth2Service } from '../../../../shared/services/oauth2.service';
+import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
