@@ -42,3 +42,9 @@
  .card-actions {
      margin-top: 16px;
  }
+
+ @media (max-width: 768px) {
+     .group-card {
+         min-width: 80vw;
+     }
+ }

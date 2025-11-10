@@ -1,9 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import {
-  Group,
-  GroupApiService,
-  GroupFilterParams,
-} from '../../services/groups-api/group-api.service';
+import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
@@ -11,7 +7,8 @@ import { GroupCardComponent } from '../../../shared/components/group-card/group-
 import { CommonModule } from '@angular/common';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-
+import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
+import { Group } from '../../../../shared/models/group.model';
 @Component({
   selector: 'app-community-page',
   imports: [
@@ -70,7 +67,7 @@ export class CommunityPageComponent implements OnInit {
   }
 
   onGroupTypeChange(groupTypeId: string | null) {
-    this.groupTypeId.set(Number(groupTypeId));
+    this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
     this.loadGroups(0);
   }
 }

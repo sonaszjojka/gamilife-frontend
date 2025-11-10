@@ -4,7 +4,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Group } from '../../../community/services/groups-api/group-api.service';
+import { Group } from '../../../../shared/models/group.model';
 
 @Component({
   selector: 'app-group-card',

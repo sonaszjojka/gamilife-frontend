@@ -11,13 +11,11 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
-import {
-  GroupApiService,
-  GroupType,
-} from '../../../community/services/groups-api/group-api.service';
+import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { HttpClient } from '@angular/common/http';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { GroupFilterParams } from '../../../community/services/groups-api/group-api.service';
+import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
+import { GroupType } from '../../../../shared/models/group-type.model';
 
 @Component({
   selector: 'app-input-search',
@@ -72,6 +70,27 @@ import { GroupFilterParams } from '../../../community/services/groups-api/group-
       }
       nz-select {
         width: 200px;
+      }
+      @media (max-width: 768px) {
+        .input-search-container {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          height: 100px;
+          flex-wrap: wrap;
+        }
+
+        nz-input-group {
+          width: 400px;
+          max-width: 100%;
+        }
+
+        nz-select {
+          width: 200px;
+          max-width: 100%;
+        }
       }
     `,
   ],
