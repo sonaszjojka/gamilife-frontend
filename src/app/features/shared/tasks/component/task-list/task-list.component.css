@@ -1,8 +1,55 @@
-
-.task-list-container {
-  padding: 20px;
+.task-panel{
+  background: url('/background_guest_page.png') center center / cover no-repeat;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
 }
 
-h2 {
-  margin-bottom: 20px;
+.task-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
 }
+
+
+.filter-panel {
+  flex: 0 0 250px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.h2
+{
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+
+}
+
+
+
+.task-list {
+  margin: 1rem;
+  flex: 1;
+}
+
+.task-form {
+  flex: 0 0 250px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+@media (max-width: 768px) {
+  .task-layout {
+    flex-direction: column;
+  }
+}
+

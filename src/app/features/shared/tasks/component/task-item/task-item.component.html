@@ -1,19 +1,26 @@
 <nz-card [nzTitle]="task.title">
-  <p *ngIf="task.description">{{ task.description }}</p>
- <p> <span>{{task.categoryName}}</span></p>
   <div>
-    Czas:
-    <span *ngIf="task.startTime">{{ task.startTime }}</span>
-    <span *ngIf="task.endTime"> - {{ task.endTime }}</span>
+  <button nz-button (click)="onTaskEdit()" ><nz-icon nzType="setting" nzTheme="outline" /></button>
+  </div>
+  <p *ngIf="task.description">{{ task.description }}</p>
+  <div class="task-tags">
+    <p> <span>{{task.categoryName}}</span></p>
+    <p><span>{{task.difficultyName}}</span></p>
+  </div>
+
+  <div>
+    <span > Start -{{ task.startTime | date}}</span>
+    <span> | </span>
+    <span >Finish  - {{ task.endTime | date }}</span>
     @if(task.completedAt != null){
-      <div>(Finished At) - {{task.completedAt}}</div>
+      <div>(Finished At) - {{task.completedAt| date}}</div>
     }
 
   </div>
 
-  @if(task.completedAt == null){
-    <label nz-checkbox [(ngModel)]="isCompleted" (ngModelChange)="completeTask($event)">
-      Finish Task
-    </label>
+  @if(!isInactive()){
+   <button (click)=completeTask()>
+     <nz-icon nzType="check-circle" nzTheme="outline" />
+   </button>
   }
 </nz-card>

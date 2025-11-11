@@ -1,0 +1,112 @@
+<div class="task-form">
+<form
+class="task-form"
+[formGroup]="validTaskForm"
+>
+  <h2>TASK</h2>
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="title">Title</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide valid Title"
+    >
+      <input
+        nz-input
+        id="title"
+        formControlName="title"
+        placeholder="My  New Task"
+      />
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="startTime">Start Time</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide valid Start Time"
+    >
+      <input
+        nz-input
+        id="startTime"
+        formControlName="startTime"
+        placeholder="Task Start Time"
+      />
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="endTime">End Time</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide valid End Time"
+    >
+      <input
+        nz-input
+        id="endTime"
+        formControlName="endTime"
+        placeholder="Task End Time"
+      />
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="categoryId">Category</nz-form-label>
+    <nz-form-control nzErrorTip="Please provide category">
+      <nz-select
+        id="categoryId"
+        formControlName="categoryId"
+        nzPlaceHolder="Select Category"
+      >
+          @for (category of categories; track category.categoryId)
+          {
+              <nz-option [nzValue]="category.categoryId" [nzLabel]="category.categoryName"></nz-option>
+
+          }
+
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="difficulty">Difficulty</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide difficulty"
+    >
+     <nz-select
+      id="difficultyId"
+      formControlName="difficultyId"
+      nzPlaceHolder="Select Difficulty"
+     >
+       @for(difficulty of difiiculties; track difficulty.difficultyId)
+       {
+         <nz-option [nzValue]="difficulty.difficultyId" [nzLabel]="difficulty.difficultyName"></nz-option>
+       }
+     </nz-select>
+
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="description">Description</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide valid Description"
+    >
+      <input
+        nz-input
+        id="description"
+        formControlName="description"
+        placeholder="Put Your Task Description Here"
+      />
+    </nz-form-control>
+
+  </nz-form-item>
+
+
+  <button nz-button (click)="onSubmit()" > Submit</button>
+
+  <button nz-button (click)="onClose()">Close</button>
+
+
+</form>
+</div>

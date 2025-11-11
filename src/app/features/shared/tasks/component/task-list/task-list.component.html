@@ -1,20 +1,56 @@
-<div class="task-list-container">
-  <h2>My Tasks</h2>
+<div class="task-panel">
+<h1>My Tasks
+<button nz-button (click)="onTaskCreation()">
+  Create New Task
+</button>
+</h1>
 
-  <div *ngIf="loading" class="loading-initial">
-    <div class="spinner"></div>
-    <p>Loading tasks...</p>
-  </div>
+<div class="task-layout">
+  <aside class="filter-panel">
+    <app-task-filter
+    [categoryId]="categoryId"
+    [difficultyId]="difficultyId"
+    [isGroupTask]="isGroupTask"
+    [isCompleted]="isCompleted"
+  ></app-task-filter>
+  </aside>
 
-  <div *ngIf="!loading && tasks.length === 0" class="empty-state">
-    You have no tasks yet
-  </div>
+  <div class="task-list">
+    @if (!loading && tasks.length === 0) {
+      <div class="empty-state">
+        You have no tasks yet
+      </div>
+    }
 
-  <div class="tasks-grid">
-    <app-task-item
-      *ngFor="let task of tasks; trackBy: trackByTaskId"
-      [task]="task"
-      (taskUpdated)="onTaskUpdated()">
-    </app-task-item>
+    @if (!loading && tasks.length > 0) {
+      @for (date of getGroupKeys(); track getGroupKeys().keys() ) {
+        <div class="task-group">
+          <h3 class="task-group-title">{{ date }}</h3>
+
+          <div class="tasks-grid">
+            @for (task of groupedTasks[date]; track task.taskId) {
+              <app-task-item
+                [task]="task"
+                (taskUpdated)=onTaskUpdated(task.taskId)
+                (editTask)="onTaskEdit(task)">
+              </app-task-item>
+            }
+          </div>
+        </div>
+      }
+    }
   </div>
+<aside>
+  @if(editionMode()||creationMode())
+  {
+  <app-task-form
+  [taskSignal]="selectedTask"
+  [editionMode]="editionMode"
+  [creationMode]="creationMode"
+  (taskFormSubmitted)="onTaskSubmit()"
+  >
+  </app-task-form>
+  }
+</aside>
+</div>
 </div>
