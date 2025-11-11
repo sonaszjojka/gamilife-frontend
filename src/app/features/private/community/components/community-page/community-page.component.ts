@@ -40,7 +40,7 @@ export class CommunityPageComponent implements OnInit {
   loadGroups(page: number, timeout: number) {
     const params: GroupFilterParams = {
       page: page,
-      size: 9,
+      size: 12,
       groupName: this.groupName() ?? undefined,
       groupType: this.groupTypeId() ?? undefined,
     };
