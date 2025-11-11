@@ -1,32 +1,35 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
+import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
-import { CommonModule } from '@angular/common';
-import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
+import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
+import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
 import { Group } from '../../../../shared/models/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
+
 @Component({
-  selector: 'app-community-page',
+  selector: 'app-my-groups-page',
   imports: [
+    CommonModule,
     NzInputModule,
     NzIconModule,
-    InputSearchComponent,
-    CommonModule,
-    PaginationMoreComponent,
+    NzButtonModule,
     NzGridModule,
+    InputSearchComponent,
+    PaginationMoreComponent,
     GroupListComponent,
   ],
-  templateUrl: './community-page.component.html',
-  styleUrl: './community-page.component.css',
+  templateUrl: './my-groups-page.component.html',
+  styleUrl: './my-groups-page.component.css',
   standalone: true,
 })
-export class CommunityPageComponent implements OnInit {
+export class MyGroupsPageComponent implements OnInit {
   private groupApiService = inject(GroupApiService);
-  readonly value = signal('');
+
   groups = signal<Group[]>([]);
   totalPages = signal<number>(0);
   currentPage = signal<number>(0);
@@ -34,10 +37,10 @@ export class CommunityPageComponent implements OnInit {
   groupTypeId = signal<number | undefined>(undefined);
 
   ngOnInit() {
-    this.loadGroups(0, 0);
+    this.loadMyGroups(0, 0);
   }
 
-  loadGroups(page: number, timeout: number) {
+  loadMyGroups(page: number, timeout: number) {
     const params: GroupFilterParams = {
       page: page,
       size: 9,
@@ -45,29 +48,43 @@ export class CommunityPageComponent implements OnInit {
       groupType: this.groupTypeId() ?? undefined,
     };
 
-    this.groupApiService.getGroups(params).subscribe({
-      next: (response) => {
-        setTimeout(() => {
-          this.groups.set(response.content);
-          this.totalPages.set(response.totalPages - 1);
-          this.currentPage.set(page);
-        }, timeout);
-      },
-      error: (err) => console.error(err),
-    });
+    this.groupApiService
+      .getAllGroupsByUserIdWhereUserIsMember(params)
+      .subscribe({
+        next: (response) => {
+          setTimeout(() => {
+            this.groups.set(response.content);
+            this.totalPages.set(response.totalPages - 1);
+            this.currentPage.set(page);
+          }, timeout);
+        },
+        error: (err) => console.error(err),
+      });
   }
 
   onPageChange(page: number) {
-    this.loadGroups(page, 350);
+    this.loadMyGroups(page, 350);
   }
 
   onInputChange(inputValue: string) {
     this.groupName.set(inputValue);
-    this.loadGroups(0, 350);
+    this.loadMyGroups(0, 350);
   }
 
   onGroupTypeChange(groupTypeId: string | null) {
     this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
-    this.loadGroups(0, 350);
+    this.loadMyGroups(0, 350);
+  }
+
+  onCreateGroup() {
+    console.log('Create group');
+  }
+
+  onEditGroup(group: Group) {
+    console.log('Edit group:', group);
+  }
+
+  onDeleteGroup(group: Group) {
+    console.log('Delete group:', group);
   }
 }

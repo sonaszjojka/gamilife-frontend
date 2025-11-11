@@ -13,6 +13,7 @@ import { EmailVerificationResultComponent } from './features/public/email-verifi
 import { ResetPasswordComponent } from './features/public/reset-password/components/reset-password/reset-password.component';
 import { CommunityPageComponent } from './features/private/community/components/community-page/community-page.component';
 import { PreviewGroupComponent } from './features/private/shared/components/preview-group/preview-group.component';
+import { MyGroupsPageComponent } from './features/private/my-groups/components/my-groups-page/my-groups-page.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +59,7 @@ export const routes: Routes = [
       { path: 'tasks', component: TaskListComponent },
       { path: 'community', component: CommunityPageComponent },
       { path: 'community/groups/:groupId', component: PreviewGroupComponent },
+      { path: 'my-groups', component: MyGroupsPageComponent },
     ],
   },
   { path: '**', redirectTo: '' },

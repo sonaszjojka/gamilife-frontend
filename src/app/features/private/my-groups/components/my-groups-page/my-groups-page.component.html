@@ -1,12 +1,11 @@
-<div class="search-container">
-  <div class="search-bar-container">
-    <div class="search-bar">
-      <app-input-search
-        (inputChange)="onInputChange($event)"
-        (groupTypeChange)="onGroupTypeChange($event)"
-      >
-      </app-input-search>
-    </div>
+<div class="my-groups-container">
+  <div class="header">
+    <app-input-search
+      (inputChange)="onInputChange($event)"
+      (groupTypeChange)="onGroupTypeChange($event)"
+    >
+    </app-input-search>
+    <!-- <button (click)="onCreateGroup()">Create Group</button> -->
   </div>
 
   <div class="search-result-container">

@@ -17,6 +17,25 @@ export class GroupApiService {
   private apiUrl = environment.apiUrl;
 
   getGroups(params: GroupFilterParams): Observable<GetGroupsResult> {
+    return this.http.get<GetGroupsResult>(`${this.apiUrl}/groups`, {
+      params: this.buildHttpParamsForGetGroups(params),
+    });
+  }
+
+  getAllGroupsByUserIdWhereUserIsMember(
+    params: GroupFilterParams,
+  ): Observable<GetGroupsResult> {
+    const userId = localStorage.getItem('userId');
+
+    return this.http.get<GetGroupsResult>(
+      `${this.apiUrl}/users/${userId}/groups`,
+      {
+        params: this.buildHttpParamsForGetGroups(params),
+      },
+    );
+  }
+
+  protected buildHttpParamsForGetGroups(params: GroupFilterParams) {
     let httpParams = new HttpParams();
 
     if (params.joinCode) {
@@ -34,10 +53,7 @@ export class GroupApiService {
     if (params.size !== undefined) {
       httpParams = httpParams.set('size', params.size.toString());
     }
-
-    return this.http.get<GetGroupsResult>(`${this.apiUrl}/groups`, {
-      params: httpParams,
-    });
+    return httpParams;
   }
 
   getGroupById(groupId: string, isForLoggedUser = true): Observable<Group> {
