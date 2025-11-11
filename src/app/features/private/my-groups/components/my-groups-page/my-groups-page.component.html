@@ -1,0 +1,22 @@
+<div class="my-groups-container">
+  <div class="header">
+    <app-input-search
+      (inputChange)="onInputChange($event)"
+      (groupTypeChange)="onGroupTypeChange($event)"
+    >
+    </app-input-search>
+    <!-- <button (click)="onCreateGroup()">Create Group</button> -->
+  </div>
+
+  <div class="search-result-container">
+    <app-group-list [groups]="groups()"> </app-group-list>
+  </div>
+
+  <div class="paging-div">
+    <app-pagination-more
+      [maxPageIndex]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination-more>
+  </div>
+</div>

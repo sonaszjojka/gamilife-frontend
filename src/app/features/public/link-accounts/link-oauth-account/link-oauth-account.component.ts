@@ -14,7 +14,7 @@ import {
 import {
   OAuth2Service,
   LinkOAuthAccountRequest,
-} from '../../../shared/services/oauth2.service';
+} from '../../../shared/services/oauth2/oauth2.service';
 import { Router } from '@angular/router';
 
 @Component({

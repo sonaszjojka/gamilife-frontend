@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-verify-email',
@@ -20,6 +21,7 @@ export class VerifyEmailComponent {
   resentSuccessfully = signal(false);
   resentFailure = signal(false);
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   open(email: string): void {
     this.email.set(email);
@@ -32,6 +34,7 @@ export class VerifyEmailComponent {
     this.isVisible.set(false);
     this.resentSuccessfully.set(false);
     this.resentFailure.set(false);
+    this.router.navigate(['/login']);
   }
 
   resendVerification(): void {

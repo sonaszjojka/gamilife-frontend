@@ -1,0 +1,23 @@
+<div class="search-container">
+  <div class="search-bar-container">
+    <div class="search-bar">
+      <app-input-search
+        (inputChange)="onInputChange($event)"
+        (groupTypeChange)="onGroupTypeChange($event)"
+      >
+      </app-input-search>
+    </div>
+  </div>
+
+  <div class="search-result-container">
+    <app-group-list [groups]="groups()"> </app-group-list>
+  </div>
+
+  <div class="paging-div">
+    <app-pagination-more
+      [maxPageIndex]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination-more>
+  </div>
+</div>

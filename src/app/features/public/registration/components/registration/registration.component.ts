@@ -19,8 +19,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { environment } from '../../../../../../environments/environment.development';
 import { CommonModule } from '@angular/common';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
-import { OAuth2Service } from '../../../../shared/services/oauth2.service';
-
+import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 @Component({
   selector: 'app-registration',
   standalone: true,
