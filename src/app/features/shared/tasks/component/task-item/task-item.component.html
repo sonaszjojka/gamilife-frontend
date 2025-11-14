@@ -1,7 +1,10 @@
 <nz-card [nzTitle]="task.title">
+  @if(task.completedAt==null)
+  {
   <div>
   <button nz-button (click)="onTaskEdit()" ><nz-icon nzType="setting" nzTheme="outline" /></button>
   </div>
+  }
   <p *ngIf="task.description">{{ task.description }}</p>
   <div class="task-tags">
     <p> <span>{{task.categoryName}}</span></p>

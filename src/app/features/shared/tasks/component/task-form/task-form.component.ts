@@ -1,6 +1,6 @@
 import {Component, inject, Input, OnInit, effect, WritableSignal, Output, EventEmitter} from '@angular/core';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {FormBuilder, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
 import {NzColDirective} from 'ng-zorro-antd/grid';
 import {NzInputDirective} from 'ng-zorro-antd/input';
@@ -121,7 +121,6 @@ export class TaskFormComponent {
     if (this.creationMode?.()) {
       this.taskService.createTask(request).subscribe({
         next: (response) => {
-          console.log('Task created:', response);
           this.validTaskForm.reset();
           this.taskFormSubmitted.emit();
         },
@@ -138,7 +137,6 @@ export class TaskFormComponent {
 
       this.taskService.editTask(task.taskId, request).subscribe({
         next: (response) => {
-          console.log('Task edited:', response);
           this.validTaskForm.reset();
           this.taskFormSubmitted.emit();
         },

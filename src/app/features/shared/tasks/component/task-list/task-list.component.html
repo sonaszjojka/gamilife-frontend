@@ -6,7 +6,6 @@
 </h1>
 
 <div class="task-layout">
-
     <app-task-filter
     [categoryId]="categoryId"
     [difficultyId]="difficultyId"
@@ -14,11 +13,10 @@
     [isCompleted]="isCompleted"
   ></app-task-filter>
 
-
   <div class="task-list">
     @if (!loading && tasks.length === 0) {
       <div class="empty-state">
-        You have no tasks yet
+        <h3>You have no tasks yet!</h3>
       </div>
     }
 
