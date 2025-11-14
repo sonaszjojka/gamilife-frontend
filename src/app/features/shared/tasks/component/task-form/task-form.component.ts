@@ -28,7 +28,7 @@ import {EditTaskRequest} from '../../model/edit-task-request';
 })
 export class TaskFormComponent {
 
-  @Input() taskSignal!: WritableSignal<Task | null>;
+  @Input() task!: WritableSignal<Task | null>;
   @Input() creationMode?: WritableSignal<boolean|null>
   @Input() editionMode?: WritableSignal<boolean|null>;
   @Output() taskFormSubmitted = new EventEmitter<void>();
@@ -73,7 +73,7 @@ export class TaskFormComponent {
 
   constructor() {
     effect(() => {
-      const task = this.taskSignal?.();
+      const task = this.task?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
 
@@ -108,35 +108,46 @@ export class TaskFormComponent {
     }
 
     const formValue = this.validTaskForm.getRawValue();
-    const request: EditTaskRequest={
-
+    const request: EditTaskRequest = {
       title: formValue.title,
       startTime: formValue.startTime,
       endTime: formValue.endTime,
-      categoryId:formValue.categoryId,
-      difficultyId:formValue.difficultyId,
+      categoryId: formValue.categoryId,
+      difficultyId: formValue.difficultyId,
       completedAt: formValue.completedAt,
       description: formValue.description
     }
 
     if (this.creationMode?.()) {
-
-      this.taskService.createTask(request).subscribe(response=>
-      console.log(response))
-      this.taskFormSubmitted.emit()
-      this.onClose()
-
-    }
-    else if (this.editionMode?.()) {
-      const task = this.taskSignal?.()
-      if (task==null)
-      {
+      this.taskService.createTask(request).subscribe({
+        next: (response) => {
+          console.log('Task created:', response);
+          this.validTaskForm.reset();
+          this.taskFormSubmitted.emit();
+        },
+        error: (error) => {
+          console.error('Error creating task:', error);
+          this.taskFormSubmitted.emit();
+        }
+      });
+    } else if (this.editionMode?.()) {
+      const task = this.task?.();
+      if (task == null) {
         return;
       }
-      this.taskService.editTask(task.taskId,request).subscribe()
-      this.taskFormSubmitted.emit()
-      this.onClose()
 
+      this.taskService.editTask(task.taskId, request).subscribe({
+        next: (response) => {
+          console.log('Task edited:', response);
+          this.validTaskForm.reset();
+          this.taskFormSubmitted.emit();
+        },
+        error: (error) => {
+          console.error('Error editing task:', error);
+          this.taskFormSubmitted.emit();
+        }
+      });
     }
   }
+
 }

@@ -44,7 +44,7 @@
   @if(editionMode()||creationMode())
   {
   <app-task-form
-  [taskSignal]="selectedTask"
+  [task]="selectedTask"
   [editionMode]="editionMode"
   [creationMode]="creationMode"
   (taskFormSubmitted)="onTaskSubmit()"

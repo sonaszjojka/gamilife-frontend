@@ -182,10 +182,12 @@ export class TaskListComponent {
 
   onTaskSubmit():void
   {
-
-
       this.currentPage=0
       this.loadTasks()
+
+    this.editionMode.set(false);
+    this.creationMode.set(false);
+    this.selectedTask.set(null);
   }
 
 }
