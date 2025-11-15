@@ -11,6 +11,7 @@ export interface Group {
   membersCount: number;
   isMember: boolean | null;
   hasActiveGroupRequest: boolean | null;
+  groupMemberIdForLoggedUser: string | null;
 }
 
 export interface CreateGroupDto {
