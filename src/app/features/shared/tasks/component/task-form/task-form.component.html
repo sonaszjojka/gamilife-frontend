@@ -1,4 +1,5 @@
 <div class="task-form">
+  <button nz-button nzType="default" nzShape="circle" (click)="onClose()"><nz-icon nzType="close"></nz-icon></button>
 <form
 class="task-form"
 [formGroup]="validTaskForm"
@@ -12,6 +13,7 @@ class="task-form"
       <input
         nz-input
         id="title"
+        name="title"
         formControlName="title"
         placeholder="My  New Task"
       />
@@ -20,31 +22,43 @@ class="task-form"
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label nzRequired nzFor="startTime">Start Time</nz-form-label>
+    <nz-form-label nzRequired >Start Time</nz-form-label>
     <nz-form-control
       nzErrorTip="Please provide valid Start Time"
     >
-      <input
-        nz-input
-        id="startTime"
-        formControlName="startTime"
-        placeholder="Task Start Time"
-      />
+      <nz-date-picker
+      nzId="startTimeDate"
+      formControlName="startTimeDate"
+      nzPlaceHolder="2003-11-29"
+      >
+      </nz-date-picker>
+      <nz-time-picker
+      nzId="startTimeHour"
+      formControlName="startTimeHour"
+      nzPlaceHolder="11:59:30"
+      >
+      </nz-time-picker>
+
     </nz-form-control>
 
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label nzRequired nzFor="endTime">End Time</nz-form-label>
+    <nz-form-label nzRequired >End Time</nz-form-label>
     <nz-form-control
       nzErrorTip="Please provide valid End Time"
     >
-      <input
-        nz-input
-        id="endTime"
-        formControlName="endTime"
-        placeholder="Task End Time"
-      />
+      <nz-date-picker
+        nzId="endTimeDate"
+        formControlName="endTimeDate"
+        nzPlaceHolder="2003-11-30"
+        ></nz-date-picker>
+      <nz-time-picker
+        nzId="endTimeHour"
+        formControlName="endTimeHour"
+        nzPlaceHolder="12:00:00">
+
+      </nz-time-picker>
     </nz-form-control>
 
   </nz-form-item>
@@ -53,7 +67,7 @@ class="task-form"
     <nz-form-label nzRequired nzFor="categoryId">Category</nz-form-label>
     <nz-form-control nzErrorTip="Please provide category">
       <nz-select
-        id="categoryId"
+        nzId="categoryId"
         formControlName="categoryId"
         nzPlaceHolder="Select Category"
       >
@@ -68,12 +82,13 @@ class="task-form"
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label nzRequired nzFor="difficulty">Difficulty</nz-form-label>
+    <nz-form-label nzRequired nzFor="difficultyId">Difficulty</nz-form-label>
     <nz-form-control
       nzErrorTip="Please provide difficulty"
     >
      <nz-select
-      id="difficultyId"
+      nzId="difficultyId"
+
       formControlName="difficultyId"
       nzPlaceHolder="Select Difficulty"
      >
@@ -95,6 +110,7 @@ class="task-form"
       <input
         nz-input
         id="description"
+        name="description"
         formControlName="description"
         placeholder="Put Your Task Description Here"
       />
@@ -103,10 +119,20 @@ class="task-form"
   </nz-form-item>
 
 
-  <button nz-button (click)="onSubmit()" > Submit</button>
-
-  <button nz-button (click)="onClose()">Close</button>
-
-
 </form>
+  <div class="button-panel">
+
+    <button nz-button nzShape="round" (click)="onSubmit()" > Save</button>
+
+    @if(this.editionMode?.())
+    {
+    <button nz-button nzShape="round" (click)="onDelete()">Delete</button>
+    }
+
+  </div>
 </div>
+
+
+
+
+

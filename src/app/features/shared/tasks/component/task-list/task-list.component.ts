@@ -189,5 +189,14 @@ export class TaskListComponent {
     this.creationMode.set(false);
     this.selectedTask.set(null);
   }
+  onTaskDelete():void
+  {
+    this.tasks = this.tasks.filter(t=>t!=this.selectedTask())
+    this.groupTasksByDate()
+    this.editionMode.set(false);
+    this.creationMode.set(false);
+    this.selectedTask.set(null);
+
+  }
 
 }

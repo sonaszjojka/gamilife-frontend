@@ -8,6 +8,10 @@ import {Task} from '../../model/task.model';
 import {IndividualTaskService} from '../../service/individual-task.service';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {EditTaskRequest} from '../../model/edit-task-request';
+import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
+import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
+import {DatePipe} from '@angular/common';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-task-form',
@@ -20,7 +24,11 @@ import {EditTaskRequest} from '../../model/edit-task-request';
     NzFormLabelComponent,
     NzInputDirective,
     NzSelectComponent,
-    NzOptionComponent
+    NzOptionComponent,
+    NzDatePickerComponent,
+    NzTimePickerComponent,
+    DatePipe,
+    NzIconDirective
   ],
   templateUrl: './task-form.component.html',
   standalone: true,
@@ -32,6 +40,7 @@ export class TaskFormComponent {
   @Input() creationMode?: WritableSignal<boolean|null>
   @Input() editionMode?: WritableSignal<boolean|null>;
   @Output() taskFormSubmitted = new EventEmitter<void>();
+  @Output() taskDeleted=new EventEmitter<void>()
 
 
   private formBuilder = inject(NonNullableFormBuilder);
@@ -43,10 +52,18 @@ export class TaskFormComponent {
       Validators.minLength(1),
       Validators.maxLength(300)
     ]),
-    startTime: this.formBuilder.control('', [
+    startTimeDate: this.formBuilder.control<Date|null>(null, [
       Validators.required
     ]),
-    endTime: this.formBuilder.control(''),
+    startTimeHour: this.formBuilder.control<Date|null>(null, [
+      Validators.required
+    ]),
+    endTimeDate: this.formBuilder.control<Date|null>(null,[
+      Validators.required
+      ]),
+    endTimeHour:this.formBuilder.control<Date|null>(null,[
+      Validators.required
+    ]),
     categoryId: this.formBuilder.control<number>(0, [
       Validators.required
     ]),
@@ -78,10 +95,14 @@ export class TaskFormComponent {
       const isCreating = this.creationMode?.();
 
       if (task && isEditing) {
+        const startDate = task.startTime ? new Date(task.startTime) : null;
+        const endDate = task.endTime?new Date(task.endTime):null;
         this.validTaskForm.patchValue({
           title: task.title || '',
-          startTime: task.startTime || '',
-          endTime: task.endTime || '',
+          startTimeDate: startDate,
+          startTimeHour: startDate,
+          endTimeDate: endDate,
+          endTimeHour:endDate,
           categoryId: task.categoryId ,
           difficultyId: task.difficultyId ,
           completedAt: task.completedAt || '',
@@ -108,10 +129,25 @@ export class TaskFormComponent {
     }
 
     const formValue = this.validTaskForm.getRawValue();
+    let mergedStartTime = '';
+    const startTimeDate = formValue.startTimeDate;
+    const startTimeHour = formValue.startTimeHour;
+
+    startTimeDate!.setHours(startTimeHour!.getHours()+1,startTimeHour!.getMinutes(),startTimeHour!.getSeconds());
+    mergedStartTime=startTimeDate!.toISOString();
+
+    let mergedEndTime='';
+    const endTimeDate = formValue.endTimeDate;
+    const endTimeHour=formValue.endTimeHour;
+
+    endTimeDate!.setHours(endTimeHour!.getHours()+1,endTimeHour!.getMinutes(),endTimeHour!.getSeconds())
+    mergedEndTime=endTimeDate!.toISOString()
+
+
     const request: EditTaskRequest = {
       title: formValue.title,
-      startTime: formValue.startTime,
-      endTime: formValue.endTime,
+      startTime: mergedStartTime,
+      endTime: mergedEndTime,
       categoryId: formValue.categoryId,
       difficultyId: formValue.difficultyId,
       completedAt: formValue.completedAt,
@@ -148,4 +184,21 @@ export class TaskFormComponent {
     }
   }
 
+  onDelete() {
+    const task = this.task?.();
+    if (task == null) {
+      return;
+    }
+    this.taskService.deleteTask(task.taskId).subscribe({
+      next:()=>{
+        this.validTaskForm.reset();
+        this.taskDeleted.emit();
+      },
+      error: (error) => {
+        console.error('Error deleting task:', error);
+        this.taskFormSubmitted.emit();
+      }
+    })
+
+  }
 }

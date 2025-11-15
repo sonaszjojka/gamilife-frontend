@@ -95,6 +95,11 @@ export class IndividualTaskService {
 
   }
 
+  deleteTask(taskId:String)
+  {
+    return this.http.delete(`${environment.apiUrl}/tasks/${taskId}`, {withCredentials:true});
+  }
+
 }
 
 

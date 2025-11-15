@@ -2,4 +2,18 @@
 nz-card {
   margin-bottom: 16px;
   background-color: var(--third-color);
+  border-radius: 10px;
 }
+
+nz-card:hover{
+  background-color: var(--fifth-color);
+  transform: scale(1.020);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nzTitle
+{
+  text-align: center;
+}
+
+

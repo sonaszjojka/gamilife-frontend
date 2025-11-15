@@ -6,9 +6,10 @@ export interface Task {
   endTime: string;
   categoryId: number;
   difficultyId: number;
+  habitId?:string|null;
   completedAt?: string | null;
   categoryName: string;
   difficultyName: string;
   isGroupTask: boolean;
-  userId:string;
+  userId?:string|null;
 }
