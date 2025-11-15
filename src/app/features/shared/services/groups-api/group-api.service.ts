@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { GroupFilterParams } from '../../models/group-filter-params.model';
 import { GetGroupsResult } from '../../models/groups.model';
-import { Group } from '../../models/group.model';
+import { CreateGroupDto, Group } from '../../models/group.model';
 import { GroupType } from '../../models/group-type.model';
 import { CreateGroupMemberInOpenGroupResult } from '../../models/group-member.model';
 import { CreateGroupRequestResult } from '../../models/group-request.model';
@@ -85,5 +85,9 @@ export class GroupApiService {
 
   getGroupTypes(): Observable<GroupType[]> {
     return this.http.get<GroupType[]>(`${this.apiUrl}/group-types`);
+  }
+
+  createGroup(formValue: CreateGroupDto): Observable<unknown> {
+    return this.http.post(`${this.apiUrl}/groups`, formValue);
   }
 }

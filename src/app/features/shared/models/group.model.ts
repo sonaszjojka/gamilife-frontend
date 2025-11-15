@@ -12,3 +12,10 @@ export interface Group {
   isMember: boolean | null;
   hasActiveGroupRequest: boolean | null;
 }
+
+export interface CreateGroupDto {
+  groupName: string;
+  groupCurrencySymbol: string;
+  groupTypeId: string;
+  membersLimit: string;
+}

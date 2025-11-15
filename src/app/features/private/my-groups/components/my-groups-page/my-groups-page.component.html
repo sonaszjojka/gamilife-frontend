@@ -5,7 +5,18 @@
       (groupTypeChange)="onGroupTypeChange($event)"
     >
     </app-input-search>
-    <!-- <button (click)="onCreateGroup()">Create Group</button> -->
+  </div>
+
+  <div class="action-bar">
+    <button
+      nz-button
+      nzType="primary"
+      nzSize="large"
+      (click)="openAddGroupModal()"
+    >
+      <span nz-icon nzType="plus" nzTheme="outline"></span>
+      Create Group
+    </button>
   </div>
 
   <div class="search-result-container">
@@ -20,3 +31,5 @@
     </app-pagination-more>
   </div>
 </div>
+
+<app-add-group-form (groupCreated)="onGroupCreated()"></app-add-group-form>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -10,6 +10,7 @@ import { PaginationMoreComponent } from '../../../shared/components/pagination-m
 import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
 import { Group } from '../../../../shared/models/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
+import { AddGroupFormComponent } from '../add-group-form/add-group-form.component';
 
 @Component({
   selector: 'app-my-groups-page',
@@ -22,6 +23,7 @@ import { GroupListComponent } from '../../../shared/components/group-list/group-
     InputSearchComponent,
     PaginationMoreComponent,
     GroupListComponent,
+    AddGroupFormComponent,
   ],
   templateUrl: './my-groups-page.component.html',
   styleUrl: './my-groups-page.component.css',
@@ -35,6 +37,7 @@ export class MyGroupsPageComponent implements OnInit {
   currentPage = signal<number>(0);
   groupName = signal<string | undefined>(undefined);
   groupTypeId = signal<number | undefined>(undefined);
+  @ViewChild(AddGroupFormComponent) addGroupForm!: AddGroupFormComponent;
 
   ngOnInit() {
     this.loadMyGroups(0, 0);
@@ -60,6 +63,14 @@ export class MyGroupsPageComponent implements OnInit {
         },
         error: (err) => console.error(err),
       });
+  }
+
+  openAddGroupModal(): void {
+    this.addGroupForm.open();
+  }
+
+  onGroupCreated() {
+    this.loadMyGroups(0, 0);
   }
 
   onPageChange(page: number) {

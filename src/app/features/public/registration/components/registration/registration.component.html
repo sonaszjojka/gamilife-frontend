@@ -1,7 +1,8 @@
 <div class="div-registration-page">
   <div class="div-left-panel">
     <form
-      nz-form
+      nzForm
+      nzLayout="vertical"
       [formGroup]="validateForm"
       class="registration-form"
       (ngSubmit)="submitForm()"
@@ -19,7 +20,9 @@
       </div>
 
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="firstName">First name</nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true" nzFor="firstName"
+          >First name</nz-form-label
+        >
         <nz-form-control
           nzErrorTip="Please provide valid first name - min. 3, max. 50 letters."
         >
@@ -33,7 +36,9 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="lastName">Last name</nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true" nzFor="lastName"
+          >Last name</nz-form-label
+        >
         <nz-form-control
           nzErrorTip="Please provide valid last name - min. 3, max. 50 letters."
         >
@@ -47,7 +52,9 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="username">Username</nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true" nzFor="username"
+          >Username</nz-form-label
+        >
         <nz-form-control
           nzErrorTip="Please provide valid username - min. 3, max. 20 letters."
         >
@@ -61,7 +68,9 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="email">E-mail</nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true" nzFor="email"
+          >E-mail</nz-form-label
+        >
         <nz-form-control nzErrorTip="Please provide valid e-mail!">
           <input
             nz-input
@@ -73,7 +82,7 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="dateOfBirth"
+        <nz-form-label nzRequired [nzNoColon]="true" nzFor="dateOfBirth"
           >Date of birth</nz-form-label
         >
         <nz-form-control nzErrorTip="Please select your date of birth!">
@@ -86,7 +95,9 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="password">Password</nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true" nzFor="password"
+          >Password</nz-form-label
+        >
         <nz-form-control [nzErrorTip]="passwordErrorTpl">
           <nz-input-group [nzSuffix]="suffixVisibility">
             <input

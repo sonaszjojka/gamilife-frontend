@@ -2,9 +2,32 @@
     height: 80vh;
 }
 
+.header {
+    margin-bottom: var(--spacing-medium, 16px);
+}
+
+.action-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: var(--spacing-medium, 24px);
+    padding: var(--spacing-small, 8px) 0;
+    padding: 0 24px;
+}
+
+.action-bar button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-result-container {
+    margin-bottom: var(--spacing-medium, 16px);
+}
+
 .paging-div {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-medium) 0;
+    padding: var(--spacing-medium, 16px) 0;
 }
