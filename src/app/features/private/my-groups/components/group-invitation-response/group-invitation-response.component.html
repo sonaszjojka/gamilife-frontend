@@ -1,0 +1,121 @@
+<div class="invitation-container">
+  <div *ngIf="status() === 'loading'" class="loading-container">
+    <nz-spin nzSize="large" nzTip="Loading invitation..."></nz-spin>
+  </div>
+
+  <nz-card *ngIf="status() === 'ready'" class="invitation-card">
+    <div class="invitation-content">
+      <div class="invitation-icon">
+        <span
+          nz-icon
+          nzType="mail"
+          nzTheme="twotone"
+          [nzTwotoneColor]="'var(--third-color)'"
+        ></span>
+      </div>
+
+      <h2 class="invitation-title">Group Invitation</h2>
+
+      <div class="invitation-message">
+        <p class="message-text">
+          You have been invited to join a group with id: <br />
+          <strong>{{ groupId() }}</strong
+          >. <br />Would you like to accept this invitation?
+        </p>
+
+        <div class="group-code-box" *ngIf="groupCode()">
+          <span class="code-label">Group Code:</span>
+          <span class="code-value">{{ groupCode() }}</span>
+        </div>
+      </div>
+
+      <div class="invitation-actions">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          nzBlock
+          (click)="acceptInvitation()"
+          [nzLoading]="processing()"
+          [disabled]="processing()"
+          class="accept-btn"
+        >
+          <span nz-icon nzType="check-circle"></span>
+          Accept Invitation
+        </button>
+
+        <button
+          nz-button
+          nzDanger
+          nzSize="large"
+          nzBlock
+          (click)="rejectInvitation()"
+          [nzLoading]="processing()"
+          [disabled]="processing()"
+          class="reject-btn"
+        >
+          <span nz-icon nzType="close-circle"></span>
+          Reject Invitation
+        </button>
+      </div>
+    </div>
+  </nz-card>
+
+  <nz-result
+    *ngIf="status() === 'accepted'"
+    nzStatus="success"
+    nzTitle="Invitation Accepted!"
+    nzSubTitle="You have successfully joined the group. You can now access group features."
+  >
+    <div nz-result-extra>
+      <button
+        nz-button
+        nzType="primary"
+        [routerLink]="['/app/groups/', groupId()]"
+      >
+        <span nz-icon nzType="team"></span>
+        Go to Group
+      </button>
+      <button nz-button routerLink="/app/my-groups">
+        <span nz-icon nzType="appstore"></span>
+        View Your Groups
+      </button>
+    </div>
+  </nz-result>
+
+  <nz-result
+    *ngIf="status() === 'rejected'"
+    nzStatus="info"
+    nzTitle="Invitation Rejected"
+    nzSubTitle="You have declined the group invitation."
+  >
+    <div nz-result-extra>
+      <button nz-button nzType="primary" routerLink="/app/community">
+        <span nz-icon nzType="appstore"></span>
+        Browse Groups
+      </button>
+      <button nz-button routerLink="/">
+        <span nz-icon nzType="home"></span>
+        Go Home
+      </button>
+    </div>
+  </nz-result>
+
+  <nz-result
+    *ngIf="status() === 'error'"
+    nzStatus="error"
+    nzTitle="Invitation Error"
+    [nzSubTitle]="errorMessage() || 'Something went wrong. Please try again.'"
+  >
+    <div nz-result-extra>
+      <button nz-button nzType="primary" routerLink="/app/community">
+        <span nz-icon nzType="appstore"></span>
+        Browse Groups
+      </button>
+      <button nz-button routerLink="/">
+        <span nz-icon nzType="home"></span>
+        Go Home
+      </button>
+    </div>
+  </nz-result>
+</div>

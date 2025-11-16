@@ -1,0 +1,119 @@
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-large);
+}
+
+.info-box {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+    padding: var(--spacing-medium);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    border-left: 4px solid var(--third-color);
+}
+
+.info-icon {
+    font-size: var(--font-size-xlarge);
+    color: var(--third-color);
+}
+
+.info-text {
+    margin: 0;
+    color: var(--text-primary-color);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-base);
+}
+
+.users-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    padding: var(--spacing-small);
+    border-radius: var(--border-radius);
+    transition: background var(--transition-speed);
+}
+
+.user-item:hover {
+    background: var(--bg-hover);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+}
+
+.user-icon {
+    font-size: var(--font-size-large);
+    color: var(--third-color);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.username {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary-color);
+}
+
+.email {
+    font-size: var(--font-size-xs);
+    color: var(--border-color-dark);
+}
+
+.check-icon {
+    font-size: var(--font-size-large);
+    color: var(--color-success);
+}
+
+::ng-deep .ant-list-item.selected {
+    background: var(--bg-hover);
+    border-color: var(--third-color);
+}
+
+.status-message {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+}
+
+.sending-msg {
+    background: var(--bg-secondary);
+    color: var(--color-info);
+}
+
+.success-msg {
+    background: rgba(82, 196, 26, 0.1);
+    color: var(--color-success);
+}
+
+.error-msg {
+    background: rgba(255, 77, 79, 0.1);
+    color: var(--color-error);
+}
+
+.modal-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.modal-button-primary {
+    background: var(--third-color);
+    color: var(--main-color)
+}

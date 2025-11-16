@@ -1,4 +1,3 @@
-// group-admin-actions.component.ts
 import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -39,7 +38,7 @@ import { Router } from '@angular/router';
           (click)="openEditModal()"
         >
           <span nz-icon nzType="edit"></span>
-          Edit Group
+          Edit group information
         </button>
 
         <button
@@ -126,12 +125,10 @@ export class GroupAdminActionsComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.message.success('Group deleted successfully');
-          this.router.navigate(['/groups']);
+          this.router.navigate(['app/groups']);
         },
         error: (err) => {
           console.error('Failed to delete group:', err);
-          this.message.error('Failed to delete group. Please try again.');
         },
       });
   }

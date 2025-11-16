@@ -38,7 +38,7 @@ export class MyGroupsPageComponent implements OnInit {
   groupName = signal<string | undefined>(undefined);
   groupTypeId = signal<number | undefined>(undefined);
   @ViewChild(AddGroupFormComponent) addGroupForm!: AddGroupFormComponent;
-
+  @ViewChild(InputSearchComponent) inputSearch!: InputSearchComponent;
   ngOnInit() {
     this.loadMyGroups(0, 0);
   }
@@ -70,6 +70,9 @@ export class MyGroupsPageComponent implements OnInit {
   }
 
   onGroupCreated() {
+    this.groupName.set(undefined);
+    this.groupTypeId.set(undefined);
+    this.inputSearch.resetFilters();
     this.loadMyGroups(0, 0);
   }
 
@@ -85,17 +88,5 @@ export class MyGroupsPageComponent implements OnInit {
   onGroupTypeChange(groupTypeId: string | null) {
     this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
     this.loadMyGroups(0, 350);
-  }
-
-  onCreateGroup() {
-    console.log('Create group');
-  }
-
-  onEditGroup(group: Group) {
-    console.log('Edit group:', group);
-  }
-
-  onDeleteGroup(group: Group) {
-    console.log('Delete group:', group);
   }
 }

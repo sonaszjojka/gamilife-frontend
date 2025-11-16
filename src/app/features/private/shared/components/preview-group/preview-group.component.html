@@ -18,6 +18,17 @@
         >
           <app-members-list-peak [membersList]="membersList()">
           </app-members-list-peak>
+          <button
+            *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+            nz-button
+            nzType="default"
+            nzSize="large"
+            nzBlock
+            (click)="goToManageGroupMembersPage()"
+          >
+            <span nz-icon nzType="team"></span>
+            Manage Members
+          </button>
         </div>
       </div>
 

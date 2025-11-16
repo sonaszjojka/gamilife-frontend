@@ -1,4 +1,3 @@
-// edit-group-form.component.ts
 import {
   Component,
   inject,

@@ -1,4 +1,3 @@
-// group-actions.component.ts
 import {
   Component,
   computed,
@@ -14,7 +13,8 @@ import { Group } from '../../../../shared/models/group.model';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { GroupPreviewMode } from '../../../../shared/models/group-preview-mode';
 import { take } from 'rxjs/operators';
-import { GroupMemberApiService } from '../../../../shared/services/group-member-api.service';
+import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-group-actions',
@@ -64,7 +64,7 @@ export class GroupActionsComponent {
   protected loading = signal<boolean>(false);
   private readonly groupApi = inject(GroupApiService);
   private readonly groupMemberApi = inject(GroupMemberApiService);
-
+  private router = inject(Router);
   protected buttonText = computed(() => {
     const g = this.group();
     const m = this.mode();
@@ -206,6 +206,7 @@ export class GroupActionsComponent {
         next: () => {
           this.loading.set(false);
           this.actionComplete.emit();
+          this.router.navigate(['/app/community']);
         },
         error: (err) => {
           console.error(err);

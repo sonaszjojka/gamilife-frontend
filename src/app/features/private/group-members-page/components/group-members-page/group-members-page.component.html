@@ -1,0 +1,31 @@
+<div class="members-page-container">
+  <nz-spin [nzSpinning]="loading()" nzSize="large">
+    <nz-card [nzTitle]="'Group Members - ' + groupName()">
+      <div class="invite-btn-container" *ngIf="isAdmin()">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          (click)="openInvitationModal()"
+        >
+          <span nz-icon nzType="user-add"></span>
+          Invite User
+        </button>
+      </div>
+
+      <app-group-members-list
+        [groupId]="groupId()"
+        [members]="members()"
+        [adminId]="adminId()"
+        [isAdmin]="isAdmin()"
+        [loading]="loading()"
+        (memberChanged)="loadMembers()"
+      ></app-group-members-list>
+    </nz-card>
+  </nz-spin>
+</div>
+
+<app-send-group-invitation-form
+  [groupId]="groupId()"
+  (invitationSent)="loadMembers()"
+></app-send-group-invitation-form>

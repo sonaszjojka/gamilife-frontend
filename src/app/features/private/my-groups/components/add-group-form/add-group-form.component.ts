@@ -11,7 +11,6 @@ import { GroupApiService } from '../../../../shared/services/groups-api/group-ap
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { GroupType } from '../../../../shared/models/group-type.model';
-import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-add-group-form',
@@ -30,7 +29,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class AddGroupFormComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   protected groupApiService = inject(GroupApiService);
-  private message = inject(NzMessageService);
 
   groupCreated = output<void>();
 
@@ -79,7 +77,6 @@ export class AddGroupFormComponent implements OnInit {
 
       this.groupApiService.createGroup(formValue).subscribe({
         next: () => {
-          this.message.success('Group created successfully!');
           this.isVisible.set(false);
           this.validateForm.reset();
           this.isLoading.set(false);
@@ -87,7 +84,6 @@ export class AddGroupFormComponent implements OnInit {
         },
         error: (err) => {
           console.error('Failed to create group:', err);
-          this.message.error('Failed to create group. Please try again.');
           this.isLoading.set(false);
         },
       });

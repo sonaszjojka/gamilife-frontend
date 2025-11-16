@@ -14,6 +14,8 @@ import { ResetPasswordComponent } from './features/public/reset-password/compone
 import { CommunityPageComponent } from './features/private/community/components/community-page/community-page.component';
 import { PreviewGroupComponent } from './features/private/shared/components/preview-group/preview-group.component';
 import { MyGroupsPageComponent } from './features/private/my-groups/components/my-groups-page/my-groups-page.component';
+import { GroupMembersPageComponent } from './features/private/group-members-page/components/group-members-page/group-members-page.component';
+import { GroupInvitationResponseComponent } from './features/private/my-groups/components/group-invitation-response/group-invitation-response.component';
 
 export const routes: Routes = [
   {
@@ -58,8 +60,17 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'tasks', component: TaskListComponent },
       { path: 'community', component: CommunityPageComponent },
-      { path: 'community/groups/:groupId', component: PreviewGroupComponent },
+      { path: 'groups/:groupId', component: PreviewGroupComponent },
       { path: 'my-groups', component: MyGroupsPageComponent },
+      {
+        path: 'groups/:groupId/members',
+        component: GroupMembersPageComponent,
+        // todo AdminGuard?
+      },
+      {
+        path: 'groups/:groupId/group-invitations/:groupInvitationId',
+        component: GroupInvitationResponseComponent,
+      },
     ],
   },
   { path: '**', redirectTo: '' },

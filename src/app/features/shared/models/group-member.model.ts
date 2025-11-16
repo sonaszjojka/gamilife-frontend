@@ -22,3 +22,8 @@ export interface GroupMember {
   leftAt: string | null;
   username: string;
 }
+
+export interface EditGroupMemberDto {
+  groupMoney: number;
+  totalEarnedMoney: number;
+}
