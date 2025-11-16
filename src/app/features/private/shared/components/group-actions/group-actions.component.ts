@@ -69,7 +69,7 @@ export class GroupActionsComponent {
     const g = this.group();
     const m = this.mode();
 
-    if (m === GroupPreviewMode.MEMBER) {
+    if (m === GroupPreviewMode.MEMBER || m === GroupPreviewMode.ADMIN) {
       return 'Leave Group';
     }
 
@@ -102,7 +102,7 @@ export class GroupActionsComponent {
     const g = this.group();
     const m = this.mode();
 
-    if (m === GroupPreviewMode.MEMBER) {
+    if (m === GroupPreviewMode.MEMBER || m === GroupPreviewMode.ADMIN) {
       return false;
     }
 
@@ -124,11 +124,17 @@ export class GroupActionsComponent {
   });
 
   protected buttonType = computed(() => {
-    return this.mode() === GroupPreviewMode.MEMBER ? 'default' : 'primary';
+    return this.mode() === GroupPreviewMode.MEMBER ||
+      this.mode() === GroupPreviewMode.ADMIN
+      ? 'default'
+      : 'primary';
   });
 
   protected buttonIcon = computed(() => {
-    return this.mode() === GroupPreviewMode.MEMBER ? 'logout' : 'plus-circle';
+    return this.mode() === GroupPreviewMode.MEMBER ||
+      this.mode() === GroupPreviewMode.ADMIN
+      ? 'logout'
+      : 'plus-circle';
   });
 
   protected showLimitWarning = computed(() => {
@@ -144,7 +150,7 @@ export class GroupActionsComponent {
 
     this.loading.set(true);
 
-    if (m === GroupPreviewMode.MEMBER) {
+    if (m === GroupPreviewMode.MEMBER || m === GroupPreviewMode.ADMIN) {
       this.leaveGroup(g);
     } else {
       this.joinOrRequestGroup(g);

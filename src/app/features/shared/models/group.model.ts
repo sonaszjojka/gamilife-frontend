@@ -14,6 +14,7 @@ export interface Group {
   hasActiveGroupRequest: boolean | null;
   loggedUserMembershipDto: GroupMember | null;
   members: GroupMember[];
+  adminUsername: string | null;
 }
 
 export interface CreateGroupDto {
@@ -21,4 +22,12 @@ export interface CreateGroupDto {
   groupCurrencySymbol: string;
   groupTypeId: string;
   membersLimit: string;
+}
+
+export interface EditGroupDto {
+  adminId: string;
+  groupName: string;
+  groupCurrencySymbol: string;
+  groupTypeId: number;
+  membersLimit: number;
 }

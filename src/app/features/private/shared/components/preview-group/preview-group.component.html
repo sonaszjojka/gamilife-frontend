@@ -12,12 +12,27 @@
           </app-group-info-card>
         </div>
 
-        <div class="members-list-container"></div>
+        <div
+          class="members-list-container"
+          *ngIf="group() && mode() !== GroupPreviewMode.PUBLIC"
+        >
+          <app-members-list-peak [membersList]="membersList()">
+          </app-members-list-peak>
+        </div>
       </div>
 
       <div class="tasks-list"></div>
 
-      <div class="members-admin-panel"></div>
+      <div
+        class="group-admin-actions"
+        *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+      >
+        <app-group-admin-actions
+          [group]="group()!"
+          [members]="membersList()"
+          (actionComplete)="onActionComplete()"
+        ></app-group-admin-actions>
+      </div>
 
       <nz-card *ngIf="!group() && !loading()" class="error-card">
         <div class="error-content">

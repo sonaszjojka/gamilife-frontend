@@ -20,4 +20,5 @@ export interface GroupMember {
   totalEarnedMoney: number | null;
   joinedAt: string;
   leftAt: string | null;
+  username: string;
 }

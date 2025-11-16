@@ -51,8 +51,10 @@ import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.componen
         <div class="info-item">
           <span nz-icon nzType="crown" class="info-icon"></span>
           <div class="info-content">
-            <span class="info-label">Admin ID</span>
-            <span class="info-value">{{ group().adminId }}</span>
+            <span class="info-label">Admin</span>
+            <span class="info-value">{{
+              group().adminUsername ?? group().adminId
+            }}</span>
           </div>
         </div>
       </div>
@@ -71,67 +73,60 @@ import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.componen
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: var(--spacing-large);
+        padding-bottom: var(--spacing-medium);
+        border-bottom: 1px solid var(--border-color-light);
       }
 
       .group-name {
         margin: 0;
-        font-size: 24px;
-        font-weight: 600;
-        color: #262626;
+        font-size: var(--font-size-xlarge);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary-color);
       }
 
       .group-info {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: var(--spacing-medium);
       }
 
       .info-item {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px;
-        background: #fafafa;
-        border-radius: 8px;
-        transition: background 0.3s;
-      }
-
-      .info-item:hover {
-        background: #f5f5f5;
+        gap: var(--spacing-medium);
+        padding: var(--spacing-medium);
       }
 
       .info-icon {
-        font-size: 20px;
-        color: #1890ff;
+        font-size: var(--font-size-large);
+        color: var(--third-color);
       }
 
       .info-content {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: var(--spacing-xs);
         flex: 1;
       }
 
       .info-label {
-        font-size: 12px;
-        color: #8c8c8c;
+        font-size: var(--font-size-xs);
+        color: var(--border-color-dark);
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: var(--font-weight-medium);
         letter-spacing: 0.5px;
       }
 
       .info-value {
-        font-size: 16px;
-        color: #262626;
-        font-weight: 500;
+        font-size: var(--font-size-medium);
+        color: var(--text-primary-color);
+        font-weight: var(--font-weight-medium);
       }
 
       .limit {
-        color: #8c8c8c;
-        font-weight: 400;
+        color: var(--border-color-dark);
+        font-weight: var(--font-weight-normal);
       }
     `,
   ],

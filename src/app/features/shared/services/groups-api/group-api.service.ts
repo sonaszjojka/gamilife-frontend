@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { GroupFilterParams } from '../../models/group-filter-params.model';
 import { GetGroupsResult } from '../../models/groups.model';
-import { CreateGroupDto, Group } from '../../models/group.model';
+import { CreateGroupDto, EditGroupDto, Group } from '../../models/group.model';
 import { GroupType } from '../../models/group-type.model';
 import { CreateGroupMemberInOpenGroupResult } from '../../models/group-member.model';
 import { CreateGroupRequestResult } from '../../models/group-request.model';
@@ -89,5 +89,13 @@ export class GroupApiService {
 
   createGroup(formValue: CreateGroupDto): Observable<unknown> {
     return this.http.post(`${this.apiUrl}/groups`, formValue);
+  }
+
+  editGroup(groupId: string, data: EditGroupDto): Observable<unknown> {
+    return this.http.put(`${this.apiUrl}/groups/${groupId}`, data);
+  }
+
+  deleteGroup(groupId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/groups/${groupId}`);
   }
 }
