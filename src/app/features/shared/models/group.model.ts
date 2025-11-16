@@ -1,3 +1,4 @@
+import { GroupMember } from './group-member.model';
 import { GroupType } from './group-type.model';
 
 export interface Group {
@@ -11,7 +12,8 @@ export interface Group {
   membersCount: number;
   isMember: boolean | null;
   hasActiveGroupRequest: boolean | null;
-  groupMemberIdForLoggedUser: string | null;
+  loggedUserMembershipDto: GroupMember | null;
+  members: GroupMember[];
 }
 
 export interface CreateGroupDto {

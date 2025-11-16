@@ -186,10 +186,15 @@ export class GroupActionsComponent {
   }
 
   private leaveGroup(group: Group): void {
-    if (!group.groupId || !group.groupMemberIdForLoggedUser) return;
+    if (
+      !group.groupId ||
+      !group.loggedUserMembershipDto ||
+      !group.loggedUserMembershipDto.groupMemberId
+    )
+      return;
 
     this.groupMemberApi
-      .leaveGroup(group.groupId, group.groupMemberIdForLoggedUser)
+      .leaveGroup(group.groupId, group.loggedUserMembershipDto.groupMemberId)
       .pipe(take(1))
       .subscribe({
         next: () => {

@@ -1,19 +1,31 @@
 <div class="preview-container">
   <nz-spin [nzSpinning]="loading()" nzSize="large">
-    <app-group-info-card *ngIf="group()" [group]="group()!">
-      <app-group-actions
-        [group]="group()!"
-        [mode]="mode()"
-        (actionComplete)="onActionComplete()"
-      ></app-group-actions>
-    </app-group-info-card>
+    <div class="page-layout-container">
+      <div class="group-info-container">
+        <div class="group-info-desc-container">
+          <app-group-info-card *ngIf="group()" [group]="group()!">
+            <app-group-actions
+              [group]="group()!"
+              [mode]="mode()"
+              (actionComplete)="onActionComplete()"
+            ></app-group-actions>
+          </app-group-info-card>
+        </div>
 
-    <nz-card *ngIf="!group() && !loading()" class="error-card">
-      <div class="error-content">
-        <span nz-icon nzType="exclamation-circle" class="error-icon"></span>
-        <h2>Group Not Found</h2>
-        <p>The group with the given ID does not exist or has been deleted.</p>
+        <div class="members-list-container"></div>
       </div>
-    </nz-card>
+
+      <div class="tasks-list"></div>
+
+      <div class="members-admin-panel"></div>
+
+      <nz-card *ngIf="!group() && !loading()" class="error-card">
+        <div class="error-content">
+          <span nz-icon nzType="exclamation-circle" class="error-icon"></span>
+          <h2>Group Not Found</h2>
+          <p>The group with the given ID does not exist or has been deleted.</p>
+        </div>
+      </nz-card>
+    </div>
   </nz-spin>
 </div>

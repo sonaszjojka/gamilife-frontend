@@ -11,3 +11,13 @@ export interface GroupDto {
   groupId: string;
   adminId: string;
 }
+
+export interface GroupMember {
+  groupMemberId: string;
+  groupId: string;
+  userId: string;
+  groupMoney: number | null;
+  totalEarnedMoney: number | null;
+  joinedAt: string;
+  leftAt: string | null;
+}
