@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Task } from '../model/task.model';
-import {EditTaskResponse} from '../model/edit-task-response';
+import { Task } from '../../models/task-models/task.model';
+import {EditTaskResponse} from '../../models/task-models/edit-task-response';
 import {environment} from '../../../../../environments/environment';
-import {EditTaskRequest} from '../model/edit-task-request';
-import {CreateTaskResponse} from '../model/create-task-response';
+import {EditTaskRequest} from '../../models/task-models/edit-task-request';
+import {CreateTaskResponse} from '../../models/task-models/create-task-response';
 
 export interface Page<T> {
   content: T[];

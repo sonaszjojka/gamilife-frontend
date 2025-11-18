@@ -1,14 +1,14 @@
 import {Component, EventEmitter, Input, Output, OnInit, signal, WritableSignal} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { Task } from '../../model/task.model';
-import { IndividualTaskService } from '../../service/individual-task.service';
+import { Task } from '../../../../../shared/models/task-models/task.model';
+import { IndividualTaskService } from '../../../../../shared/services/tasks/individual-task.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
 import {getTimeConfig} from 'ng-zorro-antd/date-picker';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {EditTaskRequest} from '../../model/edit-task-request';
+import {EditTaskRequest} from '../../../../../shared/models/task-models/edit-task-request';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
 
 @Component({

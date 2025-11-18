@@ -1,12 +1,12 @@
 import { formatDate } from '@angular/common';
 import {Component, OnInit, HostListener, signal, effect} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TaskItemComponent } from '../task-item/task-item.component';
-import { TaskFilterComponent } from '../task-filter/task-filter.component';
-import { IndividualTaskService, Page } from '../../service/individual-task.service';
+import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
+import { TaskFilterComponent } from '../../shared/components/tasks/task-filter/task-filter.component';
+import { IndividualTaskService, Page } from '../../../shared/services/tasks/individual-task.service';
 
-import { Task } from '../../model/task.model';
-import {TaskFormComponent} from '../task-form/task-form.component';
+import { Task } from '../../../shared/models/task-models/task.model';
+import {TaskFormComponent} from '../../shared/components/tasks/task-form/task-form.component';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 
 @Component({

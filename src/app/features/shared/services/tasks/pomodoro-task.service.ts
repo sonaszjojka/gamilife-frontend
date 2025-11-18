@@ -2,8 +2,8 @@ import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {CreatePomodoroResponse} from '../model/create-pomodoro-response';
-import {CreatePomodoroRequest} from '../model/create-pomodoro-request';
+import {CreatePomodoroResponse} from '../../models/task-models/create-pomodoro-response';
+import {CreatePomodoroRequest} from '../../models/task-models/create-pomodoro-request';
 
 
 @Injectable({

@@ -5,17 +5,17 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
 import {NzColDirective} from 'ng-zorro-antd/grid';
 import {NzInputDirective} from 'ng-zorro-antd/input';
-import {Task} from '../../model/task.model';
-import {IndividualTaskService} from '../../service/individual-task.service';
+import {Task} from '../../../../../shared/models/task-models/task.model';
+import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
-import {EditTaskRequest} from '../../model/edit-task-request';
+import {EditTaskRequest} from '../../../../../shared/models/task-models/edit-task-request';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 import {DatePipe} from '@angular/common';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
-import {CreatePomodoroRequest} from '../../model/create-pomodoro-request';
-import {PomodoroTaskService} from '../../service/pomodoro-task.service';
+import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
+import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro-task.service';
 
 @Component({
   selector: 'app-task-form',

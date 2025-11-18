@@ -5,7 +5,7 @@ import {NzColDirective} from 'ng-zorro-antd/grid';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
-import {CreatePomodoroRequest} from '../../model/create-pomodoro-request';
+import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
 
 @Component(
 {

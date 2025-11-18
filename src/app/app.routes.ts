@@ -6,7 +6,7 @@ import { DashboardComponent } from './features/private/dashboard/components/dash
 import { AuthGuard } from './shared/guards/auth.guard';
 import { ForgotPasswordComponent } from './features/public/forgot-password/components/forgot-password/forgot-password.component';
 import { OAuthCallbackComponent } from './features/public/oauth2/components/oauth-callback/oauth-callback.component';
-import { TaskListComponent } from './features/shared/tasks/component/task-list/task-list.component';
+import { TaskListComponent } from './features/private/my-tasks/task-list/task-list.component';
 import { environment } from '../environments/environment';
 import { GuestGuard } from './shared/guards/guest.guard';
 import { EmailVerificationResultComponent } from './features/public/email-verification-result/components/email-verification-result/email-verification-result.component';
