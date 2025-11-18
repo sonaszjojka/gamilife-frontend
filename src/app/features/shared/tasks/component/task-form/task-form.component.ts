@@ -1,15 +1,5 @@
 import {
-  Component,
-  inject,
-  Input,
-  OnInit,
-  effect,
-  WritableSignal,
-  Output,
-  EventEmitter,
-  Signal,
-  signal
-} from '@angular/core';
+  Component, inject, Input, effect, WritableSignal, Output, EventEmitter, signal} from '@angular/core';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
@@ -24,6 +14,8 @@ import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 import {DatePipe} from '@angular/common';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
+import {CreatePomodoroRequest} from '../../model/create-pomodoro-request';
+import {PomodoroTaskService} from '../../service/pomodoro-task.service';
 
 @Component({
   selector: 'app-task-form',
@@ -54,10 +46,12 @@ export class TaskFormComponent {
   @Input() editionMode?: WritableSignal<boolean|null>;
   @Output() taskFormSubmitted = new EventEmitter<void>();
   @Output() taskDeleted=new EventEmitter<void>()
+  pomodoroRequest?:CreatePomodoroRequest;
 
 
   private formBuilder = inject(NonNullableFormBuilder);
   private taskService = inject(IndividualTaskService)
+  private pomodoroService=inject(PomodoroTaskService)
 
   validTaskForm = this.formBuilder.group({
     title: this.formBuilder.control('', [
@@ -156,7 +150,7 @@ export class TaskFormComponent {
     endTimeDate!.setHours(endTimeHour!.getHours()+1,endTimeHour!.getMinutes(),endTimeHour!.getSeconds())
     mergedEndTime=endTimeDate!.toISOString()
 
-
+//ToDo make two different classes for task requests or change name of edit task request
     const request: EditTaskRequest = {
       title: formValue.title,
       startTime: mergedStartTime,
@@ -183,6 +177,21 @@ export class TaskFormComponent {
       if (task == null) {
         return;
       }
+      if (this.pomodoroRequest)
+      {
+
+        this.pomodoroService.createPomodoro(task.taskId,this.pomodoroRequest).subscribe({
+          next:(response)=>
+          {
+            task.pomodoroId=response.pomodoroId
+            task.workCyclesNeeded=response.workCyclesNeeded
+            task.workCyclesCompleted=response.workCyclesCompleted
+
+          }
+        })
+        console.log("Jest dobrze")
+
+      }
 
       this.taskService.editTask(task.taskId, request).subscribe({
         next: (response) => {
@@ -198,11 +207,7 @@ export class TaskFormComponent {
   }
 
   onDelete() {
-    const task = this.task?.();
-    if (task == null) {
-      return;
-    }
-    this.taskService.deleteTask(task.taskId).subscribe({
+    this.taskService.deleteTask(this.task()!.taskId).subscribe({
       next:()=>{
         this.validTaskForm.reset();
         this.taskDeleted.emit();
@@ -217,6 +222,9 @@ export class TaskFormComponent {
  onPomodoroCreation()
  {
    this.pomodoroCreation.update(value => !value)
-   console.log(this.pomodoroCreation())
+ }
+ onPomodoroFormChange(pomodoroRequest:CreatePomodoroRequest)
+ {
+   this.pomodoroRequest=pomodoroRequest
  }
 }

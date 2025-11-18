@@ -122,6 +122,7 @@ class="task-form"
   {
   <app-pomodoro-form
     [pomodoroCreation]="pomodoroCreation"
+    (formChanged)="onPomodoroFormChange($event)"
     ></app-pomodoro-form>
   }
 
@@ -130,7 +131,7 @@ class="task-form"
 
     <button nz-button nzShape="round" (click)="onSubmit()" > Save</button>
 
-    @if(this.task()?.pomodoroId==null)
+    @if(this.task()?.pomodoroId==null&&this.editionMode?.())
     {
       <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon></button>
     }

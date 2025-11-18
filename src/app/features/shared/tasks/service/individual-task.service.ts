@@ -28,7 +28,7 @@ export class IndividualTaskService {
 
   getUserTasks(
     page: number = 0,
-    size: number = 10,
+    size: number = 4,
     categoryId?: number | null,
     difficultyId?: number | null,
     isCompleted?: boolean | null,
@@ -51,50 +51,31 @@ export class IndividualTaskService {
       params = params.set('isGroupTask', isGroupTask.toString());
     }
 
-    return this.http.get<Page<Task>>(this.API_URL, {
+    return this.http.get<Page<Task>>(`${this.API_URL}`, {
       params,
       withCredentials: true
     });
   }
 
   editTask(taskId: string, request: EditTaskRequest): Observable<EditTaskResponse> {
-    const body = {
-      title: request.title,
-      startTime: request.startTime,
-      endTime: request.endTime,
-      categoryId: request.categoryId,
-      difficultyId: request.difficultyId,
-      completedAt: request.completedAt,
-      description: request.description
-    };
-
     return this.http.put<EditTaskResponse>(
       `${environment.apiUrl}/tasks/${taskId}`,
-      body,
+      request,
       {withCredentials: true}
     );
 
   }
   createTask(request:EditTaskRequest): Observable<CreateTaskResponse>
   {
-    const body = {
-      title: request.title,
-      startTime: request.startTime,
-      endTime: request.endTime,
-      categoryId: request.categoryId,
-      difficultyId: request.difficultyId,
-      completedAt: request.completedAt,
-      description: request.description
-    };
     return this.http.post<EditTaskResponse>(
       `${environment.apiUrl}/tasks`,
-      body,
+      request,
       {withCredentials: true}
     );
 
   }
 
-  deleteTask(taskId:String)
+  deleteTask(taskId:string)
   {
     return this.http.delete(`${environment.apiUrl}/tasks/${taskId}`, {withCredentials:true});
   }

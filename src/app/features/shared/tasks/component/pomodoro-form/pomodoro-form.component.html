@@ -1,0 +1,24 @@
+<form
+  class="pomodoro-form"
+  [formGroup]="validPomodoroForm"
+>
+  <h2>Pomodoro</h2>
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="workCyclesNeeded">Work Cycles Needed</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide valid nuber of needed cycles"
+    >
+      <nz-input-number formControlName="workCyclesNeeded" nzMin="1" nzMax="100" nzPlaceHolder="1"/>
+
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="workCyclesCompleted">Work Cycles Completed</nz-form-label>
+    <nz-form-control
+      nzErrorTip="Please provide valid number of completed cycles"
+    >
+      <nz-input-number formControlName="workCyclesCompleted" nzMin="0" nzMax="100" nzPlaceHolder="0" />
+    </nz-form-control>
+  </nz-form-item>
+
+</form>
