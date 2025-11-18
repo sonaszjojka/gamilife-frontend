@@ -1,4 +1,15 @@
-import {Component, inject, Input, OnInit, effect, WritableSignal, Output, EventEmitter} from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnInit,
+  effect,
+  WritableSignal,
+  Output,
+  EventEmitter,
+  Signal,
+  signal
+} from '@angular/core';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
@@ -12,6 +23,7 @@ import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 import {DatePipe} from '@angular/common';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
 
 @Component({
   selector: 'app-task-form',
@@ -28,14 +40,15 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     NzDatePickerComponent,
     NzTimePickerComponent,
     DatePipe,
-    NzIconDirective
+    NzIconDirective,
+    PomodoroFormComponent
   ],
   templateUrl: './task-form.component.html',
   standalone: true,
   styleUrl: './task-form.component.css'
 })
 export class TaskFormComponent {
-
+  pomodoroCreation=signal<boolean>(false)
   @Input() task!: WritableSignal<Task | null>;
   @Input() creationMode?: WritableSignal<boolean|null>
   @Input() editionMode?: WritableSignal<boolean|null>;
@@ -201,4 +214,9 @@ export class TaskFormComponent {
     })
 
   }
+ onPomodoroCreation()
+ {
+   this.pomodoroCreation.update(value => !value)
+   console.log(this.pomodoroCreation())
+ }
 }

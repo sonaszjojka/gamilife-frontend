@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Task } from '../model/task.model';
@@ -24,8 +24,7 @@ export interface Page<T> {
 export class IndividualTaskService {
   private API_URL = `${environment.apiUrl}/tasks`;
 
-  constructor(private http: HttpClient) {
-  }
+ private http = inject(HttpClient);
 
   getUserTasks(
     page: number = 0,

@@ -1,11 +1,11 @@
 export interface EditTaskRequest
 {
   //ToDo change after adding habits
-  title:String,
-  startTime:String,
-  endTime:String,
+  title:string,
+  startTime:string,
+  endTime:string,
   categoryId:number,
   difficultyId:number,
-  completedAt:String|null,
-  description:String
+  completedAt:string|null,
+  description:string
 }

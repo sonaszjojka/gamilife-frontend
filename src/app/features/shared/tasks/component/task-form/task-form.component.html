@@ -118,16 +118,30 @@ class="task-form"
 
   </nz-form-item>
 
+  @if(this.pomodoroCreation())
+  {
+  <app-pomodoro-form
+    [pomodoroCreation]="pomodoroCreation"
+    ></app-pomodoro-form>
+  }
 
 </form>
   <div class="button-panel">
 
     <button nz-button nzShape="round" (click)="onSubmit()" > Save</button>
 
+    @if(this.task()?.pomodoroId==null)
+    {
+      <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon></button>
+    }
+
     @if(this.editionMode?.())
     {
-    <button nz-button nzShape="round" (click)="onDelete()">Delete</button>
+    <button class="delete-button" nz-button nzShape="round" (click)="onDelete()">Delete</button>
     }
+
+
+
 
   </div>
 </div>

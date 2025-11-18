@@ -12,4 +12,8 @@ export interface Task {
   difficultyName: string;
   isGroupTask: boolean;
   userId?:string|null;
+  pomodoroId?:string|null;
+  workCyclesNeeded?:number|null;
+  workCyclesCompleted?:number|null;
+  createdAt?:string|null;
 }

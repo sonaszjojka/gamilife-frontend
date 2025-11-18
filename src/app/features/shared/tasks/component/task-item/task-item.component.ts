@@ -9,6 +9,7 @@ import {getTimeConfig} from 'ng-zorro-antd/date-picker';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {EditTaskRequest} from '../../model/edit-task-request';
+import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
 
 @Component({
   selector: 'app-task-item',
@@ -20,7 +21,8 @@ import {EditTaskRequest} from '../../model/edit-task-request';
     ReactiveFormsModule,
     DatePipe,
     NzIconDirective,
-    NzButtonComponent
+    NzButtonComponent,
+    PomodoroTaskProgressComponent
   ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css'

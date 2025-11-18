@@ -5,6 +5,13 @@
   <button nz-button (click)="onTaskEdit()" ><nz-icon nzType="setting" nzTheme="outline" /></button>
   </div>
   }
+  @if(task.pomodoroId!=null)
+  {
+    <pomodoro-task-progress
+      [workCyclesNeeded] ="task.workCyclesNeeded"
+      [workCyclesCompleted] ="task.workCyclesCompleted"
+      ></pomodoro-task-progress>
+  }
   <p *ngIf="task.description">{{ task.description }}</p>
   <div class="task-tags">
     <p> <span>{{task.categoryName}}</span></p>
