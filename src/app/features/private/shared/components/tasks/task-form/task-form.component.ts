@@ -11,7 +11,6 @@ import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {EditTaskRequest} from '../../../../../shared/models/task-models/edit-task-request';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
-import {DatePipe} from '@angular/common';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
 import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
@@ -31,7 +30,6 @@ import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro
     NzOptionComponent,
     NzDatePickerComponent,
     NzTimePickerComponent,
-    DatePipe,
     NzIconDirective,
     PomodoroFormComponent
   ],

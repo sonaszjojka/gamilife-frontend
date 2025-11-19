@@ -2,8 +2,6 @@ import {Component, EventEmitter, inject, Input, Output, WritableSignal} from '@a
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
 import {NzColDirective} from 'ng-zorro-antd/grid';
-import {NzInputDirective} from 'ng-zorro-antd/input';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
 
@@ -17,8 +15,6 @@ import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/cr
       NzColDirective,
       NzFormControlComponent,
       NzFormLabelComponent,
-      NzInputDirective,
-      NzIconDirective,
       FormsModule,
       NzInputNumberComponent
     ],

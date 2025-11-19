@@ -14,6 +14,7 @@ import { ResetPasswordComponent } from './features/public/reset-password/compone
 import { CommunityPageComponent } from './features/private/community/components/community-page/community-page.component';
 import { PreviewGroupComponent } from './features/private/shared/components/preview-group/preview-group.component';
 import { MyGroupsPageComponent } from './features/private/my-groups/components/my-groups-page/my-groups-page.component';
+import {PomodoroSessionComponent} from './features/private/my-tasks/pomodoro-session/pomodoro-session.component';
 
 export const routes: Routes = [
   {
@@ -60,6 +61,7 @@ export const routes: Routes = [
       { path: 'community', component: CommunityPageComponent },
       { path: 'community/groups/:groupId', component: PreviewGroupComponent },
       { path: 'my-groups', component: MyGroupsPageComponent },
+      { path: 'tasks/pomodoro-session',component:PomodoroSessionComponent}
     ],
   },
   { path: '**', redirectTo: '' },

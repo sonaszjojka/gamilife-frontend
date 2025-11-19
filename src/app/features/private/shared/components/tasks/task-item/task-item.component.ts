@@ -4,8 +4,6 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { Task } from '../../../../../shared/models/task-models/task.model';
 import { IndividualTaskService } from '../../../../../shared/services/tasks/individual-task.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
-import {getTimeConfig} from 'ng-zorro-antd/date-picker';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {EditTaskRequest} from '../../../../../shared/models/task-models/edit-task-request';
@@ -28,9 +26,11 @@ import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-
   styleUrl: './task-item.component.css'
 })
 export class TaskItemComponent implements OnInit {
+  @Input() inPomodoroList:WritableSignal<boolean|null> = signal(false)
   @Input() task!: Task;
   @Output() taskUpdated = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
+  @Output() movedToCurrentSession = new EventEmitter<Task>();
   isCompleted = signal(false);
 
   constructor(private taskService: IndividualTaskService) {}
@@ -69,5 +69,9 @@ export class TaskItemComponent implements OnInit {
 
   isInactive(): boolean {
     return !!this.task.completedAt ||  new Date(this.task.endTime!) < new Date(Date.now());
+  }
+
+  addTaskToPomodoroSesion() {
+    this.movedToCurrentSession.emit(this.task)
   }
 }

@@ -1,0 +1,56 @@
+
+<div class="pomodoro-view">
+
+
+  <div  class="not-pomodoro-column">
+    <div class="session-column-title">
+      <h2> Your Tasks</h2>
+    </div>
+
+    @for (task of usersNotPomodoroTasks; track task.taskId)
+    {
+      <app-task-item
+        [task]="task"
+        [inPomodoroList]="this.isPomodoroList"
+
+      ></app-task-item>
+    }
+
+  </div>
+
+  <div cdkDropList class="current-session-column" (cdkDropListDropped)="drop($event)" >
+
+      <div class="session-column-title">
+        <h1> Current Session</h1>
+      </div>
+    <button class="start-session-button" nz-button nzShape="round" >Start Session</button>
+    @for (task of currentSessionPomodoroTasks; track task.taskId)
+    {
+      <app-task-item
+        [task]="task"
+        [inPomodoroList]="this.isPomodoroList"
+        cdkDrag
+        ></app-task-item>
+    }
+
+
+  </div>
+
+  <div class="pomodoro-column">
+    <div class="session-column-title">
+      <h2> Your Pomodoro Tasks</h2>
+    </div>
+
+    @for (task of usersPomodoroTasks; track task.taskId)
+    {
+      <app-task-item
+        [task]="task"
+        [inPomodoroList]="this.isPomodoroList"
+        (movedToCurrentSession)="moveTaskToCurrentSession(task)"
+      ></app-task-item>
+    }
+
+  </div>
+
+
+</div>
