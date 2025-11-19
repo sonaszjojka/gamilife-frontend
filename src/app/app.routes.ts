@@ -16,6 +16,7 @@ import { PreviewGroupComponent } from './features/private/shared/components/prev
 import { MyGroupsPageComponent } from './features/private/my-groups/components/my-groups-page/my-groups-page.component';
 import { GroupMembersPageComponent } from './features/private/group-members-page/components/group-members-page/group-members-page.component';
 import { GroupInvitationResponseComponent } from './features/private/my-groups/components/group-invitation-response/group-invitation-response.component';
+import { GroupRequestsPageComponent } from './features/private/group-requests-page/components/group-requests-page/group-requests-page.component';
 
 export const routes: Routes = [
   {
@@ -65,7 +66,10 @@ export const routes: Routes = [
       {
         path: 'groups/:groupId/members',
         component: GroupMembersPageComponent,
-        // todo AdminGuard?
+      },
+      {
+        path: 'groups/:groupId/requests',
+        component: GroupRequestsPageComponent,
       },
       {
         path: 'groups/:groupId/group-invitations/:groupInvitationId',

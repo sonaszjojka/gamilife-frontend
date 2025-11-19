@@ -1,0 +1,12 @@
+<div class="requests-page-container">
+  <nz-spin [nzSpinning]="loading()" nzSize="large">
+    <nz-card nzTitle="Group Requests">
+      <app-group-requests-list
+        [groupId]="groupId()"
+        [requests]="requests()"
+        [loading]="loading()"
+        (requestChanged)="loadRequests()"
+      ></app-group-requests-list>
+    </nz-card>
+  </nz-spin>
+</div>
