@@ -1,57 +1,85 @@
 <div class="preview-container">
   <nz-spin [nzSpinning]="loading()" nzSize="large">
-    <div class="page-layout-container">
-      <div class="group-info-container">
-        <div class="group-info-desc-container">
-          <app-group-info-card *ngIf="group()" [group]="group()!">
-            <app-group-actions
-              [group]="group()!"
-              [mode]="mode()"
-              (actionComplete)="onActionComplete()"
-            ></app-group-actions>
-          </app-group-info-card>
-        </div>
+    <div class="two-column-layout">
+      <div class="left-column">
+        <app-group-info-card *ngIf="group()" [group]="group()!">
+          <app-group-actions
+            [group]="group()!"
+            [mode]="mode()"
+            (actionComplete)="onActionComplete()"
+          ></app-group-actions>
+        </app-group-info-card>
 
-        <div
-          class="members-list-container"
-          *ngIf="group() && mode() !== GroupPreviewMode.PUBLIC"
-        >
-          <app-members-list-peak [membersList]="membersList()">
+        <nz-card *ngIf="group()" class="section-card">
+          <app-members-list-peak
+            [membersList]="membersList()"
+            [showManageButton]="mode() === GroupPreviewMode.ADMIN"
+            (manageMembers)="goToManageGroupMembersPage()"
+          >
           </app-members-list-peak>
+        </nz-card>
+
+        <nz-card
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="section-card"
+        >
+          <app-group-requests-list-peak
+            [requestsList]="requestsList()"
+            [showManageButton]="true"
+            (manageRequests)="goToManageGroupRequestsPage()"
+          >
+          </app-group-requests-list-peak>
+        </nz-card>
+      </div>
+
+      <div class="right-column">
+        <div
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="admin-actions-bar"
+        >
           <button
-            *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
             nz-button
             nzType="default"
             nzSize="large"
-            nzBlock
-            (click)="goToManageGroupMembersPage()"
+            (click)="openEditModal()"
           >
-            <span nz-icon nzType="team"></span>
-            Manage Members
+            <span nz-icon nzType="edit"></span>
+            Edit Group
+          </button>
+
+          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
+            <span nz-icon nzType="delete"></span>
+            Delete Group
           </button>
         </div>
+
+        <nz-card class="main-content-card">
+          <div class="placeholder-content">
+            <span
+              nz-icon
+              nzType="inbox"
+              nzTheme="outline"
+              class="placeholder-icon"
+            ></span>
+            <p>Main content area - 2/3 width</p>
+          </div>
+        </nz-card>
       </div>
-
-      <div class="tasks-list"></div>
-
-      <div
-        class="group-admin-actions"
-        *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
-      >
-        <app-group-admin-actions
-          [group]="group()!"
-          [members]="membersList()"
-          (actionComplete)="onActionComplete()"
-        ></app-group-admin-actions>
-      </div>
-
-      <nz-card *ngIf="!group() && !loading()" class="error-card">
-        <div class="error-content">
-          <span nz-icon nzType="exclamation-circle" class="error-icon"></span>
-          <h2>Group Not Found</h2>
-          <p>The group with the given ID does not exist or has been deleted.</p>
-        </div>
-      </nz-card>
     </div>
+
+    <nz-card *ngIf="!group() && !loading()" class="error-card">
+      <div class="error-content">
+        <span nz-icon nzType="exclamation-circle" class="error-icon"></span>
+        <h2>Group Not Found</h2>
+        <p>The group with the given ID does not exist or has been deleted.</p>
+      </div>
+    </nz-card>
   </nz-spin>
+
+  <app-edit-group-form
+    *ngIf="group()"
+    [group]="group()!"
+    [members]="membersList()"
+    (groupUpdated)="onActionComplete()"
+  ></app-edit-group-form>
 </div>

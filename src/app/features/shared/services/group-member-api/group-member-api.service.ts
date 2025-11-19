@@ -2,7 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { Observable } from 'rxjs';
-import { EditGroupMemberDto } from '../../models/group-member.model';
+import {
+  CreateGroupMemberInOpenGroupResult,
+  EditGroupMemberDto,
+} from '../../models/group-member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +40,17 @@ export class GroupMemberApiService {
     return this.http.put(
       `${this.apiUrl}/groups/${groupId}/members/${groupMemberId}/leave`,
       {},
+    );
+  }
+
+  joinGroup(groupId: string) {
+    const params = {
+      userId: localStorage.getItem('userId'),
+    };
+
+    return this.http.post<CreateGroupMemberInOpenGroupResult>(
+      `${this.apiUrl}/groups/${groupId}/members`,
+      params,
     );
   }
 }

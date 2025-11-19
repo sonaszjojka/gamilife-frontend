@@ -10,11 +10,11 @@ import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Group } from '../../../../shared/models/group.model';
-import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { GroupPreviewMode } from '../../../../shared/models/group-preview-mode';
 import { take } from 'rxjs/operators';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { Router } from '@angular/router';
+import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
 
 @Component({
   selector: 'app-group-actions',
@@ -62,8 +62,9 @@ export class GroupActionsComponent {
   actionComplete = output<void>();
 
   protected loading = signal<boolean>(false);
-  private readonly groupApi = inject(GroupApiService);
+  private readonly memberApi = inject(GroupMemberApiService);
   private readonly groupMemberApi = inject(GroupMemberApiService);
+  private readonly requestsApi = inject(GroupRequestApiService);
   private router = inject(Router);
   protected buttonText = computed(() => {
     const g = this.group();
@@ -74,6 +75,8 @@ export class GroupActionsComponent {
     }
 
     if (!g) return 'Join Group';
+
+    if (g.groupType.title === 'Open' && !g.isMember) return 'Join Group';
 
     if (g.membersLimit && g.membersCount >= g.membersLimit) {
       return 'Group Full';
@@ -112,7 +115,10 @@ export class GroupActionsComponent {
       return true;
     }
 
-    if (g.isMember || g.hasActiveGroupRequest) {
+    if (
+      g.isMember ||
+      (g.hasActiveGroupRequest && g.groupType.title !== 'Open')
+    ) {
       return true;
     }
 
@@ -161,7 +167,7 @@ export class GroupActionsComponent {
     if (!group.groupId) return;
 
     if (group.groupType.title === 'Open') {
-      this.groupApi
+      this.memberApi
         .joinGroup(group.groupId)
         .pipe(take(1))
         .subscribe({
@@ -175,7 +181,7 @@ export class GroupActionsComponent {
           },
         });
     } else {
-      this.groupApi
+      this.requestsApi
         .sendRequest(group.groupId)
         .pipe(take(1))
         .subscribe({

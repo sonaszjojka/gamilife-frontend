@@ -6,8 +6,6 @@ import { GroupFilterParams } from '../../models/group-filter-params.model';
 import { GetGroupsResult } from '../../models/groups.model';
 import { CreateGroupDto, EditGroupDto, Group } from '../../models/group.model';
 import { GroupType } from '../../models/group-type.model';
-import { CreateGroupMemberInOpenGroupResult } from '../../models/group-member.model';
-import { CreateGroupRequestResult } from '../../models/group-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -63,24 +61,6 @@ export class GroupApiService {
     );
 
     return this.http.get<Group>(`${this.apiUrl}/groups/${groupId}`, { params });
-  }
-
-  joinGroup(groupId: string) {
-    const params = {
-      userId: localStorage.getItem('userId'),
-    };
-
-    return this.http.post<CreateGroupMemberInOpenGroupResult>(
-      `${this.apiUrl}/groups/${groupId}/members`,
-      params,
-    );
-  }
-
-  sendRequest(groupId: string) {
-    return this.http.post<CreateGroupRequestResult>(
-      `${this.apiUrl}/groups/${groupId}/requests`,
-      {},
-    );
   }
 
   getGroupTypes(): Observable<GroupType[]> {
