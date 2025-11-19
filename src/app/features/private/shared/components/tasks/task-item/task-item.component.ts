@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnInit, signal, input} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { Task } from '../../../../../shared/models/task-models/task.model';
@@ -26,12 +26,14 @@ import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-
   styleUrl: './task-item.component.css'
 })
 export class TaskItemComponent implements OnInit {
-  @Input() inPomodoroList:WritableSignal<boolean|null> = signal(false)
+  inPomodoroList = input<boolean>(false)
   @Input() task!: Task;
   @Output() taskUpdated = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
-  @Output() movedToCurrentSession = new EventEmitter<Task>();
+  @Output() moveToCurrentSession = new EventEmitter<Task>();
   isCompleted = signal(false);
+  @Output() removeFromCurrentSession = new EventEmitter<Task>();
+  isInSession=input<boolean>(false);
 
   constructor(private taskService: IndividualTaskService) {}
 
@@ -71,7 +73,13 @@ export class TaskItemComponent implements OnInit {
     return !!this.task.completedAt ||  new Date(this.task.endTime!) < new Date(Date.now());
   }
 
-  addTaskToPomodoroSesion() {
-    this.movedToCurrentSession.emit(this.task)
+  addTaskToPomodoroSession() {
+    this.moveToCurrentSession.emit(this.task)
+  }
+
+  removeTaskFromPomodoroSession()
+  {
+    this.removeFromCurrentSession.emit(this.task)
+
   }
 }

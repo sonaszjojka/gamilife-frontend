@@ -11,15 +11,14 @@
     {
       <app-task-item
         [task]="task"
-        [inPomodoroList]="this.isPomodoroList"
-
+        [inPomodoroList]="true"
+        (moveToCurrentSession)="moveTaskToCurrentSession(task)"
       ></app-task-item>
     }
 
   </div>
 
   <div cdkDropList class="current-session-column" (cdkDropListDropped)="drop($event)" >
-
       <div class="session-column-title">
         <h1> Current Session</h1>
       </div>
@@ -28,7 +27,9 @@
     {
       <app-task-item
         [task]="task"
-        [inPomodoroList]="this.isPomodoroList"
+        [inPomodoroList]="true"
+        [isInSession] ="true"
+        (removeFromCurrentSession)="removeFromCurrentSession(task)"
         cdkDrag
         ></app-task-item>
     }
@@ -45,12 +46,16 @@
     {
       <app-task-item
         [task]="task"
-        [inPomodoroList]="this.isPomodoroList"
-        (movedToCurrentSession)="moveTaskToCurrentSession(task)"
+        [inPomodoroList]="true"
+        [isInSession] ="false"
+        (moveToCurrentSession)="moveTaskToCurrentSession(task)"
       ></app-task-item>
     }
 
   </div>
+  <app-pomdoro-modal
+    (moveToCurrentSession)="moveModalPomodoroToSession($event)"
+  ></app-pomdoro-modal>
 
 
 </div>

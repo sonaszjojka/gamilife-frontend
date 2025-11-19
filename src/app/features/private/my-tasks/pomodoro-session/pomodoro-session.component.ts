@@ -1,10 +1,12 @@
-import {Component, HostListener, inject, signal} from '@angular/core';
+import {Component, HostListener, inject, ViewChild} from '@angular/core';
 import {Task} from '../../../shared/models/task-models/task.model';
 import {IndividualTaskService, Page} from '../../../shared/services/tasks/individual-task.service';
-import {PomodoroTaskService} from '../../../shared/services/tasks/pomodoro-task.service';
 import {TaskItemComponent} from '../../shared/components/tasks/task-item/task-item.component';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
+import {PomodoroSessionModal} from '../../shared/components/tasks/pomodoro-session-modal/pomodoro-session-modal';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
+import {PomodoroFormComponent} from '../../shared/components/tasks/pomodoro-form/pomodoro-form.component';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -12,27 +14,33 @@ import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/d
     TaskItemComponent,
     NzButtonComponent,
     CdkDrag,
-    CdkDropList
+    CdkDropList,
+    PomodoroSessionModal,
+    NzWaveDirective,
+    PomodoroFormComponent
   ],
   templateUrl: './pomodoro-session.component.html',
   standalone: true,
   styleUrl: './pomodoro-session.component.css'
 })
 export class PomodoroSessionComponent {
-  isPomodoroList=signal(true);
+  @ViewChild(PomodoroSessionModal)
+  pomodoroSessionModal!:PomodoroSessionModal
+
   loading=false;
   loadingMore=false;
+
   allUsersTasks:Task[]=[];
   currentSessionPomodoroTasks:Task[]=[];
   usersPomodoroTasks:Task[]=[];
   usersNotPomodoroTasks:Task[]=[];
+
   currentPage = 0;
   pageSize = 8;
   totalPages = 0;
   hasMore = true;
 
   taskService=inject(IndividualTaskService)
-  pomodoroService= inject(PomodoroTaskService)
 
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
@@ -89,7 +97,6 @@ export class PomodoroSessionComponent {
 
     })
 
-
   }
 
 
@@ -111,19 +118,42 @@ export class PomodoroSessionComponent {
 
  moveTaskToCurrentSession(task:Task)
  {
+   if (!task) return;
+
+   if (task.pomodoroId==null)
+   {
+     this.pomodoroSessionModal.task=task
+     this.pomodoroSessionModal.showModal()
+
+   }
 
     if (task.pomodoroId!=null)
     {
-      this.currentSessionPomodoroTasks.push(<Task>this.usersPomodoroTasks.find(t => t.taskId == task.taskId))
-      this.usersPomodoroTasks= this.usersPomodoroTasks.filter(t=> t.taskId!=task.taskId)
+      this.currentSessionPomodoroTasks.push(<Task>this.usersPomodoroTasks.find(t => t.taskId == task.taskId));
+      this.usersPomodoroTasks= this.usersPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+
     }
+
+ }
+
+ removeFromCurrentSession(task:Task)
+ {
+
+   this.usersPomodoroTasks.push(<Task>this.currentSessionPomodoroTasks.find(t => t.taskId == task.taskId));
+   this.currentSessionPomodoroTasks= this.currentSessionPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+ }
+
+
+ moveModalPomodoroToSession(task:Task)
+ {
+   this.currentSessionPomodoroTasks.push(<Task>this.usersNotPomodoroTasks.find(t => t.taskId == task.taskId));
+   this.usersNotPomodoroTasks= this.usersNotPomodoroTasks.filter(t=> t.taskId!=task.taskId);
  }
 
  onTaskUpdated()
  {
 
  }
-
 
 
 }

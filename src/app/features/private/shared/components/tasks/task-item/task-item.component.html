@@ -18,7 +18,7 @@
   <div class="upper-part">
   @if(task.completedAt==null)
   {
-  @if(inPomodoroList()!=true)
+  @if(!inPomodoroList())
   {
   <button nz-button nzShape="circle" (click)="onTaskEdit()" ><nz-icon nzType="setting" nzTheme="outline" /></button>
   }
@@ -41,18 +41,24 @@
 
   </div>
 
-  @if(!isInactive() && inPomodoroList()!=true){
+  @if(!isInactive() && !inPomodoroList()){
    <button nz-button nzShape="circle" (click)=completeTask() >
      <nz-icon nzType="check-circle" nzTheme="outline" />
    </button>
-  } @else if (inPomodoroList() && task.pomodoroId==null)
+  }
+  @else if (inPomodoroList() && task.pomodoroId==null)
   {
-    <button nz-button nzShape="circle" (click)=addTaskToPomodoroSesion() >
+    <button nz-button nzShape="circle" (click)=addTaskToPomodoroSession() >
       <nz-icon nzType="arrow-right" nzTheme="outline" />
     </button>
-  } @else if (inPomodoroList()&&task.pomodoroId!=null){
-    <button nz-button nzShape="circle" (click)=addTaskToPomodoroSesion() >
+  } @else if (inPomodoroList()&&task.pomodoroId!=null&&!isInSession()){
+    <button nz-button nzShape="circle" (click)=addTaskToPomodoroSession() >
       <nz-icon nzType="arrow-left" nzTheme="outline" />
     </button>
   }
+   @else if (inPomodoroList()&&task.pomodoroId!=null&& isInSession()){
+  <button nz-button nzShape="circle" (click)=removeTaskFromPomodoroSession() >
+    <nz-icon nzType="delete" nzTheme="outline" />
+  </button>
+}
 </nz-card>
