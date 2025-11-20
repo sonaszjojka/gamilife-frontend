@@ -8,7 +8,7 @@ import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro
 import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
 
 @Component({
-  selector: 'app-pomdoro-modal',
+  selector: 'app-pomdoro-form-modal',
   imports: [NzButtonModule, NzModalModule, PomodoroFormComponent],
   standalone: true,
   template: `
@@ -25,7 +25,7 @@ import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/cr
     </nz-modal>
   `
 })
-export class PomodoroSessionModal {
+export class PomodoroSessionFormModal {
   @Input() task!:Task
   @Output() moveToCurrentSession = new EventEmitter<Task>();
   pomodoroService = inject(PomodoroTaskService)
@@ -58,7 +58,6 @@ export class PomodoroSessionModal {
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.isVisible = false;
   }
 

@@ -12,7 +12,7 @@
       <app-task-item
         [task]="task"
         [inPomodoroList]="true"
-        (moveToCurrentSession)="moveTaskToCurrentSession(task)"
+        (moveToCurrentSession)="moveTaskToCurrentSession($event)"
       ></app-task-item>
     }
 
@@ -22,14 +22,28 @@
       <div class="session-column-title">
         <h1> Current Session</h1>
       </div>
-    <button class="start-session-button" nz-button nzShape="round" >Start Session</button>
+    @if (this.currentSessionPomodoroTasks.length>0)
+    {
+      <button class="start-session-button" nz-button nzShape="round" (click)="onSessionStarted()">
+        @if (isSessionActive) {
+          Pause {{ formattedTime }}
+        } @else if (remainingTime > 0) {
+          Resume {{ formattedTime }}
+        } @else {
+          Start Session
+        }
+      </button>
+    } @else {
+    <button class="start-session-button" nz-button nzShape="round" disabled>Start Session</button>
+  }
     @for (task of currentSessionPomodoroTasks; track task.taskId)
     {
       <app-task-item
         [task]="task"
         [inPomodoroList]="true"
         [isInSession] ="true"
-        (removeFromCurrentSession)="removeFromCurrentSession(task)"
+        (taskUpdated)="onTaskUpdated($event)"
+        (removeFromCurrentSession)="removeFromCurrentSession($event)"
         cdkDrag
         ></app-task-item>
     }
@@ -48,14 +62,21 @@
         [task]="task"
         [inPomodoroList]="true"
         [isInSession] ="false"
-        (moveToCurrentSession)="moveTaskToCurrentSession(task)"
+        (taskUpdated)="onTaskUpdated($event)"
+        (moveToCurrentSession)="moveTaskToCurrentSession($event)"
       ></app-task-item>
     }
 
   </div>
-  <app-pomdoro-modal
+  <app-pomdoro-form-modal
     (moveToCurrentSession)="moveModalPomodoroToSession($event)"
-  ></app-pomdoro-modal>
+  ></app-pomdoro-form-modal>
+
+<app-pomdoro-accept-task-modal
+(removeFromPanel)="removeFromPanel($event)"
+(removeFromSession)="removeFromCurrentSession($event)"
+>
+</app-pomdoro-accept-task-modal>
 
 
 </div>

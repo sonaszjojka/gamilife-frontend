@@ -69,6 +69,8 @@ export class TaskItemComponent implements OnInit {
     this.editTask.emit(this.task)
   }
 
+
+
   isInactive(): boolean {
     return !!this.task.completedAt ||  new Date(this.task.endTime!) < new Date(Date.now());
   }
