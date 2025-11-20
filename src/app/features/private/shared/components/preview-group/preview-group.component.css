@@ -13,6 +13,12 @@
     align-items: start;
 }
 
+.two-column-layout:has(.left-column):not(:has(.right-column)) {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 .left-column {
     display: flex;
     flex-direction: column;
@@ -45,7 +51,6 @@
 .main-content-card {
     box-shadow: var(--box-shadow-md);
     border-radius: var(--border-radius-xl);
-    background-color: var(--bg-primary);
     min-height: 400px;
 }
 

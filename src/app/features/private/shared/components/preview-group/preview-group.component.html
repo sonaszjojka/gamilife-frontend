@@ -10,7 +10,10 @@
           ></app-group-actions>
         </app-group-info-card>
 
-        <nz-card *ngIf="group()" class="section-card">
+        <nz-card
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="section-card"
+        >
           <app-members-list-peak
             [membersList]="membersList()"
             [showManageButton]="mode() === GroupPreviewMode.ADMIN"
@@ -32,7 +35,10 @@
         </nz-card>
       </div>
 
-      <div class="right-column">
+      <div
+        class="right-column"
+        *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+      >
         <div
           *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
           class="admin-actions-bar"

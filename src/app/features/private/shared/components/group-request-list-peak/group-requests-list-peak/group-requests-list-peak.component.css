@@ -96,7 +96,7 @@
     justify-content: center;
     padding: var(--spacing-large) 0;
     width: 100%;
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
 }
 
 .empty-icon {
@@ -112,13 +112,4 @@
 
 ::ng-deep .list-container .ant-list {
     border: none;
-}
-
-::ng-deep .list-container .ant-list-item {
-    padding: var(--spacing-medium);
-    border-bottom: 1px solid var(--border-color-light);
-}
-
-::ng-deep .list-container .ant-list-item:last-child {
-    border-bottom: none;
 }

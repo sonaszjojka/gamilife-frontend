@@ -9,17 +9,19 @@ import {
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { Group } from '../../../../shared/models/group.model';
 import { GroupPreviewMode } from '../../../../shared/models/group-preview-mode';
 import { take } from 'rxjs/operators';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { Router } from '@angular/router';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-group-actions',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzIconModule],
+  imports: [CommonModule, NzButtonModule, NzIconModule, NzModalModule],
   template: `
     <div class="action-section">
       <button
@@ -43,7 +45,7 @@ import { GroupRequestApiService } from '../../../../shared/services/group-reques
   styles: [
     `
       .action-section {
-        margin-top: 24px;
+        margin: 10px 12px;
       }
 
       .limit-warning {
@@ -65,7 +67,9 @@ export class GroupActionsComponent {
   private readonly memberApi = inject(GroupMemberApiService);
   private readonly groupMemberApi = inject(GroupMemberApiService);
   private readonly requestsApi = inject(GroupRequestApiService);
+  private readonly modal = inject(NzModalService);
   private router = inject(Router);
+
   protected buttonText = computed(() => {
     const g = this.group();
     const m = this.mode();
@@ -214,10 +218,27 @@ export class GroupActionsComponent {
           this.actionComplete.emit();
           this.router.navigate(['/app/community']);
         },
-        error: (err) => {
-          console.error(err);
+        error: (err: HttpErrorResponse) => {
           this.loading.set(false);
+
+          const errorObj = JSON.parse(err.error);
+
+          if (errorObj.code === '3001') {
+            this.showAdminCannotLeaveModal();
+          }
         },
       });
+  }
+
+  private showAdminCannotLeaveModal(): void {
+    this.modal.warning({
+      nzTitle: 'Cannot Leave Group',
+      nzContent:
+        'As the group administrator, you cannot leave the group without first transferring admin rights to another member. Please assign a new administrator before leaving.',
+      nzOkText: 'OK',
+      nzCentered: true,
+      nzClosable: true,
+      nzMaskClosable: true,
+    });
   }
 }
