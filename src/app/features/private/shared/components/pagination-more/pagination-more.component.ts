@@ -23,7 +23,7 @@ export class PaginationMoreComponent {
 
   readonly pageIndex = signal(1);
   readonly totalItems = signal(0);
-  readonly pageSize = 9;
+  readonly pageSize = 12;
 
   onPageChange(newPageIndex: number) {
     this.pageIndex.set(newPageIndex);

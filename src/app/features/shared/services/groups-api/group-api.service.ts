@@ -4,10 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { GroupFilterParams } from '../../models/group-filter-params.model';
 import { GetGroupsResult } from '../../models/groups.model';
-import { Group } from '../../models/group.model';
+import { CreateGroupDto, EditGroupDto, Group } from '../../models/group.model';
 import { GroupType } from '../../models/group-type.model';
-import { CreateGroupMemberInOpenGroupResult } from '../../models/group-member.model';
-import { CreateGroupRequestResult } from '../../models/group-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,25 +63,19 @@ export class GroupApiService {
     return this.http.get<Group>(`${this.apiUrl}/groups/${groupId}`, { params });
   }
 
-  joinGroup(groupId: string) {
-    const params = {
-      userId: localStorage.getItem('userId'),
-    };
-
-    return this.http.post<CreateGroupMemberInOpenGroupResult>(
-      `${this.apiUrl}/groups/${groupId}/members`,
-      params,
-    );
-  }
-
-  sendRequest(groupId: string) {
-    return this.http.post<CreateGroupRequestResult>(
-      `${this.apiUrl}/groups/${groupId}/requests`,
-      {},
-    );
-  }
-
   getGroupTypes(): Observable<GroupType[]> {
     return this.http.get<GroupType[]>(`${this.apiUrl}/group-types`);
+  }
+
+  createGroup(formValue: CreateGroupDto): Observable<unknown> {
+    return this.http.post(`${this.apiUrl}/groups`, formValue);
+  }
+
+  editGroup(groupId: string, data: EditGroupDto): Observable<unknown> {
+    return this.http.put(`${this.apiUrl}/groups/${groupId}`, data);
+  }
+
+  deleteGroup(groupId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/groups/${groupId}`);
   }
 }

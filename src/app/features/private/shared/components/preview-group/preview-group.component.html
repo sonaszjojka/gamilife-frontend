@@ -1,77 +1,96 @@
 <div class="preview-container">
   <nz-spin [nzSpinning]="loading()" nzSize="large">
-    <nz-card *ngIf="group()" class="group-card">
-      <div class="group-header">
-        <h1 class="group-name">{{ group()!.groupName }}</h1>
-        <app-group-type-tag
-          [typeTitle]="group()!.groupType.title"
-        ></app-group-type-tag>
-      </div>
+    <div class="two-column-layout">
+      <div class="left-column">
+        <app-group-info-card *ngIf="group()" [group]="group()!">
+          <app-group-actions
+            [group]="group()!"
+            [mode]="mode()"
+            (actionComplete)="onActionComplete()"
+          ></app-group-actions>
+        </app-group-info-card>
 
-      <div class="group-info">
-        <div class="info-item">
-          <span nz-icon nzType="key" class="info-icon"></span>
-          <div class="info-content">
-            <span class="info-label">Join Code</span>
-            <span class="info-value">{{ group()!.joinCode }}</span>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <span nz-icon nzType="team" class="info-icon"></span>
-          <div class="info-content">
-            <span class="info-label">Members</span>
-            <span class="info-value">
-              {{ group()!.membersCount || 0 }}
-              <span *ngIf="group()!.membersLimit" class="limit"
-                >/ {{ group()!.membersLimit }}</span
-              >
-            </span>
-          </div>
-        </div>
-
-        <div class="info-item" *ngIf="group()!.groupCurrencySymbol">
-          <span nz-icon nzType="dollar" class="info-icon"></span>
-          <div class="info-content">
-            <span class="info-label">Currency</span>
-            <span class="info-value">{{ group()!.groupCurrencySymbol }}</span>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <span nz-icon nzType="crown" class="info-icon"></span>
-          <div class="info-content">
-            <span class="info-label">Admin ID</span>
-            <span class="info-value">{{ group()!.adminId }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="action-section">
-        <button
-          nz-button
-          nzType="primary"
-          nzSize="large"
-          nzBlock
-          (click)="onButtonClick()"
-          [disabled]="buttonDisabled()"
-        >
-          <span nz-icon nzType="plus-circle"></span>
-          {{ buttonText() }}
-        </button>
-
-        <p
+        <nz-card
           *ngIf="
             group() &&
-            group()!.membersLimit &&
-            group()!.membersCount! >= group()!.membersLimit!
+            (mode() === GroupPreviewMode.MEMBER ||
+              mode() === GroupPreviewMode.ADMIN)
           "
-          class="limit-warning"
+          class="section-card"
         >
-          Group has reached the member limit
-        </p>
+          <app-ranking-list-peak
+            [membersList]="membersList()"
+            (viewFullRanking)="goToRankingPage()"
+          >
+          </app-ranking-list-peak>
+        </nz-card>
+
+        <nz-card
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="section-card"
+        >
+          <app-members-list-peak
+            [membersList]="membersList()"
+            [showManageButton]="true"
+            (manageMembers)="goToManageGroupMembersPage()"
+          >
+          </app-members-list-peak>
+        </nz-card>
+
+        <nz-card
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="section-card"
+        >
+          <app-group-requests-list-peak
+            [requestsList]="requestsList()"
+            [showManageButton]="true"
+            (manageRequests)="goToManageGroupRequestsPage()"
+          >
+          </app-group-requests-list-peak>
+        </nz-card>
       </div>
-    </nz-card>
+
+      <div
+        class="right-column"
+        *ngIf="
+          group() &&
+          (mode() === GroupPreviewMode.MEMBER ||
+            mode() === GroupPreviewMode.ADMIN)
+        "
+      >
+        <div
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="admin-actions-bar"
+        >
+          <button
+            nz-button
+            nzType="default"
+            nzSize="large"
+            (click)="openEditModal()"
+          >
+            <span nz-icon nzType="edit"></span>
+            Edit Group
+          </button>
+
+          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
+            <span nz-icon nzType="delete"></span>
+            Delete Group
+          </button>
+        </div>
+
+        <nz-card class="main-content-card">
+          <div class="placeholder-content">
+            <span
+              nz-icon
+              nzType="inbox"
+              nzTheme="outline"
+              class="placeholder-icon"
+            ></span>
+            <p>Main content area - 2/3 width</p>
+          </div>
+        </nz-card>
+      </div>
+    </div>
 
     <nz-card *ngIf="!group() && !loading()" class="error-card">
       <div class="error-content">
@@ -81,4 +100,11 @@
       </div>
     </nz-card>
   </nz-spin>
+
+  <app-edit-group-form
+    *ngIf="group()"
+    [group]="group()!"
+    [members]="membersList()"
+    (groupUpdated)="onActionComplete()"
+  ></app-edit-group-form>
 </div>

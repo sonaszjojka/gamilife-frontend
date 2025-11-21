@@ -1,0 +1,22 @@
+td:last-child {
+    text-align: center;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-large) 0;
+}
+
+::ng-deep .ant-table {
+    font-family: var(--main-font);
+}
+
+::ng-deep .ant-table-thead>tr>th {
+    font-weight: var(--font-weight-semibold);
+}
+
+::ng-deep .ant-table-thead>tr>th:last-child {
+    text-align: center;
+}

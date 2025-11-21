@@ -1,5 +1,11 @@
 .search-container {
-    height: 80vh;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result-container {
+    flex: 1;
 }
 
 .paging-div {

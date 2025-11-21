@@ -1,0 +1,50 @@
+<nz-modal
+  nzTitle="Edit Member"
+  [nzVisible]="isVisible()"
+  nzOkText="Save"
+  nzCancelText="Cancel"
+  [nzOkLoading]="isLoading()"
+  (nzOnOk)="handleEdit()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label>Username</nz-form-label>
+        <nz-form-control>
+          <input nz-input [value]="member()?.username" disabled />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="groupMoney">Group Money</nz-form-label>
+        <nz-form-control nzErrorTip="Group money must be positive or zero.">
+          <input
+            nz-input
+            id="groupMoney"
+            formControlName="groupMoney"
+            placeholder="0"
+            type="number"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="totalEarnedMoney"
+          >Total Earned Money</nz-form-label
+        >
+        <nz-form-control
+          nzErrorTip="Total earned money must be positive or zero."
+        >
+          <input
+            nz-input
+            id="totalEarnedMoney"
+            formControlName="totalEarnedMoney"
+            placeholder="0"
+            type="number"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

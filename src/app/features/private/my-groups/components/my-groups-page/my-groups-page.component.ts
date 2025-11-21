@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -10,6 +10,7 @@ import { PaginationMoreComponent } from '../../../shared/components/pagination-m
 import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
 import { Group } from '../../../../shared/models/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
+import { AddGroupFormComponent } from '../add-group-form/add-group-form.component';
 
 @Component({
   selector: 'app-my-groups-page',
@@ -22,6 +23,7 @@ import { GroupListComponent } from '../../../shared/components/group-list/group-
     InputSearchComponent,
     PaginationMoreComponent,
     GroupListComponent,
+    AddGroupFormComponent,
   ],
   templateUrl: './my-groups-page.component.html',
   styleUrl: './my-groups-page.component.css',
@@ -35,7 +37,8 @@ export class MyGroupsPageComponent implements OnInit {
   currentPage = signal<number>(0);
   groupName = signal<string | undefined>(undefined);
   groupTypeId = signal<number | undefined>(undefined);
-
+  @ViewChild(AddGroupFormComponent) addGroupForm!: AddGroupFormComponent;
+  @ViewChild(InputSearchComponent) inputSearch!: InputSearchComponent;
   ngOnInit() {
     this.loadMyGroups(0, 0);
   }
@@ -62,6 +65,17 @@ export class MyGroupsPageComponent implements OnInit {
       });
   }
 
+  openAddGroupModal(): void {
+    this.addGroupForm.open();
+  }
+
+  onGroupCreated() {
+    this.groupName.set(undefined);
+    this.groupTypeId.set(undefined);
+    this.inputSearch.resetFilters();
+    this.loadMyGroups(0, 0);
+  }
+
   onPageChange(page: number) {
     this.loadMyGroups(page, 350);
   }
@@ -74,17 +88,5 @@ export class MyGroupsPageComponent implements OnInit {
   onGroupTypeChange(groupTypeId: string | null) {
     this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
     this.loadMyGroups(0, 350);
-  }
-
-  onCreateGroup() {
-    console.log('Create group');
-  }
-
-  onEditGroup(group: Group) {
-    console.log('Edit group:', group);
-  }
-
-  onDeleteGroup(group: Group) {
-    console.log('Delete group:', group);
   }
 }

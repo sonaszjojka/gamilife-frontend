@@ -1,8 +1,9 @@
-.app-content {
-    flex: 1;
+.app-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.app-footer {
-    margin: 0;
-    padding: 20px 0;
+.app-content {
+    flex: 1;
 }

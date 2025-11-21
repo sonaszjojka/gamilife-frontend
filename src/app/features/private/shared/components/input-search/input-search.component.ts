@@ -135,4 +135,11 @@ export class InputSearchComponent implements OnInit {
       error: (err) => console.error('Failed to load group types:', err),
     });
   }
+
+  resetFilters(): void {
+    this.value.set('');
+    this.selectedGroupTypeId = undefined;
+    this.inputChange.emit('');
+    this.groupTypeChange.emit(null);
+  }
 }
