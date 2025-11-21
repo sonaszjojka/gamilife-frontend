@@ -22,11 +22,11 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     <ng-template #modalFooter>
       @if (isBreakEndModal) {
         <button nz-button nzType="default" (click)="handleEndSession()">
-          Zakończ sesję
+          End Session
         </button>
 
         <button nz-button nzType="primary" (click)="handleContinue()">
-          Kontynuuj następną sesję
+          Continue
         </button>
       } @else {
         <button nz-button nzType="primary" (click)="handleOk()">
@@ -49,15 +49,15 @@ export class PomodoroSessionBreakModalComponent {
   showBreakStartModal(): void {
     this.isBreakEndModal = false;
     this.modalTitle = 'Start Your Break!';
-    this.modalMessage = 'Rozpoczyna się 5-minutowa przerwa. Odpocznij i wróć za chwilę!';
+    this.modalMessage = 'Starting 5 minute break. Have a good rest and come back';
     this.isVisible = true;
     this.playNote(400)
   }
 
   showBreakEndModal(): void {
     this.isBreakEndModal = true;
-    this.modalTitle = 'Przerwa zakończona!';
-    this.modalMessage = 'Twoja przerwa dobiegła końca. Czy chcesz kontynuować kolejną sesję?';
+    this.modalTitle = 'Your Break Has Ended';
+    this.modalMessage = 'Your break has ended. Do You want to start another session?';
     this.isVisible = true;
     this.playNote(300)
   }

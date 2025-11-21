@@ -56,8 +56,8 @@ export class PomodoroSessionComponent {
   remainingTime = 0;
   isSessionActive = false;
   isBreakActive= false
-  private sessionDuration = 25 *60;
-  private breakDuration = 5 *60 ;
+  private sessionDuration = 10;
+  private breakDuration = 10 ;
 
   currentPage = 0;
   pageSize = 50;
@@ -171,6 +171,15 @@ export class PomodoroSessionComponent {
       this.stopTimer();
       this.remainingTime = 0;
       this.isSessionActive = false;
+      return;
+    }
+
+    if(this.currentSessionPomodoroTasks.length==0)
+    {
+      this.stopTimer();
+      this.remainingTime = 0;
+      this.isSessionActive = false;
+      this.isBreakActive = false;
       return;
     }
 
