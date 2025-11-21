@@ -1,0 +1,21 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <span nz-icon nzType="inbox" nzTheme="outline"></span>
+      Group Requests
+    </h1>
+    @if (groupName()) {
+      <p class="group-name">{{ groupName() }}</p>
+    }
+  </div>
+  <nz-spin [nzSpinning]="loading()" nzSize="large">
+    <nz-card class="ranking-card">
+      <app-group-requests-list
+        [groupId]="groupId()"
+        [requests]="requests()"
+        [loading]="loading()"
+        (requestChanged)="loadRequests()"
+      ></app-group-requests-list>
+    </nz-card>
+  </nz-spin>
+</div>

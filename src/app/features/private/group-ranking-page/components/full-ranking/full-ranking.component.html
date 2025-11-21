@@ -1,0 +1,111 @@
+<div class="ranking-container">
+  @if (podiumMembers().length > 0) {
+    <div class="podium-section">
+      <div class="podium-wrapper">
+        @if (podiumMembers()[1]) {
+          <div class="podium-place second">
+            <div class="member-card" data-rank="2. miejsce">
+              <div class="username">{{ podiumMembers()[1].username }}</div>
+              <div class="earned">
+                <span nz-icon nzType="dollar"></span>
+                {{ podiumMembers()[1].totalEarnedMoney ?? 0 | number: "1.2-2" }}
+              </div>
+            </div>
+            <div class="podium-step step-silver"></div>
+          </div>
+        }
+
+        @if (podiumMembers()[0]) {
+          <div class="podium-place first">
+            <span class="crown-icon">👑</span>
+            <div class="member-card" data-rank="1. miejsce">
+              <div class="username">{{ podiumMembers()[0].username }}</div>
+              <div class="earned">
+                <span nz-icon nzType="dollar"></span>
+                {{ podiumMembers()[0].totalEarnedMoney ?? 0 | number: "1.2-2" }}
+              </div>
+            </div>
+            <div class="podium-step step-gold"></div>
+          </div>
+        }
+
+        @if (podiumMembers()[2]) {
+          <div class="podium-place third">
+            <div class="member-card" data-rank="3. miejsce">
+              <div class="username">{{ podiumMembers()[2].username }}</div>
+              <div class="earned">
+                <span nz-icon nzType="dollar"></span>
+                {{ podiumMembers()[2].totalEarnedMoney ?? 0 | number: "1.2-2" }}
+              </div>
+            </div>
+            <div class="podium-step step-bronze"></div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <nz-table #rankingTable [nzData]="getMembers()" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th nzWidth="80px">Rank</th>
+        <th>Username</th>
+        <th>Group Money</th>
+        <th>Total Earned</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let member of rankingTable.data; let idx = index"
+        [class.podium-row]="getRankForMember(member) <= 3"
+      >
+        <td>
+          <span
+            class="rank-cell"
+            [class.podium-rank]="getRankForMember(member) <= 3"
+          >
+            @if (getRankForMember(member) === 1) {
+              <span
+                nz-icon
+                nzType="trophy"
+                nzTheme="twotone"
+                [nzTwotoneColor]="'#FFD700'"
+              ></span>
+            } @else if (getRankForMember(member) === 2) {
+              <span
+                nz-icon
+                nzType="trophy"
+                nzTheme="twotone"
+                [nzTwotoneColor]="'#C0C0C0'"
+              ></span>
+            } @else if (getRankForMember(member) === 3) {
+              <span
+                nz-icon
+                nzType="trophy"
+                nzTheme="twotone"
+                [nzTwotoneColor]="'#CD7F32'"
+              ></span>
+            } @else {
+              {{ getRankForMember(member) }}
+            }
+          </span>
+        </td>
+        <td>
+          <strong [class.podium-name]="getRankForMember(member) <= 3">
+            {{ member.username }}
+          </strong>
+        </td>
+        <td>
+          <span class="money-value">
+            {{ member.groupMoney ?? 0 | number: "1.2-2" }}
+          </span>
+        </td>
+        <td>
+          <span class="money-value earned">
+            {{ member.totalEarnedMoney ?? 0 | number: "1.2-2" }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

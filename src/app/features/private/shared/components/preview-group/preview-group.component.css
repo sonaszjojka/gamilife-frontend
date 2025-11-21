@@ -1,94 +1,85 @@
 .preview-container {
-    max-width: 600px;
+    max-width: 1400px;
     margin: var(--spacing-large) auto;
     padding: var(--spacing-medium);
     font-family: var(--main-font);
     color: var(--text-primary-color);
 }
 
-.group-card {
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-large);
+    align-items: start;
+}
+
+.two-column-layout:has(.left-column):not(:has(.right-column)) {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-large);
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-large);
+}
+
+.admin-actions-bar {
+    display: flex;
+    gap: var(--spacing-medium);
+    flex-wrap: wrap;
+}
+
+.admin-actions-bar button {
+    flex: 1;
+    min-width: 150px;
+}
+
+.section-card {
     box-shadow: var(--box-shadow-md);
     border-radius: var(--border-radius-xl);
     background-color: var(--bg-primary);
 }
 
-.group-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-large);
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-color-light);
+.main-content-card {
+    box-shadow: var(--box-shadow-md);
+    border-radius: var(--border-radius-xl);
+    min-height: 400px;
 }
 
-.group-name {
+.placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xxlarge) var(--spacing-large);
+    color: var(--text-secondary-color);
+}
+
+.placeholder-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-medium);
+    opacity: 0.3;
+}
+
+.placeholder-content p {
     margin: 0;
-    font-size: var(--font-size-xxlarge);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary-color);
-}
-
-.group-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-bottom: var(--spacing-large);
-}
-
-.info-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.info-icon {
-    font-size: 1.5rem;
-    color: var(--third-color);
-    flex-shrink: 0;
-}
-
-.info-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    flex: 1;
-}
-
-.info-label {
-    font-size: var(--font-size-small);
-    color: var(--border-color-dark);
-    font-weight: var(--font-weight-medium);
-}
-
-.info-value {
     font-size: var(--font-size-large);
-    color: var(--text-primary-color);
-    font-weight: var(--font-weight-medium);
-}
-
-.limit {
-    color: var(--border-color-dark);
-    font-weight: var(--font-weight-normal);
-}
-
-.action-section {
-    margin-top: var(--spacing-large);
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color-light);
-}
-
-.limit-warning {
-    text-align: center;
-    margin-top: 0.75rem;
-    margin-bottom: 0;
-    color: var(--color-warning);
-    font-size: var(--font-size-small);
+    opacity: 0.5;
 }
 
 .error-card {
     box-shadow: var(--box-shadow-md);
     border-radius: var(--border-radius-xl);
     background-color: var(--bg-primary);
+    margin-top: var(--spacing-large);
 }
 
 .error-content {
@@ -112,23 +103,39 @@
     color: var(--border-color-dark);
 }
 
+@media (max-width: 1024px) {
+    .two-column-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .right-column {
+        order: 2;
+    }
+
+    .left-column {
+        order: 1;
+    }
+}
+
 @media (max-width: 768px) {
     .preview-container {
         margin: var(--spacing-medium) auto;
         padding: var(--spacing-small);
     }
 
-    .group-header {
+    .admin-actions-bar {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
     }
 
-    .group-name {
-        font-size: var(--font-size-xlarge);
+    .admin-actions-bar button {
+        width: 100%;
     }
+}
 
-    .info-value {
-        font-size: var(--font-size-base);
-    }
+::ng-deep .section-card .ant-card-body {
+    padding: 0;
+}
+
+::ng-deep .main-content-card .ant-card-body {
+    padding: var(--spacing-large);
 }

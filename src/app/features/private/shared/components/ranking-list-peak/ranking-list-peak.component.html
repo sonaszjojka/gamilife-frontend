@@ -1,0 +1,80 @@
+<div class="list-container">
+  <div class="list-header">
+    <h3 class="header-title">
+      <span
+        nz-icon
+        nzType="trophy"
+        nzTheme="outline"
+        class="trophy-icon"
+      ></span>
+      Top Members
+    </h3>
+    <button
+      nz-button
+      nzType="link"
+      nzSize="small"
+      (click)="viewFullRanking.emit()"
+    >
+      View All
+      <span nz-icon nzType="right" nzTheme="outline"></span>
+    </button>
+  </div>
+
+  <nz-list>
+    @for (member of displayMembers(); track member.userId; let idx = $index) {
+      <nz-list-item>
+        <div class="member-item">
+          <div class="member-info">
+            <span class="rank" [class.podium]="idx < 3">
+              @if (idx === 0) {
+                <span
+                  nz-icon
+                  nzType="trophy"
+                  nzTheme="twotone"
+                  [nzTwotoneColor]="'#FFD700'"
+                ></span>
+              } @else if (idx === 1) {
+                <span
+                  nz-icon
+                  nzType="trophy"
+                  nzTheme="twotone"
+                  [nzTwotoneColor]="'#C0C0C0'"
+                ></span>
+              } @else if (idx === 2) {
+                <span
+                  nz-icon
+                  nzType="trophy"
+                  nzTheme="twotone"
+                  [nzTwotoneColor]="'#CD7F32'"
+                ></span>
+              } @else {
+                {{ idx + 1 }}
+              }
+            </span>
+            <span class="username" [class.podium-name]="idx < 3">{{
+              member.username
+            }}</span>
+          </div>
+          <div class="earned">
+            <span nz-icon nzType="dollar" class="icon"></span>
+            <span class="amount">{{
+              member.totalEarnedMoney ?? 0 | number: "1.2-2"
+            }}</span>
+          </div>
+        </div>
+      </nz-list-item>
+    } @empty {
+      <nz-list-item>
+        <div class="empty-state">
+          <span
+            nz-icon
+            nzType="trophy"
+            nzTheme="outline"
+            class="empty-icon"
+          ></span>
+          <p>No ranking data yet</p>
+        </div>
+      </nz-list-item>
+    }
+  </nz-list>
+</div>

@@ -1,0 +1,79 @@
+<nz-modal
+  nzTitle="Create group"
+  [nzVisible]="isVisible()"
+  nzOkText="Create"
+  nzCancelText="Cancel"
+  [nzOkLoading]="isLoading()"
+  (nzOnOk)="handleCreate()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="groupName">Group name</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please provide valid group name - min. 1, max. 50 characters."
+        >
+          <input
+            nz-input
+            id="groupName"
+            formControlName="groupName"
+            placeholder="e.g. SuperGroup"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="groupCurrencySymbol">
+          Group currency symbol
+        </nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please provide valid group currency symbol - exactly 1 character."
+        >
+          <input
+            nz-input
+            id="groupCurrencySymbol"
+            formControlName="groupCurrencySymbol"
+            placeholder="e.g. $"
+            maxlength="1"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="groupType">Group type</nz-form-label>
+        <nz-form-control nzErrorTip="Please choose group type.">
+          <nz-select
+            *ngIf="groupTypes().length > 0"
+            formControlName="groupTypeId"
+            nzPlaceHolder="Choose group type"
+            id="groupType"
+          >
+            <nz-option
+              *ngFor="let type of groupTypes()"
+              [nzValue]="type.id"
+              [nzLabel]="type.title"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="membersLimit">
+          Members limit
+        </nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please provide valid members limit - min. 2, max. 100."
+        >
+          <input
+            nz-input
+            id="membersLimit"
+            formControlName="membersLimit"
+            placeholder="e.g. 10"
+            type="number"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

@@ -3,18 +3,22 @@ import { LoginComponent } from './features/public/login/components/login/login.c
 import { RegistrationComponent } from './features/public/registration/components/registration/registration.component';
 import { GuestHomeComponent } from './features/public/guest-home/components/guest-home/guest-home.component';
 import { DashboardComponent } from './features/private/dashboard/components/dashboard/dashboard.component';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { AuthGuard } from './shared/guards/auth-guard/auth.guard';
 import { ForgotPasswordComponent } from './features/public/forgot-password/components/forgot-password/forgot-password.component';
 import { OAuthCallbackComponent } from './features/public/oauth2/components/oauth-callback/oauth-callback.component';
 import { TaskListComponent } from './features/private/my-tasks/task-list/task-list.component';
 import { environment } from '../environments/environment';
-import { GuestGuard } from './shared/guards/guest.guard';
+import { GuestGuard } from './shared/guards/guest-guard/guest.guard';
 import { EmailVerificationResultComponent } from './features/public/email-verification-result/components/email-verification-result/email-verification-result.component';
 import { ResetPasswordComponent } from './features/public/reset-password/components/reset-password/reset-password.component';
 import { CommunityPageComponent } from './features/private/community/components/community-page/community-page.component';
 import { PreviewGroupComponent } from './features/private/shared/components/preview-group/preview-group.component';
 import { MyGroupsPageComponent } from './features/private/my-groups/components/my-groups-page/my-groups-page.component';
 import {PomodoroSessionComponent} from './features/private/my-tasks/pomodoro-session/pomodoro-session.component';
+import { GroupMembersPageComponent } from './features/private/group-members-page/components/group-members-page/group-members-page.component';
+import { GroupInvitationResponseComponent } from './features/private/my-groups/components/group-invitation-response/group-invitation-response.component';
+import { GroupRequestsPageComponent } from './features/private/group-requests-page/components/group-requests-page/group-requests-page.component';
+import { GroupRankingPageComponent } from './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component';
 
 export const routes: Routes = [
   {
@@ -59,9 +63,25 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'tasks', component: TaskListComponent },
       { path: 'community', component: CommunityPageComponent },
-      { path: 'community/groups/:groupId', component: PreviewGroupComponent },
+      { path: 'groups/:groupId', component: PreviewGroupComponent },
       { path: 'my-groups', component: MyGroupsPageComponent },
-      { path: 'tasks/pomodoro-session',component:PomodoroSessionComponent}
+      { path: 'tasks/pomodoro-session',component:PomodoroSessionComponent},
+      {
+        path: 'groups/:groupId/members',
+        component: GroupMembersPageComponent,
+      },
+      {
+        path: 'groups/:groupId/requests',
+        component: GroupRequestsPageComponent,
+      },
+      {
+        path: 'groups/:groupId/group-invitations/:groupInvitationId',
+        component: GroupInvitationResponseComponent,
+      },
+      {
+        path: 'groups/:groupId/ranking',
+        component: GroupRankingPageComponent,
+      },
     ],
   },
   { path: '**', redirectTo: '' },
