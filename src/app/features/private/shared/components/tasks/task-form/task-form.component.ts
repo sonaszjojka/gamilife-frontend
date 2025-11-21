@@ -15,6 +15,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
 import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
 import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro-task.service';
+import {EditPomodoroRequest} from '../../../../../shared/models/task-models/edit-pomodoro-request';
 
 @Component({
   selector: 'app-task-form',
@@ -38,14 +39,16 @@ import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro
   styleUrl: './task-form.component.css'
 })
 export class TaskFormComponent {
+
   pomodoroCreation=signal<boolean>(false)
+  pomodoroEdition = signal<boolean>(false)
   @Input() task!: WritableSignal<Task | null>;
   @Input() creationMode?: WritableSignal<boolean|null>
   @Input() editionMode?: WritableSignal<boolean|null>;
   @Output() taskFormSubmitted = new EventEmitter<void>();
   @Output() taskDeleted=new EventEmitter<void>()
   pomodoroRequest?:CreatePomodoroRequest;
-
+  pomodoroEditRequest?:EditPomodoroRequest;
 
   private formBuilder = inject(NonNullableFormBuilder);
   private taskService = inject(IndividualTaskService)
@@ -175,7 +178,7 @@ export class TaskFormComponent {
       if (task == null) {
         return;
       }
-      if (this.pomodoroRequest)
+      if (this.pomodoroRequest && this.pomodoroCreation())
       {
 
         this.pomodoroService.createPomodoro(task.taskId,this.pomodoroRequest).subscribe({
@@ -184,11 +187,18 @@ export class TaskFormComponent {
             task.pomodoroId=response.pomodoroId
             task.workCyclesNeeded=response.workCyclesNeeded
             task.workCyclesCompleted=response.workCyclesCompleted
-
           }
         })
-        console.log("Jest dobrze")
-
+      }
+      else if (this.pomodoroEditRequest && this.pomodoroEdition())
+      {
+        this.pomodoroService.editPomodoro(task.pomodoroId!,this.pomodoroEditRequest).subscribe({
+          next:(response)=>
+          {
+            task.workCyclesNeeded=response.workCyclesNeeded
+            task.workCyclesCompleted=response.workCyclesCompleted
+          }
+        })
       }
 
       this.taskService.editTask(task.taskId, request).subscribe({
@@ -221,8 +231,22 @@ export class TaskFormComponent {
  {
    this.pomodoroCreation.update(value => !value)
  }
+
+ onPomodoroEdition()
+ {
+   this.pomodoroEdition.update(value => !value)
+ }
+
  onPomodoroFormChange(pomodoroRequest:CreatePomodoroRequest)
  {
-   this.pomodoroRequest=pomodoroRequest
+   if (pomodoroRequest!=null) this.pomodoroRequest=pomodoroRequest
+
  }
+
+ onPomodoroEditFormChange(pomodoroEditRequest:EditPomodoroRequest)
+ {
+   if (pomodoroEditRequest!=null)this.pomodoroEditRequest=pomodoroEditRequest;
+ }
+
+
 }

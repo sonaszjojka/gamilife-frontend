@@ -118,11 +118,13 @@ class="task-form"
 
   </nz-form-item>
 
-  @if(this.pomodoroCreation())
+  @if(this.pomodoroCreation()||this.pomodoroEdition())
   {
   <app-pomodoro-form
     [pomodoroCreation]="pomodoroCreation"
+    [pomodoroEdition]="pomodoroEdition"
     (formChanged)="onPomodoroFormChange($event)"
+    (editFormChanged)="onPomodoroEditFormChange($event)"
     ></app-pomodoro-form>
   }
 
@@ -135,14 +137,14 @@ class="task-form"
     {
       <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon></button>
     }
-
+    @else if (this.task()?.pomodoroId!=null&&this.editionMode?.())
+    {
+        <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroEdition()" >Edit Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon></button>
+    }
     @if(this.editionMode?.())
     {
     <button class="delete-button" nz-button nzShape="round" (click)="onDelete()">Delete</button>
     }
-
-
-
 
   </div>
 </div>

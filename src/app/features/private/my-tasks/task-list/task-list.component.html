@@ -29,7 +29,6 @@
             @for (task of groupedTasks[date]; track task.taskId) {
               <app-task-item
                 [task]="task"
-                (taskUpdated)=onTaskUpdated(task.taskId)
                 (editTask)="onTaskEdit(task)">
               </app-task-item>
             }

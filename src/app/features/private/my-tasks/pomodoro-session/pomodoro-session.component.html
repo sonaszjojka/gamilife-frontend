@@ -42,7 +42,6 @@
         [task]="task"
         [inPomodoroList]="true"
         [isInSession] ="true"
-        (taskUpdated)="onTaskUpdated($event)"
         (removeFromCurrentSession)="removeFromCurrentSession($event)"
         cdkDrag
         ></app-task-item>
@@ -62,7 +61,6 @@
         [task]="task"
         [inPomodoroList]="true"
         [isInSession] ="false"
-        (taskUpdated)="onTaskUpdated($event)"
         (moveToCurrentSession)="moveTaskToCurrentSession($event)"
       ></app-task-item>
     }

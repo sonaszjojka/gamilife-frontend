@@ -13,6 +13,7 @@ import {
 import {NzTimeRangePipe} from 'ng-zorro-antd/core/pipe';
 import {PomodoroTaskService} from '../../../shared/services/tasks/pomodoro-task.service';
 import {EditPomodoroRequest} from '../../../shared/models/task-models/edit-pomodoro-request';
+import {EditTaskRequest} from '../../../shared/models/task-models/edit-task-request';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -49,7 +50,7 @@ export class PomodoroSessionComponent {
   remainingTime = 0;
   isSessionActive = false;
   isBrakeActive= false
-  private sessionDuration = 25*60;
+  private sessionDuration = 5;
   private breakDuration = 5 * 60;
 
   currentPage = 0;
@@ -206,20 +207,22 @@ export class PomodoroSessionComponent {
     }
   }
 
-  onTaskUpdated(taskId:string):void
-  {
-    const changedTask = this.allUsersTasks.find(t=>t.taskId==taskId)!;
-    const isTaskNoneActive:Boolean = (changedTask.completedAt!=null||new Date(changedTask.endTime!)<new Date(Date.now()))
 
-    if (isTaskNoneActive )
-    {
-      this.allUsersTasks.filter(t=>t.taskId!=taskId)
-    }
-
-  }
 
   removeFromPanel(task:Task)
   {
+    let request:EditTaskRequest={
+      title:task.title,
+      description:task.description,
+      difficultyId:task.difficultyId,
+      categoryId:task.categoryId,
+      startTime:task.startTime,
+      endTime:task.endTime,
+      completedAt:new Date(Date.now()).toISOString()
+    }
+
+    this.taskService.editTask(task.taskId,request).subscribe()
+
     this.currentSessionPomodoroTasks= this.currentSessionPomodoroTasks.filter(t=>t.taskId!=task.taskId);
     this.allUsersTasks= this.allUsersTasks.filter(t=>t.taskId!=task.taskId);
   }
@@ -235,26 +238,46 @@ export class PomodoroSessionComponent {
   moveTaskToCurrentSession(task:Task)
   {
     if (!task) return;
-
     if (task.pomodoroId==null)
     {
       this.pomodoroSessionFormModal.task=task
       this.pomodoroSessionFormModal.showModal()
-
     }
 
     if (task.pomodoroId!=null)
     {
-      this.currentSessionPomodoroTasks.push(<Task>this.usersPomodoroTasks.find(t => t.taskId == task.taskId));
-      this.usersPomodoroTasks= this.usersPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+
+      if (task.workCyclesCompleted!>=task.workCyclesNeeded!)
+      {
+        this.pomodoroSessionFormModal.task=task
+        this.pomodoroSessionFormModal.showModal()
+
+      }
+      else
+      {
+
+        this.currentSessionPomodoroTasks.push(<Task>this.usersPomodoroTasks.find(t => t.taskId == task.taskId));
+        this.usersPomodoroTasks= this.usersPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+      }
 
     }
 
   }
   moveModalPomodoroToSession(task:Task)
   {
-    this.currentSessionPomodoroTasks.push(<Task>this.usersNotPomodoroTasks.find(t => t.taskId == task.taskId));
-    this.usersNotPomodoroTasks= this.usersNotPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+    if (<Task>this.usersNotPomodoroTasks.find(t => t.taskId == task.taskId))
+    {
+      this.currentSessionPomodoroTasks.push(<Task>this.usersNotPomodoroTasks.find(t => t.taskId == task.taskId));
+      this.usersNotPomodoroTasks= this.usersNotPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+    }
+    else
+    {
+      this.currentSessionPomodoroTasks.push(<Task>this.usersPomodoroTasks.find(t => t.taskId == task.taskId));
+      this.usersPomodoroTasks= this.usersPomodoroTasks.filter(t=> t.taskId!=task.taskId);
+    }
+
+
+
   }
 
 
