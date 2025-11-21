@@ -13,7 +13,15 @@ import { formatRelativeDate } from '../../../../../../shared/util/DateFormatterU
   template: `
     <div class="list-container">
       <div class="list-header">
-        <h3 class="header-title">Join Requests</h3>
+        <h3 class="header-title">
+          <span
+            nz-icon
+            nzType="inbox"
+            nzTheme="outline"
+            class="header-icon"
+          ></span>
+          Group Requests
+        </h3>
         @if (showManageButton()) {
           <button
             nz-button

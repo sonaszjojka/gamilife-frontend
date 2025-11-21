@@ -16,6 +16,14 @@
     font-size: var(--font-size-large);
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary-color);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+}
+
+.header-icon {
+    color: var(--text-primary-color);
+    font-size: 20px;
 }
 
 .member-item,

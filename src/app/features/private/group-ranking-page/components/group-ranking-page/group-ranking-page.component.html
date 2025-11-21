@@ -1,0 +1,29 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <span nz-icon nzType="trophy" nzTheme="outline"></span>
+      Group Ranking
+    </h1>
+    @if (groupName()) {
+      <p class="group-name">{{ groupName() }}</p>
+    }
+  </div>
+
+  <nz-spin [nzSpinning]="loading()" nzSize="large">
+    <nz-card class="ranking-card">
+      @if (members().length > 0) {
+        <app-full-ranking [members]="members()"></app-full-ranking>
+      } @else if (!loading()) {
+        <div class="empty-state">
+          <span
+            nz-icon
+            nzType="trophy"
+            nzTheme="outline"
+            class="empty-icon"
+          ></span>
+          <p>No members to rank yet</p>
+        </div>
+      }
+    </nz-card>
+  </nz-spin>
+</div>

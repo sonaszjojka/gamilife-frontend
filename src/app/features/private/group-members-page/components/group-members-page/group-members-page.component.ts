@@ -26,16 +26,57 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   templateUrl: './group-members-page.component.html',
   styles: [
     `
-      .members-page-container {
-        padding: var(--spacing-large);
+      .page-container {
         max-width: 1200px;
         margin: 0 auto;
+        padding: var(--spacing-large);
+        font-family: var(--main-font);
+      }
+
+      .page-header {
+        margin-bottom: var(--spacing-large);
+      }
+
+      .page-title {
+        font-size: 32px;
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary-color);
+        margin: var(--spacing-medium) 0 var(--spacing-xs) 0;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-small);
+      }
+
+      .group-name {
+        font-size: var(--font-size-medium);
+        color: var(--text-secondary-color);
+        margin: 0;
+      }
+
+      .ranking-card {
+        box-shadow: var(--box-shadow-md);
+        border-radius: var(--border-radius-xl);
+        background-color: var(--bg-primary);
       }
 
       .invite-btn-container {
         display: flex;
         justify-content: flex-end;
         margin-bottom: var(--spacing-medium);
+      }
+
+      @media (max-width: 768px) {
+        .page-container {
+          padding: var(--spacing-medium);
+        }
+
+        .page-title {
+          font-size: 24px;
+        }
+      }
+
+      ::ng-deep .ranking-card .ant-card-body {
+        padding: var(--spacing-large);
       }
     `,
   ],
@@ -71,7 +112,7 @@ export class GroupMembersPageComponent implements OnInit {
       .subscribe({
         next: (group) => {
           this.groupName.set(group.groupName);
-          this.members.set(group.members);
+          this.members.set(group.membersSortedDescByTotalEarnedMoney);
           this.adminId.set(group.adminId);
           this.isAdmin.set(
             group.adminId === group.loggedUserMembershipDto?.userId,

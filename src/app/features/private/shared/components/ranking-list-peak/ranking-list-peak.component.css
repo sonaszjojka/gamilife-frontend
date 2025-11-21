@@ -21,11 +21,6 @@
     gap: var(--spacing-small);
 }
 
-.header-icon {
-    color: var(--text-primary-color);
-    font-size: 20px;
-}
-
 .member-item {
     display: flex;
     justify-content: space-between;
@@ -33,9 +28,31 @@
     width: 100%;
 }
 
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+}
+
+.rank {
+    min-width: 24px;
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary-color);
+    font-size: var(--font-size-medium);
+}
+
+.rank.podium {
+    font-size: 18px;
+}
+
 .username {
     font-weight: var(--font-weight-medium);
     color: var(--text-primary-color);
+}
+
+.username.podium-name {
+    font-weight: var(--font-weight-semibold);
 }
 
 .earned {

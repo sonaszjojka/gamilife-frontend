@@ -13,7 +13,7 @@ export interface Group {
   isMember: boolean | null;
   hasActiveGroupRequest: boolean | null;
   loggedUserMembershipDto: GroupMember | null;
-  members: GroupMember[];
+  membersSortedDescByTotalEarnedMoney: GroupMember[];
   adminUsername: string | null;
 }
 

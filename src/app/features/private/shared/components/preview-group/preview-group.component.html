@@ -18,9 +18,20 @@
           "
           class="section-card"
         >
+          <app-ranking-list-peak
+            [membersList]="membersList()"
+            (viewFullRanking)="goToRankingPage()"
+          >
+          </app-ranking-list-peak>
+        </nz-card>
+
+        <nz-card
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="section-card"
+        >
           <app-members-list-peak
             [membersList]="membersList()"
-            [showManageButton]="mode() === GroupPreviewMode.ADMIN"
+            [showManageButton]="true"
             (manageMembers)="goToManageGroupMembersPage()"
           >
           </app-members-list-peak>

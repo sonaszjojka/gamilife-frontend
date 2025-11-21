@@ -12,7 +12,15 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="list-container">
       <div class="list-header">
-        <h3 class="header-title">Members</h3>
+        <h3 class="header-title">
+          <span
+            nz-icon
+            nzType="team"
+            nzTheme="outline"
+            class="header-icon"
+          ></span>
+          Members
+        </h3>
         @if (showManageButton()) {
           <button
             nz-button

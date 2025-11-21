@@ -18,6 +18,7 @@ import { GroupRequest } from '../../../../shared/models/group-request.model';
 import { GroupInfoCardComponent } from '../group-info-card/group-info-card.component';
 import { GroupActionsComponent } from '../group-actions/group-actions.component';
 import { MembersListPeakComponent } from '../members-list-peak/members-list-peak.component';
+import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
 
@@ -35,6 +36,7 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
     GroupInfoCardComponent,
     GroupActionsComponent,
     MembersListPeakComponent,
+    RankingListPeakComponent,
     GroupRequestsListPeakComponent,
     EditGroupFormComponent,
   ],
@@ -84,7 +86,7 @@ export class PreviewGroupComponent implements OnInit {
                 : GroupPreviewMode.MEMBER
               : GroupPreviewMode.PUBLIC,
           );
-          this.membersList.set(group.members);
+          this.membersList.set(group.membersSortedDescByTotalEarnedMoney);
           this.loading.set(false);
         },
         error: (err) => {
@@ -135,11 +137,21 @@ export class PreviewGroupComponent implements OnInit {
     }
   }
 
+  protected goToRankingPage(): void {
+    const groupId = this.route.snapshot.paramMap.get('groupId');
+    if (groupId) {
+      this.router.navigate([`app/groups/${groupId}/ranking`]);
+    } else {
+      console.error('Group ID not found in route');
+    }
+  }
+
   protected openEditModal(): void {
     if (this.editGroupForm) {
       this.editGroupForm.open();
     }
   }
+
   protected confirmDelete(): void {
     this.modal.confirm({
       nzTitle: 'Delete Group',

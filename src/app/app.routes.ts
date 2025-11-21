@@ -17,6 +17,7 @@ import { MyGroupsPageComponent } from './features/private/my-groups/components/m
 import { GroupMembersPageComponent } from './features/private/group-members-page/components/group-members-page/group-members-page.component';
 import { GroupInvitationResponseComponent } from './features/private/my-groups/components/group-invitation-response/group-invitation-response.component';
 import { GroupRequestsPageComponent } from './features/private/group-requests-page/components/group-requests-page/group-requests-page.component';
+import { GroupRankingPageComponent } from './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,10 @@ export const routes: Routes = [
       {
         path: 'groups/:groupId/group-invitations/:groupInvitationId',
         component: GroupInvitationResponseComponent,
+      },
+      {
+        path: 'groups/:groupId/ranking',
+        component: GroupRankingPageComponent,
       },
     ],
   },

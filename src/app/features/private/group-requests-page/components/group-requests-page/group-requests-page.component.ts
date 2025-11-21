@@ -8,6 +8,7 @@ import { GroupRequest } from '../../../../shared/models/group-request.model';
 import { GroupRequestsListComponent } from '../group-requests-list/group-requests-list.component';
 import { take } from 'rxjs/operators';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-group-requests-page',
@@ -18,14 +19,44 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzCardModule,
     GroupRequestsListComponent,
     NzModalModule,
+    NzIconModule,
   ],
   templateUrl: './group-requests-page.component.html',
   styles: [
     `
-      .requests-page-container {
-        padding: var(--spacing-large);
+      .page-container {
         max-width: 1200px;
         margin: 0 auto;
+        padding: var(--spacing-large);
+        font-family: var(--main-font);
+      }
+
+      .page-header {
+        margin-bottom: var(--spacing-large);
+      }
+
+      .page-title {
+        font-size: 32px;
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary-color);
+        margin: var(--spacing-medium) 0 var(--spacing-xs) 0;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-small);
+      }
+
+      @media (max-width: 768px) {
+        .page-container {
+          padding: var(--spacing-medium);
+        }
+
+        .page-title {
+          font-size: 24px;
+        }
+      }
+
+      ::ng-deep .ranking-card .ant-card-body {
+        padding: var(--spacing-large);
       }
 
       td:last-child {
