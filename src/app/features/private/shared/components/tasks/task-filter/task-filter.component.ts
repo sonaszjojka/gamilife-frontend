@@ -1,10 +1,11 @@
 import { Component,Input, WritableSignal } from '@angular/core';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-task-filter',
-  imports: [NzMenuModule],
+  imports: [NzMenuModule, RouterLink],
   standalone: true,
   templateUrl: './task-filter.component.html',
   styleUrl:'task-filter.component.css'

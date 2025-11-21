@@ -14,6 +14,9 @@ import {NzTimeRangePipe} from 'ng-zorro-antd/core/pipe';
 import {PomodoroTaskService} from '../../../shared/services/tasks/pomodoro-task.service';
 import {EditPomodoroRequest} from '../../../shared/models/task-models/edit-pomodoro-request';
 import {EditTaskRequest} from '../../../shared/models/task-models/edit-task-request';
+import {
+  PomodoroSessionBreakModalComponent
+} from '../../shared/components/tasks/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -26,7 +29,8 @@ import {EditTaskRequest} from '../../../shared/models/task-models/edit-task-requ
     NzWaveDirective,
     PomodoroFormComponent,
     PomodoroSessionAcceptTaskModalComponent,
-    NzTimeRangePipe
+    NzTimeRangePipe,
+    PomodoroSessionBreakModalComponent
   ],
   templateUrl: './pomodoro-session.component.html',
   standalone: true,
@@ -37,6 +41,8 @@ export class PomodoroSessionComponent {
   pomodoroSessionFormModal!:PomodoroSessionFormModal
   @ViewChild(PomodoroSessionAcceptTaskModalComponent)
   pomodoroSessionAcceptTaskModal!:PomodoroSessionAcceptTaskModalComponent
+  @ViewChild(PomodoroSessionBreakModalComponent)
+  pomodoroSessionBreakModal!: PomodoroSessionBreakModalComponent
 
   loading=false;
   loadingMore=false;
@@ -49,9 +55,9 @@ export class PomodoroSessionComponent {
   timer: any;
   remainingTime = 0;
   isSessionActive = false;
-  isBrakeActive= false
-  private sessionDuration = 5;
-  private breakDuration = 5 * 60;
+  isBreakActive= false
+  private sessionDuration = 25 *60;
+  private breakDuration = 5 *60 ;
 
   currentPage = 0;
   pageSize = 50;
@@ -150,18 +156,54 @@ export class PomodoroSessionComponent {
 
   private startCountdown(): void {
     if (this.remainingTime <= 0) {
-      this.addWorkCycleToTaskOnTop();
+      if (this.isBreakActive) {
+
+        this.handleBreakEnd();
+        return;
+      } else {
+        this.addWorkCycleToTaskOnTop();
+        this.startBreak();
+        return;
+      }
+    }
+
+    if (!this.isBreakActive && this.currentSessionPomodoroTasks.length == 0) {
       this.stopTimer();
-      return;
-    }
-    if (this.currentSessionPomodoroTasks.length==0) {
-      this.stopTimer()
       this.remainingTime = 0;
-      this.isSessionActive=false;
+      this.isSessionActive = false;
       return;
     }
+
     this.remainingTime--;
     this.timer = setTimeout(() => this.startCountdown(), 1000);
+  }
+
+  private startBreak(): void {
+    this.stopTimer();
+    this.isBreakActive = true;
+    this.remainingTime = this.breakDuration;
+    this.pomodoroSessionBreakModal.showBreakStartModal();
+    this.isSessionActive = true;
+    this.startCountdown();
+  }
+
+  private handleBreakEnd(): void {
+    this.stopTimer();
+    this.isBreakActive = false;
+    this.remainingTime = 0;
+    this.pomodoroSessionBreakModal.showBreakEndModal();
+  }
+
+  continueSession(): void {
+    this.remainingTime = this.sessionDuration;
+    this.isSessionActive = true;
+    this.startCountdown();
+  }
+
+  endSession(): void {
+    this.stopTimer();
+    this.remainingTime = 0;
+    this.isSessionActive = false;
   }
 
   private stopTimer(): void {
@@ -175,6 +217,7 @@ export class PomodoroSessionComponent {
   resetTimer(): void {
     this.stopTimer();
     this.remainingTime = 0;
+    this.isBreakActive = false;
   }
 
   get formattedTime(): string {
@@ -276,9 +319,8 @@ export class PomodoroSessionComponent {
       this.usersPomodoroTasks= this.usersPomodoroTasks.filter(t=> t.taskId!=task.taskId);
     }
 
-
-
   }
+
 
 
 

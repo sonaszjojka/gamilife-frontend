@@ -14,7 +14,7 @@ import {EditPomodoroRequest} from '../../../../../shared/models/task-models/edit
   standalone: true,
   template: `
 
-    <nz-modal [(nzVisible)]="isVisible" nzTitle="{{this.title}}}" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="{{this.title}}" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
       <ng-container *nzModalContent>
 
         <app-pomodoro-form
@@ -45,9 +45,12 @@ export class PomodoroSessionFormModal {
     if (this.task.pomodoroId) {
       this.editionMode.set(true);
       this.creationMode.set(false);
+      this.title="Edit Pomodoro Task"
     } else {
       this.creationMode.set(true);
       this.editionMode.set(false);
+      this.title="Make Task Pomodoro"
+
     }
 
     this.isVisible = true;
