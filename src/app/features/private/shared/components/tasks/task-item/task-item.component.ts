@@ -66,6 +66,7 @@ export class TaskItemComponent implements OnInit {
 
   onTaskEdit()
   {
+    console.log(this.task.pomodoro?.pomodoroId)
     this.editTask.emit(this.task)
   }
 

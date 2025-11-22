@@ -1,3 +1,6 @@
+import {PomodoroModel} from './pomodoro.model';
+import {HabitModel} from './habit-model';
+
 export interface Task {
   taskId: string;
   title: string;
@@ -12,8 +15,6 @@ export interface Task {
   difficultyName: string;
   isGroupTask: boolean;
   userId?:string|null;
-  pomodoroId?:string|null;
-  workCyclesNeeded?:number|null;
-  workCyclesCompleted?:number|null;
-  createdAt?:string|null;
+  pomodoro:PomodoroModel|null
+  habit:HabitModel|null
 }

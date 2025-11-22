@@ -13,7 +13,6 @@ import { Task } from '../../../../../shared/models/task-models/task.model';
 
     <nz-modal [(nzVisible)]="isVisible" nzTitle="Do You Wish To End This Task?" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
       <ng-container *nzModalContent>
-
       </ng-container>
     </nz-modal>
   `
@@ -24,8 +23,6 @@ export class PomodoroSessionAcceptTaskModalComponent {
   @Output() removeFromSession= new EventEmitter<Task>;
 
   isVisible = false;
-
-
 
   showModal(): void {
     this.isVisible = true;

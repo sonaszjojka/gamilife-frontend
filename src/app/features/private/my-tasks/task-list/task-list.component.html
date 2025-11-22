@@ -29,7 +29,10 @@
             @for (task of groupedTasks[date]; track task.taskId) {
               <app-task-item
                 [task]="task"
-                (editTask)="onTaskEdit(task)">
+                (editTask)="onTaskEdit(task)"
+                (taskUpdated)="onTaskUpdated($event)"
+              >
+
               </app-task-item>
             }
           </div>

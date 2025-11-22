@@ -133,11 +133,11 @@ class="task-form"
 
     <button nz-button nzShape="round" (click)="onSubmit()" > Save</button>
 
-    @if(this.task()?.pomodoroId==null&&this.editionMode?.())
+    @if(this.task()?.pomodoro?.pomodoroId==null&&this.editionMode?.())
     {
       <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon></button>
     }
-    @else if (this.task()?.pomodoroId!=null&&this.editionMode?.())
+    @else if (this.task()?.pomodoro?.pomodoroId!=null&&this.editionMode?.())
     {
         <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroEdition()" >Edit Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon></button>
     }

@@ -42,7 +42,7 @@ export class PomodoroSessionFormModal {
   isVisible = false;
 
   showModal(): void {
-    if (this.task.pomodoroId) {
+    if (this.task.pomodoro?.pomodoroId) {
       this.editionMode.set(true);
       this.creationMode.set(false);
       this.title="Edit Pomodoro Task"
@@ -63,10 +63,12 @@ export class PomodoroSessionFormModal {
 
 //ToDo Take care of Validation Errors
         next: (response) => {
-
-          this.task.pomodoroId = response.pomodoroId
-          this.task.workCyclesNeeded = response.workCyclesNeeded
-          this.task.workCyclesCompleted = response.workCyclesCompleted
+          this.task.pomodoro={
+          pomodoroId:response.pomodoroId,
+          workCyclesNeeded:response.workCyclesNeeded,
+          workCyclesCompleted:response.workCyclesCompleted,
+          createdAt:response.createdAt
+          }
 
           this.moveToCurrentSession.emit(this.task)
           this.isVisible = false;
@@ -76,15 +78,14 @@ export class PomodoroSessionFormModal {
     }
     else if (this.pomodoroEditRequest!=null)
     {
-      this.pomodoroService.editPomodoro(this.task.pomodoroId!,this.pomodoroEditRequest).subscribe({
+      this.pomodoroService.editPomodoro(this.task.pomodoro?.pomodoroId!,this.pomodoroEditRequest).subscribe({
 
         next: (response) => {
-          this.task.workCyclesNeeded = response.workCyclesNeeded
-          this.task.workCyclesCompleted = response.workCyclesCompleted
+          this.task.pomodoro!.workCyclesNeeded = response.workCyclesNeeded
+          this.task.pomodoro!.workCyclesCompleted = response.workCyclesCompleted
 
           this.moveToCurrentSession.emit(this.task)
           this.isVisible = false;
-
         }
 
       })

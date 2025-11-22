@@ -178,27 +178,26 @@ export class TaskFormComponent {
       if (task == null) {
         return;
       }
-      if (this.pomodoroRequest && this.pomodoroCreation())
-      {
-
-        this.pomodoroService.createPomodoro(task.taskId,this.pomodoroRequest).subscribe({
-          next:(response)=>
-          {
-            task.pomodoroId=response.pomodoroId
-            task.workCyclesNeeded=response.workCyclesNeeded
-            task.workCyclesCompleted=response.workCyclesCompleted
+      if (this.pomodoroRequest && this.pomodoroCreation()) {
+        this.pomodoroService.createPomodoro(task.taskId, this.pomodoroRequest).subscribe({
+          next: (response) => {
+            task.pomodoro = {
+              pomodoroId: response.pomodoroId,
+              workCyclesNeeded: response.workCyclesNeeded,
+              workCyclesCompleted: response.workCyclesCompleted,
+              createdAt: response.createdAt
+            };
           }
-        })
+        });
       }
-      else if (this.pomodoroEditRequest && this.pomodoroEdition())
-      {
-        this.pomodoroService.editPomodoro(task.pomodoroId!,this.pomodoroEditRequest).subscribe({
-          next:(response)=>
-          {
-            task.workCyclesNeeded=response.workCyclesNeeded
-            task.workCyclesCompleted=response.workCyclesCompleted
+      else if (this.pomodoroEditRequest && this.pomodoroEdition()) {
+        this.pomodoroService.editPomodoro(task.pomodoro?.pomodoroId!, this.pomodoroEditRequest).subscribe({
+          next: (response) => {
+            task.pomodoro!.workCyclesNeeded = response.workCyclesNeeded;
+            task.pomodoro!.workCyclesCompleted = response.workCyclesCompleted;
+            task.pomodoro!.createdAt = response.createdAt;
           }
-        })
+        });
       }
 
       this.taskService.editTask(task.taskId, request).subscribe({
@@ -240,7 +239,6 @@ export class TaskFormComponent {
  onPomodoroFormChange(pomodoroRequest:CreatePomodoroRequest)
  {
    if (pomodoroRequest!=null) this.pomodoroRequest=pomodoroRequest
-
  }
 
  onPomodoroEditFormChange(pomodoroEditRequest:EditPomodoroRequest)

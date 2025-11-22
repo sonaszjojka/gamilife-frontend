@@ -20,12 +20,12 @@ export class PomodoroTaskService
 
   createPomodoro (taskId:string,request:CreatePomodoroRequest): Observable<CreatePomodoroResponse>
 {
-  return this.http.post(`${this.API_URL}/${taskId}/pomodoro-tasks`,request,{withCredentials:true})
+  return this.http.post<CreatePomodoroResponse>(`${this.API_URL}/${taskId}/pomodoro-tasks`,request,{withCredentials:true})
 }
 
 editPomodoro(pomodoroId:string ,request:EditPomodoroRequest):Observable<EditPomodoroResponse>
 {
-  return this.http.put(`${this.API_URL}/pomodoro-tasks/${pomodoroId}`,request,{withCredentials:true})
+  return this.http.put<EditPomodoroResponse>(`${this.API_URL}/pomodoro-tasks/${pomodoroId}`,request,{withCredentials:true})
 }
 
 deletePomodoro(pomodoroId:string):Observable<unknown>
