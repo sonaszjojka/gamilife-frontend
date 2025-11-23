@@ -1,0 +1,147 @@
+.ranking-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-large);
+}
+
+.podium-section {
+    padding: 40px 20px 20px;
+    margin-bottom: 20px;
+}
+
+.podium-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 340px;
+}
+
+.podium-place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 200px;
+    position: relative;
+}
+
+.member-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-5px);
+}
+
+.username {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.earned {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #10b981;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.podium-step {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+}
+
+.step-gold {
+    height: 140px;
+    background: linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.step-silver {
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(224, 224, 224, 0.4), rgba(224, 224, 224, 0.1));
+    border: 1px solid rgba(224, 224, 224, 0.5);
+}
+
+.step-bronze {
+    height: 70px;
+    background: linear-gradient(to bottom, rgba(205, 127, 50, 0.3), rgba(205, 127, 50, 0.05));
+    border: 1px solid rgba(205, 127, 50, 0.4);
+}
+
+.crown-icon {
+    font-size: 36px;
+    position: absolute;
+    top: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-8px);
+    }
+}
+
+@media (max-width: 768px) {
+    .podium-wrapper {
+        height: auto;
+        gap: 8px;
+    }
+
+    .member-card {
+        padding: 12px;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .username {
+        font-size: 14px;
+    }
+
+    .earned {
+        font-size: 12px;
+    }
+
+    .step-gold {
+        height: 100px;
+    }
+
+    .step-silver {
+        height: 70px;
+    }
+
+    .step-bronze {
+        height: 50px;
+    }
+
+    .crown-icon {
+        top: -25px;
+        font-size: 24px;
+    }
+}

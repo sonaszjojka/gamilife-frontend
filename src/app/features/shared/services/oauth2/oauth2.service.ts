@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment.development';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 
 export interface OAuthCodeRequest {
   code: string;
@@ -17,7 +18,7 @@ export interface LinkOAuthAccountRequest {
 }
 
 export interface AfterLoginResponse {
-  userId: number;
+  userId: string;
   email: string;
   username: string;
   isEmailVerified: boolean;
@@ -35,6 +36,7 @@ export interface OAuth2LinkResponse {
 export class OAuth2Service {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/oauth2`;
+  private authService = inject(AuthService);
 
   private generateCodeVerifier(): string {
     const array = new Uint8Array(32);

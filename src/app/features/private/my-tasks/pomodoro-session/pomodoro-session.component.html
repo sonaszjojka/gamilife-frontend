@@ -1,0 +1,85 @@
+
+<div class="pomodoro-view">
+
+
+  <div  class="not-pomodoro-column">
+    <div class="session-column-title">
+      <h2> Your Tasks</h2>
+    </div>
+
+    @for (task of usersNotPomodoroTasks; track task.taskId)
+    {
+      <app-task-item
+        [task]="task"
+        [inPomodoroList]="true"
+        (moveToCurrentSession)="moveTaskToCurrentSession($event)"
+      ></app-task-item>
+    }
+
+  </div>
+
+  <div cdkDropList class="current-session-column" (cdkDropListDropped)="drop($event)" >
+      <div class="session-column-title">
+        <h1> Current Session</h1>
+      </div>
+    @if (this.currentSessionPomodoroTasks.length>0)
+    {
+      <button class="start-session-button" nz-button nzShape="round" (click)="onSessionStarted()">
+        @if (isSessionActive) {
+          Pause {{ formattedTime }}
+        } @else if (remainingTime > 0) {
+          Resume {{ formattedTime }}
+        } @else {
+          Start Session
+        }
+      </button>
+    } @else {
+    <button class="start-session-button" nz-button nzShape="round" disabled>Start Session</button>
+  }
+    @for (task of currentSessionPomodoroTasks; track task.taskId)
+    {
+      <app-task-item
+        [task]="task"
+        [inPomodoroList]="true"
+        [isInSession] ="true"
+        (removeFromCurrentSession)="removeFromCurrentSession($event)"
+        cdkDrag
+        ></app-task-item>
+    }
+
+
+  </div>
+
+  <div class="pomodoro-column">
+    <div class="session-column-title">
+      <h2> Your Pomodoro Tasks</h2>
+    </div>
+
+    @for (task of usersPomodoroTasks; track task.taskId)
+    {
+      <app-task-item
+        [task]="task"
+        [inPomodoroList]="true"
+        [isInSession] ="false"
+        (moveToCurrentSession)="moveTaskToCurrentSession($event)"
+      ></app-task-item>
+    }
+
+  </div>
+  <app-pomdoro-form-modal
+    (moveToCurrentSession)="moveModalPomodoroToSession($event)"
+  ></app-pomdoro-form-modal>
+
+<app-pomdoro-accept-task-modal
+(removeFromPanel)="removeFromPanel($event)"
+(removeFromSession)="removeFromCurrentSession($event)"
+>
+</app-pomdoro-accept-task-modal>
+
+  <app-pomdoro-break-modal
+    (continueSession)="continueSession()"
+    (endSession)="endSession()">
+  </app-pomdoro-break-modal>
+
+
+</div>

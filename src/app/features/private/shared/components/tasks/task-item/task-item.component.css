@@ -1,0 +1,39 @@
+
+nz-card {
+  margin-bottom: 16px;
+  background-color: var(--third-color);
+  border-radius: 10px;
+  height: 350px;
+}
+
+nz-card:hover{
+  background-color: var(--fifth-color);
+  transform: scale(1.020);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.upper-part {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+:host ::ng-deep .ant-card-head-title {
+  position: relative;
+  text-align: center;
+  font-weight: bold;
+}
+
+.title-container {
+  position: relative;
+  width: 100%;
+}
+
+.progress-absolute {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+

@@ -6,8 +6,9 @@ import {
   OAuth2Service,
   OAuth2LinkResponse,
   AfterLoginResponse,
-} from '../../../../shared/services/oauth2.service';
+} from '../../../../shared/services/oauth2/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -20,7 +21,7 @@ export class OAuthCallbackComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private oauth2Service = inject(OAuth2Service);
-
+  private authService = inject(AuthService);
   error: string | null = null;
 
   ngOnInit(): void {
@@ -33,7 +34,6 @@ export class OAuthCallbackComponent implements OnInit {
         setTimeout(() => this.router.navigate(['/login']), 3000);
         return;
       }
-
       if (code) {
         this.handleCallback(code);
       } else {
@@ -59,17 +59,10 @@ export class OAuthCallbackComponent implements OnInit {
             },
           });
         } else {
-          const loginResponse = response as AfterLoginResponse;
-          if (!loginResponse.isEmailVerified) {
-            this.router.navigateByUrl('/login', {
-              state: {
-                showEmailVerification: true,
-                email: loginResponse.email,
-              },
-            });
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
+          const res = response as AfterLoginResponse;
+          localStorage.setItem('userId', res.userId);
+          this.authService.tryToLogIn();
+          this.router.navigate(['/app/dashboard']);
         }
       },
       error: (err: HttpErrorResponse) => {

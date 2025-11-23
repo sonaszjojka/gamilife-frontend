@@ -1,0 +1,40 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <span nz-icon nzType="team" nzTheme="outline"></span>
+      Group Members
+    </h1>
+    @if (groupName()) {
+      <p class="group-name">{{ groupName() }}</p>
+    }
+  </div>
+  <nz-spin [nzSpinning]="loading()" nzSize="large">
+    <nz-card class="ranking-card">
+      <div class="invite-btn-container" *ngIf="isAdmin()">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          (click)="openInvitationModal()"
+        >
+          <span nz-icon nzType="user-add"></span>
+          Invite User
+        </button>
+      </div>
+
+      <app-group-members-list
+        [groupId]="groupId()"
+        [members]="members()"
+        [adminId]="adminId()"
+        [isAdmin]="isAdmin()"
+        [loading]="loading()"
+        (memberChanged)="loadMembers()"
+      ></app-group-members-list>
+    </nz-card>
+  </nz-spin>
+</div>
+
+<app-send-group-invitation-form
+  [groupId]="groupId()"
+  (invitationSent)="loadMembers()"
+></app-send-group-invitation-form>

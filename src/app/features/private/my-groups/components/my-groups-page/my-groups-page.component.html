@@ -1,0 +1,35 @@
+<div class="my-groups-container">
+  <div class="header">
+    <app-input-search
+      (inputChange)="onInputChange($event)"
+      (groupTypeChange)="onGroupTypeChange($event)"
+    >
+    </app-input-search>
+  </div>
+
+  <div class="action-bar">
+    <button
+      nz-button
+      nzType="primary"
+      nzSize="large"
+      (click)="openAddGroupModal()"
+    >
+      <span nz-icon nzType="plus" nzTheme="outline"></span>
+      Create Group
+    </button>
+  </div>
+
+  <div class="search-result-container">
+    <app-group-list [groups]="groups()"> </app-group-list>
+  </div>
+
+  <div class="paging-div">
+    <app-pagination-more
+      [maxPageIndex]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination-more>
+  </div>
+</div>
+
+<app-add-group-form (groupCreated)="onGroupCreated()"></app-add-group-form>

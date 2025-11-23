@@ -17,8 +17,9 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { VerifyEmailComponent } from '../verify-email/verify-email.component';
 import { ForgotPasswordComponent } from '../../../forgot-password/components/forgot-password/forgot-password.component';
-import { OAuth2Service } from '../../../../shared/services/oauth2.service';
+import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);
   private oauth2Service = inject(OAuth2Service);
+  private authService = inject(AuthService);
 
   isPasswordVisible = signal(false);
 
@@ -95,28 +97,7 @@ export class LoginComponent implements OnInit {
   submitForm(): void {
     if (this.validateForm.valid) {
       const formData = this.validateForm.value;
-      const url = `${environment.apiUrl}/auth/login`;
-
-      this.http
-        .post<AfterLoginResponse>(url, formData, { withCredentials: true })
-        .subscribe({
-          next: (res) => {
-            if (!res.isEmailVerified) {
-              this.verificationModal.open(res.email);
-            } else {
-              this.router.navigate(['/dashboard']);
-            }
-          },
-          error: (err) => {
-            if (err.status === 401) {
-              this.validateForm.controls['password'].setErrors({
-                apiError: 'Invalid credentials',
-              });
-            } else {
-              this.validateForm.setErrors({ apiError: 'Something went wrong' });
-            }
-          },
-        });
+      this.handleStandardLogin(formData);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -125,6 +106,33 @@ export class LoginComponent implements OnInit {
         }
       });
     }
+  }
+
+  // might move to authService
+  private handleStandardLogin(formData: unknown) {
+    const url = `${environment.apiUrl}/auth/login`;
+    this.http
+      .post<AfterLoginResponse>(url, formData, { withCredentials: true })
+      .subscribe({
+        next: (res) => {
+          if (!res.isEmailVerified) {
+            this.verificationModal.open(res.email);
+          } else {
+            localStorage.setItem('userId', res.userId);
+            this.authService.tryToLogIn();
+            this.router.navigate(['/app/dashboard']);
+          }
+        },
+        error: (err) => {
+          if (err.status === 401) {
+            this.validateForm.controls['password'].setErrors({
+              apiError: 'Invalid credentials',
+            });
+          } else {
+            this.validateForm.setErrors({ apiError: 'Something went wrong' });
+          }
+        },
+      });
   }
 
   goToRegister() {
@@ -141,7 +149,7 @@ export class LoginComponent implements OnInit {
 }
 
 interface AfterLoginResponse {
-  userId: number;
+  userId: string;
   email: string;
   username: string;
   isEmailVerified: boolean;

@@ -1,0 +1,16 @@
+.search-container {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result-container {
+    flex: 1;
+}
+
+.paging-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-medium) 0;
+}
