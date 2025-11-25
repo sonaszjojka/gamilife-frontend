@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class UserAccountButtonComponent {
   public authService = inject(AuthService);
-  private router = inject(Router);
+  protected router = inject(Router);
 
   isLoggedIn = this.authService.loggedIn;
   username = this.authService.username;

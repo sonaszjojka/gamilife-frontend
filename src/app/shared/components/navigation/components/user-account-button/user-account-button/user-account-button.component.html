@@ -19,6 +19,11 @@
       <li nz-menu-item class="navbar-dropdown-item">
         <button nz-button (click)="logout()">Logout</button>
       </li>
+      <li nz-menu-item class="navbar-dropdown-item">
+        <button nz-button (click)="router.navigate(['/app/user-profile'])">
+          Profile
+        </button>
+      </li>
     }
   </ul>
 </nz-dropdown-menu>
