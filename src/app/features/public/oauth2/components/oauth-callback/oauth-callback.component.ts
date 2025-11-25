@@ -60,8 +60,16 @@ export class OAuthCallbackComponent implements OnInit {
           });
         } else {
           const res = response as AfterLoginResponse;
+          localStorage.setItem(
+            'isTutorialCompleted',
+            String(res.isTutorialCompleted),
+          );
           localStorage.setItem('userId', res.userId);
-          this.authService.tryToLogIn();
+          this.authService.userId.set(res.userId);
+          this.authService.username.set(res.username);
+          this.authService.loggedIn.set(true);
+          this.authService.isTutorialCompleted.set(res.isTutorialCompleted);
+
           this.router.navigate(['/app/dashboard']);
         }
       },

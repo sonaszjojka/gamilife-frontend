@@ -12,8 +12,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { environment } from '../../../../../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { VerifyEmailComponent } from '../verify-email/verify-email.component';
 import { ForgotPasswordComponent } from '../../../forgot-password/components/forgot-password/forgot-password.component';
@@ -51,11 +49,11 @@ export class LoginComponent implements OnInit {
 
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
-  private http = inject(HttpClient);
-  private oauth2Service = inject(OAuth2Service);
   private authService = inject(AuthService);
+  private oauth2Service = inject(OAuth2Service);
 
   isPasswordVisible = signal(false);
+  isLoading = signal(false);
 
   validateForm = this.fb.group({
     email: this.fb.control('', [Validators.email, Validators.required]),
@@ -96,7 +94,10 @@ export class LoginComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      const formData = this.validateForm.value;
+      const formData = this.validateForm.value as {
+        email: string;
+        password: string;
+      };
       this.handleStandardLogin(formData);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
@@ -108,31 +109,31 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // might move to authService
-  private handleStandardLogin(formData: unknown) {
-    const url = `${environment.apiUrl}/auth/login`;
-    this.http
-      .post<AfterLoginResponse>(url, formData, { withCredentials: true })
-      .subscribe({
-        next: (res) => {
-          if (!res.isEmailVerified) {
-            this.verificationModal.open(res.email);
-          } else {
-            localStorage.setItem('userId', res.userId);
-            this.authService.tryToLogIn();
-            this.router.navigate(['/app/dashboard']);
-          }
-        },
-        error: (err) => {
-          if (err.status === 401) {
-            this.validateForm.controls['password'].setErrors({
-              apiError: 'Invalid credentials',
-            });
-          } else {
-            this.validateForm.setErrors({ apiError: 'Something went wrong' });
-          }
-        },
-      });
+  private handleStandardLogin(credentials: {
+    email: string;
+    password: string;
+  }) {
+    this.isLoading.set(true);
+    this.authService.login(credentials).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        if (!res.isEmailVerified) {
+          this.verificationModal.open(res.email);
+        } else {
+          this.router.navigate(['/app/dashboard']);
+        }
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        if (err.status === 401) {
+          this.validateForm.controls['password'].setErrors({
+            apiError: 'Invalid credentials',
+          });
+        } else {
+          this.validateForm.setErrors({ apiError: 'Something went wrong' });
+        }
+      },
+    });
   }
 
   goToRegister() {
@@ -146,11 +147,4 @@ export class LoginComponent implements OnInit {
   loginWithGoogle(): void {
     this.oauth2Service.startGoogleLogin();
   }
-}
-
-interface AfterLoginResponse {
-  userId: string;
-  email: string;
-  username: string;
-  isEmailVerified: boolean;
 }

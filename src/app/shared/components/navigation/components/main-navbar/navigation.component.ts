@@ -2,12 +2,13 @@ import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../../../services/auth/auth.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { FormsModule } from '@angular/forms';
+import { UserAccountButtonComponent } from '../user-account-button/user-account-button/user-account-button.component';
 
 @Component({
   selector: 'app-navigation',
@@ -21,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     NzDropDownModule,
     NzSwitchModule,
     FormsModule,
+    UserAccountButtonComponent,
   ],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
@@ -33,9 +35,5 @@ export class NavigationComponent {
 
   toggleTheme() {
     this.isDarkTheme.update((prev) => !prev);
-  }
-
-  logout() {
-    this.authService.logout();
   }
 }

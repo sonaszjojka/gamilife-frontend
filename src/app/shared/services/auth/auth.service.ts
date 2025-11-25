@@ -6,18 +6,64 @@ import { finalize, Observable, Subject, tap } from 'rxjs';
 
 export interface IAuthService {
   isLoggedIn: Signal<boolean>;
+  username: Signal<string | null>;
+  userId: Signal<string | null>;
 
-  login(): void;
+  login(credentials: LoginCredentials): Observable<LoginResponse>;
   logout(): void;
+  loadUserData(): Observable<UserData>;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  userId: string;
+  email: string;
+  username: string;
+  isEmailVerified: boolean;
+  isTutorialCompleted: boolean;
+}
+
+export interface UserData {
+  userId: string;
+  username: string;
+  email: string;
+  isTutorialCompleted: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  loggedIn = signal<boolean>(!!localStorage.getItem('userId'));
   private router = inject(Router);
   private http = inject(HttpClient);
   private refreshSubject = new Subject<void>();
+
   refreshInProgress = false;
+
+  loggedIn = signal<boolean>(!!localStorage.getItem('userId'));
+  username = signal<string | null>(null);
+  userId = signal<string | null>(localStorage.getItem('userId') ?? null);
+  isTutorialCompleted = signal<boolean>(
+    localStorage.getItem('isTutorialCompleted') === 'true',
+  );
+
+  login(credentials: LoginCredentials): Observable<LoginResponse> {
+    const url = `${environment.apiUrl}/auth/login`;
+    return this.http
+      .post<LoginResponse>(url, credentials, { withCredentials: true })
+      .pipe(
+        tap((res) => {
+          this.saveAuthDataToStorage(res.userId, res.isTutorialCompleted);
+          this.updateAuthState(
+            res.userId,
+            res.username,
+            res.isTutorialCompleted,
+          );
+        }),
+      );
+  }
 
   logout() {
     this.http
@@ -30,13 +76,13 @@ export class AuthService {
 
   logoutLocal() {
     localStorage.removeItem('userId');
-    this.loggedIn.set(false);
-    this.router.navigate(['/login']);
-  }
+    localStorage.removeItem('isTutorialCompleted');
 
-  tryToLogIn() {
-    this.loggedIn.set(!!localStorage.getItem('userId'));
-    return this.loggedIn;
+    this.userId.set(null);
+    this.username.set(null);
+    this.loggedIn.set(false);
+    this.isTutorialCompleted.set(false);
+    this.router.navigate(['/login']);
   }
 
   refreshToken(): Observable<void> {
@@ -58,7 +104,24 @@ export class AuthService {
       );
   }
 
-  waitForRefresh(): Observable<void> {
-    return this.refreshSubject.asObservable();
+  completeUserOnboarding(): void {
+    this.isTutorialCompleted.set(true);
+    localStorage.setItem('isTutorialCompleted', 'true');
+  }
+
+  private updateAuthState(
+    userId: string,
+    username: string,
+    isTutorialCompleted: boolean,
+  ): void {
+    this.userId.set(userId);
+    this.username.set(username);
+    this.loggedIn.set(true);
+    this.isTutorialCompleted.set(isTutorialCompleted);
+  }
+
+  private saveAuthDataToStorage(userId: string, isTutorialCompleted: boolean) {
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('isTutorialCompleted', String(isTutorialCompleted));
   }
 }
