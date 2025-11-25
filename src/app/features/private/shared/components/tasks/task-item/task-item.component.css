@@ -4,6 +4,7 @@ nz-card {
   background-color: var(--third-color);
   border-radius: 10px;
   height: 350px;
+  width: 100%;
 }
 
 nz-card:hover{

@@ -4,7 +4,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
 import {NzColDirective} from 'ng-zorro-antd/grid';
-import {NzInputDirective} from 'ng-zorro-antd/input';
+import {NzAutosizeDirective, NzInputDirective} from 'ng-zorro-antd/input';
 import {Task} from '../../../../../shared/models/task-models/task.model';
 import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
@@ -32,7 +32,8 @@ import {EditPomodoroRequest} from '../../../../../shared/models/task-models/edit
     NzDatePickerComponent,
     NzTimePickerComponent,
     NzIconDirective,
-    PomodoroFormComponent
+    PomodoroFormComponent,
+    NzAutosizeDirective
   ],
   templateUrl: './task-form.component.html',
   standalone: true,

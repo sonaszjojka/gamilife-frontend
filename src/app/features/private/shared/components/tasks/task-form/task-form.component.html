@@ -107,16 +107,17 @@ class="task-form"
     <nz-form-control
       nzErrorTip="Please provide valid Description"
     >
-      <input
-        nz-input
-        id="description"
-        name="description"
-        formControlName="description"
-        placeholder="Put Your Task Description Here"
-      />
+    <textarea
+      nz-input
+      id="description"
+      name="description"
+      formControlName="description"
+      placeholder="Put Your Task Description Here"
+      [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+    ></textarea>
     </nz-form-control>
-
   </nz-form-item>
+
 
   @if(this.pomodoroCreation()||this.pomodoroEdition())
   {
@@ -133,17 +134,36 @@ class="task-form"
 
     <button nz-button nzShape="round" (click)="onSubmit()" > Save</button>
 
-    @if(this.task()?.pomodoro?.pomodoroId==null&&this.editionMode?.())
+    @if (this.task()?.habit==null&&this.task()?.pomodoro==null&&this.editionMode?.())
     {
-      <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon></button>
+      <button class="habit-button" nz-button nzShape="round"  >
+        Make task habit<nz-icon nzType="smile"></nz-icon>
+      </button>
+    } @else if (this.task()?.habit?.habitId!=null&&this.task()?.pomodoro==null&&this.editionMode?.())
+    {
+        <button class="habit-button" nz-button nzShape="round"  >
+          Edit Habit Task<nz-icon nzType="smile">
+
+        </nz-icon></button>
     }
-    @else if (this.task()?.pomodoro?.pomodoroId!=null&&this.editionMode?.())
+
+    @if(this.task()?.pomodoro==null&&this.task()?.habit==null&&this.editionMode?.())
     {
-        <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroEdition()" >Edit Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon></button>
+      <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >
+        Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon>
+      </button>
+    }
+    @else if (this.task()?.pomodoro?.pomodoroId!=null&&this.task()?.habit==null&&this.editionMode?.())
+    {
+        <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroEdition()" >
+          Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon>
+        </button>
     }
     @if(this.editionMode?.())
     {
-    <button class="delete-button" nz-button nzShape="round" (click)="onDelete()">Delete</button>
+    <button class="delete-button" nz-button nzShape="round" (click)="onDelete()">
+      Delete <nz-icon nzType="delete"></nz-icon>
+    </button>
     }
 
   </div>

@@ -42,6 +42,8 @@ export class TaskItemComponent implements OnInit {
   }
 
   completeTask(): void  {
+    if (this.task.habit==null)
+    {
     this.isCompleted.set(true)
     const request:EditTaskRequest ={
       title: this.task.title,
@@ -62,11 +64,26 @@ export class TaskItemComponent implements OnInit {
         this.isCompleted.set(false)
       }
     });
+    }
+    else {
+      //this.task.endTime=this.task.endTime + this.task.habit.duration;
+      // const request:EditTaskRequest ={
+      //       title: this.task.title,
+      //       startTime:this.task.startTime,
+      //       endTime:this.task.endTime,
+      //       categoryId:this.task.categoryId,
+      //       difficultyId:this.task.difficultyId,
+      //       completedAt: this.task.completedAt,
+      //       description: this.task.description
+      //     }
+      //this.taskService.editTask(this.task.taskId,request).subscribe({});
+      //
+
+    }
   }
 
   onTaskEdit()
   {
-    console.log(this.task.pomodoro?.pomodoroId)
     this.editTask.emit(this.task)
   }
 

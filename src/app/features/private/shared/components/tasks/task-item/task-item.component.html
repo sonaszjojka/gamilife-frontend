@@ -11,6 +11,9 @@
         [workCyclesNeeded]="task.pomodoro?.workCyclesNeeded"
         [workCyclesCompleted]="task.pomodoro?.workCyclesCompleted"
       ></pomodoro-task-progress>
+      } @else if (task.habit?.habitId != null)
+      {
+        <button nz-button nzShape="round" class="habit-button"> Finish Habit </button>
       }
     </div>
   </ng-template>

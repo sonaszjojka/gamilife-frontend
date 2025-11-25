@@ -2,12 +2,11 @@ import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
 import { Task } from '../../../../../shared/models/task-models/task.model';
 
 @Component({
   selector: 'app-pomdoro-accept-task-modal',
-  imports: [NzButtonModule, NzModalModule, PomodoroFormComponent],
+  imports: [NzButtonModule, NzModalModule],
   standalone: true,
   template: `
 
