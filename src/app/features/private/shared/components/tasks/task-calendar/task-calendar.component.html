@@ -1,0 +1,21 @@
+<div class="calendar-panel">
+  <div class="button-panel">
+    <button nz-button><nz-icon nzType="arrow-left"></nz-icon></button>
+    <h1 *nzDateCell="let month">{{ month.getMonth() }}</h1>
+    <button nz-button><nz-icon nzType="arrow-right"></nz-icon></button>
+  </div>
+<nz-calendar>
+  <ul *nzDateCell="let date" class="events">
+    @for ( task of this.taskCalendarList; track task.taskId)
+    {
+      @if ( isSameDay(task.endTime, date) )
+      {
+        <li>
+          <span class="event-badge"></span>
+          {{ task.title }}
+        </li>
+      }
+    }
+  </ul>
+</nz-calendar>
+</div>
