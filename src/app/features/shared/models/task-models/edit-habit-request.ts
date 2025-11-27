@@ -1,6 +1,6 @@
 export interface EditHabitRequest  {
-  cycleLength:number;
+  cycleLength:string;
   currentStreak:number;
   longestStreak:number;
-  acceptedDate:string;
+  acceptedDate:string|null;
 }

@@ -16,6 +16,11 @@ import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
 import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
 import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro-task.service';
 import {EditPomodoroRequest} from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import {CreateHabitRequest} from '../../../../../shared/models/task-models/create-habit-request';
+import {EditHabitRequest} from '../../../../../shared/models/task-models/edit-habit-request';
+import {HabitFormComponent} from '../habit-form/habit-form.component';
+import {HabitTaskService} from '../../../../../shared/services/tasks/habit-task.service';
+import {daysAsDuration} from '../../../../../../shared/util/DateFormatterUtil';
 
 @Component({
   selector: 'app-task-form',
@@ -33,7 +38,8 @@ import {EditPomodoroRequest} from '../../../../../shared/models/task-models/edit
     NzTimePickerComponent,
     NzIconDirective,
     PomodoroFormComponent,
-    NzAutosizeDirective
+    NzAutosizeDirective,
+    HabitFormComponent
   ],
   templateUrl: './task-form.component.html',
   standalone: true,
@@ -43,6 +49,8 @@ export class TaskFormComponent {
 
   pomodoroCreation=signal<boolean>(false)
   pomodoroEdition = signal<boolean>(false)
+  habitCreation=signal<boolean>(false)
+  habitEdition=signal<boolean>(false)
   @Input() task!: WritableSignal<Task | null>;
   @Input() creationMode?: WritableSignal<boolean|null>
   @Input() editionMode?: WritableSignal<boolean|null>;
@@ -50,10 +58,16 @@ export class TaskFormComponent {
   @Output() taskDeleted=new EventEmitter<void>()
   pomodoroRequest?:CreatePomodoroRequest;
   pomodoroEditRequest?:EditPomodoroRequest;
+  habitRequest?:CreateHabitRequest;
+  habitEditRequest?:EditHabitRequest;
+
+  habitCreateDurationDays?:number;
+  habitEditDurationDays?:number;
 
   private formBuilder = inject(NonNullableFormBuilder);
   private taskService = inject(IndividualTaskService)
   private pomodoroService=inject(PomodoroTaskService)
+  private habitService=inject(HabitTaskService)
 
   validTaskForm = this.formBuilder.group({
     title: this.formBuilder.control('', [
@@ -201,6 +215,36 @@ export class TaskFormComponent {
         });
       }
 
+      if (this.habitRequest && this.habitCreation()) {
+        this.habitRequest.cycleLength=daysAsDuration(this.habitCreateDurationDays!);
+
+        this.habitService.createHabitTask(task.taskId, this.habitRequest).subscribe({
+          next: (response) => {
+            task.taskHabit = {
+              habitId: response.habitId,
+              cycleLength: response.cycleLength,
+              currentStreak: response.currentStreak,
+              longestStreak: response.longestStreak,
+              acceptedDate:response.acceptedDate,
+            };
+            console.log(task.taskHabit.habitId);
+            //ToDo decide if we need to set task.endTime from here or use already existing one
+          }
+        });
+      }
+
+      else if (this.habitEditRequest && this.habitEdition()) {
+        this.habitEditRequest.cycleLength=daysAsDuration(this.habitEditDurationDays!);
+        this.habitService.editHabitTask(task.taskHabit?.habitId!, task.taskId,this.habitEditRequest).subscribe({
+          next: (response) => {
+            task.taskHabit!.cycleLength = response.cycleLength;
+            task.taskHabit!.currentStreak = response.currentStreak;
+            task.taskHabit!.longestStreak = response.longestStreak;
+            task.taskHabit!.acceptedDate = response.acceptedDate;}
+
+        });
+      }
+
       this.taskService.editTask(task.taskId, request).subscribe({
         next: (response) => {
           this.validTaskForm.reset();
@@ -227,6 +271,9 @@ export class TaskFormComponent {
     })
 
   }
+
+
+
  onPomodoroCreation()
  {
    this.pomodoroCreation.update(value => !value)
@@ -248,4 +295,28 @@ export class TaskFormComponent {
  }
 
 
+  onHabitCreation() {
+      this.habitCreation.update(value => !value)
+    this.habitRequest={
+      cycleLength: '',
+      currentStreak: 0,
+      longestStreak: 0,
+      acceptedDate: null
+    }
+  }
+
+  onHabitEdition() {
+    this.habitEdition.update(value => !value)
+
+  }
+
+  onHabitFormChange(habitCreateDurationInDays:number)
+  {
+    if (habitCreateDurationInDays!=null) this.habitCreateDurationDays=habitCreateDurationInDays
+  }
+
+  onHabitEditFormChange(habitEditDurationInDays:number)
+  {
+    if (habitEditDurationInDays!=null)this.habitEditDurationDays=habitEditDurationInDays;
+  }
 }

@@ -9,12 +9,12 @@ export interface Task {
   endTime: string;
   categoryId: number;
   difficultyId: number;
-  habitId?:string|null;
-  completedAt?: string | null;
+  habitId:string|null;
+  completedAt: string | null;
   categoryName: string;
   difficultyName: string;
   isGroupTask: boolean;
-  userId?:string|null;
+  userId:string|null;
   pomodoro:PomodoroModel|null
-  habit:HabitModel|null
+  taskHabit:HabitModel|null
 }

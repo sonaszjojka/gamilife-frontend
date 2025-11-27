@@ -11,7 +11,7 @@
         [workCyclesNeeded]="task.pomodoro?.workCyclesNeeded"
         [workCyclesCompleted]="task.pomodoro?.workCyclesCompleted"
       ></pomodoro-task-progress>
-      } @else if (task.habit?.habitId != null)
+      } @else if (task.taskHabit?.habitId != null)
       {
         <button nz-button nzShape="round" class="habit-button"> Finish Habit </button>
       }

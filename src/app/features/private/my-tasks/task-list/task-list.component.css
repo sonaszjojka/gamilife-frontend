@@ -31,7 +31,7 @@ h1 {
   padding: 0 2rem;
 }
 .task-list {
-  width: 55%;
+  width: 40%;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@ h1 {
 
 }
 .filter-panel {
-  width: 25%;
+  width: 20%;
   flex-shrink: 0;
 }
 app-task-form {
@@ -66,7 +66,7 @@ border-radius: 10px;
 }
 
 app-task-form {
-  width: 30%;
+  width: 35%;
   background: #f8f8f8;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

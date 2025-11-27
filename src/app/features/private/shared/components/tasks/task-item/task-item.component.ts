@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit, signal, input} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnInit, signal, input, inject} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { Task } from '../../../../../shared/models/task-models/task.model';
@@ -26,23 +26,27 @@ import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-
   styleUrl: './task-item.component.css'
 })
 export class TaskItemComponent implements OnInit {
-  inPomodoroList = input<boolean>(false)
+
   @Input() task!: Task;
+  isCompleted = signal(false);
+
   @Output() taskUpdated = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
-  @Output() moveToCurrentSession = new EventEmitter<Task>();
-  isCompleted = signal(false);
-  @Output() removeFromCurrentSession = new EventEmitter<Task>();
-  isInSession=input<boolean>(false);
 
-  constructor(private taskService: IndividualTaskService) {}
+  isInSession=input<boolean>(false);
+  inPomodoroList = input<boolean>(false)
+  @Output() moveToCurrentSession = new EventEmitter<Task>();
+  @Output() removeFromCurrentSession = new EventEmitter<Task>();
+
+  taskService = inject(IndividualTaskService)
 
   ngOnInit(): void {
     this.isCompleted.set(this.task.completedAt != null);
+
   }
 
   completeTask(): void  {
-    if (this.task.habit==null)
+    if (this.task.taskHabit==null)
     {
     this.isCompleted.set(true)
     const request:EditTaskRequest ={

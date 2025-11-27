@@ -2,8 +2,8 @@ export interface CreateHabitResponse
 {
   habitId: string;
   taskId:string;
-  cycleLength:number;
+  cycleLength:string;
   currentStreak:number;
   longestStreak:number;
-  acceptedDate:string;
+  acceptedDate:string|null;
 }

@@ -51,6 +51,10 @@
   (taskDeleted)="onTaskDelete()"
   >
   </app-task-form>
+  } @else {
+    <task-calendar
+    [taskCalendarList]="this.tasks"
+    ></task-calendar>
   }
 </div>
 </div>

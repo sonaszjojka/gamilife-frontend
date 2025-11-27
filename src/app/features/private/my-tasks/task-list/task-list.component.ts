@@ -11,6 +11,7 @@ import {
 import { Task } from '../../../shared/models/task-models/task.model';
 import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
+import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar/task-calendar.component';
 
 @Component({
   selector: 'app-task-list',
@@ -21,6 +22,7 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
     TaskFilterComponent,
     TaskFormComponent,
     NzButtonComponent,
+    TaskCalendarComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',

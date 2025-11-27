@@ -1,13 +1,8 @@
 export interface HabitModel
 {
   habitId: string,
-  cycleLength: number
+  cycleLength: string
   currentStreak:number
   longestStreak:number
-  acceptedDate:string
-  updated_at:string
-  created_at:string
-
-
-
+  acceptedDate:string|null
 }
