@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 import { CreateGroupInvitationDto } from '../../models/user.model';
 import { EditGroupInvitationStatusDto } from '../../models/group-invitation.model';
 

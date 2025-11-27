@@ -4,7 +4,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../../../environments/environment.development';
+import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 

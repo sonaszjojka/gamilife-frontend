@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal, Signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { finalize, Observable, Subject, tap } from 'rxjs';
 
 export interface IAuthService {

@@ -15,7 +15,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { environment } from '../../../../../../environments/environment.development';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-reset-password',
