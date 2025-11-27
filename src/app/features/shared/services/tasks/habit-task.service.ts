@@ -24,7 +24,7 @@ createHabitTask(taskId: string, createHabitRequest: CreateHabitRequest) :Observa
     );
 
   }
-editHabitTask(taskId:string,habitId:string, editHabitRequest:CreateHabitRequest):Observable<CreateHabitResponse>{
+editHabitTask(habitId:string,taskId:string, editHabitRequest:CreateHabitRequest):Observable<CreateHabitResponse>{
     return this.http.put<CreateHabitResponse>
     (`${this.API_URL}/${taskId}/habits/${habitId}`,editHabitRequest,
       {withCredentials:true}

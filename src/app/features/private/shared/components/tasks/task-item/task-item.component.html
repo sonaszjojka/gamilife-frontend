@@ -32,6 +32,11 @@
   <div class="task-tags">
     <p> <span>{{task.categoryName}}</span></p>
     <p><span>{{task.difficultyName}}</span></p>
+    @if (task.taskHabit != null)
+    {
+    <p><span>{{task.taskHabit.currentStreak}}</span></p>
+      <p><span>{{task.taskHabit.longestStreak}}</span></p>
+    }
   </div>
 
   <div>

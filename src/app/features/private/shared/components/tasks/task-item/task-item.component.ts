@@ -8,6 +8,9 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {EditTaskRequest} from '../../../../../shared/models/task-models/edit-task-request';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
+import {durationToDays} from '../../../../../../shared/util/DateFormatterUtil';
+import {HabitTaskService} from '../../../../../shared/services/tasks/habit-task.service';
+import {EditHabitRequest} from '../../../../../shared/models/task-models/edit-habit-request';
 
 @Component({
   selector: 'app-task-item',
@@ -39,6 +42,7 @@ export class TaskItemComponent implements OnInit {
   @Output() removeFromCurrentSession = new EventEmitter<Task>();
 
   taskService = inject(IndividualTaskService)
+  habitService = inject(HabitTaskService)
 
   ngOnInit(): void {
     this.isCompleted.set(this.task.completedAt != null);
@@ -70,18 +74,46 @@ export class TaskItemComponent implements OnInit {
     });
     }
     else {
-      //this.task.endTime=this.task.endTime + this.task.habit.duration;
-      // const request:EditTaskRequest ={
-      //       title: this.task.title,
-      //       startTime:this.task.startTime,
-      //       endTime:this.task.endTime,
-      //       categoryId:this.task.categoryId,
-      //       difficultyId:this.task.difficultyId,
-      //       completedAt: this.task.completedAt,
-      //       description: this.task.description
-      //     }
-      //this.taskService.editTask(this.task.taskId,request).subscribe({});
-      //
+      this.task.endTime=this.addCycleLengthToEndTime(this.task.endTime!,this.task.taskHabit.cycleLength);
+       const request:EditTaskRequest ={
+             title: this.task.title,
+             startTime:this.task.startTime,
+             endTime:this.task.endTime,
+            categoryId:this.task.categoryId,
+             difficultyId:this.task.difficultyId,
+             completedAt: this.task.completedAt,
+             description: this.task.description
+           }
+      this.taskService.editTask(this.task.taskId,request).subscribe({
+
+        next: () => {
+
+          this.task.taskHabit!.currentStreak++;
+          if (this.task.taskHabit!.longestStreak < this.task.taskHabit!.currentStreak)
+          {
+            this.task.taskHabit!.longestStreak = this.task.taskHabit!.currentStreak;
+          }
+
+          let request : EditHabitRequest = {
+            currentStreak: this.task.taskHabit!.currentStreak,
+            longestStreak: this.task.taskHabit!.longestStreak,
+            cycleLength: this.task.taskHabit!.cycleLength,
+            acceptedDate: this.task.taskHabit!.acceptedDate
+          }
+              this.habitService.editHabitTask(this.task.taskHabit!.habitId,
+                this.task.taskId,
+                request)
+                .subscribe({next: () => {
+                  this.taskUpdated.emit(this.task.taskId);
+              }
+              });
+            },
+            error: (error) => {
+          console.error('Error:', error);
+          this.isCompleted.set(false)
+        }
+      });
+
 
     }
   }
@@ -106,4 +138,13 @@ export class TaskItemComponent implements OnInit {
     this.removeFromCurrentSession.emit(this.task)
 
   }
+  addCycleLengthToEndTime(endTime:string,cycleLength: string):string
+  {
+    const endDate = new Date(endTime);
+    const cycleLengthInDays = durationToDays(cycleLength);
+    endDate.setDate(endDate.getDate() + cycleLengthInDays);
+    return endDate.toISOString();
+  }
+
+
 }

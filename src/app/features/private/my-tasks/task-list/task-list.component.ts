@@ -171,10 +171,10 @@ export class TaskListComponent {
       new Date(changedTask.endTime!) < new Date(Date.now());
 
     if (
-      changedTask.categoryId != this.categoryId() ||
-      changedTask.difficultyId != this.difficultyId() ||
-      changedTask.isGroupTask != this.isGroupTask() ||
-      isTaskNoneActive != this.isCompleted() //rename filter param
+      (changedTask.categoryId != this.categoryId() && this.categoryId()!=null )||
+      (changedTask.difficultyId != this.difficultyId() && this.difficultyId()!=null) ||
+      (changedTask.isGroupTask != this.isGroupTask() && this.isGroupTask()!=null) ||
+      (isTaskNoneActive != this.isCompleted()&& this.isCompleted()!=null)
     ) {
       this.tasks = this.tasks.filter((t) => t.taskId != taskId);
       this.groupTasksByDate();
