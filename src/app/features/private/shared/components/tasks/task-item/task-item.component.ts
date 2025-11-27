@@ -50,8 +50,6 @@ export class TaskItemComponent implements OnInit {
   }
 
   completeTask(): void  {
-    if (this.task.taskHabit==null)
-    {
     this.isCompleted.set(true)
     const request:EditTaskRequest ={
       title: this.task.title,
@@ -72,50 +70,78 @@ export class TaskItemComponent implements OnInit {
         this.isCompleted.set(false)
       }
     });
+
+  }
+
+
+  completeHabitCycle():void
+  {
+    if (this.task.taskHabit!==null)
+    this.task.endTime=this.addCycleLengthToEndTime(this.task.endTime!,this.task.taskHabit.cycleLength);
+    const request:EditTaskRequest ={
+      title: this.task.title,
+      startTime:this.task.startTime,
+      endTime:this.task.endTime,
+      categoryId:this.task.categoryId,
+      difficultyId:this.task.difficultyId,
+      completedAt: this.task.completedAt,
+      description: this.task.description
     }
-    else {
-      this.task.endTime=this.addCycleLengthToEndTime(this.task.endTime!,this.task.taskHabit.cycleLength);
-       const request:EditTaskRequest ={
-             title: this.task.title,
-             startTime:this.task.startTime,
-             endTime:this.task.endTime,
-            categoryId:this.task.categoryId,
-             difficultyId:this.task.difficultyId,
-             completedAt: this.task.completedAt,
-             description: this.task.description
-           }
-      this.taskService.editTask(this.task.taskId,request).subscribe({
+    this.taskService.editTask(this.task.taskId,request).subscribe({
 
-        next: () => {
+      next: () => {
 
-          this.task.taskHabit!.currentStreak++;
-          if (this.task.taskHabit!.longestStreak < this.task.taskHabit!.currentStreak)
-          {
-            this.task.taskHabit!.longestStreak = this.task.taskHabit!.currentStreak;
-          }
+        this.task.taskHabit!.currentStreak++;
+        if (this.task.taskHabit!.longestStreak < this.task.taskHabit!.currentStreak)
+        {
+          this.task.taskHabit!.longestStreak = this.task.taskHabit!.currentStreak;
+        }
 
-          let request : EditHabitRequest = {
-            currentStreak: this.task.taskHabit!.currentStreak,
-            longestStreak: this.task.taskHabit!.longestStreak,
-            cycleLength: this.task.taskHabit!.cycleLength,
-            acceptedDate: this.task.taskHabit!.acceptedDate
-          }
-              this.habitService.editHabitTask(this.task.taskHabit!.habitId,
-                this.task.taskId,
-                request)
-                .subscribe({next: () => {
-                  this.taskUpdated.emit(this.task.taskId);
-              }
-              });
-            },
-            error: (error) => {
-          console.error('Error:', error);
-          this.isCompleted.set(false)
+        let request : EditHabitRequest = {
+          currentStreak: this.task.taskHabit!.currentStreak,
+          longestStreak: this.task.taskHabit!.longestStreak,
+          cycleLength: this.task.taskHabit!.cycleLength,
+          acceptedDate: this.task.taskHabit!.acceptedDate
+        }
+        this.habitService.editHabitTask(this.task.taskHabit!.habitId,
+          this.task.taskId,
+          request)
+          .subscribe({next: () => {
+              this.taskUpdated.emit(this.task.taskId);
+            }
+          });
+      },
+      error: (error) => {
+        console.error('Error:', error);
+        this.isCompleted.set(false)
+      }
+    });
+
+  }
+  completeHabit():void
+  {
+    let acceptedDate = new Date(Date.now());
+
+    acceptedDate.setHours(acceptedDate.getHours()+1,
+      acceptedDate.getMinutes(),
+      acceptedDate.getSeconds(),
+      acceptedDate.getMilliseconds()
+    );
+    let request : EditHabitRequest = {
+      currentStreak: this.task.taskHabit!.currentStreak,
+      longestStreak: this.task.taskHabit!.longestStreak,
+      cycleLength: this.task.taskHabit!.cycleLength,
+      acceptedDate: acceptedDate.toISOString()
+    }
+    console.log(request);
+    this.habitService.editHabitTask(this.task.taskHabit!.habitId,
+      this.task.taskId,
+      request)
+      .subscribe({next: () => {
+        this.completeTask();
+          this.taskUpdated.emit(this.task.taskId);
         }
       });
-
-
-    }
   }
 
   onTaskEdit()

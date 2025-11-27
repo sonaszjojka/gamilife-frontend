@@ -227,7 +227,6 @@ export class TaskFormComponent {
               longestStreak: response.longestStreak,
               acceptedDate:response.acceptedDate,
             };
-            console.log(task.taskHabit.habitId);
             //ToDo decide if we need to set task.endTime from here or use already existing one
           }
         });
