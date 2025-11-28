@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GroupListComponent } from './group-list.component';
 
 describe('GroupListComponent', () => {
@@ -13,6 +12,9 @@ describe('GroupListComponent', () => {
 
     fixture = TestBed.createComponent(GroupListComponent);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('groups', []);
+
     fixture.detectChanges();
   });
 
