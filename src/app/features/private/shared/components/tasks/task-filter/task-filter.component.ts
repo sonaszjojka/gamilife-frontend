@@ -1,8 +1,8 @@
-import {Component, inject, Input, WritableSignal} from '@angular/core';
+import { Component, inject, Input, WritableSignal } from '@angular/core';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import {Router} from '@angular/router';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
+import { Router } from '@angular/router';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-task-filter',
@@ -23,7 +23,7 @@ export class TaskFilterComponent {
   @Input() isGroupTask?: WritableSignal<boolean | null>;
   @Input() isCompleted?: WritableSignal<boolean | null>;
 
-  router=inject(Router);
+  router = inject(Router);
 
   openHandler(value: string): void {
     for (const key in this.openMap) {
