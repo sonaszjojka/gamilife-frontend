@@ -1,4 +1,11 @@
-import { Component, HostListener, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { Task } from '../../../shared/models/task-models/task.model';
 import {
   IndividualTaskService,
@@ -36,7 +43,7 @@ import { PomodoroSessionBreakModalComponent } from '../../shared/components/task
   standalone: true,
   styleUrl: './pomodoro-session.component.css',
 })
-export class PomodoroSessionComponent {
+export class PomodoroSessionComponent implements OnInit, OnDestroy {
   @ViewChild(PomodoroSessionFormModal)
   pomodoroSessionFormModal!: PomodoroSessionFormModal;
   @ViewChild(PomodoroSessionAcceptTaskModalComponent)
@@ -52,7 +59,7 @@ export class PomodoroSessionComponent {
   usersPomodoroTasks: Task[] = [];
   usersNotPomodoroTasks: Task[] = [];
 
-  timer: any;
+  timer: ReturnType<typeof setTimeout> | null = null;
   remainingTime = 0;
   isSessionActive = false;
   isBreakActive = false;
@@ -67,7 +74,7 @@ export class PomodoroSessionComponent {
   taskService = inject(IndividualTaskService);
   pomodoroService = inject(PomodoroTaskService);
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onScroll(): void {
     const threshold = 200;
     const position = window.scrollY + window.innerHeight;
@@ -127,8 +134,7 @@ export class PomodoroSessionComponent {
   }
 
   dispatchTasks() {
-    let tasksNotInSession: Task[];
-    tasksNotInSession = this.allUsersTasks.filter(
+    const tasksNotInSession: Task[] = this.allUsersTasks.filter(
       (t) => !this.currentSessionPomodoroTasks.includes(t),
     );
 
@@ -272,7 +278,7 @@ export class PomodoroSessionComponent {
   }
 
   removeFromPanel(task: Task) {
-    let request: EditTaskRequest = {
+    const request: EditTaskRequest = {
       title: task.title,
       description: task.description,
       difficultyId: task.difficultyId,
@@ -294,9 +300,9 @@ export class PomodoroSessionComponent {
 
   removeFromCurrentSession(task: Task) {
     this.usersPomodoroTasks.push(
-      <Task>(
-        this.currentSessionPomodoroTasks.find((t) => t.taskId == task.taskId)
-      ),
+      this.currentSessionPomodoroTasks.find(
+        (t) => t.taskId == task.taskId,
+      ) as Task,
     );
     this.currentSessionPomodoroTasks = this.currentSessionPomodoroTasks.filter(
       (t) => t.taskId != task.taskId,
@@ -318,7 +324,7 @@ export class PomodoroSessionComponent {
         this.pomodoroSessionFormModal.showModal();
       } else {
         this.currentSessionPomodoroTasks.push(
-          <Task>this.usersPomodoroTasks.find((t) => t.taskId == task.taskId),
+          this.usersPomodoroTasks.find((t) => t.taskId == task.taskId) as Task,
         );
         this.usersPomodoroTasks = this.usersPomodoroTasks.filter(
           (t) => t.taskId != task.taskId,
@@ -327,16 +333,18 @@ export class PomodoroSessionComponent {
     }
   }
   moveModalPomodoroToSession(task: Task) {
-    if (<Task>this.usersNotPomodoroTasks.find((t) => t.taskId == task.taskId)) {
+    if (
+      this.usersNotPomodoroTasks.find((t) => t.taskId == task.taskId) as Task
+    ) {
       this.currentSessionPomodoroTasks.push(
-        <Task>this.usersNotPomodoroTasks.find((t) => t.taskId == task.taskId),
+        this.usersNotPomodoroTasks.find((t) => t.taskId == task.taskId) as Task,
       );
       this.usersNotPomodoroTasks = this.usersNotPomodoroTasks.filter(
         (t) => t.taskId != task.taskId,
       );
     } else {
       this.currentSessionPomodoroTasks.push(
-        <Task>this.usersPomodoroTasks.find((t) => t.taskId == task.taskId),
+        this.usersPomodoroTasks.find((t) => t.taskId == task.taskId) as Task,
       );
       this.usersPomodoroTasks = this.usersPomodoroTasks.filter(
         (t) => t.taskId != task.taskId,
