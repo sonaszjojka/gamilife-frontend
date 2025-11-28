@@ -29,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'verify-email',
     component: EmailVerificationResultComponent,
-    canActivate: [GuestGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: 'reset-password',
