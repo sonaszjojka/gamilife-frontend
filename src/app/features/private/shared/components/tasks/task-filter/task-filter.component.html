@@ -93,7 +93,16 @@
           Health
         </li>
       </ul>
-      Pomodoro Session
-    </li>
+
+
+    <li
+    nz-menu-item
+    (click)="pomodoroSessionSelected()"
+    (keyup.enter)="pomodoroSessionSelected()"
+    tabindex="0"
+  ><nz-icon nzType="clock-circle"></nz-icon> Pomodoro Session
+  </li>
+
   </ul>
+
 </div>

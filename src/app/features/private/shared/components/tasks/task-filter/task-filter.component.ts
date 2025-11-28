@@ -1,10 +1,12 @@
-import { Component, Input, WritableSignal } from '@angular/core';
+import {Component, inject, Input, WritableSignal} from '@angular/core';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import {Router} from '@angular/router';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-task-filter',
-  imports: [NzMenuModule],
+  imports: [NzMenuModule, NzIconDirective],
   standalone: true,
   templateUrl: './task-filter.component.html',
   styleUrl: 'task-filter.component.css',
@@ -20,6 +22,8 @@ export class TaskFilterComponent {
   @Input() categoryId?: WritableSignal<number | null>;
   @Input() isGroupTask?: WritableSignal<boolean | null>;
   @Input() isCompleted?: WritableSignal<boolean | null>;
+
+  router=inject(Router);
 
   openHandler(value: string): void {
     for (const key in this.openMap) {
@@ -62,5 +66,9 @@ export class TaskFilterComponent {
     this.difficultyId?.set(null);
     this.isGroupTask?.set(null);
     this.isCompleted?.set(true);
+  }
+
+  pomodoroSessionSelected() {
+    this.router.navigate(['/app/tasks/pomodoro-session']);
   }
 }
