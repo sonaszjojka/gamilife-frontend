@@ -7,7 +7,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
-import { InvitationStatus } from '../../../../shared/models/group-invitation.model';
+import { InvitationStatus } from '../../../../shared/models/group/group-invitation.model';
 import { take } from 'rxjs/operators';
 
 type PageStatus = 'loading' | 'ready' | 'accepted' | 'rejected' | 'error';

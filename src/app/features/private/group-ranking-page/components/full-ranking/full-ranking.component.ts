@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 
 @Component({
   selector: 'app-full-ranking',

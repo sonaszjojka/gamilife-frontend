@@ -6,11 +6,9 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {PomodoroSessionFormModal} from '../../shared/components/tasks/pomodoro-form-modal/pomodoro-session-form-modal';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
-import {PomodoroFormComponent} from '../../shared/components/tasks/pomodoro-form/pomodoro-form.component';
 import {
   PomodoroSessionAcceptTaskModalComponent
 } from '../../shared/components/tasks/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
-import {NzTimeRangePipe} from 'ng-zorro-antd/core/pipe';
 import {PomodoroTaskService} from '../../../shared/services/tasks/pomodoro-task.service';
 import {EditPomodoroRequest} from '../../../shared/models/task-models/edit-pomodoro-request';
 import {EditTaskRequest} from '../../../shared/models/task-models/edit-task-request';
@@ -27,9 +25,7 @@ import {
     CdkDropList,
     PomodoroSessionFormModal,
     NzWaveDirective,
-    PomodoroFormComponent,
     PomodoroSessionAcceptTaskModalComponent,
-    NzTimeRangePipe,
     PomodoroSessionBreakModalComponent
   ],
   templateUrl: './pomodoro-session.component.html',

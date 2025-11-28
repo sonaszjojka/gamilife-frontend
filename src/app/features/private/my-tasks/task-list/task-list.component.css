@@ -11,8 +11,7 @@ h1{
 
 }
 
-.task-panel
-{
+.task-panel {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -28,6 +27,22 @@ h1 {
   display: flex;
   align-items: flex-start;
   gap: 2rem;
+  width: 100%;
+  padding: 0 2rem;
+}
+.task-list {
+  width: 40%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.task-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 .h2
@@ -37,16 +52,31 @@ h1 {
   font-size: 2rem;
 
 }
-
-.task-list {
-  margin: 1rem;
-  flex: 1;
+.filter-panel {
+  width: 20%;
+  flex-shrink: 0;
 }
+app-task-form {
+  flex-shrink: 0;
+}
+
 
 button{
 border-radius: 10px;
 }
 
+app-task-form {
+  width: 35%;
+  background: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  display: block;
+}
 
 @media (max-width: 768px) {
   .task-layout {

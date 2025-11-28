@@ -7,7 +7,7 @@ import {
   EditGroupRequestStatusResult,
   GetGroupRequestsParams,
   GetGroupRequestsResult,
-} from '../../models/group-request.model';
+} from '../../models/group/group-request.model';
 import { Observable } from 'rxjs';
 
 @Injectable({

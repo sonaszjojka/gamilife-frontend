@@ -3,7 +3,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
-import { GroupRequest } from '../../../../../shared/models/group-request.model';
+import { GroupRequest } from '../../../../../shared/models/group/group-request.model';
 import { formatRelativeDate } from '../../../../../../shared/util/DateFormatterUtil';
 
 @Component({

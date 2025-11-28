@@ -8,7 +8,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { take } from 'rxjs/operators';
 
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { FullRankingComponent } from '../full-ranking/full-ranking.component';
 
 @Component({

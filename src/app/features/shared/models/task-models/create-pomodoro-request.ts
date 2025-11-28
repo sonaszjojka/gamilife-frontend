@@ -1,6 +1,4 @@
-export interface CreatePomodoroRequest
-{
-  workCyclesNeeded:number,
-  workCyclesCompleted:number
-
+export interface CreatePomodoroRequest {
+  workCyclesNeeded: number;
+  workCyclesCompleted: number;
 }

@@ -18,9 +18,12 @@ import {
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
-import { GroupType } from '../../../../shared/models/group-type.model';
-import { EditGroupDto, Group } from '../../../../shared/models/group.model';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupType } from '../../../../shared/models/group/group-type.model';
+import {
+  EditGroupDto,
+  Group,
+} from '../../../../shared/models/group/group.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 
 @Component({
   selector: 'app-edit-group-form',

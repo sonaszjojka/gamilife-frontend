@@ -5,7 +5,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { GroupRequest } from '../../../../shared/models/group-request.model';
+import { GroupRequest } from '../../../../shared/models/group/group-request.model';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
 import { take } from 'rxjs/operators';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';

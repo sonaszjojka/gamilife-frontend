@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Group } from '../../../../shared/models/group.model';
+import { Group } from '../../../../shared/models/group/group.model';
 import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.component';
 
 @Component({

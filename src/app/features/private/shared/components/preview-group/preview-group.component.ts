@@ -11,10 +11,10 @@ import { take } from 'rxjs/operators';
 
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
-import { Group } from '../../../../shared/models/group.model';
-import { GroupPreviewMode } from '../../../../shared/models/group-preview-mode';
-import { GroupMember } from '../../../../shared/models/group-member.model';
-import { GroupRequest } from '../../../../shared/models/group-request.model';
+import { Group } from '../../../../shared/models/group/group.model';
+import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
+import { GroupRequest } from '../../../../shared/models/group/group-request.model';
 import { GroupInfoCardComponent } from '../group-info-card/group-info-card.component';
 import { GroupActionsComponent } from '../group-actions/group-actions.component';
 import { MembersListPeakComponent } from '../members-list-peak/members-list-peak.component';

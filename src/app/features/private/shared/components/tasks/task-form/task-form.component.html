@@ -1,155 +1,191 @@
 <div class="task-form">
-  <button nz-button nzType="default" nzShape="circle" (click)="onClose()"><nz-icon nzType="close"></nz-icon></button>
-<form
-class="task-form"
-[formGroup]="validTaskForm"
->
-  <h2>TASK</h2>
-  <nz-form-item>
-    <nz-form-label nzRequired nzFor="title">Title</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Please provide valid Title"
-    >
-      <input
-        nz-input
-        id="title"
-        name="title"
-        formControlName="title"
-        placeholder="My  New Task"
-      />
-    </nz-form-control>
+  <button nz-button nzType="default" nzShape="circle" (click)="onClose()">
+    <nz-icon nzType="close"></nz-icon>
+  </button>
+  <form class="task-form" [formGroup]="validTaskForm">
+    <h2>TASK</h2>
+    <nz-form-item>
+      <nz-form-label nzRequired nzFor="title">Title</nz-form-label>
+      <nz-form-control nzErrorTip="Please provide valid Title">
+        <input
+          nz-input
+          id="title"
+          name="title"
+          formControlName="title"
+          placeholder="My  New Task"
+        />
+      </nz-form-control>
+    </nz-form-item>
 
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label nzRequired >Start Time</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Please provide valid Start Time"
-    >
-      <nz-date-picker
-      nzId="startTimeDate"
-      formControlName="startTimeDate"
-      nzPlaceHolder="2003-11-29"
-      >
-      </nz-date-picker>
-      <nz-time-picker
-      nzId="startTimeHour"
-      formControlName="startTimeHour"
-      nzPlaceHolder="11:59:30"
-      >
-      </nz-time-picker>
-
-    </nz-form-control>
-
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label nzRequired >End Time</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Please provide valid End Time"
-    >
-      <nz-date-picker
-        nzId="endTimeDate"
-        formControlName="endTimeDate"
-        nzPlaceHolder="2003-11-30"
-        ></nz-date-picker>
-      <nz-time-picker
-        nzId="endTimeHour"
-        formControlName="endTimeHour"
-        nzPlaceHolder="12:00:00">
-
-      </nz-time-picker>
-    </nz-form-control>
-
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label nzRequired nzFor="categoryId">Category</nz-form-label>
-    <nz-form-control nzErrorTip="Please provide category">
-      <nz-select
-        nzId="categoryId"
-        formControlName="categoryId"
-        nzPlaceHolder="Select Category"
-      >
-          @for (category of categories; track category.categoryId)
-          {
-              <nz-option [nzValue]="category.categoryId" [nzLabel]="category.categoryName"></nz-option>
-
+    <nz-form-item>
+      <nz-form-label nzRequired nzFor="categoryId">Category</nz-form-label>
+      <nz-form-control nzErrorTip="Please provide category">
+        <nz-select
+          nzId="categoryId"
+          formControlName="categoryId"
+          nzPlaceHolder="Select Category"
+        >
+          @for (category of categories; track category.categoryId) {
+            <nz-option
+              [nzValue]="category.categoryId"
+              [nzLabel]="category.categoryName"
+            ></nz-option>
           }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
 
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzRequired nzFor="difficultyId">Difficulty</nz-form-label>
+      <nz-form-control nzErrorTip="Please provide difficulty">
+        <nz-select
+          nzId="difficultyId"
+          formControlName="difficultyId"
+          nzPlaceHolder="Select Difficulty"
+        >
+          @for (difficulty of difiiculties; track difficulty.difficultyId) {
+            <nz-option
+              [nzValue]="difficulty.difficultyId"
+              [nzLabel]="difficulty.difficultyName"
+            ></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label nzRequired nzFor="difficultyId">Difficulty</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Please provide difficulty"
-    >
-     <nz-select
-      nzId="difficultyId"
+    <nz-form-item>
+      <nz-form-label nzRequired nzFor="description">Description</nz-form-label>
+      <nz-form-control nzErrorTip="Please provide valid Description">
+        <textarea
+          nz-input
+          id="description"
+          name="description"
+          formControlName="description"
+          placeholder="Put Your Task Description Here"
+          [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzRequired>Start Time</nz-form-label>
+      <nz-form-control nzErrorTip="Please provide valid Start Time">
+        <nz-date-picker
+          nzId="startTimeDate"
+          formControlName="startTimeDate"
+          nzPlaceHolder="2003-11-29"
+        >
+        </nz-date-picker>
+        <nz-time-picker
+          nzId="startTimeHour"
+          formControlName="startTimeHour"
+          nzPlaceHolder="11:59:30"
+        >
+        </nz-time-picker>
+      </nz-form-control>
+    </nz-form-item>
 
-      formControlName="difficultyId"
-      nzPlaceHolder="Select Difficulty"
-     >
-       @for(difficulty of difiiculties; track difficulty.difficultyId)
-       {
-         <nz-option [nzValue]="difficulty.difficultyId" [nzLabel]="difficulty.difficultyName"></nz-option>
-       }
-     </nz-select>
+    @if (!this.habitEdition() && !this.habitCreation()) {
+      <nz-form-item>
+        <nz-form-label nzRequired>End Time</nz-form-label>
+        <nz-form-control nzErrorTip="Please provide valid End Time">
+          <nz-date-picker
+            nzId="endTimeDate"
+            formControlName="endTimeDate"
+            nzPlaceHolder="2003-11-30"
+          ></nz-date-picker>
+          <nz-time-picker
+            nzId="endTimeHour"
+            formControlName="endTimeHour"
+            nzPlaceHolder="12:00:00"
+          >
+          </nz-time-picker>
+        </nz-form-control>
+      </nz-form-item>
+    } @else if (this.habitCreation() || this.habitEdition()) {
+      <app-habit-form
+        [habitCreation]="habitCreation"
+        [habitEdition]="habitEdition"
+        (formChanged)="onHabitFormChange($event)"
+        (editFormChanged)="onHabitEditFormChange($event)"
+      ></app-habit-form>
+    }
 
-    </nz-form-control>
-
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label nzRequired nzFor="description">Description</nz-form-label>
-    <nz-form-control
-      nzErrorTip="Please provide valid Description"
-    >
-      <input
-        nz-input
-        id="description"
-        name="description"
-        formControlName="description"
-        placeholder="Put Your Task Description Here"
-      />
-    </nz-form-control>
-
-  </nz-form-item>
-
-  @if(this.pomodoroCreation()||this.pomodoroEdition())
-  {
-  <app-pomodoro-form
-    [pomodoroCreation]="pomodoroCreation"
-    [pomodoroEdition]="pomodoroEdition"
-    (formChanged)="onPomodoroFormChange($event)"
-    (editFormChanged)="onPomodoroEditFormChange($event)"
-    ></app-pomodoro-form>
-  }
-
-</form>
+    @if (this.pomodoroCreation() || this.pomodoroEdition()) {
+      <app-pomodoro-form
+        [pomodoroCreation]="pomodoroCreation"
+        [pomodoroEdition]="pomodoroEdition"
+        (formChanged)="onPomodoroFormChange($event)"
+        (editFormChanged)="onPomodoroEditFormChange($event)"
+      ></app-pomodoro-form>
+    }
+  </form>
   <div class="button-panel">
+    <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
 
-    <button nz-button nzShape="round" (click)="onSubmit()" > Save</button>
+    @if (
+      this.task()?.taskHabit === null &&
+      this.task()?.pomodoro === null &&
+      this.editionMode?.()
+    ) {
+      <button
+        class="habit-button"
+        nz-button
+        nzShape="round"
+        (click)="onHabitCreation()"
+      >
+        Make task habit<nz-icon nzType="smile"></nz-icon>
+      </button>
+    } @else if (
+      this.task()?.taskHabit?.habitId !== null &&
+      this.task()?.pomodoro === null &&
+      this.editionMode?.()
+    ) {
+      <button
+        class="habit-button"
+        nz-button
+        nzShape="round"
+        (click)="onHabitEdition()"
+      >
+        Edit Habit Task<nz-icon nzType="smile"> </nz-icon>
+      </button>
+    }
 
-    @if(this.task()?.pomodoro?.pomodoroId==null&&this.editionMode?.())
-    {
-      <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroCreation()" >Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon></button>
+    @if (
+      this.task()?.pomodoro === null &&
+      this.task()?.taskHabit === null &&
+      this.editionMode?.()
+    ) {
+      <button
+        class="pomodoro-button"
+        nz-button
+        nzShape="round"
+        (click)="onPomodoroCreation()"
+      >
+        Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon>
+      </button>
+    } @else if (
+      this.task()?.pomodoro?.pomodoroId !== null &&
+      this.task()?.taskHabit === null &&
+      this.editionMode?.()
+    ) {
+      <button
+        class="pomodoro-button"
+        nz-button
+        nzShape="round"
+        (click)="onPomodoroEdition()"
+      >
+        Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon>
+      </button>
     }
-    @else if (this.task()?.pomodoro?.pomodoroId!=null&&this.editionMode?.())
-    {
-        <button class="pomodoro-button" nz-button nzShape="round" (click)="onPomodoroEdition()" >Edit Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon></button>
+    @if (this.editionMode?.()) {
+      <button
+        class="delete-button"
+        nz-button
+        nzShape="round"
+        (click)="onDelete()"
+      >
+        Delete <nz-icon nzType="delete"></nz-icon>
+      </button>
     }
-    @if(this.editionMode?.())
-    {
-    <button class="delete-button" nz-button nzShape="round" (click)="onDelete()">Delete</button>
-    }
-
   </div>
 </div>
-
-
-
-
-

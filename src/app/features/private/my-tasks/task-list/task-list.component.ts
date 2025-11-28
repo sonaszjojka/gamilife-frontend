@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit, HostListener, signal, effect } from '@angular/core';
+import { Component, HostListener, signal, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
 import { TaskFilterComponent } from '../../shared/components/tasks/task-filter/task-filter.component';
@@ -11,6 +11,7 @@ import {
 import { Task } from '../../../shared/models/task-models/task.model';
 import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { TaskCalendarComponent } from '../../shared/components/tasks/task-calendar/task-calendar.component';
 
 @Component({
   selector: 'app-task-list',
@@ -21,13 +22,14 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
     TaskFilterComponent,
     TaskFormComponent,
     NzButtonComponent,
+    TaskCalendarComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
 })
 export class TaskListComponent {
   tasks: Task[] = [];
-  groupedTasks: { [date: string]: Task[] } = {};
+  groupedTasks: Record<string, Task[]> = {};
 
   loading = false;
   loadingMore = false;
@@ -53,9 +55,9 @@ export class TaskListComponent {
     this.currentPage = 0;
     this.loadTasks();
   });
-  constructor(private taskService: IndividualTaskService) {}
+  private taskService = inject(IndividualTaskService);
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onScroll(): void {
     const threshold = 200;
     const position = window.scrollY + window.innerHeight;
@@ -129,7 +131,7 @@ export class TaskListComponent {
   }
 
   private groupTasksByDate(): void {
-    const grouped: { [key: string]: Task[] } = {};
+    const grouped: Record<string, Task[]> = {};
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -164,15 +166,18 @@ export class TaskListComponent {
 
   onTaskUpdated(taskId: string): void {
     const changedTask = this.tasks.find((t) => t.taskId == taskId)!;
-    const isTaskNoneActive: Boolean =
+    const isTaskNoneActive: boolean =
       changedTask.completedAt != null ||
       new Date(changedTask.endTime!) < new Date(Date.now());
 
     if (
-      changedTask.categoryId != this.categoryId() ||
-      changedTask.difficultyId != this.difficultyId() ||
-      changedTask.isGroupTask != this.isGroupTask() ||
-      isTaskNoneActive != this.isCompleted() //rename filter param
+      (changedTask.categoryId != this.categoryId() &&
+        this.categoryId() != null) ||
+      (changedTask.difficultyId != this.difficultyId() &&
+        this.difficultyId() != null) ||
+      (changedTask.isGroupTask != this.isGroupTask() &&
+        this.isGroupTask() != null) ||
+      (isTaskNoneActive != this.isCompleted() && this.isCompleted() != null)
     ) {
       this.tasks = this.tasks.filter((t) => t.taskId != taskId);
       this.groupTasksByDate();

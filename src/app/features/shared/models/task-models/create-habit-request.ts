@@ -1,5 +1,4 @@
-export interface HabitModel {
-  habitId: string;
+export interface CreateHabitRequest {
   cycleLength: string;
   currentStreak: number;
   longestStreak: number;

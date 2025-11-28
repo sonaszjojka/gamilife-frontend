@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
@@ -12,8 +12,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
       [nzTitle]="modalTitle"
       [nzClosable]="isBreakEndModal"
       [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()">
-
+      (nzOnCancel)="handleCancel()"
+    >
       <ng-container *nzModalContent>
         <p>{{ modalMessage }}</p>
       </ng-container>
@@ -29,13 +29,10 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
           Continue
         </button>
       } @else {
-        <button nz-button nzType="primary" (click)="handleOk()">
-          OK
-        </button>
+        <button nz-button nzType="primary" (click)="handleOk()">OK</button>
       }
     </ng-template>
-
-  `
+  `,
 })
 export class PomodoroSessionBreakModalComponent {
   @Output() continueSession = new EventEmitter<void>();
@@ -49,17 +46,19 @@ export class PomodoroSessionBreakModalComponent {
   showBreakStartModal(): void {
     this.isBreakEndModal = false;
     this.modalTitle = 'Start Your Break!';
-    this.modalMessage = 'Starting 5 minute break. Have a good rest and come back';
+    this.modalMessage =
+      'Starting 5 minute break. Have a good rest and come back';
     this.isVisible = true;
-    this.playNote(400)
+    this.playNote(400);
   }
 
   showBreakEndModal(): void {
     this.isBreakEndModal = true;
     this.modalTitle = 'Your Break Has Ended';
-    this.modalMessage = 'Your break has ended. Do You want to start another session?';
+    this.modalMessage =
+      'Your break has ended. Do You want to start another session?';
     this.isVisible = true;
-    this.playNote(300)
+    this.playNote(300);
   }
 
   handleOk(): void {

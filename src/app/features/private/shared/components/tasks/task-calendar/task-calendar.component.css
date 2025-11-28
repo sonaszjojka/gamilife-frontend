@@ -1,0 +1,52 @@
+::ng-deep .ant-picker-cell {
+  height: 60px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .ant-picker-cell:hover {
+  height: auto;
+  transform: scale(1.02);
+  z-index: 10;
+  position: relative;
+}
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.events li {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  padding: 2px 0;
+}
+
+
+.event-badge {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #005678;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+
+::ng-deep .ant-picker-calendar {
+
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+::ng-deep .ant-picker-calendar-header {
+  display: none;
+}
+
+.calendar-panel {
+  width: 100%;
+  background-color: #757575;
+}

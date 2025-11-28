@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
-import { GroupRequest } from '../../../../shared/models/group-request.model';
+import { GroupRequest } from '../../../../shared/models/group/group-request.model';
 import { GroupRequestsListComponent } from '../group-requests-list/group-requests-list.component';
 import { take } from 'rxjs/operators';
 import { NzModalModule } from 'ng-zorro-antd/modal';

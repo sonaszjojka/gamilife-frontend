@@ -1,56 +1,55 @@
 <div class="task-panel">
-<h1>My Tasks
-<button nz-button (click)="onTaskCreation()">
-  Create New Task
-</button>
-</h1>
+  <h1>
+    My Tasks
+    <button nz-button (click)="onTaskCreation()">Create New Task</button>
+  </h1>
 
-<div class="task-layout">
+  <div class="task-layout">
     <app-task-filter
-    [categoryId]="categoryId"
-    [difficultyId]="difficultyId"
-    [isGroupTask]="isGroupTask"
-    [isCompleted]="isCompleted"
-  ></app-task-filter>
+      [categoryId]="categoryId"
+      [difficultyId]="difficultyId"
+      [isGroupTask]="isGroupTask"
+      [isCompleted]="isCompleted"
+    ></app-task-filter>
 
-  <div class="task-list">
-    @if (!loading && tasks.length === 0) {
-      <div class="empty-state">
-        <h3>You have no tasks yet!</h3>
-      </div>
-    }
-
-    @if (!loading && tasks.length > 0) {
-      @for (date of getGroupKeys(); track getGroupKeys().keys() ) {
-        <div class="task-group">
-          <h3 class="task-group-title">{{ date }}</h3>
-
-          <div class="tasks-grid">
-            @for (task of groupedTasks[date]; track task.taskId) {
-              <app-task-item
-                [task]="task"
-                (editTask)="onTaskEdit(task)"
-                (taskUpdated)="onTaskUpdated($event)"
-              >
-
-              </app-task-item>
-            }
-          </div>
+    <div class="task-list">
+      @if (!loading && tasks.length === 0) {
+        <div class="empty-state">
+          <h3>You have no tasks yet!</h3>
         </div>
       }
+
+      @if (!loading && tasks.length > 0) {
+        @for (date of getGroupKeys(); track getGroupKeys().keys()) {
+          <div class="task-group">
+            <h3 class="task-group-title">{{ date }}</h3>
+
+            <div class="tasks-grid">
+              @for (task of groupedTasks[date]; track task.taskId) {
+                <app-task-item
+                  [task]="task"
+                  (editTask)="onTaskEdit(task)"
+                  (taskUpdated)="onTaskUpdated($event)"
+                >
+                </app-task-item>
+              }
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    @if (editionMode() || creationMode()) {
+      <app-task-form
+        [task]="selectedTask"
+        [editionMode]="editionMode"
+        [creationMode]="creationMode"
+        (taskFormSubmitted)="onTaskSubmit()"
+        (taskDeleted)="onTaskDelete()"
+      >
+      </app-task-form>
+    } @else {
+      <app-task-calendar [taskCalendarList]="this.tasks"></app-task-calendar>
     }
   </div>
-
-  @if(editionMode()||creationMode())
-  {
-  <app-task-form
-  [task]="selectedTask"
-  [editionMode]="editionMode"
-  [creationMode]="creationMode"
-  (taskFormSubmitted)="onTaskSubmit()"
-  (taskDeleted)="onTaskDelete()"
-  >
-  </app-task-form>
-  }
-</div>
 </div>

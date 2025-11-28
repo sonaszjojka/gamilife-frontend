@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';

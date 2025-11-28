@@ -1,21 +1,19 @@
-import { Component,Input, WritableSignal } from '@angular/core';
+import { Component, Input, WritableSignal } from '@angular/core';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-task-filter',
-  imports: [NzMenuModule, RouterLink],
+  imports: [NzMenuModule],
   standalone: true,
   templateUrl: './task-filter.component.html',
-  styleUrl:'task-filter.component.css'
+  styleUrl: 'task-filter.component.css',
 })
 export class TaskFilterComponent {
-
-  openMap: { [name: string]: boolean } = {
+  openMap: Record<string, boolean> = {
     status: true,
     difficulty: false,
-    category: false
+    category: false,
   };
 
   @Input() difficultyId?: WritableSignal<number | null>;
@@ -31,49 +29,38 @@ export class TaskFilterComponent {
     }
   }
 
-    categorySelected(category:number): void
-  {
+  categorySelected(category: number): void {
     this.categoryId?.set(category);
     this.difficultyId?.set(null);
     this.isGroupTask?.set(null);
-    this.isCompleted?.set(false)
+    this.isCompleted?.set(false);
   }
 
-  difficultySelected(difficulty:number):void
-  {
+  difficultySelected(difficulty: number): void {
     this.categoryId?.set(null);
     this.difficultyId?.set(difficulty);
     this.isGroupTask?.set(null);
-    this.isCompleted?.set(false)
-
+    this.isCompleted?.set(false);
   }
 
-  groupTaskSelected ():void
-  {
+  groupTaskSelected(): void {
     this.categoryId?.set(null);
     this.difficultyId?.set(null);
     this.isGroupTask?.set(true);
-    this.isCompleted?.set(false)
-
+    this.isCompleted?.set(false);
   }
 
-  activeTaskSelected ():void
-  {
+  activeTaskSelected(): void {
     this.categoryId?.set(null);
     this.difficultyId?.set(null);
     this.isGroupTask?.set(null);
-    this.isCompleted?.set(false)
-
+    this.isCompleted?.set(false);
   }
 
-  inactiveTaskSelected ():void
-  {
+  inactiveTaskSelected(): void {
     this.categoryId?.set(null);
     this.difficultyId?.set(null);
     this.isGroupTask?.set(null);
-    this.isCompleted?.set(true)
-
+    this.isCompleted?.set(true);
   }
 }
-
-

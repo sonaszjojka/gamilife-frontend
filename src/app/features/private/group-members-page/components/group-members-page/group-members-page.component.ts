@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMembersListComponent } from '../../../shared/components/group-members-list/group-members-list.component';
 import { take } from 'rxjs/operators';
 import { SendGroupInvitationFormComponent } from '../send-group-invitation-form/send-group-invitation-form.component';
