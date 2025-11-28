@@ -10,17 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
       - name: Prettier formatting check
         run: npm run format:check
@@ -28,8 +25,14 @@ jobs:
       - name: Lint code (ESLint)
         run: npm run lint
 
+      - name: TypeScript type check
+        run: tsc --noEmit
+
       - name: Run unit tests
         run: npm run test -- --watch=false --browsers=ChromeHeadless || echo "No tests found"
 
       - name: Build Angular app
         run: npm run build -- --configuration=production
+
+      - name: Audit npm dependencies
+        run: npm audit --audit-level=high
