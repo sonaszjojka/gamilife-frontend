@@ -1,374 +1,381 @@
 .div-registration-page {
-    width: 100%;
-    min-height: calc(100vh - 64px);
-    background: url('/background_guest_page.png') center center / cover no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    padding: var(--spacing-large);
-    gap: var(--spacing-xl);
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  background: url("/background_guest_page.png") center center / cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: var(--spacing-large);
+  gap: var(--spacing-xl);
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .div-left-panel,
 .div-right-panel {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: var(--spacing-medium);
-    animation: fadeIn 0.8s ease-in;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-medium);
+  animation: fadeIn 0.8s ease-in;
 }
 
 .card-inner-login {
-    width: 100%;
-    max-width: 450px;
+  width: 100%;
+  max-width: 450px;
 }
 
 .card-login-title {
-    font-size: var(--font-size-xlarge);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-secondary-color);
-    margin-bottom: var(--spacing-small);
+  font-size: var(--font-size-xlarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary-color);
+  margin-bottom: var(--spacing-small);
 }
 
 .card-login-subtitle {
-    font-size: var(--font-size-medium);
-    color: var(--secondary-color);
-    margin-bottom: var(--spacing-large);
-    line-height: var(--line-height-base);
+  font-size: var(--font-size-medium);
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-large);
+  line-height: var(--line-height-base);
 }
 
 .login-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-medium);
 }
 
 .login-button,
 .registration-form-button {
-    width: 100%;
-    height: 44px;
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-small);
-    transition: all var(--transition-speed);
+  width: 100%;
+  height: 44px;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-small);
+  transition: all var(--transition-speed);
 }
 
 .login-button-primary,
 ::ng-deep .registration-form-button.ant-btn-primary {
-    background: var(--third-color);
-    color: var(--text-secondary-color);
-    border: none;
+  background: var(--third-color);
+  color: var(--text-secondary-color);
+  border: none;
 }
 
 .login-button-primary:hover,
 ::ng-deep .registration-form-button.ant-btn-primary:hover {
-    background: var(--fifth-color);
-    transform: translateY(-2px);
+  background: var(--fifth-color);
+  transform: translateY(-2px);
 }
 
 .registration-title {
-    font-size: var(--font-size-xxlarge);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-secondary-color);
-    margin-bottom: var(--spacing-large);
-    text-align: center;
+  font-size: var(--font-size-xxlarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary-color);
+  margin-bottom: var(--spacing-large);
+  text-align: center;
 }
 
 .registration-form {
-    width: 100%;
-    max-width: 400px;
-    background: rgba(30, 30, 40, 0.9);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--box-shadow-lg);
+  width: 100%;
+  max-width: 400px;
+  background: rgba(30, 30, 40, 0.9);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
 }
 
 .registration-form-margin {
-    margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
 }
 
 .api-error-p {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--color-error);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-error);
 }
 
 .ant-input-password-icon,
 ::ng-deep .ant-input-password-icon {
-    cursor: pointer;
-    color: var(--third-color);
+  cursor: pointer;
+  color: var(--third-color);
 }
 
 .ant-input-password-icon:hover,
 ::ng-deep .ant-input-password-icon:hover {
-    cursor: pointer;
-    color: var(--fifth-color);
+  cursor: pointer;
+  color: var(--fifth-color);
 }
 
 ::ng-deep .registration-form .ant-form-item {
-    margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
 }
 
 ::ng-deep .registration-form .ant-form-item-label {
-    padding: 0 0 4px;
+  padding: 0 0 4px;
 }
 
 ::ng-deep .registration-form .ant-form-item-control {
-    width: 100%;
+  width: 100%;
 }
 
 ::ng-deep .registration-form .ant-input-affix-wrapper,
 ::ng-deep .registration-form .ant-input,
 ::ng-deep .registration-form .ant-picker {
-    width: 100% !important;
-    font-size: var(--font-size-medium);
-    background: rgba(0, 0, 0, 0.3) !important;
-    color: var(--text-secondary-color) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+  width: 100% !important;
+  font-size: var(--font-size-medium);
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: var(--text-secondary-color) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 ::ng-deep .registration-form .ant-input-affix-wrapper:hover,
 ::ng-deep .registration-form .ant-input:hover,
 ::ng-deep .registration-form .ant-picker:hover {
-    border-color: var(--third-color) !important;
+  border-color: var(--third-color) !important;
 }
 
 ::ng-deep .registration-form .ant-input-affix-wrapper-focused,
 ::ng-deep .registration-form .ant-input:focus,
 ::ng-deep .registration-form .ant-input-affix-wrapper:focus-within,
 ::ng-deep .registration-form .ant-picker-focused {
-    background: rgba(0, 0, 0, 0.4) !important;
-    border-color: var(--third-color) !important;
-    box-shadow: 0 0 0 2px rgba(var(--third-color-rgb), 0.2) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-color: var(--third-color) !important;
+  box-shadow: 0 0 0 2px rgba(var(--third-color-rgb), 0.2) !important;
 }
 
 ::ng-deep .registration-form .ant-input::placeholder,
 ::ng-deep .registration-form .ant-picker-input input::placeholder {
-    color: rgba(255, 255, 255, 0.4) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
 }
 
 ::ng-deep .registration-form .ant-input-prefix,
 ::ng-deep .registration-form .ant-picker-suffix {
-    color: var(--third-color) !important;
+  color: var(--third-color) !important;
 }
 
-::ng-deep .registration-form .ant-form-item-label>label {
-    color: var(--text-secondary-color);
+::ng-deep .registration-form .ant-form-item-label > label {
+  color: var(--text-secondary-color);
 }
 
 ::ng-deep .registration-form .ant-form-item-explain-error {
-    font-size: var(--font-size-small);
+  font-size: var(--font-size-small);
 }
 
 ::ng-deep .registration-form .ant-checkbox-wrapper {
-    color: var(--text-secondary-color);
+  color: var(--text-secondary-color);
 }
 
 ::ng-deep .registration-form .ant-checkbox-inner {
-    background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 ::ng-deep .registration-form .ant-checkbox:hover .ant-checkbox-inner,
 ::ng-deep .registration-form .ant-checkbox-wrapper:hover .ant-checkbox-inner {
-    border-color: var(--third-color) !important;
+  border-color: var(--third-color) !important;
 }
 
 ::ng-deep .registration-form .ant-checkbox-checked .ant-checkbox-inner {
-    background: var(--third-color) !important;
-    border-color: var(--third-color) !important;
+  background: var(--third-color) !important;
+  border-color: var(--third-color) !important;
 }
 
-::ng-deep .registration-form .ant-checkbox-input:focus+.ant-checkbox-inner {
-    border-color: var(--third-color) !important;
+::ng-deep .registration-form .ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: var(--third-color) !important;
 }
 
 ::ng-deep .registration-form .ant-picker-input input {
-    color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .registration-form .ant-picker {
-    display: flex !important;
+  display: flex !important;
 }
 
 ::ng-deep .ant-picker-dropdown {
-    background: rgba(30, 30, 40, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: var(--box-shadow-lg) !important;
+  background: rgba(30, 30, 40, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: var(--box-shadow-lg) !important;
 }
 
 ::ng-deep .ant-picker-panel-container {
-    background: rgba(30, 30, 40, 0.95) !important;
+  background: rgba(30, 30, 40, 0.95) !important;
 }
 
 ::ng-deep .ant-picker-panel {
-    background: transparent !important;
-    border: none !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 ::ng-deep .ant-picker-header {
-    color: var(--text-secondary-color) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-secondary-color) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 ::ng-deep .ant-picker-header-view button {
-    color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-header-view button:hover {
-    color: var(--third-color) !important;
+  color: var(--third-color) !important;
 }
 
 ::ng-deep .ant-picker-header-super-prev-btn,
 ::ng-deep .ant-picker-header-prev-btn,
 ::ng-deep .ant-picker-header-next-btn,
 ::ng-deep .ant-picker-header-super-next-btn {
-    color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-header-super-prev-btn:hover,
 ::ng-deep .ant-picker-header-prev-btn:hover,
 ::ng-deep .ant-picker-header-next-btn:hover,
 ::ng-deep .ant-picker-header-super-next-btn:hover {
-    color: var(--third-color) !important;
+  color: var(--third-color) !important;
 }
 
 ::ng-deep .ant-picker-content thead th {
-    color: var(--secondary-color) !important;
+  color: var(--secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-cell {
-    color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-cell-in-view {
-    color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-cell-disabled {
-    color: rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
 }
 
 ::ng-deep .ant-picker-cell-disabled::before {
-    background: rgba(0, 0, 0, 0.2) !important;
+  background: rgba(0, 0, 0, 0.2) !important;
 }
 
-::ng-deep .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
-    background: rgba(255, 255, 255, 0.1) !important;
+::ng-deep
+  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 ::ng-deep .ant-picker-cell-selected .ant-picker-cell-inner {
-    background: var(--third-color) !important;
-    color: var(--text-secondary-color) !important;
+  background: var(--third-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-cell-today .ant-picker-cell-inner::before {
-    border-color: var(--third-color) !important;
+  border-color: var(--third-color) !important;
 }
 
 ::ng-deep .ant-picker-footer {
-    background: rgba(30, 30, 40, 0.95) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(30, 30, 40, 0.95) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 ::ng-deep .ant-picker-today-btn {
-    color: var(--third-color) !important;
+  color: var(--third-color) !important;
 }
 
 ::ng-deep .ant-picker-today-btn:hover {
-    color: var(--fifth-color) !important;
+  color: var(--fifth-color) !important;
 }
 
 ::ng-deep .ant-picker-year-panel .ant-picker-cell-inner,
 ::ng-deep .ant-picker-month-panel .ant-picker-cell-inner {
-    color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 ::ng-deep .ant-picker-year-panel .ant-picker-cell:hover .ant-picker-cell-inner,
-::ng-deep .ant-picker-month-panel .ant-picker-cell:hover .ant-picker-cell-inner {
-    background: rgba(255, 255, 255, 0.1) !important;
+::ng-deep
+  .ant-picker-month-panel
+  .ant-picker-cell:hover
+  .ant-picker-cell-inner {
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .login-button-google,
 ::ng-deep .login-form-button-google.ant-btn {
-    background: #fff !important;
-    color: #757575 !important;
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: #fff !important;
+  color: #757575 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 .login-button-google:hover,
 ::ng-deep .login-form-button-google.ant-btn:hover {
-    background: #f8f8f8 !important;
-    border-color: rgba(0, 0, 0, 0.2) !important;
-    transform: translateY(-2px);
+  background: #f8f8f8 !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 992px) {
-    .div-registration-page {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: var(--spacing-medium);
-        gap: var(--spacing-medium);
-    }
+  .div-registration-page {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-medium);
+    gap: var(--spacing-medium);
+  }
 
-    .div-left-panel,
-    .div-right-panel {
-        padding: var(--spacing-small);
-    }
+  .div-left-panel,
+  .div-right-panel {
+    padding: var(--spacing-small);
+  }
 
-    .card-inner-login {
-        max-width: 100%;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+  .card-inner-login {
+    max-width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {
-    .div-registration-page {
-        padding: var(--spacing-small);
-        gap: var(--spacing-small);
-    }
+  .div-registration-page {
+    padding: var(--spacing-small);
+    gap: var(--spacing-small);
+  }
 
-    .div-left-panel,
-    .div-right-panel {
-        padding: var(--spacing-small);
-        margin: 0;
-    }
+  .div-left-panel,
+  .div-right-panel {
+    padding: var(--spacing-small);
+    margin: 0;
+  }
 }
 
 @media (max-width: 576px) {
-    .div-registration-page {
-        padding: var(--spacing-small);
-        gap: var(--spacing-xsmall);
-    }
+  .div-registration-page {
+    padding: var(--spacing-small);
+    gap: var(--spacing-xsmall);
+  }
 
-    .div-left-panel,
-    .div-right-panel {
-        padding: 0;
-        margin: 0;
-    }
+  .div-left-panel,
+  .div-right-panel {
+    padding: 0;
+    margin: 0;
+  }
 }

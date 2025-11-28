@@ -8,9 +8,8 @@ describe('AddGroupFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddGroupFormComponent]
-    })
-    .compileComponents();
+      imports: [AddGroupFormComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AddGroupFormComponent);
     component = fixture.componentInstance;

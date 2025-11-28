@@ -1,141 +1,141 @@
 .invitation-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    padding: var(--spacing-large);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: var(--spacing-large);
 }
 
 .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
 }
 
 .invitation-card {
-    max-width: 600px;
-    width: 100%;
-    box-shadow: var(--box-shadow-lg);
-    border-radius: var(--border-radius-xl);
+  max-width: 600px;
+  width: 100%;
+  box-shadow: var(--box-shadow-lg);
+  border-radius: var(--border-radius-xl);
 }
 
 .invitation-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-large);
-    padding: var(--spacing-large);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-large);
+  padding: var(--spacing-large);
 }
 
 .invitation-icon {
-    font-size: 64px;
-    color: var(--third-color);
+  font-size: 64px;
+  color: var(--third-color);
 }
 
 .invitation-title {
-    margin: 0;
-    font-size: var(--font-size-xxlarge);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary-color);
-    text-align: center;
+  margin: 0;
+  font-size: var(--font-size-xxlarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary-color);
+  text-align: center;
 }
 
 .invitation-message {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-medium);
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  width: 100%;
 }
 
 .message-text {
-    text-align: center;
-    font-size: var(--font-size-medium);
-    color: var(--text-primary-color);
-    line-height: var(--line-height-base);
-    margin: 0;
+  text-align: center;
+  font-size: var(--font-size-medium);
+  color: var(--text-primary-color);
+  line-height: var(--line-height-base);
+  margin: 0;
 }
 
 .group-code-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-small);
-    padding: var(--spacing-medium);
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius-lg);
-    border: 2px dashed var(--border-color-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-small);
+  padding: var(--spacing-medium);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 2px dashed var(--border-color-base);
 }
 
 .code-label {
-    font-size: var(--font-size-small);
-    color: var(--border-color-dark);
-    text-transform: uppercase;
-    font-weight: var(--font-weight-medium);
-    letter-spacing: 0.5px;
+  font-size: var(--font-size-small);
+  color: var(--border-color-dark);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.5px;
 }
 
 .code-value {
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-bold);
-    color: var(--third-color);
-    font-family: monospace;
-    letter-spacing: 2px;
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-bold);
+  color: var(--third-color);
+  font-family: monospace;
+  letter-spacing: 2px;
 }
 
 .invitation-actions {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-medium);
-    width: 100%;
-    margin-top: var(--spacing-medium);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  width: 100%;
+  margin-top: var(--spacing-medium);
 }
 
 .accept-btn,
 .reject-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-small);
-    height: 48px;
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-small);
+  height: 48px;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-semibold);
 }
 
 ::ng-deep .ant-result-icon {
-    margin-bottom: var(--spacing-large);
+  margin-bottom: var(--spacing-large);
 }
 
 ::ng-deep .ant-result-title {
-    font-size: var(--font-size-xlarge);
-    font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xlarge);
+  font-weight: var(--font-weight-bold);
 }
 
 ::ng-deep .ant-result-subtitle {
-    font-size: var(--font-size-medium);
+  font-size: var(--font-size-medium);
 }
 
 ::ng-deep .ant-result-extra {
-    display: flex;
-    gap: var(--spacing-medium);
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  gap: var(--spacing-medium);
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 768px) {
-    .invitation-card {
-        margin: var(--spacing-medium);
-    }
+  .invitation-card {
+    margin: var(--spacing-medium);
+  }
 
-    .invitation-content {
-        padding: var(--spacing-medium);
-    }
+  .invitation-content {
+    padding: var(--spacing-medium);
+  }
 
-    .invitation-title {
-        font-size: var(--font-size-xlarge);
-    }
+  .invitation-title {
+    font-size: var(--font-size-xlarge);
+  }
 
-    .invitation-icon {
-        font-size: 48px;
-    }
+  .invitation-icon {
+    font-size: 48px;
+  }
 }

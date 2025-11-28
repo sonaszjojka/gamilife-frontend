@@ -8,9 +8,8 @@ describe('MembersListPeakComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MembersListPeakComponent]
-    })
-    .compileComponents();
+      imports: [MembersListPeakComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MembersListPeakComponent);
     component = fixture.componentInstance;

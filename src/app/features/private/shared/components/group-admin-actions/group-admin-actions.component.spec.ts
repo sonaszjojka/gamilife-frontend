@@ -8,9 +8,8 @@ describe('GroupAdminActionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupAdminActionsComponent]
-    })
-    .compileComponents();
+      imports: [GroupAdminActionsComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GroupAdminActionsComponent);
     component = fixture.componentInstance;

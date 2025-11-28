@@ -8,9 +8,8 @@ describe('RankingListPeakComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RankingListPeakComponent]
-    })
-    .compileComponents();
+      imports: [RankingListPeakComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RankingListPeakComponent);
     component = fixture.componentInstance;

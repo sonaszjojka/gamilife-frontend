@@ -1,102 +1,103 @@
 .list-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-medium) var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
-    border-bottom: 1px solid var(--border-color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-medium) var(--spacing-medium) var(--spacing-medium)
+    var(--spacing-medium);
+  border-bottom: 1px solid var(--border-color-light);
 }
 
 .header-title {
-    margin: 0;
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary-color);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-small);
+  margin: 0;
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
 }
 
 .member-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .member-info {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-medium);
 }
 
 .rank {
-    min-width: 24px;
-    text-align: center;
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-secondary-color);
-    font-size: var(--font-size-medium);
+  min-width: 24px;
+  text-align: center;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary-color);
+  font-size: var(--font-size-medium);
 }
 
 .rank.podium {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .username {
-    font-weight: var(--font-weight-medium);
-    color: var(--text-primary-color);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary-color);
 }
 
 .username.podium-name {
-    font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold);
 }
 
 .earned {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    color: var(--color-success);
-    font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-success);
+  font-weight: var(--font-weight-medium);
 }
 
 .icon {
-    font-size: var(--font-size-small);
+  font-size: var(--font-size-small);
 }
 
 .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-large) 0;
-    width: 100%;
-    color: var(--text-secondary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-large) 0;
+  width: 100%;
+  color: var(--text-secondary-color);
 }
 
 .empty-icon {
-    font-size: 48px;
-    margin-bottom: var(--spacing-small);
-    opacity: 0.4;
+  font-size: 48px;
+  margin-bottom: var(--spacing-small);
+  opacity: 0.4;
 }
 
 .empty-state p {
-    margin: 0;
-    font-size: var(--font-size-medium);
+  margin: 0;
+  font-size: var(--font-size-medium);
 }
 
 ::ng-deep .list-container .ant-list {
-    border: none;
+  border: none;
 }
 
 ::ng-deep .list-container .ant-list-item {
-    padding: var(--spacing-medium);
-    border-bottom: 1px solid var(--border-color-light);
+  padding: var(--spacing-medium);
+  border-bottom: 1px solid var(--border-color-light);
 }
 
 ::ng-deep .list-container .ant-list-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }

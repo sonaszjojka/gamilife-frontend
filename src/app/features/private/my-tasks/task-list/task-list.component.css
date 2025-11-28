@@ -1,21 +1,19 @@
-h3
-{
+h3 {
   text-align: center;
   color: var(--bg-primary);
 }
-h1{
+h1 {
   text-align: center;
   color: var(--bg-primary);
   display: flex;
   flex-direction: column;
-
 }
 
 .task-panel {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: url('/background_guest_page.png') center center / cover no-repeat;
+  background: url("/background_guest_page.png") center center / cover no-repeat;
 }
 h1 {
   text-align: center;
@@ -45,12 +43,10 @@ h1 {
   margin-bottom: 2rem;
 }
 
-.h2
-{
+.h2 {
   text-align: center;
   margin-bottom: 1rem;
   font-size: 2rem;
-
 }
 .filter-panel {
   width: 20%;
@@ -60,9 +56,8 @@ app-task-form {
   flex-shrink: 0;
 }
 
-
-button{
-border-radius: 10px;
+button {
+  border-radius: 10px;
 }
 
 app-task-form {
@@ -83,4 +78,3 @@ app-task-form {
     flex-direction: column;
   }
 }
-

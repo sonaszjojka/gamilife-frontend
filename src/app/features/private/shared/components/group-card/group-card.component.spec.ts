@@ -8,9 +8,8 @@ describe('GroupCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupCardComponent]
-    })
-    .compileComponents();
+      imports: [GroupCardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GroupCardComponent);
     component = fixture.componentInstance;

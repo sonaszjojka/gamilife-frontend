@@ -8,9 +8,8 @@ describe('GroupTypeTagComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupTypeTagComponent]
-    })
-    .compileComponents();
+      imports: [GroupTypeTagComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GroupTypeTagComponent);
     component = fixture.componentInstance;

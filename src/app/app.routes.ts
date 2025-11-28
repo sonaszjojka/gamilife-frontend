@@ -14,7 +14,7 @@ import { ResetPasswordComponent } from './features/public/reset-password/compone
 import { CommunityPageComponent } from './features/private/community/components/community-page/community-page.component';
 import { PreviewGroupComponent } from './features/private/shared/components/preview-group/preview-group.component';
 import { MyGroupsPageComponent } from './features/private/my-groups/components/my-groups-page/my-groups-page.component';
-import {PomodoroSessionComponent} from './features/private/my-tasks/pomodoro-session/pomodoro-session.component';
+import { PomodoroSessionComponent } from './features/private/my-tasks/pomodoro-session/pomodoro-session.component';
 import { GroupMembersPageComponent } from './features/private/group-members-page/components/group-members-page/group-members-page.component';
 import { GroupInvitationResponseComponent } from './features/private/my-groups/components/group-invitation-response/group-invitation-response.component';
 import { GroupRequestsPageComponent } from './features/private/group-requests-page/components/group-requests-page/group-requests-page.component';
@@ -65,7 +65,7 @@ export const routes: Routes = [
       { path: 'community', component: CommunityPageComponent },
       { path: 'groups/:groupId', component: PreviewGroupComponent },
       { path: 'my-groups', component: MyGroupsPageComponent },
-      { path: 'tasks/pomodoro-session',component:PomodoroSessionComponent},
+      { path: 'tasks/pomodoro-session', component: PomodoroSessionComponent },
       {
         path: 'groups/:groupId/members',
         component: GroupMembersPageComponent,
