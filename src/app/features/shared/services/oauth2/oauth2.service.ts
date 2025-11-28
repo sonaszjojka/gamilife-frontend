@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../shared/services/auth/auth.service';
 
 export interface OAuthCodeRequest {
@@ -22,6 +22,7 @@ export interface AfterLoginResponse {
   email: string;
   username: string;
   isEmailVerified: boolean;
+  isTutorialCompleted: boolean;
 }
 
 export interface OAuth2LinkResponse {
@@ -92,21 +93,48 @@ export class OAuth2Service {
       codeVerifier,
     };
 
-    return this.http.post<AfterLoginResponse | OAuth2LinkResponse>(
-      `${this.apiUrl}/code/google`,
-      request,
-      { withCredentials: true },
-    );
+    return this.http
+      .post<
+        AfterLoginResponse | OAuth2LinkResponse
+      >(`${this.apiUrl}/code/google`, request, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          if ('isTutorialCompleted' in response) {
+            this.authService.userId.set(response.userId);
+            this.authService.username.set(response.username);
+            this.authService.loggedIn.set(true);
+            localStorage.setItem(
+              'isTutorialCompleted',
+              String(response.isTutorialCompleted),
+            );
+            localStorage.setItem('userId', response.userId);
+          }
+        }),
+      );
   }
 
   linkOAuthAccount(
     linkRequest: LinkOAuthAccountRequest,
   ): Observable<AfterLoginResponse> {
-    return this.http.post<AfterLoginResponse>(
-      `${this.apiUrl}/link`,
-      linkRequest,
-      { withCredentials: true },
-    );
+    return this.http
+      .post<AfterLoginResponse>(`${this.apiUrl}/link`, linkRequest, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((response) => {
+          this.authService.userId.set(response.userId);
+          this.authService.username.set(response.username);
+          this.authService.loggedIn.set(true);
+          this.authService.isTutorialCompleted.set(
+            response.isTutorialCompleted,
+          );
+          localStorage.setItem('userId', response.userId);
+          localStorage.setItem(
+            'isTutorialCompleted',
+            String(response.isTutorialCompleted),
+          );
+        }),
+      );
   }
 
   clearOAuthData(): void {

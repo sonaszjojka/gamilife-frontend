@@ -31,28 +31,5 @@
       <li nz-menu-item routerLink="/app/tasks">Tasks</li>
     </ul>
   }
-  <a nz-dropdown [nzDropdownMenu]="menu" [nzClickHide]="true" class="user-menu">
-    <span class="user-menu-text">
-      {{ isLoggedIn() ? "Account" : "Sign in" }}
-    </span>
-    <nz-icon nzType="user" nzTheme="outline"></nz-icon>
-    <nz-icon nzType="down"></nz-icon>
-  </a>
-
-  <nz-dropdown-menu #menu="nzDropdownMenu" class="navbar-dropdown-menu">
-    <ul nz-menu class="navbar-dropdown-ul">
-      @if (!isLoggedIn()) {
-        <li nz-menu-item routerLink="/login" class="navbar-dropdown-item">
-          Login
-        </li>
-        <li nz-menu-item routerLink="/register" class="navbar-dropdown-item">
-          Register
-        </li>
-      } @else {
-        <li nz-menu-item class="navbar-dropdown-item">
-          <button nz-button (click)="logout()">Logout</button>
-        </li>
-      }
-    </ul>
-  </nz-dropdown-menu>
+  <app-user-account-button></app-user-account-button>
 </nav>

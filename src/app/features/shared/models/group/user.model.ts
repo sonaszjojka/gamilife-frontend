@@ -13,3 +13,17 @@ export interface UserFilterParams {
 export interface CreateGroupInvitationDto {
   userId: string;
 }
+export interface UserDetails {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  dateOfBirth: string;
+  experience: number;
+  money: number;
+  sendBudgetReports: boolean;
+  isProfilePublic: boolean;
+  isEmailVerified: boolean;
+  isTutorialCompleted: boolean;
+}
