@@ -13,15 +13,6 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './shared/auth.interceptor';
-import { provideNzIcons } from 'ng-zorro-antd/icon';
-import {
-  LockOutline,
-  InboxOutline,
-  TeamOutline,
-  GithubOutline,
-  LinkedinOutline,
-  InstagramOutline,
-} from '@ant-design/icons-angular/icons';
 
 registerLocaleData(en);
 
@@ -33,14 +24,5 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideNzIcons([
-      // not sure, whether it is a good practice
-      LockOutline,
-      InboxOutline,
-      TeamOutline,
-      GithubOutline,
-      LinkedinOutline,
-      InstagramOutline,
-    ]),
   ],
 };
