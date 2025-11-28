@@ -21,6 +21,7 @@ export class GroupRequestApiService {
     return this.http.post<CreateGroupRequestResult>(
       `${this.apiUrl}/groups/${groupId}/requests`,
       {},
+      { withCredentials: true },
     );
   }
 
@@ -42,7 +43,10 @@ export class GroupRequestApiService {
 
     return this.http.get<GetGroupRequestsResult>(
       `${this.apiUrl}/groups/${groupId}/requests`,
-      { params: httpParams },
+      {
+        params: httpParams,
+        withCredentials: true,
+      },
     );
   }
 
@@ -66,6 +70,7 @@ export class GroupRequestApiService {
     return this.http.put<EditGroupRequestStatusResult>(
       `${this.apiUrl}/groups/${groupId}/requests/${groupRequestId}/status`,
       request,
+      { withCredentials: true },
     );
   }
 

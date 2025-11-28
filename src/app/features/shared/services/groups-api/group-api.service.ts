@@ -21,6 +21,7 @@ export class GroupApiService {
   getGroups(params: GroupFilterParams): Observable<GetGroupsResult> {
     return this.http.get<GetGroupsResult>(`${this.apiUrl}/groups`, {
       params: this.buildHttpParamsForGetGroups(params),
+      withCredentials: true,
     });
   }
 
@@ -33,6 +34,7 @@ export class GroupApiService {
       `${this.apiUrl}/users/${userId}/groups`,
       {
         params: this.buildHttpParamsForGetGroups(params),
+        withCredentials: true,
       },
     );
   }
@@ -64,22 +66,33 @@ export class GroupApiService {
       String(isForLoggedUser),
     );
 
-    return this.http.get<Group>(`${this.apiUrl}/groups/${groupId}`, { params });
+    return this.http.get<Group>(`${this.apiUrl}/groups/${groupId}`, {
+      params,
+      withCredentials: true,
+    });
   }
 
   getGroupTypes(): Observable<GroupType[]> {
-    return this.http.get<GroupType[]>(`${this.apiUrl}/group-types`);
+    return this.http.get<GroupType[]>(`${this.apiUrl}/group-types`, {
+      withCredentials: true,
+    });
   }
 
   createGroup(formValue: CreateGroupDto): Observable<unknown> {
-    return this.http.post(`${this.apiUrl}/groups`, formValue);
+    return this.http.post(`${this.apiUrl}/groups`, formValue, {
+      withCredentials: true,
+    });
   }
 
   editGroup(groupId: string, data: EditGroupDto): Observable<unknown> {
-    return this.http.put(`${this.apiUrl}/groups/${groupId}`, data);
+    return this.http.put(`${this.apiUrl}/groups/${groupId}`, data, {
+      withCredentials: true,
+    });
   }
 
   deleteGroup(groupId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/groups/${groupId}`);
+    return this.http.delete<void>(`${this.apiUrl}/groups/${groupId}`, {
+      withCredentials: true,
+    });
   }
 }

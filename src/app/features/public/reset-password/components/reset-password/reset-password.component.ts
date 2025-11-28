@@ -98,10 +98,14 @@ export class ResetPasswordComponent implements OnInit {
     const code = this.code;
 
     this.http
-      .post(`${environment.apiUrl}/auth/reset-password`, {
-        code,
-        newPassword,
-      })
+      .post(
+        `${environment.apiUrl}/auth/reset-password`,
+        {
+          code,
+          newPassword,
+        },
+        { withCredentials: true },
+      )
       .subscribe({
         next: () => {
           this.status.set('success');
