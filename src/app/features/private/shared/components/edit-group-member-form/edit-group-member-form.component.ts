@@ -8,9 +8,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
-import { EditGroupMemberDto } from '../../../../shared/models/group-member.model';
+import { EditGroupMemberDto } from '../../../../shared/models/group/group-member.model';
 import { take } from 'rxjs/operators';
 
 @Component({

@@ -21,14 +21,11 @@
   padding: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.delete-button
-{
+
+.delete-button {
   color: var(--fifth-color);
 }
 
-.delete-button:hover
-{
+.delete-button:hover {
   border-color: var(--fifth-color);
 }
-
-

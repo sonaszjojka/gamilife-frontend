@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
-import { UserFilterParams } from '../../models/user.model';
-import { User } from '../../models/user.model';
+import { UserFilterParams } from '../../models/group/user.model';
+import { User } from '../../models/group/user.model';
 
 export interface PagedResponse<T> {
   content: T[];

@@ -7,8 +7,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
-import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
-import { Group } from '../../../../shared/models/group.model';
+import { GroupFilterParams } from '../../../../shared/models/group/group-filter-params.model';
+import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { AddGroupFormComponent } from '../add-group-form/add-group-form.component';
 

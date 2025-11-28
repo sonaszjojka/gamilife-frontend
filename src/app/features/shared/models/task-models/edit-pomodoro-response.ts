@@ -1,6 +1,5 @@
-export interface EditPomodoroResponse
-{
-  workCyclesNeeded:number;
-  workCyclesCompleted:number;
-  createdAt:string;
+export interface EditPomodoroResponse {
+  workCyclesNeeded: number;
+  workCyclesCompleted: number;
+  createdAt: string;
 }

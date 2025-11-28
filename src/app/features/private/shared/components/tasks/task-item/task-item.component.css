@@ -1,4 +1,3 @@
-
 nz-card {
   margin-bottom: 16px;
   background-color: var(--third-color);
@@ -7,7 +6,7 @@ nz-card {
   width: 100%;
 }
 
-nz-card:hover{
+nz-card:hover {
   background-color: var(--fifth-color);
   transform: scale(1.020);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -36,5 +35,3 @@ nz-card:hover{
   top: 50%;
   transform: translateY(-50%);
 }
-
-

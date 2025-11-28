@@ -11,7 +11,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { GroupMember } from '../../../../shared/models/group-member.model';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberFormComponent } from '../edit-group-member-form/edit-group-member-form.component';
 import { take } from 'rxjs/operators';

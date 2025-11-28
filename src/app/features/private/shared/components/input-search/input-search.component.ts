@@ -14,8 +14,8 @@ import { CommonModule } from '@angular/common';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { HttpClient } from '@angular/common/http';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { GroupFilterParams } from '../../../../shared/models/group-filter-params.model';
-import { GroupType } from '../../../../shared/models/group-type.model';
+import { GroupFilterParams } from '../../../../shared/models/group/group-filter-params.model';
+import { GroupType } from '../../../../shared/models/group/group-type.model';
 
 @Component({
   selector: 'app-input-search',

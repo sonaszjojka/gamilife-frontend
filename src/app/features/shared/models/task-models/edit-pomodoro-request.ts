@@ -1,6 +1,4 @@
-export interface EditPomodoroRequest
-{
-  workCyclesNeeded?:number|null;
-  workCyclesCompleted?:number|null;
-
+export interface EditPomodoroRequest {
+  workCyclesNeeded?: number | null;
+  workCyclesCompleted?: number | null;
 }

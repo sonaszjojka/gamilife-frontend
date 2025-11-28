@@ -10,7 +10,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs';
-import { User } from '../../../../shared/models/user.model';
+import { User } from '../../../../shared/models/group/user.model';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
 

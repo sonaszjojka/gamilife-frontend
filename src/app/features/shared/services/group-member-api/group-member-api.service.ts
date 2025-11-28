@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import {
   CreateGroupMemberInOpenGroupResult,
   EditGroupMemberDto,
-} from '../../models/group-member.model';
+} from '../../models/group/group-member.model';
 
 @Injectable({
   providedIn: 'root',

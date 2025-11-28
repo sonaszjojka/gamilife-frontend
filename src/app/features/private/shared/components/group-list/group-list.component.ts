@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { GroupCardComponent } from '../group-card/group-card.component';
 import { CommonModule } from '@angular/common';
-import { Group } from '../../../../shared/models/group.model';
+import { Group } from '../../../../shared/models/group/group.model';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 @Component({
   selector: 'app-group-list',

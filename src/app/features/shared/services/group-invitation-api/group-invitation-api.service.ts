@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
-import { CreateGroupInvitationDto } from '../../models/user.model';
-import { EditGroupInvitationStatusDto } from '../../models/group-invitation.model';
+import { CreateGroupInvitationDto } from '../../models/group/user.model';
+import { EditGroupInvitationStatusDto } from '../../models/group/group-invitation.model';
 
 @Injectable({
   providedIn: 'root',

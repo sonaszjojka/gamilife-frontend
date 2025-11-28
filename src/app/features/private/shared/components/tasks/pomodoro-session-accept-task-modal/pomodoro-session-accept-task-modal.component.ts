@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -9,17 +9,20 @@ import { Task } from '../../../../../shared/models/task-models/task.model';
   imports: [NzButtonModule, NzModalModule],
   standalone: true,
   template: `
-
-    <nz-modal [(nzVisible)]="isVisible" nzTitle="Do You Wish To End This Task?" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-      <ng-container *nzModalContent>
-      </ng-container>
+    <nz-modal
+      [(nzVisible)]="isVisible"
+      nzTitle="Do You Wish To End This Task?"
+      (nzOnCancel)="handleCancel()"
+      (nzOnOk)="handleOk()"
+    >
+      <ng-container *nzModalContent> </ng-container>
     </nz-modal>
-  `
+  `,
 })
 export class PomodoroSessionAcceptTaskModalComponent {
-  @Input() task!:Task
-  @Output() removeFromPanel= new EventEmitter<Task>;
-  @Output() removeFromSession= new EventEmitter<Task>;
+  @Input() task!: Task;
+  @Output() removeFromPanel = new EventEmitter<Task>();
+  @Output() removeFromSession = new EventEmitter<Task>();
 
   isVisible = false;
 
@@ -29,13 +32,11 @@ export class PomodoroSessionAcceptTaskModalComponent {
 
   handleOk(): void {
     this.removeFromPanel.emit(this.task);
-    this.isVisible=false;
+    this.isVisible = false;
   }
 
   handleCancel(): void {
-
     this.isVisible = false;
     this.removeFromSession.emit(this.task);
   }
-
 }

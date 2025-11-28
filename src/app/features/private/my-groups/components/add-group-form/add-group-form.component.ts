@@ -10,7 +10,7 @@ import {
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
-import { GroupType } from '../../../../shared/models/group-type.model';
+import { GroupType } from '../../../../shared/models/group/group-type.model';
 
 @Component({
   selector: 'app-add-group-form',

@@ -1,8 +1,7 @@
-export interface HabitModel
-{
-  habitId: string,
-  cycleLength: string
-  currentStreak:number
-  longestStreak:number
-  acceptedDate:string|null
+export interface HabitModel {
+  habitId: string;
+  cycleLength: string;
+  currentStreak: number;
+  longestStreak: number;
+  acceptedDate: string | null;
 }

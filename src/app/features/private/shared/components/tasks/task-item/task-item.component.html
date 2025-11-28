@@ -3,15 +3,21 @@
     <div class="title-container">
       <span class="title-text">{{ task.title }}</span>
 
-      @if (task.pomodoro?.pomodoroId != null) {
-        <pomodoro-task-progress
+      @if (task.pomodoro?.pomodoroId !== null) {
+        <app-pomodoro-task-progress
           class="progress-absolute"
           [workCyclesNeeded]="task.pomodoro?.workCyclesNeeded"
-          [workCyclesCompleted]="task.pomodoro?.workCyclesCompleted">
-        </pomodoro-task-progress>
+          [workCyclesCompleted]="task.pomodoro?.workCyclesCompleted"
+        >
+        </app-pomodoro-task-progress>
       } @else {
-        @if (task.taskHabit?.habitId != null && task.completedAt == null) {
-          <button nz-button nzShape="round" class="habit-button" (click)="completeHabit()">
+        @if (task.taskHabit?.habitId !== null && task.completedAt === null) {
+          <button
+            nz-button
+            nzShape="round"
+            class="habit-button"
+            (click)="completeHabit()"
+          >
             Finish Habit
           </button>
         }
@@ -20,7 +26,7 @@
   </ng-template>
 
   <div class="upper-part">
-    @if (task.completedAt == null) {
+    @if (task.completedAt === null) {
       @if (!inPomodoroList()) {
         <button nz-button nzShape="circle" (click)="onTaskEdit()">
           <nz-icon nzType="setting" nzTheme="outline" />
@@ -32,13 +38,17 @@
   <p *ngIf="task.description">{{ task.description }}</p>
 
   <div class="task-tags">
-    <p><span>{{ task.categoryName }}</span></p>
-    <p><span>{{ task.difficultyName }}</span></p>
+    <p>
+      <span>{{ task.categoryName }}</span>
+    </p>
+    <p>
+      <span>{{ task.difficultyName }}</span>
+    </p>
 
-    @if (task.taskHabit != null) {
+    @if (task.taskHabit !== null) {
       <p>
-        <span>Longest Streak {{ task.taskHabit.currentStreak }}</span> -
-        Current Streak <span>{{ task.taskHabit.longestStreak }}</span>
+        <span>Longest Streak {{ task.taskHabit.currentStreak }}</span> - Current
+        Streak <span>{{ task.taskHabit.longestStreak }}</span>
       </p>
     }
   </div>
@@ -48,13 +58,13 @@
     <span> | </span>
     <span>Finish - {{ task.endTime | date }}</span>
 
-    @if (task.completedAt != null) {
+    @if (task.completedAt !== null) {
       <div>(Finished At) - {{ task.completedAt | date }}</div>
     }
   </div>
 
   @if (!isInactive() && !inPomodoroList()) {
-    @if (task.taskHabit != null && task.completedAt == null) {
+    @if (task.taskHabit !== null && task.completedAt === null) {
       <button nz-button nzShape="circle" (click)="completeHabitCycle()">
         <nz-icon nzType="check-circle" nzTheme="outline" />
       </button>
@@ -64,18 +74,28 @@
       </button>
     }
   } @else {
-    @if (inPomodoroList() && task.pomodoro?.pomodoroId == null) {
+    @if (inPomodoroList() && task.pomodoro?.pomodoroId === null) {
       <button nz-button nzShape="circle" (click)="addTaskToPomodoroSession()">
         <nz-icon nzType="arrow-right" nzTheme="outline" />
       </button>
     } @else {
-      @if (inPomodoroList() && task.pomodoro?.pomodoroId != null && !isInSession()) {
+      @if (
+        inPomodoroList() && task.pomodoro?.pomodoroId !== null && !isInSession()
+      ) {
         <button nz-button nzShape="circle" (click)="addTaskToPomodoroSession()">
           <nz-icon nzType="arrow-left" nzTheme="outline" />
         </button>
       } @else {
-        @if (inPomodoroList() && task.pomodoro?.pomodoroId != null && isInSession()) {
-          <button nz-button nzShape="circle" (click)="removeTaskFromPomodoroSession()">
+        @if (
+          inPomodoroList() &&
+          task.pomodoro?.pomodoroId !== null &&
+          isInSession()
+        ) {
+          <button
+            nz-button
+            nzShape="circle"
+            (click)="removeTaskFromPomodoroSession()"
+          >
             <nz-icon nzType="delete" nzTheme="outline" />
           </button>
         }
