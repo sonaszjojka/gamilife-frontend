@@ -1,0 +1,55 @@
+<nz-modal
+  [nzVisible]="isVisible()"
+  nzTitle="Verify your email"
+  [nzFooter]="footerTpl"
+  (nzOnCancel)="close()"
+  nzCentered
+  [nzWidth]="500"
+>
+  <ng-container *nzModalContent>
+    <div class="modal-content">
+      <div class="email-info">
+        <nz-icon nzType="mail" nzTheme="outline" class="email-icon"></nz-icon>
+        <p class="email-text">
+          Your email address <strong>{{ email() }}</strong> has not been
+          verified yet. Please check your inbox for the verification link.
+        </p>
+      </div>
+
+      <div *ngIf="resending()" class="status-message resending-msg">
+        <nz-icon nzType="loading" nzTheme="outline"></nz-icon>
+        <span>Resending verification link...</span>
+      </div>
+
+      <div *ngIf="resentSuccessfully()" class="status-message success-msg">
+        <nz-icon nzType="check-circle" nzTheme="fill"></nz-icon>
+        <span>Verification link has been resent successfully!</span>
+      </div>
+
+      <div
+        *ngIf="resentFailure() && !resending()"
+        class="status-message failure-msg"
+      >
+        <nz-icon nzType="close-circle" nzTheme="outline" />
+        <span>Something went wrong! Try to verify later.</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #footerTpl>
+    <button nz-button (click)="close()" class="modal-button">
+      <nz-icon nzType="close" nzTheme="outline"></nz-icon>
+      <span>Close</span>
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="resendVerification()"
+      [disabled]="resending()"
+      class="modal-button modal-button-primary"
+    >
+      <nz-icon nzType="mail" nzTheme="outline" />
+      <span>Resend</span>
+    </button>
+  </ng-template>
+</nz-modal>

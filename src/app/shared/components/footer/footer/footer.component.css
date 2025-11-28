@@ -1,0 +1,100 @@
+.app-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--main-color);
+  color: var(--text-secondary-color);
+  font-family: var(--main-font);
+  font-size: var(--font-size-medium);
+}
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px var(--spacing-medium);
+  flex-wrap: wrap;
+}
+
+.footer-logo img {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-link {
+  color: var(--text-secondary-color);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-bottom: 2px solid transparent;
+  transition:
+    color var(--transition-speed),
+    border-bottom-color var(--transition-speed);
+}
+
+.footer-link:hover {
+  color: var(--fifth-color);
+}
+
+.footer-divider {
+  border: none;
+  border-top: 1px solid var(--text-secondary-color);
+  margin: 0;
+}
+
+.footer-bottom {
+  justify-content: space-between;
+  padding: 10px var(--spacing-medium);
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-social a nz-icon {
+  font-size: 24px;
+  color: var(--text-secondary-color);
+  transition: color var(--transition-speed);
+}
+
+.footer-social a:hover nz-icon {
+  color: var(--fifth-color);
+}
+
+.footer-text {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .footer-logo img {
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  .footer-nav {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+}

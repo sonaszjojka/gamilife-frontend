@@ -1,0 +1,91 @@
+<nz-modal
+  [nzVisible]="isVisible()"
+  nzTitle="Link Your Account"
+  [nzFooter]="footerTpl"
+  (nzOnCancel)="close()"
+  nzCentered
+  [nzWidth]="500"
+  [nzMaskClosable]="false"
+>
+  <ng-container *nzModalContent>
+    <div class="modal-content">
+      <div class="info-box">
+        <nz-icon nzType="link" nzTheme="outline" class="info-icon"></nz-icon>
+        <p class="info-text">
+          An account with this email already exists. Enter your password to link
+          your {{ getProviderDisplayName() }} account.
+        </p>
+      </div>
+
+      <form nz-form [formGroup]="validateForm" *ngIf="!linkingSuccess()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please enter your password">
+            <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
+              <input
+                [type]="isPasswordVisible() ? 'text' : 'password'"
+                nz-input
+                formControlName="password"
+                placeholder="Enter your password"
+              />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <button
+                type="button"
+                nz-button
+                nzType="text"
+                class="password-toggle-btn"
+                [attr.aria-label]="
+                  isPasswordVisible() ? 'Hide password' : 'Show password'
+                "
+                (click)="changePasswordVisibility()"
+              >
+                <span
+                  nz-icon
+                  [nzType]="isPasswordVisible() ? 'eye-invisible' : 'eye'"
+                ></span>
+              </button>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+      <div *ngIf="linking()" class="status-message sending-msg">
+        <nz-icon nzType="loading" nzTheme="outline"></nz-icon>
+        <span>Linking accounts...</span>
+      </div>
+
+      <div *ngIf="linkingSuccess()" class="status-message success-msg">
+        <nz-icon nzType="check-circle" nzTheme="fill"></nz-icon>
+        <span>Accounts linked successfully!</span>
+      </div>
+
+      <div *ngIf="errorMessage()" class="status-message error-msg">
+        <nz-icon nzType="close-circle" nzTheme="fill"></nz-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #footerTpl>
+    <button
+      nz-button
+      (click)="skipLinking()"
+      [disabled]="linking()"
+      class="modal-button"
+    >
+      <nz-icon nzType="close" nzTheme="outline"></nz-icon>
+      <span>Skip</span>
+    </button>
+    <button
+      *ngIf="!linkingSuccess()"
+      nz-button
+      nzType="primary"
+      (click)="linkAccount()"
+      [disabled]="linking()"
+      class="modal-button modal-button-primary"
+    >
+      <nz-icon nzType="link" nzTheme="outline"></nz-icon>
+      <span>Link Account</span>
+    </button>
+  </ng-template>
+</nz-modal>

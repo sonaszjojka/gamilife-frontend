@@ -57,3 +57,23 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Team Information About Frontend Application
+
+### Architecture
+
+**Division by Feature**
+
+Init project structure in `src/app`. It might change depending on our needs.
+
+![alt text](./public/project-structure-ss.png)
+
+### External Material Libraries
+
+Added external material libraries:
+
+- [NG-ZORRO](https://ng.ant.design/docs/introduce/en)
+
+### Normalize.css
+
+[Normalize.css](https://necolas.github.io/normalize.css/) was also added to project - it will help render all elements more consistently and in line with modern standards.

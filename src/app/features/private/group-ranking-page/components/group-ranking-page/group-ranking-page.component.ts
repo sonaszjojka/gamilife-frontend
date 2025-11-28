@@ -1,0 +1,74 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { take } from 'rxjs/operators';
+
+import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
+import { FullRankingComponent } from '../full-ranking/full-ranking.component';
+
+@Component({
+  selector: 'app-group-ranking-page',
+  standalone: true,
+  imports: [
+    CommonModule,
+    NzSpinModule,
+    NzCardModule,
+    NzButtonModule,
+    NzIconModule,
+    FullRankingComponent,
+  ],
+  templateUrl: './group-ranking-page.component.html',
+  styleUrl: './group-ranking-page.component.css',
+})
+export class GroupRankingPageComponent implements OnInit {
+  protected members = signal<GroupMember[]>([]);
+  protected loading = signal<boolean>(true);
+  protected groupName = signal<string | undefined>(undefined);
+
+  private readonly groupApi = inject(GroupApiService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
+  ngOnInit(): void {
+    const groupId = this.route.snapshot.paramMap.get('groupId');
+    if (!groupId) {
+      this.router.navigate(['/app/groups']);
+      return;
+    }
+
+    this.loadGroupData(groupId);
+  }
+
+  private loadGroupData(groupId: string): void {
+    this.loading.set(true);
+
+    this.groupApi
+      .getGroupById(groupId, true)
+      .pipe(take(1))
+      .subscribe({
+        next: (group) => {
+          this.groupName.set(group.groupName);
+          this.members.set(group.membersSortedDescByTotalEarnedMoney);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading group data:', err);
+          this.loading.set(false);
+        },
+      });
+  }
+
+  protected goBack(): void {
+    const groupId = this.route.snapshot.paramMap.get('groupId');
+    if (groupId) {
+      this.router.navigate([`/app/groups/${groupId}`]);
+    } else {
+      this.router.navigate(['/app/groups']);
+    }
+  }
+}

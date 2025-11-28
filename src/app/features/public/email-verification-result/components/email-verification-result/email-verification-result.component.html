@@ -1,0 +1,21 @@
+<nz-result
+  *ngIf="status === 'success'"
+  nzStatus="success"
+  nzTitle="Email Verification Successful!"
+  nzSubTitle="Email has been verified. You can now login to your account."
+>
+  <div nz-result-extra>
+    <button nz-button routerLink="/login">Login</button>
+  </div>
+</nz-result>
+
+<nz-result
+  *ngIf="status === 'error'"
+  nzTitle="Email Verification Failed!"
+  nzStatus="error"
+  nzSubTitle="Please try again."
+>
+</nz-result>
+<div *ngIf="status === 'loading'">
+  <nz-spin nzTip="Processing e-mail verification..."></nz-spin>
+</div>

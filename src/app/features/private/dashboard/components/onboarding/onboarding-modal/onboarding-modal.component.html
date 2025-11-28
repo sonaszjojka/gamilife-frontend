@@ -1,0 +1,59 @@
+<nz-modal
+  [(nzVisible)]="visible"
+  [nzClosable]="false"
+  [nzMaskClosable]="false"
+  [nzFooter]="null"
+  [nzWidth]="700"
+  nzCentered
+>
+  <div *nzModalContent>
+    <nz-spin [nzSpinning]="isLoading">
+      <div class="onboarding-container">
+        <nz-carousel
+          #carousel
+          [nzEffect]="'scrollx'"
+          [nzDots]="false"
+          [nzEnableSwipe]="false"
+          (nzAfterChange)="onSlideChange($event)"
+        >
+          <div nz-carousel-content *ngFor="let slide of slides">
+            <div class="slide-content">
+              <div class="slide-icon">{{ slide.icon }}</div>
+              <div class="slide-text">
+                <h2 class="slide-title">{{ slide.title }}</h2>
+                <p class="slide-description">{{ slide.description }}</p>
+              </div>
+            </div>
+          </div>
+        </nz-carousel>
+
+        <div class="dots-indicator">
+          <span
+            *ngFor="let slide of slides; let i = index"
+            class="dot"
+            [class.active]="i === currentSlide"
+          ></span>
+        </div>
+
+        <div class="onboarding-actions">
+          <button
+            nz-button
+            nzType="default"
+            (click)="prevSlide()"
+            [disabled]="isFirstSlide || isLoading"
+          >
+            Back
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            (click)="handleButtonClick()"
+            [nzLoading]="isLoading"
+          >
+            {{ isLastSlide ? "Get Started" : "Next" }}
+          </button>
+        </div>
+      </div>
+    </nz-spin>
+  </div>
+</nz-modal>

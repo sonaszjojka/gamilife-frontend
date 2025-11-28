@@ -1,0 +1,33 @@
+.admin-badge {
+  margin-left: var(--spacing-small);
+  color: var(--color-warning);
+  font-size: var(--font-size-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.money-value {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary-color);
+}
+
+.money-value.earned {
+  color: var(--color-success);
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-large) 0;
+}
+
+::ng-deep .ant-table {
+  font-family: var(--main-font);
+}
+
+::ng-deep .ant-table-thead > tr > th {
+  font-weight: var(--font-weight-semibold);
+  background: var(--bg-secondary);
+}

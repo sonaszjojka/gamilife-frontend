@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="logo">
+    <img src="/logo_gl.png" alt="GamiLife Logo" />
+  </div>
+
+  @if (!isLoggedIn()) {
+    <ul nz-menu nzMode="horizontal" class="nav-menu" [nzSelectable]="false">
+      <li nz-menu-item routerLink="/">Home</li>
+      <li nz-menu-item routerLink="/about">About us</li>
+    </ul>
+    <nz-switch
+      class="nav-switch-mode"
+      [ngModel]="isDarkTheme()"
+      (click)="toggleTheme()"
+      [nzCheckedChildren]="checkedTemplate"
+      [nzUnCheckedChildren]="unCheckedTemplate"
+      nzControl
+    >
+    </nz-switch>
+    <ng-template #checkedTemplate
+      ><nz-icon nzType="moon" nzTheme="outline"
+    /></ng-template>
+    <ng-template #unCheckedTemplate
+      ><nz-icon nzType="sun" nzTheme="outline"
+    /></ng-template>
+  } @else {
+    <ul nz-menu nzMode="horizontal" class="nav-menu" [nzSelectable]="false">
+      <li nz-menu-item routerLink="/app/dashboard">Home</li>
+      <li nz-menu-item routerLink="/app/my-groups">My Groups</li>
+      <li nz-menu-item routerLink="/app/community">Community</li>
+      <li nz-menu-item routerLink="/app/tasks">Tasks</li>
+    </ul>
+  }
+  <app-user-account-button></app-user-account-button>
+</nav>

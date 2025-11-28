@@ -1,0 +1,27 @@
+.oauth-callback-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("/background_guest_page.png") center center / cover no-repeat;
+}
+
+.callback-content {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: rgba(30, 30, 40, 0.9);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.callback-content h2 {
+  color: var(--text-secondary-color);
+  font-size: var(--font-size-xlarge);
+  margin-bottom: var(--spacing-medium);
+}
+
+.error-message {
+  color: #f44336;
+  margin-top: var(--spacing-medium);
+}

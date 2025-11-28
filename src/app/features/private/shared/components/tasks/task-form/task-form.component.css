@@ -1,0 +1,30 @@
+.task-form {
+  flex: 0 0 250px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+  max-height: calc(100vh - 40px);
+}
+
+.button-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.delete-button {
+  color: var(--fifth-color);
+}
+
+.delete-button:hover {
+  border-color: var(--fifth-color);
+}
