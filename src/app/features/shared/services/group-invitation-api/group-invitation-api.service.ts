@@ -16,7 +16,11 @@ export class GroupInvitationApiService {
     groupId: string,
     data: CreateGroupInvitationDto,
   ): Observable<unknown> {
-    return this.http.post(`${this.apiUrl}/groups/${groupId}/invitations`, data);
+    return this.http.post(
+      `${this.apiUrl}/groups/${groupId}/invitations`,
+      data,
+      { withCredentials: true },
+    );
   }
 
   updateInvitationStatus(
@@ -27,6 +31,7 @@ export class GroupInvitationApiService {
     return this.http.put(
       `${this.apiUrl}/groups/${groupId}/invitations/${invitationId}/status`,
       data,
+      { withCredentials: true },
     );
   }
 }

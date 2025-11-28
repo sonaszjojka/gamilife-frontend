@@ -18,7 +18,10 @@ export class GroupMemberApiService {
     return this.http.put<void>(
       `${this.apiUrl}/groups/${groupId}/members/${groupMemberId}/leave`,
       {},
-      { responseType: 'text' as 'json' },
+      {
+        responseType: 'text' as 'json',
+        withCredentials: true,
+      },
     );
   }
 
@@ -30,6 +33,7 @@ export class GroupMemberApiService {
     return this.http.put(
       `${this.apiUrl}/groups/${groupId}/members/${groupMemberId}`,
       data,
+      { withCredentials: true },
     );
   }
 
@@ -40,6 +44,7 @@ export class GroupMemberApiService {
     return this.http.put(
       `${this.apiUrl}/groups/${groupId}/members/${groupMemberId}/leave`,
       {},
+      { withCredentials: true },
     );
   }
 
@@ -51,6 +56,7 @@ export class GroupMemberApiService {
     return this.http.post<CreateGroupMemberInOpenGroupResult>(
       `${this.apiUrl}/groups/${groupId}/members`,
       params,
+      { withCredentials: true },
     );
   }
 }

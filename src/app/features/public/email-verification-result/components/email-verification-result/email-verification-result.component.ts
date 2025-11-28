@@ -34,7 +34,7 @@ export class EmailVerificationResultComponent implements OnInit {
       return;
     }
 
-    this.http.post(this.apiUrl, { code }).subscribe({
+    this.http.post(this.apiUrl, { code }, { withCredentials: true }).subscribe({
       next: () => {
         this.status = 'success';
       },
