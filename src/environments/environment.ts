@@ -6,5 +6,5 @@ export const environment = {
   googleClientId:
     '886417696654-ocac0ev9b6b00kcs5gn1gakeg3ujhg5p.apps.googleusercontent.com',
   callbackUri,
-  googleRedirectUri: `http://localhost:4200/${callbackUri}`,
+  googleRedirectUri: `http://localhost:4200/oauth2/callback`,
 };
