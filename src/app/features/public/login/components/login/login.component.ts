@@ -145,6 +145,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithGoogle(): void {
+    this.isLoading.set(true);
     this.oauth2Service.startGoogleLogin();
   }
 }
