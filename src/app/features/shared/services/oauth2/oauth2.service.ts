@@ -108,6 +108,7 @@ export class OAuth2Service {
               String(response.isTutorialCompleted),
             );
             localStorage.setItem('userId', response.userId);
+            localStorage.setItem('username', response.username);
           }
         }),
       );
@@ -133,6 +134,7 @@ export class OAuth2Service {
             'isTutorialCompleted',
             String(response.isTutorialCompleted),
           );
+          localStorage.setItem('username', response.username);
         }),
       );
   }

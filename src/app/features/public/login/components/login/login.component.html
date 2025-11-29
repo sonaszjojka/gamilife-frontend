@@ -93,6 +93,8 @@
         nz-button
         class="login-form-button login-form-margin"
         [nzType]="'primary'"
+        [nzLoading]="isLoading()"
+        [disabled]="isLoading()"
       >
         <nz-icon nzType="login" nzTheme="outline"></nz-icon>
         <span>Login</span>
@@ -102,6 +104,8 @@
         nzSize="large"
         class="login-button login-button-google"
         (click)="loginWithGoogle()"
+        [nzLoading]="isLoading()"
+        [disabled]="isLoading()"
       >
         <nz-icon nzType="google" nzTheme="outline"></nz-icon>
         <span>Continue with Google</span>

@@ -43,7 +43,7 @@ export class AuthService {
   refreshInProgress = false;
 
   loggedIn = signal<boolean>(!!localStorage.getItem('userId'));
-  username = signal<string | null>(null);
+  username = signal<string | null>(localStorage.getItem('username') ?? null);
   userId = signal<string | null>(localStorage.getItem('userId') ?? null);
   isTutorialCompleted = signal<boolean>(
     localStorage.getItem('isTutorialCompleted') === 'true',
@@ -55,7 +55,11 @@ export class AuthService {
       .post<LoginResponse>(url, credentials, { withCredentials: true })
       .pipe(
         tap((res) => {
-          this.saveAuthDataToStorage(res.userId, res.isTutorialCompleted);
+          this.saveAuthDataToStorage(
+            res.userId,
+            res.username,
+            res.isTutorialCompleted,
+          );
           this.updateAuthState(
             res.userId,
             res.username,
@@ -76,6 +80,7 @@ export class AuthService {
 
   logoutLocal() {
     localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     localStorage.removeItem('isTutorialCompleted');
 
     this.userId.set(null);
@@ -120,8 +125,13 @@ export class AuthService {
     this.isTutorialCompleted.set(isTutorialCompleted);
   }
 
-  private saveAuthDataToStorage(userId: string, isTutorialCompleted: boolean) {
+  private saveAuthDataToStorage(
+    userId: string,
+    username: string,
+    isTutorialCompleted: boolean,
+  ) {
     localStorage.setItem('userId', userId);
+    localStorage.setItem('username', username);
     localStorage.setItem('isTutorialCompleted', String(isTutorialCompleted));
   }
 }

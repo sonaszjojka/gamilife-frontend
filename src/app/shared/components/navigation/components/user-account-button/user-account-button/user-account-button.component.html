@@ -1,6 +1,6 @@
 <a nz-dropdown [nzDropdownMenu]="menu" [nzClickHide]="true" class="user-menu">
   <span class="user-menu-text">
-    {{ isLoggedIn() ? username() : "Sign in" }}
+    {{ authService.loggedIn() ? authService.username() : "Sign in" }}
   </span>
   <nz-icon nzType="user" nzTheme="outline"></nz-icon>
   <nz-icon nzType="down"></nz-icon>
@@ -8,7 +8,7 @@
 
 <nz-dropdown-menu #menu="nzDropdownMenu" class="navbar-dropdown-menu">
   <ul nz-menu class="navbar-dropdown-ul">
-    @if (!isLoggedIn()) {
+    @if (!authService.loggedIn()) {
       <li nz-menu-item routerLink="/login" class="navbar-dropdown-item">
         Login
       </li>

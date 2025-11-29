@@ -16,9 +16,6 @@ export class UserAccountButtonComponent {
   public authService = inject(AuthService);
   protected router = inject(Router);
 
-  isLoggedIn = this.authService.loggedIn;
-  username = this.authService.username;
-
   logout() {
     this.authService.logout();
   }
