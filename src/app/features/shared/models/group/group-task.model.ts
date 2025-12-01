@@ -1,4 +1,4 @@
-export interface GroupTaskModel
+export interface GroupTask
 {
 groupTaskId: string;
 reward:number;
@@ -18,7 +18,7 @@ export interface TaskDto
   category:number;
   difficulty:number;
   completedAt:string|null;
-  description:string|null;
+  description:string;
 }
 
 export interface GroupTaskMemberModel{

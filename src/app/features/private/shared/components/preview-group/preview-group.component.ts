@@ -21,6 +21,8 @@ import { MembersListPeakComponent } from '../members-list-peak/members-list-peak
 import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
+import {GroupTaskListComponent} from '../group-task-list/group-task-list.component';
+import {GroupTaskFormComponent} from '../group-task-from/group-task-form.component';
 
 @Component({
   selector: 'app-preview-group',
@@ -39,6 +41,7 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
     RankingListPeakComponent,
     GroupRequestsListPeakComponent,
     EditGroupFormComponent,
+    GroupTaskFormComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
@@ -50,6 +53,8 @@ export class PreviewGroupComponent implements OnInit {
   protected loading = signal<boolean>(true);
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
+
+
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
 
@@ -60,6 +65,8 @@ export class PreviewGroupComponent implements OnInit {
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
+  @ViewChild(GroupTaskFormComponent)
+  groupTaskForm!: GroupTaskFormComponent;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('groupId');
@@ -179,5 +186,11 @@ export class PreviewGroupComponent implements OnInit {
           console.error('Failed to delete group:', err);
         },
       });
+  }
+
+  protected createTask(): void {
+    if (this.groupTaskForm) {
+      this.groupTaskForm.openForm();
+    }
   }
 }
