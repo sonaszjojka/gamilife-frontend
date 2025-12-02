@@ -87,6 +87,7 @@
               <app-group-task
                 [task]="task"
                 [groupId]="groupId()!"
+                (taskUpdated)="onActionComplete()"
               ></app-group-task>
             }
 

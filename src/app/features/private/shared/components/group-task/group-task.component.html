@@ -1,10 +1,20 @@
 <nz-card>
+
+  @if (this.mode()==GroupPreviewMode.ADMIN)
+  {
+  <button nz-button nzShape="circle" (click)="deleteTask()"><nz-icon nzType="delete"></nz-icon></button>
+  }
   <h1>{{this.task.taskDto.title}}</h1>
-  <button nz-button nzShape="circle" (click)="editTask()"><nz-icon nzType="settings"></nz-icon></button>
+  <button nz-button nzShape="circle" (click)="editTask()"><nz-icon nzType="setting"></nz-icon></button>
+
+  <button nz-button nzShape="circle" (click)="manageParticipants()">
+    <nz-icon nzType="team"></nz-icon>
+    </button>
 </nz-card>
 
 <app-group-task-form
 [groupId]="groupId"
 [task]="task"
+(formSubmitted)="onUpdate()"
 >
 </app-group-task-form>

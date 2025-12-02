@@ -155,7 +155,7 @@ export class GroupTaskFormComponent{
     }
   }
 
-  //ToDo add hour selection and change edit task validation when user==null on backend
+  //ToDo add hour selection
   handleEdit(): void {
     if (this.validateForm.valid) {
       const formValue = this.validateForm.getRawValue();
@@ -173,7 +173,7 @@ export class GroupTaskFormComponent{
       this.taskApi.editTask(this.task()!.taskDto.id, editTaskRequest).subscribe({
         next: () => {
           let groupTaskUpdateRequest = {
-            reward: this.validateForm.value.reward,
+            reward: formValue.reward
           }
           this.groupTaskApi.editGroupTask(this.groupId(), this.task()!.groupTaskId, groupTaskUpdateRequest).subscribe({
             next: () => {
