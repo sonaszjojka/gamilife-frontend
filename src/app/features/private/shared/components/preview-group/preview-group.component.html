@@ -82,7 +82,13 @@
           nzTitle
           <div class="placeholder-content">
 
-
+            @for (task of tasksList();track task.taskDto.id)
+            {
+              <app-group-task
+                [task]="task"
+                [groupId]="groupId()!"
+              ></app-group-task>
+            }
 
             @if (mode()!== GroupPreviewMode.PUBLIC)
             {
@@ -119,6 +125,7 @@
   <app-group-task-form
     *ngIf="group()"
     [groupId]="group()!.groupId"
+    (formSubmitted)="onActionComplete()"
   >
   </app-group-task-form>
 </div>

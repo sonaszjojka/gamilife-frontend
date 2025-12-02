@@ -21,8 +21,10 @@ import { MembersListPeakComponent } from '../members-list-peak/members-list-peak
 import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
-import {GroupTaskListComponent} from '../group-task-list/group-task-list.component';
 import {GroupTaskFormComponent} from '../group-task-from/group-task-form.component';
+import {GroupTask} from '../../../../shared/models/group/group-task.model';
+import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
+import {GroupTaskComponent} from '../group-task/group-task.component';
 
 @Component({
   selector: 'app-preview-group',
@@ -42,6 +44,7 @@ import {GroupTaskFormComponent} from '../group-task-from/group-task-form.compone
     GroupRequestsListPeakComponent,
     EditGroupFormComponent,
     GroupTaskFormComponent,
+    GroupTaskComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
@@ -53,6 +56,7 @@ export class PreviewGroupComponent implements OnInit {
   protected loading = signal<boolean>(true);
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
+  protected tasksList = signal<GroupTask[]>([]);
 
 
   protected GroupPreviewMode = GroupPreviewMode;
@@ -62,6 +66,7 @@ export class PreviewGroupComponent implements OnInit {
   private readonly requestsApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly modal = inject(NzModalService);
+  private readonly groupTaskApi = inject(GroupTaskApiService);
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
@@ -75,6 +80,7 @@ export class PreviewGroupComponent implements OnInit {
     this.groupId.set(id);
     this.loadGroup();
     this.loadGroupRequests();
+    this.loadGroupTasks();
   }
 
   private loadGroup(): void {
@@ -103,6 +109,28 @@ export class PreviewGroupComponent implements OnInit {
       });
   }
 
+  //todo add more tasks load options
+  private loadGroupTasks(): void {
+    const groupId = this.groupId();
+    if (!groupId) return;
+   let requestParams ={
+      isAccepted: false,
+      pageNumber:0,
+      pageSize:5
+    }
+    this.groupTaskApi
+      .getGroupTasks(groupId,requestParams)
+      .subscribe({
+        next: (tasks) => {
+          this.tasksList.set(tasks.content);
+        },
+        error: (err) => {
+          console.error('Error loading group tasks:', err);
+          this.tasksList.set([]);
+        },
+      });
+  }
+
   private loadGroupRequests(): void {
     const groupId = this.groupId();
     if (!groupId) return;
@@ -124,6 +152,7 @@ export class PreviewGroupComponent implements OnInit {
   protected onActionComplete(): void {
     this.loadGroup();
     this.loadGroupRequests();
+    this.loadGroupTasks();
   }
 
   protected goToManageGroupMembersPage(): void {

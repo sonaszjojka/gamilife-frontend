@@ -1,0 +1,10 @@
+<nz-card>
+  <h1>{{this.task.taskDto.title}}</h1>
+  <button nz-button nzShape="circle" (click)="editTask()"><nz-icon nzType="settings"></nz-icon></button>
+</nz-card>
+
+<app-group-task-form
+[groupId]="groupId"
+[task]="task"
+>
+</app-group-task-form>

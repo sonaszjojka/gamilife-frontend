@@ -1,6 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
+import {GroupTask} from '../../models/group/group-task.model';
+import {Observable} from 'rxjs';
+import {Page} from '../tasks/individual-task.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,8 +32,9 @@ export class GroupTaskApiService {
     });
   }
 
-  public getGroupTasks(groupId: string,params?: any) {
-    return this.http.get(`${this.apiUrl}/groups/${groupId}/tasks`, {
+  public getGroupTasks(groupId: string,requestParams:any): Observable<Page<GroupTask>>  {
+    return this.http.get <Page<GroupTask>>(`${this.apiUrl}/groups/${groupId}/tasks`, {
+      params: requestParams,
       withCredentials: true,
     });
   }

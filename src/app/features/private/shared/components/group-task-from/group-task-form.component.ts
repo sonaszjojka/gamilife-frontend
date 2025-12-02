@@ -1,6 +1,6 @@
 
 
-import {Component, inject, input} from '@angular/core';
+import {Component, inject, input, output, Output} from '@angular/core';
 import {GroupTask} from '../../../../shared/models/group/group-task.model';
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {GroupMemberApiService} from '../../../../shared/services/group-member-api/group-member-api.service';
@@ -11,6 +11,8 @@ import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {CommonModule} from '@angular/common';
+import {EditTaskRequest} from '../../../../shared/models/task-models/edit-task-request';
+import {IndividualTaskService} from '../../../../shared/services/tasks/individual-task.service';
 @Component({
   selector: 'app-group-task-form',
   templateUrl: './group-task-form.component.html',
@@ -31,14 +33,19 @@ import {CommonModule} from '@angular/common';
 })
 
 export class GroupTaskFormComponent{
+  formSubmitted = output<void>();
+
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
   private groupMemberApi = inject(GroupMemberApiService);
+  private taskApi = inject(IndividualTaskService);
 
   task=input<GroupTask|null>(null);
   groupId=input.required<string>();
   isVisible = false;
 
+
+//ToDo add hour selection
   protected validateForm = this.fb.group({
     title: this.fb.control<string>('', [
       Validators.required,
@@ -52,7 +59,7 @@ export class GroupTaskFormComponent{
       Validators.required,
       ]),
     endTime: this.fb.control<Date | null>(null, [
-      Validators.required
+      Validators.required,
       ]),
     categoryId: this.fb.control<number>(1, [
       Validators.required,
@@ -65,7 +72,9 @@ export class GroupTaskFormComponent{
       Validators.min(1),
       Validators.max(9999)
     ])
-  });
+  }
+
+  );
 
   categories = [
     { categoryId: 1, categoryName: 'Work' },
@@ -87,7 +96,7 @@ export class GroupTaskFormComponent{
         description: task.taskDto!.description!,
         startTime: new Date(task.taskDto.startTime),
         endTime: new Date(task.taskDto.endTime),
-        categoryId: task.taskDto.category,
+        categoryId:   task.taskDto.category,
         difficultyId: task.taskDto.difficulty,
         reward: task.reward
       });
@@ -109,9 +118,7 @@ export class GroupTaskFormComponent{
       };
 
       this.groupTaskApi.postGroupTask(this.groupId(), request).subscribe({
-        next: () => {
-          console.log("Jej")
-        },
+        next: () => { this.formSubmitted.emit();},
         error: (error) => {
           console.error('Error creating task:', error);
         },
@@ -126,8 +133,10 @@ export class GroupTaskFormComponent{
     }
     else
     {
-      console.log("Edit task not implemented yet")
+      this.handleEdit();
+      this.isVisible = false;
     }
+
   }
   handleCancel(): void {
     this.isVisible=false;
@@ -146,5 +155,43 @@ export class GroupTaskFormComponent{
     }
   }
 
+  //ToDo add hour selection and change edit task validation when user==null on backend
+  handleEdit(): void {
+    if (this.validateForm.valid) {
+      const formValue = this.validateForm.getRawValue();
+      let editTaskRequest: EditTaskRequest = {
+        title: formValue.title,
+        description: formValue.description,
+        startTime: formValue.startTime!.toISOString().slice(0,19),
+        endTime: formValue.endTime!.toISOString().slice(0,19),
+        categoryId: formValue.categoryId!,
+        difficultyId: formValue.difficultyId!,
+        completedAt: null
+      }
+      console.log(editTaskRequest);
 
+      this.taskApi.editTask(this.task()!.taskDto.id, editTaskRequest).subscribe({
+        next: () => {
+          let groupTaskUpdateRequest = {
+            reward: this.validateForm.value.reward,
+          }
+          this.groupTaskApi.editGroupTask(this.groupId(), this.task()!.groupTaskId, groupTaskUpdateRequest).subscribe({
+            next: () => {
+              this.formSubmitted.emit();
+            },
+            error: (error) => {
+              console.error('Error editing group task:', error);
+            },
+          })
+        },
+        error: (error) => {
+          console.error('Error editing task:', error);
+        },
+      })
+
+
+    }
+
+
+  }
 }
