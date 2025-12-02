@@ -162,13 +162,12 @@ export class GroupTaskFormComponent{
       let editTaskRequest: EditTaskRequest = {
         title: formValue.title,
         description: formValue.description,
-        startTime: formValue.startTime!.toISOString().slice(0,19),
-        endTime: formValue.endTime!.toISOString().slice(0,19),
+        startTime: formValue.startTime!.toISOString(),
+        endTime: formValue.endTime!.toISOString(),
         categoryId: formValue.categoryId!,
         difficultyId: formValue.difficultyId!,
         completedAt: null
       }
-      console.log(editTaskRequest);
 
       this.taskApi.editTask(this.task()!.taskDto.id, editTaskRequest).subscribe({
         next: () => {
