@@ -10,7 +10,12 @@
     </button>
   }
   <h1>{{task().taskDto.title}}</h1>
-
+  <div>
+        @for (participant of task().groupTaskMembers; track participant.groupMemberId)
+        {
+            <span>{{participant.groupMemberId}} </span>
+        }
+  </div>
   <button nz-button nzShape="circle" (click)="editTask()">
     <nz-icon nzType="setting"></nz-icon>
   </button>
@@ -19,25 +24,35 @@
     <nz-icon nzType="team"></nz-icon>
   </button>
 
-    @if (userIsParticipant())
+    @if (userIsParticipant()!=null)
     {
-    <button nz-button nzShape="circle" (click)="complete()">
-      <nz-icon nzType="check-circle"></nz-icon>
-    </button>
-    }
 
+      @if(checkIfTaskIsCompletedByUser()){
+        <button nz-button nzShape="circle" (click)="removeCompletion()">
+          <nz-icon nzType="undo"></nz-icon>
+        </button>
+
+      }
+      @else
+      {
+        <button nz-button nzShape="circle" (click)="complete()">
+          <nz-icon nzType="check"></nz-icon>
+        </button>
+        }
+    }
 </nz-card>
 
 <app-group-task-form
-[groupId]="groupId()"
+[groupId]="group().groupId"
 [task]="task()"
 (formSubmitted)="onUpdate()"
 >
 </app-group-task-form>
 
 <app-group-task-members-manager
-  [groupId]="groupId()"
+  [groupId]="group().groupId"
   [task]="task()"
   [membersList]="membersList()"
+  (changed)="checkUserIsParticipant()"
 >
 </app-group-task-members-manager>

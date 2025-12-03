@@ -1,8 +1,11 @@
+import {GroupTaskMemberModel} from './group-task-member.model';
+
 export interface GroupTask
 {
 groupTaskId: string;
 reward:number;
 acceptedDate:string;
+declineMessage:string|null;
 taskDto: TaskDto;
 groupTaskMembers: GroupTaskMemberModel[];
 
@@ -21,10 +24,12 @@ export interface TaskDto
   description:string;
 }
 
-export interface GroupTaskMemberModel{
-  groupTaskMemberId:string;
-  groupMemberId:string;
-  isMarkedAsDone:boolean;
+
+
+export interface EditGroupTaskDto{
+ reward:number;
+ isAccepted:boolean;
+ declineMessage:string|null;
 }
 
 

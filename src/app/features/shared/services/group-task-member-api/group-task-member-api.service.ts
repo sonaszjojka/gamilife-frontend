@@ -3,8 +3,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
-import {GroupTaskMemberModel} from '../../models/group/group-task.model';
 import {Observable} from 'rxjs';
+import {EditGroupTaskMemberDto, GroupTaskMemberModel} from '../../models/group/group-task-member.model';
 @Injectable
 ({
   providedIn: 'root',
@@ -20,9 +20,19 @@ export class GroupTaskMemberApiService {
     });
 
   }
+
   public removeMemberFromTask( groupId: string, taskId: string, participantId: string) {
     return this.http.delete(`${this.apiUrl}/groups/${groupId}/group-tasks/${taskId}/participants/${participantId}`, {
       withCredentials: true,
     });
   }
+
+  public editTaskMemberCompletionStatus(groupId: string, taskId: string, participantId: string, request: EditGroupTaskMemberDto): Observable<GroupTaskMemberModel> {
+    return this.http.put<GroupTaskMemberModel>(`${this.apiUrl}/groups/${groupId}/group-tasks/${taskId}/participants/${participantId}`, request, {
+      withCredentials: true,
+    });
+  }
+
+
+
 }

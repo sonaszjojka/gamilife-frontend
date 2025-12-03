@@ -1,5 +1,5 @@
-import {Component, inject, input, OnInit, signal} from '@angular/core';
-import {GroupTask, GroupTaskMemberModel,} from '../../../../shared/models/group/group-task.model';
+import {Component, inject, input, OnInit, output, signal} from '@angular/core';
+import {GroupTask,} from '../../../../shared/models/group/group-task.model';
 import {
   GroupTaskMemberApiService
 } from '../../../../shared/services/group-task-member-api/group-task-member-api.service';
@@ -9,6 +9,7 @@ import {CommonModule} from '@angular/common';
 import {NzListComponent, NzListItemComponent, NzListItemMetaComponent} from 'ng-zorro-antd/list';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {GroupTaskMemberModel} from '../../../../shared/models/group/group-task-member.model';
 
 @Component({
   selector: 'app-group-task-members-manager',
@@ -36,6 +37,7 @@ export class GroupTaskMembersManagerComponent implements OnInit{
 
   private readonly groupTaskMemberApi= inject(GroupTaskMemberApiService);
 
+  changed=output<void>();
 
 
   protected addMemberToTask(memberId:string): void {
@@ -50,7 +52,7 @@ export class GroupTaskMembersManagerComponent implements OnInit{
         {
           groupTaskMemberId: response.groupTaskMemberId,
           groupMemberId: response.groupMemberId,
-          isMarkedAsDone: response.isMarkedAsDone
+          isMarkedDone: response.isMarkedDone
         }
         this.notAssignedMembers.set(
           this.notAssignedMembers().filter(
@@ -62,6 +64,7 @@ export class GroupTaskMembersManagerComponent implements OnInit{
         ]);
 
         this.task().groupTaskMembers.push(assignedMember);
+        this.changed.emit();
       }
     });
   }
@@ -85,7 +88,8 @@ export class GroupTaskMembersManagerComponent implements OnInit{
       this.task().groupTaskMembers=
         this.task().groupTaskMembers.filter(
           taskMember=>taskMember.groupMemberId!=memberId);
-  });
+      this.changed.emit();
+    });
   }
 
 

@@ -1,5 +1,5 @@
-import {Component, inject, input, Input, OnInit, output, signal, ViewChild} from '@angular/core';
-import {GroupTask} from '../../../../shared/models/group/group-task.model';
+import {Component, inject, input, OnInit, output, signal, ViewChild} from '@angular/core';
+import {EditGroupTaskDto, GroupTask} from '../../../../shared/models/group/group-task.model';
 import {NzCardComponent} from 'ng-zorro-antd/card';
 import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mode';
 import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
@@ -7,7 +7,13 @@ import {GroupTaskFormComponent} from '../group-task-from/group-task-form.compone
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {GroupTaskMembersManagerComponent} from '../group-task-member-manager/group-task-members-manager.component';
-import {GroupMember} from '../../../../shared/models/group/group-member.model';
+import {EditGroupMemberDto, GroupMember} from '../../../../shared/models/group/group-member.model';
+import {Group} from '../../../../shared/models/group/group.model';
+import {
+  GroupTaskMemberApiService
+} from '../../../../shared/services/group-task-member-api/group-task-member-api.service';
+import {EditGroupTaskMemberDto, GroupTaskMemberModel} from '../../../../shared/models/group/group-task-member.model';
+import {GroupMemberApiService} from '../../../../shared/services/group-member-api/group-member-api.service';
 
 @Component({
   selector: 'app-group-task',
@@ -24,21 +30,28 @@ import {GroupMember} from '../../../../shared/models/group/group-member.model';
 })
 
 
-export class GroupTaskComponent {
+export class GroupTaskComponent implements OnInit {
   protected readonly GroupPreviewMode = GroupPreviewMode;
 
 
    task=input.required<GroupTask>();
    mode=input.required<GroupPreviewMode>();
-   groupId=input.required<string>();
+   group=input.required<Group>();
    membersList=input.required<GroupMember[]>();
 
-  userIsParticipant=signal<boolean>(false);
+  userIsParticipant=signal<GroupTaskMemberModel|null>(null);
+
 
   taskUpdated=output<void>();
 
 
   private readonly groupTaskApi= inject(GroupTaskApiService);
+  private readonly groupTaskMemberApi= inject(GroupTaskMemberApiService);
+  private readonly groupMemberApi= inject(GroupMemberApiService);
+
+  ngOnInit(): void {
+    this.checkUserIsParticipant();
+  }
 
 
   @ViewChild(GroupTaskFormComponent)
@@ -48,6 +61,7 @@ export class GroupTaskComponent {
 
 
   protected editTask(): void {
+    console.log(this.userIsParticipant());
     if (this.groupTaskForm)
     {
       this.groupTaskForm.openForm();
@@ -55,7 +69,7 @@ export class GroupTaskComponent {
   }
 
   protected deleteTask(): void {
-    this.groupTaskApi.deleteGroupTask(this.groupId(),this.task().groupTaskId).subscribe({
+    this.groupTaskApi.deleteGroupTask(this.group().groupId,this.task().groupTaskId).subscribe({
       next: () => {
         this.onUpdate();
       },
@@ -65,33 +79,92 @@ export class GroupTaskComponent {
     })
   }
 
-  protected onUpdate(): void {
-    this.taskUpdated.emit();
-  }
+
 
   protected manageParticipants(): void {
-
-
       this.groupTaskMembersManager.show();
-
-
   }
+
   protected complete(): void {
+    if (this.userIsParticipant()!=null) {
+      let request : EditGroupTaskMemberDto = {
+        isMarkedDone: true
+      }
+
+      this.groupTaskMemberApi.editTaskMemberCompletionStatus(this.group().groupId,
+        this.task().groupTaskId,
+        this.userIsParticipant()!.groupTaskMemberId,
+        request)
+        .subscribe({
+          next: (response) => {
+            this.userIsParticipant.set({isMarkedDone: response.isMarkedDone,
+              groupTaskMemberId:response.groupTaskMemberId,
+              groupMemberId:response.groupMemberId});
+            console.log(response);
+          },
+          error: (err) => {
+            console.error('Error marking task as complete:', err);
+          }
+        })
+    }
 
   }
-  protected accept(): void {
 
+  protected removeCompletion(): void {
+    if (this.userIsParticipant()!=null)
+    {
+    let request:EditGroupTaskMemberDto={
+      isMarkedDone:false
+    }
+    this.groupTaskMemberApi.editTaskMemberCompletionStatus(this.group().groupId,
+      this.task().groupTaskId,
+      this.userIsParticipant()!.groupTaskMemberId,
+      request).subscribe(
+      {
+        next: (response) => {
+          this.userIsParticipant.set({isMarkedDone: response.isMarkedDone,
+            groupTaskMemberId:response.groupTaskMemberId,
+            groupMemberId:response.groupMemberId});
+        },
+        error: (err) => {
+          console.error('Error marking task as complete:', err);
+        }
+      }
+    )
+    }
+
+  }
+
+  protected accept(): void {
 
   }
 
   protected decline(): void {
 
+
+
   }
 
-  //todo add participants
-  //todo mark complete for participants
-  //todo decline ?
+  protected onUpdate(): void {
+    this.taskUpdated.emit();
+  }
+
+  public checkUserIsParticipant(): void {
+
+    let participant = this.task().groupTaskMembers.find((currentMember) =>
+      currentMember.groupMemberId === this.group().loggedUserMembershipDto!.groupMemberId
+    );
+    this.userIsParticipant.set(participant ?? null);
+
+  }
+
+  public checkIfTaskIsCompletedByUser(): boolean {
+    return this.userIsParticipant()!.isMarkedDone;
+  }
+
   //todo accept by admin
+  //todo decline ?
+
 
 
 }

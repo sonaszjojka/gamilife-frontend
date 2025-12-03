@@ -169,6 +169,7 @@ export class GroupTaskFormComponent{
         completedAt: null
       }
 
+      //todo change after tasks refactor on backend
       this.taskApi.editTask(this.task()!.taskDto.id, editTaskRequest).subscribe({
         next: () => {
           let groupTaskUpdateRequest = {
