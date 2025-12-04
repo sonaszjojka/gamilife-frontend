@@ -57,7 +57,11 @@ export class PreviewGroupComponent implements OnInit {
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
   protected tasksList = signal<GroupTask[]>([]);
-
+  protected tasksRequestParams ={
+    isAccepted: false,
+    pageNumber:0,
+    pageSize:5
+  }
 
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
@@ -113,13 +117,9 @@ export class PreviewGroupComponent implements OnInit {
   private loadGroupTasks(): void {
     const groupId = this.groupId();
     if (!groupId) return;
-   let requestParams ={
-      isAccepted: false,
-      pageNumber:0,
-      pageSize:5
-    }
+
     this.groupTaskApi
-      .getGroupTasks(groupId,requestParams)
+      .getGroupTasks(groupId,this.tasksRequestParams)
       .subscribe({
         next: (tasks) => {
           this.tasksList.set(tasks.content);
@@ -221,5 +221,17 @@ export class PreviewGroupComponent implements OnInit {
     if (this.groupTaskForm) {
       this.groupTaskForm.openForm();
     }
+  }
+
+  protected onActiveTasks():void
+  {
+      this.tasksRequestParams.isAccepted =false
+      this.loadGroupTasks()
+  }
+
+  protected onInactiveTasks():void
+  {
+      this.tasksRequestParams.isAccepted=true
+      this.loadGroupTasks()
   }
 }

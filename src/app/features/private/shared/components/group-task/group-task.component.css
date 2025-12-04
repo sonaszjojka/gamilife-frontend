@@ -1,0 +1,131 @@
+
+.task-card {
+  max-width: 600px;
+  margin: 20px auto;
+  width: 100%;
+  box-shadow: var(--box-shadow-md);
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+}
+:hover .task-card
+{
+    scale: calc(1.5);
+}
+
+
+:host ::ng-deep .task-card .ant-card-body {
+  padding: 0;
+
+}
+
+.task-header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-small) var(--spacing-medium);
+}
+
+.task-actions-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--spacing-small) var(--spacing-medium);
+}
+
+.task-actions-header .action-buttons-admin {
+  display: flex;
+  gap: var(--spacing-small);
+  align-items: center;
+}
+
+.task-header {
+  text-align: center;
+  align-items: center;
+  padding: var(--spacing-medium);
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.task-title {
+  margin: 0;
+  font-size: var(--font-size-xlarge);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary-color);
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-medium);
+  padding: var(--spacing-medium);
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  font-size: var(--font-size-large);
+  color: var(--third-color);
+  flex-shrink: 0;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.info-label {
+  font-size: var(--font-size-xs);
+  color: var(--border-color-dark);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: var(--font-size-medium);
+  color: var(--text-primary-color);
+  font-weight: var(--font-weight-medium);
+}
+
+.limit {
+  color: var(--border-color-dark);
+  font-weight: var(--font-weight-normal);
+}
+
+
+.participants-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-small);
+  flex-direction: row;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--border-color-light);
+  padding: 4px 8px;
+  font-size: var(--font-size-small);
+}
+
+
+.task-actions-footer {
+  display: flex;
+  justify-content: flex-start;
+  padding: var(--spacing-medium);
+  gap: var(--spacing-small);
+  border-top: 1px solid var(--border-color-light);
+}
+h1
+{
+  text-align: center;
+}

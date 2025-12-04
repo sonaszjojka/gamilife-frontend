@@ -7,13 +7,13 @@ import {GroupTaskFormComponent} from '../group-task-from/group-task-form.compone
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {GroupTaskMembersManagerComponent} from '../group-task-member-manager/group-task-members-manager.component';
-import {EditGroupMemberDto, GroupMember} from '../../../../shared/models/group/group-member.model';
+import {GroupMember} from '../../../../shared/models/group/group-member.model';
 import {Group} from '../../../../shared/models/group/group.model';
 import {
   GroupTaskMemberApiService
 } from '../../../../shared/services/group-task-member-api/group-task-member-api.service';
 import {EditGroupTaskMemberDto, GroupTaskMemberModel} from '../../../../shared/models/group/group-task-member.model';
-import {GroupMemberApiService} from '../../../../shared/services/group-member-api/group-member-api.service';
+import {formatDateTime, formatShortDate} from '../../../../../shared/util/DateFormatterUtil';
 
 @Component({
   selector: 'app-group-task',
@@ -41,17 +41,24 @@ export class GroupTaskComponent implements OnInit {
 
   userIsParticipant=signal<GroupTaskMemberModel|null>(null);
 
+  formatedStartDate!: string;
+  formatedEndDate!: string;
+  formatedAcceptedDate!: string;
+
+
 
   taskUpdated=output<void>();
 
 
   private readonly groupTaskApi= inject(GroupTaskApiService);
   private readonly groupTaskMemberApi= inject(GroupTaskMemberApiService);
-  private readonly groupMemberApi= inject(GroupMemberApiService);
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
-    console.log(this.task())
+
+    this.formatedStartDate = formatDateTime(this.task().taskDto.startTime)
+    this.formatedEndDate = formatDateTime(this.task().taskDto.endTime)
+    this.formatedAcceptedDate = formatDateTime(this.task().acceptedDate)
   }
 
 
@@ -62,7 +69,6 @@ export class GroupTaskComponent implements OnInit {
 
 
   protected editTask(): void {
-    console.log(this.userIsParticipant());
     if (this.groupTaskForm)
     {
       this.groupTaskForm.openForm();
@@ -79,6 +85,8 @@ export class GroupTaskComponent implements OnInit {
       }
     })
   }
+
+
 
 
 
@@ -101,7 +109,12 @@ export class GroupTaskComponent implements OnInit {
             this.userIsParticipant.set({isMarkedDone: response.isMarkedDone,
               groupTaskMemberId:response.groupTaskMemberId,
               groupMemberId:response.groupMemberId});
-            console.log(response);
+
+           let participant = this.task().groupTaskMembers.find(
+              currentMember =>
+                currentMember.groupTaskMemberId==response.groupTaskMemberId)
+            participant!.isMarkedDone=response.isMarkedDone
+
           },
           error: (err) => {
             console.error('Error marking task as complete:', err);
@@ -126,6 +139,12 @@ export class GroupTaskComponent implements OnInit {
           this.userIsParticipant.set({isMarkedDone: response.isMarkedDone,
             groupTaskMemberId:response.groupTaskMemberId,
             groupMemberId:response.groupMemberId});
+
+          let participant = this.task().groupTaskMembers.find(
+            currentMember =>
+              currentMember.groupTaskMemberId==response.groupTaskMemberId)
+          participant!.isMarkedDone=response.isMarkedDone
+
         },
         error: (err) => {
           console.error('Error marking task as complete:', err);
@@ -136,7 +155,6 @@ export class GroupTaskComponent implements OnInit {
 
   }
 
-//toDo after task refactor change into one request
   protected accept(): void {
     let  request : EditGroupTaskDto ={
       title:this.task().taskDto.title,
@@ -150,7 +168,6 @@ export class GroupTaskComponent implements OnInit {
       isAccepted: true,
       declineMessage: null
     }
-    console.log(request)
     this.groupTaskApi.editGroupTask(this.group().groupId,this.task().groupTaskId,request).subscribe({
       next: () => {
         this.onUpdate();
@@ -184,6 +201,12 @@ export class GroupTaskComponent implements OnInit {
 
   public checkIfTaskIsCompletedByUser(): boolean {
     return this.userIsParticipant()!.isMarkedDone;
+  }
+
+  protected getParticipantUsername(participantId:string) :string
+  {
+    return this.membersList().find(member => member.groupMemberId == participantId)!.username
+
   }
 
 

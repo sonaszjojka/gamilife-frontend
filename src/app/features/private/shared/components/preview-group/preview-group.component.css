@@ -29,6 +29,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-large);
+  height: 100%;
 }
 
 .admin-actions-bar {
@@ -54,14 +55,7 @@
   min-height: 400px;
 }
 
-.placeholder-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xxlarge) var(--spacing-large);
-  color: var(--text-secondary-color);
-}
+
 
 .placeholder-icon {
   font-size: 64px;
@@ -138,4 +132,66 @@
 
 ::ng-deep .main-content-card .ant-card-body {
   padding: var(--spacing-large);
+}
+
+.group-tasks-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ::ng-deep .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+  }
+  ::ng-deep .ant-card-head {
+    text-align: center;
+  }
+
+  ::ng-deep .ant-card-head-title {
+    text-align: center;
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+  }
+}
+
+.group-tasks-filter {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+
+  button {
+    flex: 1; // Równe szerokości
+  }
+}
+
+.group-tasks-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 80px;
+  height: 100%;
+}
+
+.bottom-tasks-list-panel {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10;
+
+  button {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      transform: scale(1.05);
+      transition: all 0.3s ease;
+    }
+  }
 }

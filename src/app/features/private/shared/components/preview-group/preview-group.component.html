@@ -78,10 +78,13 @@
           </button>
         </div>
 
-        <nz-card class="main-content-card">
-          nzTitle
-          <div class="placeholder-content">
-
+        <nz-card class="group-tasks-card"
+                 nzTitle = "GroupTasks">
+          <div class="group-tasks-filter">
+            <button nz-button (click)="onActiveTasks()"> Active Tasks</button>
+            <button nz-button (click)="onInactiveTasks()">Tasks History</button>
+          </div>
+          <div class="group-tasks-list">
             @for (task of tasksList();track task.taskDto.id)
             {
               <app-group-task
@@ -92,18 +95,12 @@
                 (taskUpdated)="onActionComplete()"
               ></app-group-task>
             }
-
+          </div>
+          <div class="bottom-tasks-list-panel">
             @if (mode()!== GroupPreviewMode.PUBLIC)
             {
-            <button nz-button nzShape="circle" (click)="createTask()"> Add New Task</button>
+              <button nz-button nzShape="circle" (click)="createTask()"> <nz-icon nzType="plus"></nz-icon></button>
             }
-            <span
-              nz-icon
-              nzType="inbox"
-              nzTheme="outline"
-              class="placeholder-icon"
-            ></span>
-            <p>Main content area - 2/3 width</p>
           </div>
         </nz-card>
       </div>
