@@ -6,7 +6,7 @@
       <nz-icon nzType="delete"></nz-icon>
     </button>
 
-    @if (task().acceptedDate==null)
+    @if (task().acceptedDate==null&&task().declineMessage==null)
     {
     <button nz-button nzShape="circle" (click)="accept()">
       Accept Task

@@ -51,6 +51,7 @@ export class GroupTaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
+    console.log(this.task())
   }
 
 
@@ -142,31 +143,17 @@ export class GroupTaskComponent implements OnInit {
       description:this.task().taskDto.description,
       startTime: this.task().taskDto.startTime,
       endTime:this.task().taskDto.endTime,
-      categoryId:this.task().taskDto.category,
-      difficultyId:this.task().taskDto.difficulty,
+      categoryId: this.task().taskDto.category.id,
+      difficultyId:this.task().taskDto.difficulty.id,
       completedAt:this.task().taskDto.completedAt,
       reward: this.task().reward,
       isAccepted: true,
-      declineMessage: this.task().declineMessage
+      declineMessage: null
     }
+    console.log(request)
     this.groupTaskApi.editGroupTask(this.group().groupId,this.task().groupTaskId,request).subscribe({
       next: () => {
-        for (let member of this.task().groupTaskMembers)
-        {
-          if (member.isMarkedDone)
-          {
-            let groupMember= this.membersList().find(
-              groupMember=>groupMember.groupMemberId==member.groupMemberId)
-
-            if (groupMember!=null) {
-              let request: EditGroupMemberDto = {
-                groupMoney: groupMember.groupMoney! + this.task().reward,
-                totalEarnedMoney:groupMember.totalEarnedMoney!+this.task().reward
-              }
-              this.groupMemberApi.editGroupMember(this.group().groupId,member.groupMemberId,request).subscribe()
-            }
-          }
-        }
+        this.onUpdate();
       },
       error: (err) => {
         console.error('Error accepting task:', err);

@@ -18,10 +18,20 @@ export interface TaskDto
   title:string;
   startTime:string;
   endTime:string;
-  category:number;
-  difficulty:number;
+  category:Category;
+  difficulty:Difficulty;
   completedAt:string|null;
   description:string;
+}
+
+export interface Category
+{
+  id:number
+}
+
+export interface Difficulty
+{
+  id:number
 }
 
 

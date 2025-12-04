@@ -96,8 +96,8 @@ export class GroupTaskFormComponent{
         description: task.taskDto!.description!,
         startTime: new Date(task.taskDto.startTime),
         endTime: new Date(task.taskDto.endTime),
-        categoryId:   task.taskDto.category,
-        difficultyId: task.taskDto.difficulty,
+        categoryId:   task.taskDto.category.id,
+        difficultyId: task.taskDto.difficulty.id,
         reward: task.reward
       });
     }
