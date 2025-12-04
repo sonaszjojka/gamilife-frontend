@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
-import {GroupTask} from '../../models/group/group-task.model';
+import {EditGroupTaskDto, GroupTask} from '../../models/group/group-task.model';
 import {Observable} from 'rxjs';
 import {Page} from '../tasks/individual-task.service';
 
@@ -26,7 +26,7 @@ export class GroupTaskApiService {
     });
   }
 
-  public editGroupTask(groupId: string, taskId: string, request: any) {
+  public editGroupTask(groupId: string, taskId: string, request: EditGroupTaskDto) {
     return this.http.put(`${this.apiUrl}/groups/${groupId}/tasks/${taskId}`, request, {
       withCredentials: true,
     });

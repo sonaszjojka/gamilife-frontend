@@ -1,7 +1,7 @@
 
 
 import {Component, inject, input, output, Output} from '@angular/core';
-import {GroupTask} from '../../../../shared/models/group/group-task.model';
+import {EditGroupTaskDto, GroupTask} from '../../../../shared/models/group/group-task.model';
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {GroupMemberApiService} from '../../../../shared/services/group-member-api/group-member-api.service';
 import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
@@ -159,23 +159,20 @@ export class GroupTaskFormComponent{
   handleEdit(): void {
     if (this.validateForm.valid) {
       const formValue = this.validateForm.getRawValue();
-      let editTaskRequest: EditTaskRequest = {
+      let editGroupTaskRequest: EditGroupTaskDto = {
         title: formValue.title,
         description: formValue.description,
         startTime: formValue.startTime!.toISOString(),
         endTime: formValue.endTime!.toISOString(),
         categoryId: formValue.categoryId!,
         difficultyId: formValue.difficultyId!,
-        completedAt: null
+        completedAt: null,
+        isAccepted:false,
+        reward:formValue.reward,
+        declineMessage:null
       }
-
-      //todo change after tasks refactor on backend
-      this.taskApi.editTask(this.task()!.taskDto.id, editTaskRequest).subscribe({
-        next: () => {
-          let groupTaskUpdateRequest = {
-            reward: formValue.reward
-          }
-          this.groupTaskApi.editGroupTask(this.groupId(), this.task()!.groupTaskId, groupTaskUpdateRequest).subscribe({
+        console.log(editGroupTaskRequest)
+          this.groupTaskApi.editGroupTask(this.groupId(), this.task()!.groupTaskId, editGroupTaskRequest).subscribe({
             next: () => {
               this.formSubmitted.emit();
             },
@@ -183,13 +180,6 @@ export class GroupTaskFormComponent{
               console.error('Error editing group task:', error);
             },
           })
-        },
-        error: (error) => {
-          console.error('Error editing task:', error);
-        },
-      })
-
-
     }
 
 

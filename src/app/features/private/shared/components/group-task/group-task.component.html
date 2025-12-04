@@ -5,10 +5,15 @@
     <button nz-button nzShape="circle" (click)="deleteTask()">
       <nz-icon nzType="delete"></nz-icon>
     </button>
+
+    @if (task().acceptedDate==null)
+    {
     <button nz-button nzShape="circle" (click)="accept()">
       Accept Task
     </button>
-  }
+    }
+    }
+
   <h1>{{task().taskDto.title}}</h1>
   <div>
         @for (participant of task().groupTaskMembers; track participant.groupMemberId)
@@ -24,7 +29,7 @@
     <nz-icon nzType="team"></nz-icon>
   </button>
 
-    @if (userIsParticipant()!=null)
+    @if (userIsParticipant()!=null &&task().acceptedDate==null&&task().declineMessage==null)
     {
 
       @if(checkIfTaskIsCompletedByUser()){

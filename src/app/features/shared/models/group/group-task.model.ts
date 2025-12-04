@@ -27,9 +27,16 @@ export interface TaskDto
 
 
 export interface EditGroupTaskDto{
- reward:number;
- isAccepted:boolean;
- declineMessage:string|null;
+  title:string;
+  description:string;
+  startTime: string;
+  endTime:string;
+  categoryId:number;
+  difficultyId:number;
+  completedAt:string|null;
+  reward:number;
+  isAccepted:boolean;
+  declineMessage:string|null;
 }
 
 

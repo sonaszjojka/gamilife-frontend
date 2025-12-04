@@ -135,7 +135,44 @@ export class GroupTaskComponent implements OnInit {
 
   }
 
+//toDo after task refactor change into one request
   protected accept(): void {
+    let  request : EditGroupTaskDto ={
+      title:this.task().taskDto.title,
+      description:this.task().taskDto.description,
+      startTime: this.task().taskDto.startTime,
+      endTime:this.task().taskDto.endTime,
+      categoryId:this.task().taskDto.category,
+      difficultyId:this.task().taskDto.difficulty,
+      completedAt:this.task().taskDto.completedAt,
+      reward: this.task().reward,
+      isAccepted: true,
+      declineMessage: this.task().declineMessage
+    }
+    this.groupTaskApi.editGroupTask(this.group().groupId,this.task().groupTaskId,request).subscribe({
+      next: () => {
+        for (let member of this.task().groupTaskMembers)
+        {
+          if (member.isMarkedDone)
+          {
+            let groupMember= this.membersList().find(
+              groupMember=>groupMember.groupMemberId==member.groupMemberId)
+
+            if (groupMember!=null) {
+              let request: EditGroupMemberDto = {
+                groupMoney: groupMember.groupMoney! + this.task().reward,
+                totalEarnedMoney:groupMember.totalEarnedMoney!+this.task().reward
+              }
+              this.groupMemberApi.editGroupMember(this.group().groupId,member.groupMemberId,request).subscribe()
+            }
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error accepting task:', err);
+      }
+    });
+
 
   }
 
@@ -162,8 +199,6 @@ export class GroupTaskComponent implements OnInit {
     return this.userIsParticipant()!.isMarkedDone;
   }
 
-  //todo accept by admin
-  //todo decline ?
 
 
 
