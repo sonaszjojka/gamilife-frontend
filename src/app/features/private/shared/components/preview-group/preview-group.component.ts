@@ -59,6 +59,7 @@ export class PreviewGroupComponent implements OnInit {
   protected tasksList = signal<GroupTask[]>([]);
   protected tasksRequestParams ={
     isAccepted: false,
+    isDeclined:false,
     pageNumber:0,
     pageSize:5
   }
@@ -226,12 +227,21 @@ export class PreviewGroupComponent implements OnInit {
   protected onActiveTasks():void
   {
       this.tasksRequestParams.isAccepted =false
+      this.tasksRequestParams.isDeclined=false
       this.loadGroupTasks()
   }
 
   protected onInactiveTasks():void
   {
       this.tasksRequestParams.isAccepted=true
+      this.tasksRequestParams.isDeclined=false
       this.loadGroupTasks()
+  }
+
+  protected onDeclinedTasks():void
+  {
+    this.tasksRequestParams.isAccepted=false
+    this.tasksRequestParams.isDeclined=true
+    this.loadGroupTasks()
   }
 }

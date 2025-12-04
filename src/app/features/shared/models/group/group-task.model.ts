@@ -45,7 +45,7 @@ export interface EditGroupTaskDto{
   difficultyId:number;
   completedAt:string|null;
   reward:number;
-  isAccepted:boolean;
+  isAccepted:boolean|null;
   declineMessage:string|null;
 }
 

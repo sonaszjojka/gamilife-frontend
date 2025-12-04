@@ -14,6 +14,7 @@ import {
 } from '../../../../shared/services/group-task-member-api/group-task-member-api.service';
 import {EditGroupTaskMemberDto, GroupTaskMemberModel} from '../../../../shared/models/group/group-task-member.model';
 import {formatDateTime, formatShortDate} from '../../../../../shared/util/DateFormatterUtil';
+import {GroupTaskDeclineFormComponent} from '../group-task-decline-form/group-task-decline-form.component';
 
 @Component({
   selector: 'app-group-task',
@@ -23,7 +24,8 @@ import {formatDateTime, formatShortDate} from '../../../../../shared/util/DateFo
     NzButtonComponent,
     NzIconDirective,
     GroupTaskFormComponent,
-    GroupTaskMembersManagerComponent
+    GroupTaskMembersManagerComponent,
+    GroupTaskDeclineFormComponent
   ],
   templateUrl: './group-task.component.html',
   styleUrl: './group-task.component.css'
@@ -59,6 +61,7 @@ export class GroupTaskComponent implements OnInit {
     this.formatedStartDate = formatDateTime(this.task().taskDto.startTime)
     this.formatedEndDate = formatDateTime(this.task().taskDto.endTime)
     this.formatedAcceptedDate = formatDateTime(this.task().acceptedDate)
+    console.log(this.task())
   }
 
 
@@ -66,6 +69,8 @@ export class GroupTaskComponent implements OnInit {
   groupTaskForm!: GroupTaskFormComponent;
   @ViewChild(GroupTaskMembersManagerComponent)
   groupTaskMembersManager!: GroupTaskMembersManagerComponent;
+  @ViewChild(GroupTaskDeclineFormComponent)
+  groupTaskDeclineForm!:(GroupTaskDeclineFormComponent)
 
 
   protected editTask(): void {
@@ -85,9 +90,6 @@ export class GroupTaskComponent implements OnInit {
       }
     })
   }
-
-
-
 
 
   protected manageParticipants(): void {
@@ -181,9 +183,7 @@ export class GroupTaskComponent implements OnInit {
   }
 
   protected decline(): void {
-
-
-
+    this.groupTaskDeclineForm.openForm();
   }
 
   protected onUpdate(): void {

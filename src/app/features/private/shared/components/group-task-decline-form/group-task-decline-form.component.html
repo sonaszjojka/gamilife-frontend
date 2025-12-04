@@ -1,0 +1,24 @@
+<nz-modal
+  [nzVisible]="isVisible"
+  nzOkText="Save"
+  nzCancelText="Cancel"
+  (nzOnOk)="handleSubmit()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label nzFor="declineMessage">Decline Message</nz-form-label>
+        <nz-form-control>
+            <textarea
+              nz-input
+              id="declineMessage"
+              formControlName="declineMessage"
+              placeholder="Enter task Decline Message"
+              rows="4"
+            ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

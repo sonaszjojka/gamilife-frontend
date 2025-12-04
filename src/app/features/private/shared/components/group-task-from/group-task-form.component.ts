@@ -1,9 +1,8 @@
 
 
-import {Component, inject, input, output, Output} from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import {EditGroupTaskDto, GroupTask} from '../../../../shared/models/group/group-task.model';
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {GroupMemberApiService} from '../../../../shared/services/group-member-api/group-member-api.service';
 import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
@@ -11,8 +10,6 @@ import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {CommonModule} from '@angular/common';
-import {EditTaskRequest} from '../../../../shared/models/task-models/edit-task-request';
-import {IndividualTaskService} from '../../../../shared/services/tasks/individual-task.service';
 @Component({
   selector: 'app-group-task-form',
   templateUrl: './group-task-form.component.html',
@@ -37,8 +34,6 @@ export class GroupTaskFormComponent{
 
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
-  private groupMemberApi = inject(GroupMemberApiService);
-  private taskApi = inject(IndividualTaskService);
 
   task=input<GroupTask|null>(null);
   groupId=input.required<string>();
@@ -167,11 +162,11 @@ export class GroupTaskFormComponent{
         categoryId: formValue.categoryId!,
         difficultyId: formValue.difficultyId!,
         completedAt: null,
-        isAccepted:false,
+        isAccepted:null,
         reward:formValue.reward,
         declineMessage:null
       }
-        console.log(editGroupTaskRequest)
+
           this.groupTaskApi.editGroupTask(this.groupId(), this.task()!.groupTaskId, editGroupTaskRequest).subscribe({
             next: () => {
               this.formSubmitted.emit();

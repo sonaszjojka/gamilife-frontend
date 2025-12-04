@@ -3,9 +3,12 @@
 
     <div class="action-left">
       @if (mode() === GroupPreviewMode.ADMIN) {
-        <button nz-button nzShape="circle" (click)="deleteTask()">
+        @if (task().declineMessage==null)
+        {
+        <button nz-button nzShape="circle" (click)="decline()">
           <nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#c41a1a'"></nz-icon>
         </button>
+        }
       }
     </div>
 
@@ -71,6 +74,16 @@
         </div>
       </div>
     </div>
+    @if (task().declineMessage!=null)
+    {
+      <div class="info-item" >
+        <nz-icon nzType="warning" class="info-icon"></nz-icon>
+        <div class ="info-label"> Decline Message </div>
+        <div class="info-value">
+          {{task().declineMessage}}
+        </div>
+      </div>
+    }
   </div>
 
   <div class="task-actions-footer">
@@ -104,6 +117,14 @@
 >
 </app-group-task-form>
 
+<app-group-task-decline-form
+  [groupId]="group().groupId"
+  [task]="task()"
+  (formSubmitted)="onUpdate()"
+>
+
+</app-group-task-decline-form>
+
 <app-group-task-members-manager
   [groupId]="group().groupId"
   [task]="task()"
@@ -111,3 +132,5 @@
   (changed)="checkUserIsParticipant()"
 >
 </app-group-task-members-manager>
+
+

@@ -83,6 +83,10 @@
           <div class="group-tasks-filter">
             <button nz-button (click)="onActiveTasks()"> Active Tasks</button>
             <button nz-button (click)="onInactiveTasks()">Tasks History</button>
+            @if (mode()!=GroupPreviewMode.PUBLIC)
+            {
+            <button nz-button (click)="onDeclinedTasks()">Declined Tasks</button>
+            }
           </div>
           <div class="group-tasks-list">
             @for (task of tasksList();track task.taskDto.id)
