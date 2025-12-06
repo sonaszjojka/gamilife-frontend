@@ -35,7 +35,6 @@ export const routes: Routes = [
   {
     path: 'reset-password',
     component: ResetPasswordComponent,
-    canActivate: [GuestGuard],
   },
   {
     path: 'login',
