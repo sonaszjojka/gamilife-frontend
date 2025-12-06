@@ -155,6 +155,7 @@ public onGroupRefresh()
 
   protected onActiveTasks():void
   {
+    this.tasksRequestParams.page=0;
     this.tasksRequestParams.isAccepted =false
     this.tasksRequestParams.isDeclined=false
     this.loadGroupTasks()
@@ -162,6 +163,7 @@ public onGroupRefresh()
 
   protected onAcceptedTasks ():void
   {
+    this.tasksRequestParams.page=0;
     this.tasksRequestParams.isAccepted=true
     this.tasksRequestParams.isDeclined=false
     this.loadGroupTasks()
@@ -169,6 +171,7 @@ public onGroupRefresh()
 
   protected onDeclinedTasks():void
   {
+    this.tasksRequestParams.page=0;
     this.tasksRequestParams.isAccepted=false
     this.tasksRequestParams.isDeclined=true
     this.loadGroupTasks()

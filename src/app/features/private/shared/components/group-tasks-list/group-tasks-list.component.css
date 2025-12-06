@@ -9,6 +9,7 @@
   min-height:0;
   overflow: hidden;
   border-radius:10px;
+  box-shadow: var(--box-shadow-md);
 
   ::ng-deep .ant-card-body {
     display: flex;

@@ -96,5 +96,10 @@
       </div>
     </nz-card>
   </nz-spin>
+  <app-edit-group-form
+    [group]="group()!"
+    [members]="membersList()"
+    (groupUpdated)="onActionComplete()"
+    ></app-edit-group-form>
 
 </div>

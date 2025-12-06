@@ -92,11 +92,11 @@
 
     <div class="action-right">
       @if (mode() === GroupPreviewMode.ADMIN) {
-        <button nz-button nzShape="circle" (click)="deleteTask()">
+        <button nz-button nzShape="circle" (click)="confirmDelete()">
           <nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#c41a1a'"></nz-icon>
         </button>
         @if (task().acceptedDate == null && task().declineMessage == null) {
-          <button nz-button (click)="accept()">
+          <button nz-button (click)="confirmAccept()">
             Accept Task
           </button>
           <button nz-button  (click)="decline()" style="border-color: #c41a1a">

@@ -15,6 +15,7 @@ import {
 import {EditGroupTaskMemberDto, GroupTaskMemberModel} from '../../../../shared/models/group/group-task-member.model';
 import {formatDateTime, formatShortDate} from '../../../../../shared/util/DateFormatterUtil';
 import {GroupTaskDeclineFormComponent} from '../group-task-decline-form/group-task-decline-form.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-group-task',
@@ -55,6 +56,7 @@ export class GroupTaskComponent implements OnInit {
 
   private readonly groupTaskApi= inject(GroupTaskApiService);
   private readonly groupTaskMemberApi= inject(GroupTaskMemberApiService);
+  private modal =inject(NzModalService);
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
@@ -152,7 +154,7 @@ export class GroupTaskComponent implements OnInit {
 
   }
 
-  protected accept(): void {
+  protected acceptTask(): void {
     let  request : EditGroupTaskDto ={
       title:this.task().taskDto.title,
       description:this.task().taskDto.description,
@@ -206,6 +208,29 @@ export class GroupTaskComponent implements OnInit {
   {
     return this.membersList().find(member => member.groupMemberId == participantId)!.username
 
+  }
+
+  protected confirmDelete(): void {
+    this.modal.confirm({
+      nzTitle: 'Delete Task',
+      nzContent:
+        'Are you sure you want to delete this task? This action cannot be undone.',
+      nzOkText: 'Delete',
+      nzOkDanger: true,
+      nzCancelText: 'Cancel',
+      nzOnOk: () => this.deleteTask(),
+    });
+  }
+
+  protected confirmAccept(): void {
+    this.modal.confirm({
+      nzTitle: 'Accept Task',
+      nzContent:
+        'Are you sure you want to accept this task? This action cannot be undone.',
+      nzOkText: 'Accept',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => this.acceptTask(),
+    });
   }
 
 

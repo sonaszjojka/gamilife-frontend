@@ -40,6 +40,7 @@ import {GroupTasksListComponent} from '../group-tasks-list/group-tasks-list.comp
     RankingListPeakComponent,
     GroupRequestsListPeakComponent,
     GroupTasksListComponent,
+    EditGroupFormComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
