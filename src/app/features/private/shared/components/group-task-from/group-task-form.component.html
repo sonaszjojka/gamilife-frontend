@@ -42,15 +42,24 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label nzRequired nzFor="endTime">End Time</nz-form-label>
-        <nz-form-control nzErrorTip="Please select End Time!">
+      <nz-form-label nzRequired>End Time</nz-form-label>
+      <nz-form-control nzErrorTip="Please select End Time!">
+        <div style="display: flex; gap: 8px;">
           <nz-date-picker
+            id="endDate"
+            formControlName="endDate"
+            style="flex: 1;"
+          ></nz-date-picker>
+          <nz-time-picker
             id="endTime"
             formControlName="endTime"
-            style="width: 100%;"
-            ></nz-date-picker>
-        </nz-form-control>
+            nzFormat="HH:mm"
+            style="flex: 1;"
+          ></nz-time-picker>
+        </div>
+      </nz-form-control>
       </nz-form-item>
+
       <nz-form-item>
         <nz-form-label nzRequired nzFor="categoryId">Category</nz-form-label>
         <nz-form-control nzErrorTip="Please select a category!">

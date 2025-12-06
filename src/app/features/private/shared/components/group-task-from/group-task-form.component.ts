@@ -10,6 +10,7 @@ import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {CommonModule} from '@angular/common';
+import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 @Component({
   selector: 'app-group-task-form',
   templateUrl: './group-task-form.component.html',
@@ -24,7 +25,8 @@ import {CommonModule} from '@angular/common';
     NzFormDirective,
     NzDatePickerComponent,
     NzSelectComponent,
-    NzOptionComponent
+    NzOptionComponent,
+    NzTimePickerComponent
   ],
   standalone: true
 })
@@ -40,7 +42,7 @@ export class GroupTaskFormComponent{
   isVisible = false;
 
 
-//ToDo add hour selection
+
   protected validateForm = this.fb.group({
     title: this.fb.control<string>('', [
       Validators.required,
@@ -53,9 +55,13 @@ export class GroupTaskFormComponent{
     startTime: this.fb.control<Date | null>(null, [
       Validators.required,
       ]),
-    endTime: this.fb.control<Date | null>(null, [
+    endDate: this.fb.control<Date | null>(null, [
       Validators.required,
       ]),
+    endTime:this.fb.control<Date|null>(null,[
+      Validators.required
+    ]),
+
     categoryId: this.fb.control<number>(1, [
       Validators.required,
     ]),
@@ -90,6 +96,7 @@ export class GroupTaskFormComponent{
         title: task.taskDto.title,
         description: task.taskDto!.description!,
         startTime: new Date(task.taskDto.startTime),
+        endDate: new Date(task.taskDto.endTime),
         endTime: new Date(task.taskDto.endTime),
         categoryId:   task.taskDto.category.id,
         difficultyId: task.taskDto.difficulty.id,
@@ -102,11 +109,12 @@ export class GroupTaskFormComponent{
   handleCreate(): void {
     if (this.validateForm.valid) {
       const formValue = this.validateForm.getRawValue();
+      formValue.endDate!.setHours(formValue.endTime!.getHours()+1, formValue.endTime!.getMinutes(), 0, 0);
       const request = {
         title: formValue.title,
         description: formValue.description,
         startTime: formValue.startTime,
-        endTime: formValue.endTime,
+        endTime: formValue.endDate,
         categoryId: formValue.categoryId,
         difficultyId: formValue.difficultyId,
         reward:formValue.reward
@@ -155,11 +163,12 @@ export class GroupTaskFormComponent{
   handleEdit(): void {
     if (this.validateForm.valid) {
       const formValue = this.validateForm.getRawValue();
+      formValue.endDate!.setHours(formValue.endTime!.getHours()+1, formValue.endTime!.getMinutes(), 0, 0);
       let editGroupTaskRequest: EditGroupTaskDto = {
         title: formValue.title,
         description: formValue.description,
         startTime: formValue.startTime!.toISOString(),
-        endTime: formValue.endTime!.toISOString(),
+        endTime: formValue.endDate!.toISOString(),
         categoryId: formValue.categoryId!,
         difficultyId: formValue.difficultyId!,
         completedAt: null,
