@@ -21,7 +21,7 @@ import { MembersListPeakComponent } from '../members-list-peak/members-list-peak
 import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
-import {GroupTasksListComponent} from '../group-tasks-list/group-tasks-list.component';
+import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
 
 @Component({
   selector: 'app-preview-group',
@@ -53,7 +53,6 @@ export class PreviewGroupComponent implements OnInit {
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
 
-
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
 
@@ -64,7 +63,6 @@ export class PreviewGroupComponent implements OnInit {
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
-
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('groupId');
@@ -99,7 +97,6 @@ export class PreviewGroupComponent implements OnInit {
         },
       });
   }
-
 
   private loadGroupRequests(): void {
     const groupId = this.groupId();

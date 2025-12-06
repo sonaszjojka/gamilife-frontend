@@ -1,8 +1,7 @@
-
-export interface GroupTaskMemberModel{
-  groupTaskMemberId:string;
-  groupMemberId:string;
-  isMarkedDone:boolean;
+export interface GroupTaskMemberModel {
+  groupTaskMemberId: string;
+  groupMemberId: string;
+  isMarkedDone: boolean;
 }
 
 export interface EditGroupTaskMemberDto {
@@ -11,6 +10,6 @@ export interface EditGroupTaskMemberDto {
 
 export interface CreateGroupTaskMemberDto {
   groupMemberId: string;
-  groupTaskId:string;
-  isMarkedDone:boolean;
+  groupTaskId: string;
+  isMarkedDone: boolean;
 }

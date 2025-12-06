@@ -14,12 +14,9 @@
       >
         <ng-template #assignedMember let-assignedMember>
           <nz-list-item>
-            <nz-list-item-meta
-              [nzTitle]="assignedMember.username"
-            >
-              @if (assignedMember.isMarkedDone)
-              {
-                <nz-icon nzType="check-circle" style="color: green;"></nz-icon>
+            <nz-list-item-meta [nzTitle]="assignedMember.username">
+              @if (assignedMember.isMarkedDone) {
+                <nz-icon nzType="check-circle" style="color: green"></nz-icon>
               }
               <nz-icon></nz-icon>
             </nz-list-item-meta>
@@ -28,7 +25,7 @@
               nzType="default"
               nzDanger
               (click)="removeMemberFromTask(assignedMember.groupMemberId)"
-              >
+            >
               Remove
             </button>
           </nz-list-item>
@@ -44,9 +41,7 @@
       >
         <ng-template #notAssignedMember let-notAssignedMember>
           <nz-list-item>
-            <nz-list-item-meta
-              [nzTitle]="notAssignedMember.username"
-            >
+            <nz-list-item-meta [nzTitle]="notAssignedMember.username">
             </nz-list-item-meta>
             <button
               nz-button
@@ -59,6 +54,5 @@
         </ng-template>
       </nz-list>
     </div>
-
   </ng-container>
 </nz-modal>

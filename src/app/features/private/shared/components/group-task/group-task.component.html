@@ -1,7 +1,5 @@
 <nz-card class="task-card">
-  <div class="task-header-controls">
-
-  </div>
+  <div class="task-header-controls"></div>
 
   <div class="task-content">
     <div class="task-header">
@@ -9,7 +7,6 @@
     </div>
 
     <div class="info-container">
-
       <div class="info-item">
         <nz-icon nzType="file-text" class="info-icon"></nz-icon>
         <div class="info-content">
@@ -22,7 +19,11 @@
         <nz-icon nzType="tag" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Difficulty / Category</div>
-          <div class="info-value">{{ task().taskDto.difficulty.difficultyName }} <span class="limit">/</span> {{ task().taskDto.category.categoryName }}</div>
+          <div class="info-value">
+            {{ task().taskDto.difficulty.difficultyName }}
+            <span class="limit">/</span>
+            {{ task().taskDto.category.categoryName }}
+          </div>
         </div>
       </div>
 
@@ -48,33 +49,43 @@
       <div class="info-content">
         <div class="info-label">Participants</div>
         <div class="info-value participants-container">
-          @for (participant of task().groupTaskMembers; track participant.groupTaskMemberId) {
+          @for (
+            participant of task().groupTaskMembers;
+            track participant.groupTaskMemberId
+          ) {
             <span class="participant-item">
               {{ getParticipantUsername(participant.groupMemberId) }}
-              @if(participant.isMarkedDone) {
-                <nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#52c41a'"></nz-icon>
+              @if (participant.isMarkedDone) {
+                <nz-icon
+                  nzType="check-circle"
+                  nzTheme="twotone"
+                  [nzTwotoneColor]="'#52c41a'"
+                ></nz-icon>
               } @else {
-                <nz-icon nzType="close-circle" nzTheme="twotone" [nzTwotoneColor]="'#c41a1a'"></nz-icon>
+                <nz-icon
+                  nzType="close-circle"
+                  nzTheme="twotone"
+                  [nzTwotoneColor]="'#c41a1a'"
+                ></nz-icon>
               }
             </span>
           }
         </div>
       </div>
     </div>
-    @if (task().declineMessage!=null)
-    {
-      <div class="info-item" >
+    @if (task().declineMessage != null) {
+      <div class="info-item">
         <nz-icon nzType="warning" class="info-icon"></nz-icon>
-        <div class ="info-label"> Decline Message </div>
+        <div class="info-label">Decline Message</div>
         <div class="info-value">
-          {{task().declineMessage}}
+          {{ task().declineMessage }}
         </div>
       </div>
     }
   </div>
 
   <div class="task-actions-footer">
-    @if(task().acceptedDate == null && task().declineMessage == null) {
+    @if (task().acceptedDate == null && task().declineMessage == null) {
       <button nz-button nzShape="circle" (click)="editTask()">
         <nz-icon nzType="setting"></nz-icon>
       </button>
@@ -84,8 +95,12 @@
       </button>
     }
 
-    @if (userIsParticipant() != null && task().acceptedDate == null && task().declineMessage == null) {
-      @if(checkIfTaskIsCompletedByUser()){
+    @if (
+      userIsParticipant() != null &&
+      task().acceptedDate == null &&
+      task().declineMessage == null
+    ) {
+      @if (checkIfTaskIsCompletedByUser()) {
         <button nz-button nzShape="circle" (click)="removeCompletion()">
           <nz-icon nzType="undo"></nz-icon>
         </button>
@@ -96,30 +111,29 @@
       }
     }
 
-
     <div class="action-right">
       @if (mode() === GroupPreviewMode.ADMIN) {
         <button nz-button nzShape="circle" (click)="confirmDelete()">
-          <nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#c41a1a'"></nz-icon>
+          <nz-icon
+            nzType="delete"
+            nzTheme="twotone"
+            [nzTwotoneColor]="'#c41a1a'"
+          ></nz-icon>
         </button>
         @if (task().acceptedDate == null && task().declineMessage == null) {
-          <button nz-button (click)="confirmAccept()">
-            Accept Task
-          </button>
-          <button nz-button  (click)="decline()" style="border-color: #c41a1a">
+          <button nz-button (click)="confirmAccept()">Accept Task</button>
+          <button nz-button (click)="decline()" style="border-color: #c41a1a">
             Decline Task
           </button>
         }
-
       }
     </div>
-
   </div>
 </nz-card>
 <app-group-task-form
-[groupId]="group().groupId"
-[task]="task()"
-(formSubmitted)="onUpdate()"
+  [groupId]="group().groupId"
+  [task]="task()"
+  (formSubmitted)="onUpdate()"
 >
 </app-group-task-form>
 
@@ -128,7 +142,6 @@
   [task]="task()"
   (formSubmitted)="onUpdate()"
 >
-
 </app-group-task-decline-form>
 
 <app-group-task-members-manager
@@ -138,5 +151,3 @@
   (changed)="checkUserIsParticipant()"
 >
 </app-group-task-members-manager>
-
-

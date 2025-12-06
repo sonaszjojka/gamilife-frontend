@@ -78,11 +78,11 @@
           </button>
         </div>
         <app-group-task-list
-        [mode]="mode()"
-        [groupMembersList]="membersList()"
-        [group]="group()!"
-        [groupId]="groupId()!"
-        (refreshGroup)="onActionComplete()"
+          [mode]="mode()"
+          [groupMembersList]="membersList()"
+          [group]="group()!"
+          [groupId]="groupId()!"
+          (refreshGroup)="onActionComplete()"
         >
         </app-group-task-list>
       </div>
@@ -100,6 +100,5 @@
     [group]="group()!"
     [members]="membersList()"
     (groupUpdated)="onActionComplete()"
-    ></app-edit-group-form>
-
+  ></app-edit-group-form>
 </div>

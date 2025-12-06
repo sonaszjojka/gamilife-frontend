@@ -1,27 +1,34 @@
-import {Component, inject, input, OnInit, output, signal, ViewChild} from '@angular/core';
-import {GroupTaskFormComponent} from '../group-task-from/group-task-form.component';
-import {NzModalModule} from 'ng-zorro-antd/modal';
-import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
-import {GroupTask} from '../../../../shared/models/group/group-task.model';
-import {Group} from '../../../../shared/models/group/group.model';
-import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mode';
-import {CommonModule} from '@angular/common';
-import {NzSpinModule} from 'ng-zorro-antd/spin';
-import {NzCardModule} from 'ng-zorro-antd/card';
-import {NzIconModule} from 'ng-zorro-antd/icon';
-import {NzListModule} from 'ng-zorro-antd/list';
-import {NzButtonModule} from 'ng-zorro-antd/button';
-import {EditGroupFormComponent} from '../edit-group-form/edit-group-form.component';
-import {GroupTaskComponent} from '../group-task/group-task.component';
-import {GroupMember} from '../../../../shared/models/group/group-member.model';
-import {Page} from '../../../../shared/services/tasks/individual-task.service';
-
+import {
+  Component,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { GroupTaskFormComponent } from '../group-task-from/group-task-form.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { GroupTaskApiService } from '../../../../shared/services/group-task-api/group-task-api.service';
+import { GroupTask } from '../../../../shared/models/group/group-task.model';
+import { Group } from '../../../../shared/models/group/group.model';
+import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
+import { CommonModule } from '@angular/common';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
+import { GroupTaskComponent } from '../group-task/group-task.component';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
+import { Page } from '../../../../shared/services/tasks/individual-task.service';
 
 @Component({
   selector: 'app-group-task-list',
   standalone: true,
   templateUrl: 'group-tasks-list.component.html',
-  styleUrl:'group-tasks-list.component.css',
+  styleUrl: 'group-tasks-list.component.css',
   imports: [
     CommonModule,
     NzSpinModule,
@@ -34,30 +41,25 @@ import {Page} from '../../../../shared/services/tasks/individual-task.service';
     GroupTaskFormComponent,
     EditGroupFormComponent,
   ],
-
 })
-
-export class GroupTasksListComponent implements OnInit
-{
-
+export class GroupTasksListComponent implements OnInit {
   mode = input.required<GroupPreviewMode>();
-  group = input.required<Group >();
+  group = input.required<Group>();
   groupId = input.required<string>();
-  groupMembersList=input.required<GroupMember[]>()
+  groupMembersList = input.required<GroupMember[]>();
 
-  refreshGroup=output<void>()
+  refreshGroup = output<void>();
 
-
-  protected loadingMore=signal<boolean>(false)
+  protected loadingMore = signal<boolean>(false);
   protected loading = signal<boolean>(true);
-  protected hasMore=signal<boolean>(true)
+  protected hasMore = signal<boolean>(true);
   protected tasksList = signal<GroupTask[]>([]);
-  protected tasksRequestParams ={
+  protected tasksRequestParams = {
     isAccepted: false,
-    isDeclined:false,
-    page:0,
-    size:5
-  }
+    isDeclined: false,
+    page: 0,
+    size: 5,
+  };
 
   private readonly groupTaskApi = inject(GroupTaskApiService);
   protected readonly GroupPreviewMode = GroupPreviewMode;
@@ -66,20 +68,19 @@ export class GroupTasksListComponent implements OnInit
   groupTaskForm!: GroupTaskFormComponent;
 
   ngOnInit() {
-    this.loadGroupTasks()
+    this.loadGroupTasks();
   }
-
 
   private loadGroupTasks(): void {
     const groupId = this.groupId();
     if (!groupId) return;
 
     this.groupTaskApi
-      .getGroupTasks(groupId,this.tasksRequestParams)
+      .getGroupTasks(groupId, this.tasksRequestParams)
       .subscribe({
         next: (tasks) => {
           this.tasksList.set(tasks.content);
-          this.loading.set(false)
+          this.loading.set(false);
         },
         error: (err) => {
           console.error('Error loading group tasks:', err);
@@ -91,61 +92,50 @@ export class GroupTasksListComponent implements OnInit
   loadMoreTasks(): void {
     if (!this.hasMore() || this.loadingMore()) return;
     this.loadingMore.set(true);
-    let nexPage=this.tasksRequestParams.page+1
+    let nexPage = this.tasksRequestParams.page + 1;
 
-    let nexPageParams={
+    let nexPageParams = {
       size: this.tasksRequestParams.size,
       page: nexPage,
       isAccepted: this.tasksRequestParams.isAccepted,
-      isDeclined: this.tasksRequestParams.isDeclined
-    }
-    this.groupTaskApi
-      .getGroupTasks(
-        this.groupId(),
-        nexPageParams
-      )
-      .subscribe({
-        next: (response: Page<GroupTask>) => {
-          this.tasksList.update(currentTasks => [...currentTasks, ...response.content]);
-          this.tasksRequestParams.page = response.number;
-          this.hasMore.set(!response.last)
-          this.loadingMore.set(false)
-        },
-        error: (error) => {
-          console.error('Error loading more tasks:', error);
-          this.loadingMore.set(false)
-        },
-      });
+      isDeclined: this.tasksRequestParams.isDeclined,
+    };
+    this.groupTaskApi.getGroupTasks(this.groupId(), nexPageParams).subscribe({
+      next: (response: Page<GroupTask>) => {
+        this.tasksList.update((currentTasks) => [
+          ...currentTasks,
+          ...response.content,
+        ]);
+        this.tasksRequestParams.page = response.number;
+        this.hasMore.set(!response.last);
+        this.loadingMore.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading more tasks:', error);
+        this.loadingMore.set(false);
+      },
+    });
   }
   onListScroll(event: Event): void {
     const target = event.target as HTMLElement;
     const threshold = 100;
 
-    const isNearEnd = (target.scrollTop + target.clientHeight) >= (target.scrollHeight - threshold);
+    const isNearEnd =
+      target.scrollTop + target.clientHeight >= target.scrollHeight - threshold;
 
-    if (
-      isNearEnd &&
-      !this.loading() &&
-      !this.loadingMore() &&
-      this.hasMore()
-    ) {
+    if (isNearEnd && !this.loading() && !this.loadingMore() && this.hasMore()) {
       this.loadMoreTasks();
     }
   }
 
+  public onTaskListUpdate() {
+    this.loadGroupTasks();
+  }
 
- public onTaskListUpdate()
-{
-
-  this.loadGroupTasks();
-}
-
-public onGroupRefresh()
-{
-  this.loadGroupTasks();
-  this.refreshGroup.emit()
-}
-
+  public onGroupRefresh() {
+    this.loadGroupTasks();
+    this.refreshGroup.emit();
+  }
 
   protected createTask(): void {
     if (this.groupTaskForm) {
@@ -153,28 +143,24 @@ public onGroupRefresh()
     }
   }
 
-  protected onActiveTasks():void
-  {
-    this.tasksRequestParams.page=0;
-    this.tasksRequestParams.isAccepted =false
-    this.tasksRequestParams.isDeclined=false
-    this.loadGroupTasks()
+  protected onActiveTasks(): void {
+    this.tasksRequestParams.page = 0;
+    this.tasksRequestParams.isAccepted = false;
+    this.tasksRequestParams.isDeclined = false;
+    this.loadGroupTasks();
   }
 
-  protected onAcceptedTasks ():void
-  {
-    this.tasksRequestParams.page=0;
-    this.tasksRequestParams.isAccepted=true
-    this.tasksRequestParams.isDeclined=false
-    this.loadGroupTasks()
+  protected onAcceptedTasks(): void {
+    this.tasksRequestParams.page = 0;
+    this.tasksRequestParams.isAccepted = true;
+    this.tasksRequestParams.isDeclined = false;
+    this.loadGroupTasks();
   }
 
-  protected onDeclinedTasks():void
-  {
-    this.tasksRequestParams.page=0;
-    this.tasksRequestParams.isAccepted=false
-    this.tasksRequestParams.isDeclined=true
-    this.loadGroupTasks()
+  protected onDeclinedTasks(): void {
+    this.tasksRequestParams.page = 0;
+    this.tasksRequestParams.isAccepted = false;
+    this.tasksRequestParams.isDeclined = true;
+    this.loadGroupTasks();
   }
-
 }

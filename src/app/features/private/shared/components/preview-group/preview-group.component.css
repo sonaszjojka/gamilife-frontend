@@ -56,8 +56,6 @@
   min-height: 400px;
 }
 
-
-
 .placeholder-icon {
   font-size: 64px;
   margin-bottom: var(--spacing-medium);
@@ -129,6 +127,3 @@
 ::ng-deep .section-card .ant-card-body {
   padding: 0;
 }
-
-
-
