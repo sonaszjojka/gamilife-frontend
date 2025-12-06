@@ -41,7 +41,7 @@ export class GroupTaskComponent implements OnInit {
    group=input.required<Group>();
    membersList=input.required<GroupMember[]>();
 
-  userIsParticipant=signal<GroupTaskMemberModel|null>(null);
+   userIsParticipant=signal<GroupTaskMemberModel|null>(null);
 
   formatedStartDate!: string;
   formatedEndDate!: string;
@@ -50,6 +50,7 @@ export class GroupTaskComponent implements OnInit {
 
 
   taskUpdated=output<void>();
+  rewardGiven=output<void>();
 
 
   private readonly groupTaskApi= inject(GroupTaskApiService);
@@ -57,8 +58,6 @@ export class GroupTaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
-
-    this.formatedStartDate = formatDateTime(this.task().taskDto.startTime)
     this.formatedEndDate = formatDateTime(this.task().taskDto.endTime)
     this.formatedAcceptedDate = formatDateTime(this.task().acceptedDate)
   }
@@ -94,13 +93,11 @@ export class GroupTaskComponent implements OnInit {
   protected manageParticipants(): void {
       this.groupTaskMembersManager.show();
   }
-
   protected complete(): void {
     if (this.userIsParticipant()!=null) {
       let request : EditGroupTaskMemberDto = {
         isMarkedDone: true
       }
-
       this.groupTaskMemberApi.editTaskMemberCompletionStatus(this.group().groupId,
         this.task().groupTaskId,
         this.userIsParticipant()!.groupTaskMemberId,
@@ -115,7 +112,6 @@ export class GroupTaskComponent implements OnInit {
               currentMember =>
                 currentMember.groupTaskMemberId==response.groupTaskMemberId)
             participant!.isMarkedDone=response.isMarkedDone
-
           },
           error: (err) => {
             console.error('Error marking task as complete:', err);
@@ -171,7 +167,7 @@ export class GroupTaskComponent implements OnInit {
     }
     this.groupTaskApi.editGroupTask(this.group().groupId,this.task().groupTaskId,request).subscribe({
       next: () => {
-        this.onUpdate();
+        this.onRewardGiven()
       },
       error: (err) => {
         console.error('Error accepting task:', err);
@@ -187,6 +183,10 @@ export class GroupTaskComponent implements OnInit {
 
   protected onUpdate(): void {
     this.taskUpdated.emit();
+  }
+  protected onRewardGiven():void
+  {
+    this.rewardGiven.emit()
   }
 
   public checkUserIsParticipant(): void {
@@ -207,6 +207,8 @@ export class GroupTaskComponent implements OnInit {
     return this.membersList().find(member => member.groupMemberId == participantId)!.username
 
   }
+
+
 
 
 

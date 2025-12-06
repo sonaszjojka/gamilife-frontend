@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, signal, ViewChild} from '@angular/core';
+import {Component, inject, input, OnInit, output, signal, ViewChild} from '@angular/core';
 import {GroupTaskFormComponent} from '../group-task-from/group-task-form.component';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
@@ -44,6 +44,8 @@ export class GroupTasksListComponent implements OnInit
   group = input.required<Group >();
   groupId = input.required<string>();
   groupMembersList=input.required<GroupMember[]>()
+
+  refreshGroup=output<void>()
 
 
   protected loadingMore=signal<boolean>(false)
@@ -136,6 +138,12 @@ export class GroupTasksListComponent implements OnInit
 {
 
   this.loadGroupTasks();
+}
+
+public onGroupRefresh()
+{
+  this.loadGroupTasks();
+  this.refreshGroup.emit()
 }
 
 

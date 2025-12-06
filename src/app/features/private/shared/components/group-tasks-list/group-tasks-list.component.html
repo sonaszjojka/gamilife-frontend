@@ -15,6 +15,7 @@
           [mode]="mode()"
           [membersList]="groupMembersList()"
           (taskUpdated)="onTaskListUpdate()"
+          (rewardGiven)="onGroupRefresh()"
         ></app-group-task>
       }
     </nz-spin>
@@ -27,15 +28,8 @@
     }
   </div>
 </nz-card>
-<app-edit-group-form
-  *ngIf="group()"
-  [group]="group()!"
-  [members]="groupMembersList()"
-  (groupUpdated)="onTaskListUpdate()"
-></app-edit-group-form>
 
 <app-group-task-form
-  *ngIf="group()"
   [groupId]="group()!.groupId"
   (formSubmitted)="onTaskListUpdate()"
 >

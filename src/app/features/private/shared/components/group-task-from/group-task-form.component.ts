@@ -125,11 +125,13 @@ export class GroupTaskFormComponent{
     if (this.task()==null) {
       this.handleCreate();
       this.isVisible = false;
+      this.validateForm.reset();
     }
     else
     {
       this.handleEdit();
       this.isVisible = false;
+      this.validateForm.reset();
     }
 
   }
@@ -150,7 +152,6 @@ export class GroupTaskFormComponent{
     }
   }
 
-  //ToDo add hour selection
   handleEdit(): void {
     if (this.validateForm.valid) {
       const formValue = this.validateForm.getRawValue();
