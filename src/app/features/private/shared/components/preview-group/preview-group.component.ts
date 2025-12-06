@@ -21,10 +21,7 @@ import { MembersListPeakComponent } from '../members-list-peak/members-list-peak
 import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
-import {GroupTaskFormComponent} from '../group-task-from/group-task-form.component';
-import {GroupTask} from '../../../../shared/models/group/group-task.model';
-import {GroupTaskApiService} from '../../../../shared/services/group-task-api/group-task-api.service';
-import {GroupTaskComponent} from '../group-task/group-task.component';
+import {GroupTasksListComponent} from '../group-tasks-list/group-tasks-list.component';
 
 @Component({
   selector: 'app-preview-group',
@@ -42,9 +39,7 @@ import {GroupTaskComponent} from '../group-task/group-task.component';
     MembersListPeakComponent,
     RankingListPeakComponent,
     GroupRequestsListPeakComponent,
-    EditGroupFormComponent,
-    GroupTaskFormComponent,
-    GroupTaskComponent,
+    GroupTasksListComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
@@ -56,13 +51,7 @@ export class PreviewGroupComponent implements OnInit {
   protected loading = signal<boolean>(true);
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
-  protected tasksList = signal<GroupTask[]>([]);
-  protected tasksRequestParams ={
-    isAccepted: false,
-    isDeclined:false,
-    pageNumber:0,
-    pageSize:5
-  }
+
 
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
@@ -71,21 +60,17 @@ export class PreviewGroupComponent implements OnInit {
   private readonly requestsApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly modal = inject(NzModalService);
-  private readonly groupTaskApi = inject(GroupTaskApiService);
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
-  @ViewChild(GroupTaskFormComponent)
-  groupTaskForm!: GroupTaskFormComponent;
+
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('groupId');
     if (!id) return;
-
     this.groupId.set(id);
     this.loadGroup();
     this.loadGroupRequests();
-    this.loadGroupTasks();
   }
 
   private loadGroup(): void {
@@ -114,23 +99,6 @@ export class PreviewGroupComponent implements OnInit {
       });
   }
 
-  //todo add more tasks load options
-  private loadGroupTasks(): void {
-    const groupId = this.groupId();
-    if (!groupId) return;
-
-    this.groupTaskApi
-      .getGroupTasks(groupId,this.tasksRequestParams)
-      .subscribe({
-        next: (tasks) => {
-          this.tasksList.set(tasks.content);
-        },
-        error: (err) => {
-          console.error('Error loading group tasks:', err);
-          this.tasksList.set([]);
-        },
-      });
-  }
 
   private loadGroupRequests(): void {
     const groupId = this.groupId();
@@ -153,7 +121,6 @@ export class PreviewGroupComponent implements OnInit {
   protected onActionComplete(): void {
     this.loadGroup();
     this.loadGroupRequests();
-    this.loadGroupTasks();
   }
 
   protected goToManageGroupMembersPage(): void {
@@ -216,32 +183,5 @@ export class PreviewGroupComponent implements OnInit {
           console.error('Failed to delete group:', err);
         },
       });
-  }
-
-  protected createTask(): void {
-    if (this.groupTaskForm) {
-      this.groupTaskForm.openForm();
-    }
-  }
-
-  protected onActiveTasks():void
-  {
-      this.tasksRequestParams.isAccepted =false
-      this.tasksRequestParams.isDeclined=false
-      this.loadGroupTasks()
-  }
-
-  protected onInactiveTasks():void
-  {
-      this.tasksRequestParams.isAccepted=true
-      this.tasksRequestParams.isDeclined=false
-      this.loadGroupTasks()
-  }
-
-  protected onDeclinedTasks():void
-  {
-    this.tasksRequestParams.isAccepted=false
-    this.tasksRequestParams.isDeclined=true
-    this.loadGroupTasks()
   }
 }

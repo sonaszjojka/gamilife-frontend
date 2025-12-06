@@ -1,26 +1,6 @@
 <nz-card class="task-card">
   <div class="task-header-controls">
 
-    <div class="action-left">
-      @if (mode() === GroupPreviewMode.ADMIN) {
-        @if (task().declineMessage==null)
-        {
-        <button nz-button nzShape="circle" (click)="decline()">
-          <nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#c41a1a'"></nz-icon>
-        </button>
-        }
-      }
-    </div>
-
-    <div class="action-right">
-      @if (mode() === GroupPreviewMode.ADMIN) {
-        @if (task().acceptedDate == null && task().declineMessage == null) {
-          <button nz-button (click)="accept()">
-            Accept Task
-          </button>
-        }
-      }
-    </div>
   </div>
 
   <div class="task-content">
@@ -42,7 +22,7 @@
         <nz-icon nzType="tag" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Difficulty / Category</div>
-          <div class="info-value">{{ task().taskDto.difficulty.id }} <span class="limit">/</span> {{ task().taskDto.category.id }}</div>
+          <div class="info-value">{{ task().taskDto.difficulty.difficultyName }} <span class="limit">/</span> {{ task().taskDto.category.categoryName }}</div>
         </div>
       </div>
 
@@ -108,6 +88,25 @@
         </button>
       }
     }
+
+
+    <div class="action-right">
+      @if (mode() === GroupPreviewMode.ADMIN) {
+        <button nz-button nzShape="circle" (click)="deleteTask()">
+          <nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#c41a1a'"></nz-icon>
+        </button>
+        @if (task().acceptedDate == null && task().declineMessage == null) {
+          <button nz-button (click)="accept()">
+            Accept Task
+          </button>
+          <button nz-button  (click)="decline()" style="border-color: #c41a1a">
+            Decline Task
+          </button>
+        }
+
+      }
+    </div>
+
   </div>
 </nz-card>
 <app-group-task-form

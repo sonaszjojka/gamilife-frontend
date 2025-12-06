@@ -77,36 +77,13 @@
             Delete Group
           </button>
         </div>
-
-        <nz-card class="group-tasks-card"
-                 nzTitle = "GroupTasks">
-          <div class="group-tasks-filter">
-            <button nz-button (click)="onActiveTasks()"> Active Tasks</button>
-            <button nz-button (click)="onInactiveTasks()">Tasks History</button>
-            @if (mode()!=GroupPreviewMode.PUBLIC)
-            {
-            <button nz-button (click)="onDeclinedTasks()">Declined Tasks</button>
-            }
-          </div>
-          <div class="group-tasks-list">
-            @for (task of tasksList();track task.taskDto.id)
-            {
-              <app-group-task
-                [task]="task"
-                [group]="group()!"
-                [mode]="mode()"
-                [membersList]="membersList()"
-                (taskUpdated)="onActionComplete()"
-              ></app-group-task>
-            }
-          </div>
-          <div class="bottom-tasks-list-panel">
-            @if (mode()!== GroupPreviewMode.PUBLIC)
-            {
-              <button nz-button nzShape="circle" (click)="createTask()"> <nz-icon nzType="plus"></nz-icon></button>
-            }
-          </div>
-        </nz-card>
+        <app-group-task-list
+        [mode]="mode()"
+        [groupMembersList]="membersList()"
+        [group]="group()!"
+        [groupId]="groupId()!"
+        >
+        </app-group-task-list>
       </div>
     </div>
 
@@ -119,17 +96,4 @@
     </nz-card>
   </nz-spin>
 
-  <app-edit-group-form
-    *ngIf="group()"
-    [group]="group()!"
-    [members]="membersList()"
-    (groupUpdated)="onActionComplete()"
-  ></app-edit-group-form>
-
-  <app-group-task-form
-    *ngIf="group()"
-    [groupId]="group()!.groupId"
-    (formSubmitted)="onActionComplete()"
-  >
-  </app-group-task-form>
 </div>

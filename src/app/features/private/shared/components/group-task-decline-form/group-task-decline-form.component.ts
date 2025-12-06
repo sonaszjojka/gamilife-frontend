@@ -22,9 +22,6 @@ import {CommonModule} from '@angular/common';
     NzFormControlComponent,
     NzInputDirective,
     NzFormDirective,
-    NzDatePickerComponent,
-    NzSelectComponent,
-    NzOptionComponent
   ],
   standalone: true
 })

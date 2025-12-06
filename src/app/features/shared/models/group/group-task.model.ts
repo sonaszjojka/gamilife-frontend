@@ -1,4 +1,5 @@
 import {GroupTaskMemberModel} from './group-task-member.model';
+import {Title} from '@angular/platform-browser';
 
 export interface GroupTask
 {
@@ -27,14 +28,14 @@ export interface TaskDto
 export interface Category
 {
   id:number
+  categoryName:Title
 }
 
 export interface Difficulty
 {
   id:number
+  difficultyName:Title
 }
-
-
 
 export interface EditGroupTaskDto{
   title:string;

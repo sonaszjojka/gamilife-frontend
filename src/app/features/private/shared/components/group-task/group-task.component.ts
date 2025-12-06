@@ -61,7 +61,6 @@ export class GroupTaskComponent implements OnInit {
     this.formatedStartDate = formatDateTime(this.task().taskDto.startTime)
     this.formatedEndDate = formatDateTime(this.task().taskDto.endTime)
     this.formatedAcceptedDate = formatDateTime(this.task().acceptedDate)
-    console.log(this.task())
   }
 
 

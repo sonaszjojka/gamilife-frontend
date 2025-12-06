@@ -1,0 +1,66 @@
+::ng-deep .main-content-card .ant-card-body {
+  padding: var(--spacing-large);
+}
+
+.group-tasks-card {
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  min-height:0;
+  overflow: hidden;
+
+  ::ng-deep .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    padding: 0;
+    overflow: hidden;
+  }
+  ::ng-deep .ant-card-head {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  ::ng-deep .ant-card-head-title {
+    text-align: center;
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+
+  }
+}
+
+.group-tasks-filter {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+
+  button {
+    flex: 1;
+  }
+}
+
+.group-tasks-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 16px;
+  min-height: 0;
+}
+
+.bottom-tasks-list-panel {
+
+  height: 8%;
+  width: 100%;
+  border-top: 1px solid #f0f0f0;
+  align-content: end;
+  flex-shrink: 0;
+
+  button {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+}
