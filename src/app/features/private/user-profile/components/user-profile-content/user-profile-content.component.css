@@ -1,0 +1,12 @@
+.profile-content {
+    height: 100%;
+}
+
+::ng-deep .profile-content .ant-tabs {
+    height: 100%;
+}
+
+::ng-deep .profile-content .ant-tabs-content {
+    height: calc(100% - 46px);
+    overflow-y: auto;
+}

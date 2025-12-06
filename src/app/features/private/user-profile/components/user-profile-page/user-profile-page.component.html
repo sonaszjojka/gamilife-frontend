@@ -1,0 +1,33 @@
+<div class="profile-page-container">
+  <nz-spin [nzSpinning]="loading" nzTip="Loading profile...">
+    <div class="profile-layout" *ngIf="userDetails">
+      <div class="profile-sidebar-container">
+        <app-user-profile-sidebar
+          [userDetails]="userDetails"
+          [viewMode]="viewMode"
+        >
+        </app-user-profile-sidebar>
+      </div>
+
+      <div class="profile-content-container">
+        <app-user-profile-content
+          [userDetails]="userDetails"
+          [viewMode]="viewMode"
+          (userDetailsChanged)="onUserDetailsChanged($event)"
+        >
+        </app-user-profile-content>
+      </div>
+    </div>
+
+    <nz-result
+      *ngIf="!loading && !userDetails"
+      nzStatus="404"
+      nzTitle="User Not Found"
+      nzSubTitle="The user profile you're looking for doesn't exist."
+    >
+      <div nz-result-extra>
+        <button nz-button nzType="primary" routerLink="/">Back Home</button>
+      </div>
+    </nz-result>
+  </nz-spin>
+</div>

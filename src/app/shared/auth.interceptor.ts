@@ -22,7 +22,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         }
 
         if ((code === 1019 || code === 2013) && !isAuthEndpoint) {
-          console.log('3');
           return authService.refreshToken().pipe(
             switchMap(() => next(cloned)),
             catchError(() => {

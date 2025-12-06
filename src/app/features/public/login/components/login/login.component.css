@@ -1,7 +1,7 @@
 .div-login-page {
   width: 100%;
   min-height: calc(100vh - 64px);
-  background: url("/background_guest_page.png") center center / cover no-repeat;
+  background: url("/assets/background_guest_page.png") center center / cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -170,7 +170,7 @@
   color: var(--third-color) !important;
 }
 
-::ng-deep .login-form .ant-form-item-label > label {
+::ng-deep .login-form .ant-form-item-label>label {
   color: var(--text-secondary-color);
 }
 

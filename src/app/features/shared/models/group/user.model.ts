@@ -21,6 +21,8 @@ export interface UserDetails {
   username: string;
   dateOfBirth: string;
   experience: number;
+  level: number;
+  requiredExperience: number | null;
   money: number;
   sendBudgetReports: boolean;
   isProfilePublic: boolean;

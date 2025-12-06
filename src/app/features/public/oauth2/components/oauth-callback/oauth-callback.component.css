@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url("/background_guest_page.png") center center / cover no-repeat;
+  background: url("/assets/background_guest_page.png") center center / cover no-repeat;
 }
 
 .callback-content {

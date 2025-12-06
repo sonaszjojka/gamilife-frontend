@@ -1,0 +1,24 @@
+<div
+  class="badge-item"
+  [class.equipped]="item.isEquipped"
+  [style.border-color]="getRarityColor()"
+  nz-tooltip
+  [nzTooltipTitle]="tooltipTemplate"
+  nzTooltipPlacement="bottom"
+  nzTooltipOverlayClassName="badge-tooltip-overlay"
+>
+  <img [src]="getImagePath()" [alt]="item.item.name" class="badge-image" />
+  <div class="badge-quantity" *ngIf="item.quantity > 1">
+    {{ item.quantity }}
+  </div>
+</div>
+
+<ng-template #tooltipTemplate>
+  <div class="badge-tooltip">
+    <h4>{{ item.item.name }}</h4>
+    <p>{{ item.item.description }}</p>
+    <nz-tag [nzColor]="getRarityColor()">
+      {{ item.item.rarity.name }}
+    </nz-tag>
+  </div>
+</ng-template>

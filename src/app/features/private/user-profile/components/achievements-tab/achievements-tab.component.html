@@ -1,0 +1,58 @@
+<div class="achievements-container">
+  <nz-spin [nzSpinning]="loading">
+    <div
+      class="achievements-grid"
+      *ngIf="achievements.length > 0; else noAchievements"
+    >
+      <nz-card
+        *ngFor="let achievement of achievements"
+        [nzHoverable]="true"
+        class="achievement-card"
+        [class.unlocked]="achievement.isUnlocked"
+      >
+        <div class="achievement-content">
+          <div class="achievement-icon">
+            <img
+              [src]="'assets/placeholder.png'"
+              [alt]="achievement.name"
+              [class.locked]="!achievement.isUnlocked"
+            />
+          </div>
+          <div class="achievement-info">
+            <h3>{{ achievement.name }}</h3>
+            <p>{{ achievement.description }}</p>
+
+            <div class="achievement-progress" *ngIf="!achievement.isUnlocked">
+              <nz-progress
+                [nzPercent]="getProgressPercent(achievement)"
+                [nzStatus]="getProgressStatus(achievement)"
+                [nzFormat]="progressFormat"
+              >
+              </nz-progress>
+              <ng-template #progressFormat let-percent>
+                {{ achievement.progress }}/{{ achievement.goal }}
+              </ng-template>
+            </div>
+
+            <nz-tag
+              *ngIf="achievement.isUnlocked"
+              nzColor="success"
+              class="unlocked-tag"
+            >
+              <i nz-icon nzType="check-circle" nzTheme="outline"></i>
+              Unlocked
+            </nz-tag>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+
+    <ng-template #noAchievements>
+      <nz-empty
+        nzNotFoundContent="No achievements yet"
+        nzNotFoundImage="simple"
+      >
+      </nz-empty>
+    </ng-template>
+  </nz-spin>
+</div>

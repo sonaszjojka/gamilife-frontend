@@ -1,0 +1,34 @@
+.profile-page-container {
+    min-height: 100vh;
+    background: var(--bg-secondary);
+    padding: var(--spacing-large);
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-large);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.profile-sidebar-container {
+    position: sticky;
+    top: var(--spacing-large);
+    height: fit-content;
+}
+
+.profile-content-container {
+    min-height: 600px;
+}
+
+@media (max-width: var(--breakpoint-lg)) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-sidebar-container {
+        position: relative;
+        top: 0;
+    }
+}

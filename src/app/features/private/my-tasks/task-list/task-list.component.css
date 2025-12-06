@@ -2,6 +2,7 @@ h3 {
   text-align: center;
   color: var(--bg-primary);
 }
+
 h1 {
   text-align: center;
   color: var(--bg-primary);
@@ -13,8 +14,9 @@ h1 {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: url("/background_guest_page.png") center center / cover no-repeat;
+  background: url("/assets/background_guest_page.png") center center / cover no-repeat;
 }
+
 h1 {
   text-align: center;
   margin-bottom: 2rem;
@@ -28,6 +30,7 @@ h1 {
   width: 100%;
   padding: 0 2rem;
 }
+
 .task-list {
   width: 40%;
   flex-shrink: 0;
@@ -48,10 +51,12 @@ h1 {
   margin-bottom: 1rem;
   font-size: 2rem;
 }
+
 .filter-panel {
   width: 20%;
   flex-shrink: 0;
 }
+
 app-task-form {
   flex-shrink: 0;
 }

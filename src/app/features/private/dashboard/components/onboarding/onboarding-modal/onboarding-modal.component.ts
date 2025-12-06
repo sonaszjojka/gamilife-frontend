@@ -114,17 +114,14 @@ export class OnboardingModalComponent implements AfterViewInit {
       return;
     }
 
-    console.log('Completing onboarding for user:', this.userId);
     this.isLoading = true;
 
     this.userApiService.completeOnboarding(this.userId).subscribe({
-      next: (response) => {
-        console.log('Onboarding completed successfully:', response);
+      next: () => {
         this.isLoading = false;
         this.completed.emit();
       },
-      error: (error) => {
-        console.error('Error completing onboarding:', error);
+      error: () => {
         this.isLoading = false;
       },
     });

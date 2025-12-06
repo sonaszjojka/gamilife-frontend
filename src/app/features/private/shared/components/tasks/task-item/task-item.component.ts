@@ -144,7 +144,6 @@ export class TaskItemComponent implements OnInit {
       cycleLength: this.task.taskHabit!.cycleLength,
       acceptedDate: acceptedDate.toISOString(),
     };
-    console.log(request);
     this.habitService
       .editHabitTask(this.task.taskHabit!.habitId, this.task.taskId, request)
       .subscribe({

@@ -91,7 +91,6 @@ export class GroupRequestsListPeakComponent {
   }
 
   formatDate(dateString: string): string {
-    console.log('my date: ', dateString);
     return formatRelativeDate(dateString);
   }
 }

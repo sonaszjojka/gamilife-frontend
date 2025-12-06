@@ -17,12 +17,15 @@
       </li>
     } @else {
       <li nz-menu-item class="navbar-dropdown-item">
-        <button nz-button (click)="logout()">Logout</button>
-      </li>
-      <li nz-menu-item class="navbar-dropdown-item">
-        <button nz-button (click)="router.navigate(['/app/user-profile'])">
+        <button
+          nz-button
+          (click)="router.navigate([`/app/users/${this.authService.userId}`])"
+        >
           Profile
         </button>
+      </li>
+      <li nz-menu-item class="navbar-dropdown-item">
+        <button nz-button (click)="logout()">Logout</button>
       </li>
     }
   </ul>

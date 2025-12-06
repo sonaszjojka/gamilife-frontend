@@ -61,10 +61,8 @@ export class PomodoroFormComponent implements OnInit {
     this.validPomodoroForm.valueChanges.subscribe((value) => {
       if (this.validPomodoroForm.valid) {
         if (this.pomodoroCreation()) {
-          console.log('Create');
           this.formChanged.emit(value as CreatePomodoroRequest);
         } else if (this.pomodoroEdition()) {
-          console.log('Edit');
           this.editFormChanged.emit(value as EditPomodoroRequest);
         }
       }
