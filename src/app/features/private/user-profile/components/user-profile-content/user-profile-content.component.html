@@ -1,0 +1,50 @@
+<div class="profile-content">
+  <nz-tabset
+    [(nzSelectedIndex)]="selectedTabIndex"
+    [nzTabPosition]="'top'"
+    [nzType]="'card'"
+  >
+    <nz-tab [nzTitle]="achievementsTitle">
+      <ng-template #achievementsTitle>
+        <i nz-icon nzType="trophy" nzTheme="outline"></i>
+        Achievements
+      </ng-template>
+      <app-achievements-tab [userId]="userDetails.id"></app-achievements-tab>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="badgesTitle">
+      <ng-template #badgesTitle>
+        <i nz-icon nzType="star" nzTheme="outline"></i>
+        Badges
+      </ng-template>
+      <app-badges-tab [userId]="userDetails.id"></app-badges-tab>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="avatarTitle">
+      <ng-template #avatarTitle>
+        <i nz-icon nzType="user" nzTheme="outline"></i>
+        Avatar
+      </ng-template>
+      <app-avatar-customization-tab
+        [userId]="userDetails.id"
+        [viewMode]="viewMode"
+      >
+      </app-avatar-customization-tab>
+    </nz-tab>
+
+    <nz-tab
+      [nzTitle]="settingsTitle"
+      *ngIf="viewMode === ProfileViewMode.OWNER"
+    >
+      <ng-template #settingsTitle>
+        <i nz-icon nzType="setting" nzTheme="outline"></i>
+        Settings
+      </ng-template>
+      <app-profile-settings-tab
+        [userDetails]="userDetails"
+        (settingsUpdated)="onSettingsUpdated($event)"
+      >
+      </app-profile-settings-tab>
+    </nz-tab>
+  </nz-tabset>
+</div>

@@ -1,0 +1,32 @@
+<div class="badges-container">
+  <nz-spin [nzSpinning]="loading">
+    <div class="badges-grid" *ngIf="badges.length > 0; else noBadges">
+      <app-badge-item
+        *ngFor="let badge of badges; trackBy: trackByBadgeId"
+        [item]="badge"
+      >
+      </app-badge-item>
+    </div>
+
+    <ng-template #noBadges>
+      <nz-empty
+        nzNotFoundContent="No badges collected yet"
+        nzNotFoundImage="simple"
+      >
+      </nz-empty>
+    </ng-template>
+
+    <div class="pagination-container" *ngIf="totalPages > 1">
+      <nz-pagination
+        [nzPageIndex]="currentPage + 1"
+        [nzTotal]="totalElements"
+        [nzPageSize]="pageSize"
+        (nzPageIndexChange)="onPageChange($event)"
+        nzShowSizeChanger
+        [nzPageSizeOptions]="[12, 24, 48]"
+        (nzPageSizeChange)="onPageSizeChange($event)"
+      >
+      </nz-pagination>
+    </div>
+  </nz-spin>
+</div>

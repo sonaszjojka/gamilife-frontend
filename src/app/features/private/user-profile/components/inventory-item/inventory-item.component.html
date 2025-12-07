@@ -1,0 +1,38 @@
+<nz-card
+  [nzHoverable]="true"
+  class="inventory-item-card"
+  [class.equipped]="item.isEquipped"
+  (click)="onItemClick()"
+>
+  <div class="item-image-container" [style.border-color]="getRarityColor()">
+    <img
+      [src]="'assets/placeholder.png'"
+      [alt]="item.item.name"
+      class="item-image"
+    />
+    <nz-tag class="rarity-tag" [nzColor]="getRarityColor()">
+      {{ item.item.rarity.name }}
+    </nz-tag>
+    <div *ngIf="item.isEquipped" class="equipped-overlay">
+      <i nz-icon nzType="check-circle" nzTheme="fill"></i>
+      <span>Equipped</span>
+    </div>
+  </div>
+  <nz-card-meta
+    [nzTitle]="item.item.name"
+    [nzDescription]="item.item.itemSlot.name"
+  >
+  </nz-card-meta>
+  <div class="item-footer">
+    <span class="quantity" *ngIf="item.quantity > 1">
+      <i nz-icon nzType="deployment-unit" nzTheme="outline"></i>
+      <span class="label">Qty:</span>
+      {{ item.quantity }}
+    </span>
+    <span class="sell-value">
+      <i nz-icon nzType="dollar" nzTheme="outline"></i>
+      <span class="label">Value:</span>
+      {{ item.item.quickSellValue }}
+    </span>
+  </div>
+</nz-card>

@@ -1,0 +1,203 @@
+<div class="settings-container">
+  <nz-card [nzTitle]="'Profile Settings'" [nzBordered]="true">
+    <form nz-form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired nzFor="firstNameInput"
+          >First Name</nz-form-label
+        >
+        <nz-form-control
+          [nzSpan]="18"
+          nzErrorTip="Please enter your first name"
+        >
+          <input
+            id="firstNameInput"
+            nz-input
+            formControlName="firstName"
+            placeholder="First Name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired nzFor="lastNameInput"
+          >Last Name</nz-form-label
+        >
+        <nz-form-control [nzSpan]="18" nzErrorTip="Please enter your last name">
+          <input
+            id="lastNameInput"
+            nz-input
+            formControlName="lastName"
+            placeholder="Last Name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired nzFor="usernameInput"
+          >Username</nz-form-label
+        >
+        <nz-form-control [nzSpan]="18" nzErrorTip="Please enter your username">
+          <input
+            id="usernameInput"
+            nz-input
+            formControlName="username"
+            placeholder="Username"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired nzFor="dobPicker"
+          >Date of Birth</nz-form-label
+        >
+        <nz-form-control
+          [nzSpan]="18"
+          nzErrorTip="Please select your date of birth"
+        >
+          <nz-date-picker
+            id="dobPicker"
+            formControlName="dateOfBirth"
+            style="width: 100%"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-divider></nz-divider>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="publicProfileCheckbox"
+          >Privacy Settings</nz-form-label
+        >
+        <nz-form-control [nzSpan]="18">
+          <nz-checkbox
+            nz-checkbox
+            id="publicProfile"
+            formControlName="isProfilePublic"
+          >
+            Make my profile public
+          </nz-checkbox>
+          <p class="form-help-text">
+            Other users will be able to view your profile, achievements, and
+            inventory.
+          </p>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="budgetReportsCheckbox"
+          >Notifications</nz-form-label
+        >
+        <nz-form-control [nzSpan]="18">
+          <nz-checkbox
+            nz-checkbox
+            id="budgetReports"
+            formControlName="sendBudgetReports"
+          >
+            Send me budget reports
+          </nz-checkbox>
+          <p class="form-help-text">
+            Receive periodic email updates about your budget and expenses.
+          </p>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-divider></nz-divider>
+
+      <nz-form-item>
+        <nz-form-control [nzOffset]="6" [nzSpan]="18">
+          <button
+            nz-button
+            nzType="primary"
+            type="submit"
+            [nzLoading]="saving"
+            [disabled]="!settingsForm.valid || !settingsForm.dirty"
+          >
+            <i nz-icon nzType="save"></i>
+            Save Changes
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            type="button"
+            (click)="resetForm()"
+            style="margin-left: 8px"
+            [disabled]="!settingsForm.dirty"
+          >
+            Cancel
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-card>
+
+  <nz-card [nzTitle]="'Security'" [nzBordered]="true" style="margin-top: 24px">
+    <nz-alert
+      nzType="info"
+      nzMessage="Password Reset"
+      nzDescription="For security reasons, password changes must be done through email verification. We'll send you a link to reset your password."
+      nzShowIcon
+      style="margin-bottom: 16px"
+    >
+    </nz-alert>
+    <button
+      nz-button
+      nzType="default"
+      (click)="onResetPassword()"
+      [nzLoading]="sendingResetEmail"
+      [disabled]="sendingResetEmail"
+    >
+      <i nz-icon nzType="lock"></i>
+      Send Reset Email
+    </button>
+  </nz-card>
+
+  <nz-card
+    [nzTitle]="'Account Information'"
+    [nzBordered]="true"
+    style="margin-top: 24px"
+  >
+    <nz-descriptions nzBordered [nzColumn]="1">
+      <nz-descriptions-item nzTitle="Account ID">
+        {{ userDetails.id }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Email">
+        {{ userDetails.email }}
+        <nz-tag
+          *ngIf="userDetails.isEmailVerified"
+          nzColor="success"
+          style="margin-left: 8px"
+        >
+          <i nz-icon nzType="check-circle"></i> Verified
+        </nz-tag>
+        <nz-tag
+          *ngIf="!userDetails.isEmailVerified"
+          nzColor="warning"
+          style="margin-left: 8px"
+        >
+          <i nz-icon nzType="exclamation-circle"></i> Not Verified
+        </nz-tag>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Experience Points">
+        {{ userDetails.experience }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Money">
+        <span style="color: #faad14; font-weight: 500">
+          <i nz-icon nzType="dollar"></i> {{ userDetails.money }}
+        </span>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Tutorial Status">
+        <nz-tag
+          [nzColor]="
+            this.authService.isTutorialCompleted() ? 'success' : 'default'
+          "
+        >
+          {{
+            this.authService.isTutorialCompleted()
+              ? "Completed"
+              : "Not Completed"
+          }}
+        </nz-tag>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+</div>

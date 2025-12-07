@@ -85,8 +85,7 @@ export class RegistrationComponent {
       const url = `${environment.apiUrl}/auth/register`;
 
       this.http.post(url, formData).subscribe({
-        next: (response) => {
-          console.log('Registration successful', response);
+        next: () => {
           this.isSubmitting.update(() => false);
           this.router.navigate(['/login']);
         },

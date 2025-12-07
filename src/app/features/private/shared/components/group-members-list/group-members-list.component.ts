@@ -7,9 +7,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
@@ -25,6 +27,7 @@ import { PaginationMoreComponent } from '../pagination-more/pagination-more.comp
     NzTableModule,
     NzButtonModule,
     NzIconModule,
+    NzToolTipModule,
     EditGroupMemberFormComponent,
     PaginationMoreComponent,
   ],
@@ -49,6 +52,7 @@ export class GroupMembersListComponent {
 
   private readonly groupMemberApi = inject(GroupMemberApiService);
   private readonly modal = inject(NzModalService);
+  private readonly router = inject(Router);
 
   paginatedMembers = () => {
     const members = this.members();
@@ -64,6 +68,10 @@ export class GroupMembersListComponent {
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
+  }
+
+  viewProfile(member: GroupMember): void {
+    this.router.navigate(['/app/users', member.userId]);
   }
 
   openEditModal(member: GroupMember): void {
