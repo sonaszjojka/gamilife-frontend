@@ -1,7 +1,14 @@
 <div class="profile-page-container">
   <nz-spin [nzSpinning]="loading" nzTip="Loading profile...">
-    <div class="profile-layout" *ngIf="userDetails">
-      <div class="profile-sidebar-container">
+    <div
+      class="profile-layout"
+      [class.private-view]="viewMode === ProfileViewMode.PRIVATE"
+      *ngIf="userDetails"
+    >
+      <div
+        class="profile-sidebar-container"
+        [class.private-view]="viewMode === ProfileViewMode.PRIVATE"
+      >
         <app-user-profile-sidebar
           [userDetails]="userDetails"
           [viewMode]="viewMode"
@@ -9,7 +16,10 @@
         </app-user-profile-sidebar>
       </div>
 
-      <div class="profile-content-container">
+      <div
+        class="profile-content-container"
+        *ngIf="viewMode !== ProfileViewMode.PRIVATE"
+      >
         <app-user-profile-content
           [userDetails]="userDetails"
           [viewMode]="viewMode"

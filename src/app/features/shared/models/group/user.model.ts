@@ -15,17 +15,17 @@ export interface CreateGroupInvitationDto {
 }
 export interface UserDetails {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  firstName: string | null;
+  lastName: string | null;
   username: string;
-  dateOfBirth: string;
-  experience: number;
-  level: number;
-  requiredExperience: number | null;
-  money: number;
-  sendBudgetReports: boolean;
+  level: number | null;
   isProfilePublic: boolean;
-  isEmailVerified: boolean;
-  isTutorialCompleted: boolean;
+  email: string | null;
+  dateOfBirth: string | null;
+  experience: number | null;
+  requiredExperience: number | null;
+  money: number | null;
+  sendBudgetReports: boolean | null;
+  isEmailVerified: boolean | null;
+  isTutorialCompleted: boolean | null;
 }

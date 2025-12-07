@@ -71,31 +71,25 @@
 
 .step-gold {
   height: 140px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 215, 0, 0.3),
-    rgba(255, 215, 0, 0.05)
-  );
+  background: linear-gradient(to bottom,
+      rgba(255, 215, 0, 0.3),
+      rgba(255, 215, 0, 0.05));
   border: 1px solid rgba(255, 215, 0, 0.4);
 }
 
 .step-silver {
   height: 100px;
-  background: linear-gradient(
-    to bottom,
-    rgba(224, 224, 224, 0.4),
-    rgba(224, 224, 224, 0.1)
-  );
+  background: linear-gradient(to bottom,
+      rgba(224, 224, 224, 0.4),
+      rgba(224, 224, 224, 0.1));
   border: 1px solid rgba(224, 224, 224, 0.5);
 }
 
 .step-bronze {
   height: 70px;
-  background: linear-gradient(
-    to bottom,
-    rgba(205, 127, 50, 0.3),
-    rgba(205, 127, 50, 0.05)
-  );
+  background: linear-gradient(to bottom,
+      rgba(205, 127, 50, 0.3),
+      rgba(205, 127, 50, 0.05));
   border: 1px solid rgba(205, 127, 50, 0.4);
 }
 
@@ -109,6 +103,7 @@
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateX(-50%) translateY(0);

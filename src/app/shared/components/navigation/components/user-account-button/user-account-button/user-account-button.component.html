@@ -19,9 +19,9 @@
       <li nz-menu-item class="navbar-dropdown-item">
         <button
           nz-button
-          (click)="router.navigate([`/app/users/${this.authService.userId}`])"
+          (click)="router.navigate([`/app/users/${this.authService.userId()}`])"
         >
-          Profile
+          My Profile
         </button>
       </li>
       <li nz-menu-item class="navbar-dropdown-item">

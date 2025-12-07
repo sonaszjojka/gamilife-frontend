@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { UserDetails } from '../../../../shared/models/user-profile/user-profile.models';
 import { ProfileViewMode } from '../../../../shared/models/user-profile/profile-view-mode.enum';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +9,8 @@ import { UserProfileContentComponent } from '../user-profile-content/user-profil
 import { NzResultComponent } from 'ng-zorro-antd/result';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile-page',
@@ -18,28 +20,42 @@ import { AuthService } from '../../../../../shared/services/auth/auth.service';
     UserProfileContentComponent,
     NzResultComponent,
     CommonModule,
+    NzButtonModule,
   ],
   templateUrl: './user-profile-page.component.html',
   styleUrl: './user-profile-page.component.css',
 })
-export class UserProfilePageComponent implements OnInit {
+export class UserProfilePageComponent implements OnInit, OnDestroy {
   userDetails?: UserDetails;
   viewMode: ProfileViewMode = ProfileViewMode.PUBLIC;
   loading = true;
+
+  private destroy$ = new Subject<void>();
 
   protected route = inject(ActivatedRoute);
   protected userApiService = inject(UserApiService);
   protected authService = inject(AuthService);
 
+  public ProfileViewMode = ProfileViewMode;
+
   ngOnInit(): void {
-    const userId = this.authService.userId();
-    if (userId) {
-      this.loadUserProfile(userId);
-    }
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const userId = params['userId'];
+      if (userId) {
+        this.loadUserProfile(userId);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadUserProfile(userId: string): void {
     this.loading = true;
+    this.userDetails = undefined;
+
     this.userApiService.getUserById(userId).subscribe({
       next: (response) => {
         this.userDetails = response;
@@ -58,10 +74,10 @@ export class UserProfilePageComponent implements OnInit {
 
     if (currentUserId === profileUserId) {
       this.viewMode = ProfileViewMode.OWNER;
-    } else if (!this.userDetails?.isProfilePublic) {
-      this.viewMode = ProfileViewMode.PRIVATE;
-    } else {
+    } else if (this.userDetails?.isProfilePublic) {
       this.viewMode = ProfileViewMode.PUBLIC;
+    } else {
+      this.viewMode = ProfileViewMode.PRIVATE;
     }
   }
 

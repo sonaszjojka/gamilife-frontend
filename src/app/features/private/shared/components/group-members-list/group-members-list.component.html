@@ -10,7 +10,7 @@
       <th>Group Money</th>
       <th>Total Earned</th>
       <th>Joined At</th>
-      <th nzWidth="150px">Actions</th>
+      <th nzWidth="200px">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -43,8 +43,20 @@
           nz-button
           nzType="link"
           nzSize="small"
+          (click)="viewProfile(member)"
+          nz-tooltip
+          nzTooltipTitle="View Profile"
+        >
+          <span nz-icon nzType="user"></span>
+        </button>
+        <button
+          nz-button
+          nzType="link"
+          nzSize="small"
           (click)="openEditModal(member)"
           [disabled]="!isAdmin()"
+          nz-tooltip
+          nzTooltipTitle="Edit Member"
         >
           <span nz-icon nzType="edit"></span>
         </button>
@@ -55,6 +67,8 @@
           nzSize="small"
           (click)="confirmRemove(member)"
           [disabled]="!isAdmin() || member.userId === adminId()"
+          nz-tooltip
+          nzTooltipTitle="Remove Member"
         >
           <span nz-icon nzType="delete"></span>
         </button>

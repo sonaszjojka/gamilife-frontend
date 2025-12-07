@@ -32,7 +32,6 @@
         </nz-form-control>
       </nz-form-item>
 
-      <!-- Username -->
       <nz-form-item>
         <nz-form-label [nzSpan]="6" nzRequired nzFor="usernameInput"
           >Username</nz-form-label
@@ -44,35 +43,6 @@
             formControlName="username"
             placeholder="Username"
           />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzRequired nzFor="emailInput"
-          >Email</nz-form-label
-        >
-        <nz-form-control [nzSpan]="18" nzErrorTip="Please enter a valid email">
-          <input
-            id="emailInput"
-            nz-input
-            formControlName="email"
-            type="email"
-            placeholder="Email"
-          />
-          <nz-tag
-            *ngIf="userDetails.isEmailVerified"
-            nzColor="success"
-            style="margin-top: 8px"
-          >
-            <i nz-icon nzType="check-circle"></i> Verified
-          </nz-tag>
-          <nz-tag
-            *ngIf="!userDetails.isEmailVerified"
-            nzColor="warning"
-            style="margin-top: 8px"
-          >
-            <i nz-icon nzType="exclamation-circle"></i> Not Verified
-          </nz-tag>
         </nz-form-control>
       </nz-form-item>
 
@@ -158,6 +128,48 @@
         </nz-form-control>
       </nz-form-item>
     </form>
+  </nz-card>
+
+  <!-- Email Section - Separated for future endpoint -->
+  <nz-card
+    [nzTitle]="'Email Settings'"
+    [nzBordered]="true"
+    style="margin-top: 24px"
+  >
+    <nz-alert
+      nzType="info"
+      nzMessage="Email Management"
+      nzDescription="Email changes require verification and will be available soon. Your current email is displayed below."
+      nzShowIcon
+      style="margin-bottom: 16px"
+    >
+    </nz-alert>
+
+    <nz-descriptions nzBordered [nzColumn]="1">
+      <nz-descriptions-item nzTitle="Current Email">
+        {{ userDetails.email }}
+        <nz-tag
+          *ngIf="userDetails.isEmailVerified"
+          nzColor="success"
+          style="margin-left: 8px"
+        >
+          <i nz-icon nzType="check-circle"></i> Verified
+        </nz-tag>
+        <nz-tag
+          *ngIf="!userDetails.isEmailVerified"
+          nzColor="warning"
+          style="margin-left: 8px"
+        >
+          <i nz-icon nzType="exclamation-circle"></i> Not Verified
+        </nz-tag>
+      </nz-descriptions-item>
+    </nz-descriptions>
+
+    <!-- Placeholder for future change email button -->
+    <!-- <button nz-button nzType="default" disabled style="margin-top: 16px">
+      <i nz-icon nzType="mail"></i>
+      Change Email (Coming Soon)
+    </button> -->
   </nz-card>
 
   <nz-card [nzTitle]="'Security'" [nzBordered]="true" style="margin-top: 24px">

@@ -44,7 +44,7 @@ export class UserProfileSidebarComponent implements OnInit {
   displayedBadges: UserInventoryItemDto[] = [];
   loadingBadges = false;
 
-  currentLevel = 0;
+  currentLevel: number | null = 0;
   requiredExperience = 0;
   pointsToNextLevel = 0;
   levelProgress = 0;
@@ -93,14 +93,14 @@ export class UserProfileSidebarComponent implements OnInit {
       this.isMaxLevel = true;
       this.pointsToNextLevel = 0;
       this.levelProgress = 100;
-      this.requiredExperience = this.userDetails.experience;
+      this.requiredExperience = this.userDetails.experience!;
     } else {
       this.isMaxLevel = false;
       this.requiredExperience = this.userDetails.requiredExperience;
       this.pointsToNextLevel =
-        this.requiredExperience - this.userDetails.experience;
+        this.requiredExperience - this.userDetails.experience!;
       this.levelProgress = Math.min(
-        (this.userDetails.experience / this.requiredExperience) * 100,
+        (this.userDetails.experience! / this.requiredExperience) * 100,
         100,
       );
     }

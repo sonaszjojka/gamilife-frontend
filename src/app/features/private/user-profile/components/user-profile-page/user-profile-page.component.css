@@ -12,10 +12,22 @@
     margin: 0 auto;
 }
 
+.profile-layout.private-view {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    justify-items: center;
+}
+
 .profile-sidebar-container {
     position: sticky;
     top: var(--spacing-large);
     height: fit-content;
+}
+
+.profile-sidebar-container.private-view {
+    position: relative;
+    top: 0;
+    width: 100%;
 }
 
 .profile-content-container {

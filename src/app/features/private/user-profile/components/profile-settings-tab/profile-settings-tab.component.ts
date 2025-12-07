@@ -29,6 +29,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UserDetails } from '../../../../shared/models/group/user.model';
 import { environment } from '../../../../../../environments/environment';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -62,6 +63,7 @@ export class ProfileSettingsTabComponent implements OnInit {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private message = inject(NzMessageService);
+  private userApi = inject(UserApiService);
   protected authService = inject(AuthService);
 
   ngOnInit(): void {
@@ -73,9 +75,10 @@ export class ProfileSettingsTabComponent implements OnInit {
       firstName: [this.userDetails.firstName, [Validators.required]],
       lastName: [this.userDetails.lastName, [Validators.required]],
       username: [this.userDetails.username, [Validators.required]],
-      email: [this.userDetails.email, [Validators.required, Validators.email]],
       dateOfBirth: [
-        new Date(this.userDetails.dateOfBirth),
+        this.userDetails.dateOfBirth
+          ? new Date(this.userDetails.dateOfBirth)
+          : null,
         [Validators.required],
       ],
       isProfilePublic: [this.userDetails.isProfilePublic],
@@ -88,17 +91,39 @@ export class ProfileSettingsTabComponent implements OnInit {
       this.saving = true;
       const formValue = this.settingsForm.value;
 
-      setTimeout(() => {
-        this.saving = false;
-        this.settingsForm.markAsPristine();
+      const request = {
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        username: formValue.username,
+        dateOfBirth: formValue.dateOfBirth.toISOString().split('T')[0],
+        sendBudgetReports: formValue.sendBudgetReports,
+        isProfilePublic: formValue.isProfilePublic,
+      };
 
-        const updatedUser: UserDetails = {
-          ...this.userDetails,
-          ...formValue,
-          dateOfBirth: formValue.dateOfBirth.toISOString().split('T')[0],
-        };
-        this.settingsUpdated.emit(updatedUser);
-      }, 1000);
+      this.userApi.updateUser(this.userDetails.id, request).subscribe({
+        next: (response) => {
+          this.saving = false;
+          this.settingsForm.markAsPristine();
+          this.message.success('Profile updated successfully!');
+
+          const updatedUser: UserDetails = {
+            ...this.userDetails,
+            firstName: response.firstName,
+            lastName: response.lastName,
+            username: response.username,
+            dateOfBirth: response.dateOfBirth,
+            sendBudgetReports: response.sendBudgetReports,
+            isProfilePublic: response.isProfilePublic,
+          };
+          this.settingsUpdated.emit(updatedUser);
+        },
+        error: (err) => {
+          this.saving = false;
+          const detail =
+            err.error?.detail || 'Failed to update profile. Please try again.';
+          this.message.error(detail);
+        },
+      });
     }
   }
 
@@ -107,8 +132,9 @@ export class ProfileSettingsTabComponent implements OnInit {
       firstName: this.userDetails.firstName,
       lastName: this.userDetails.lastName,
       username: this.userDetails.username,
-      email: this.userDetails.email,
-      dateOfBirth: new Date(this.userDetails.dateOfBirth),
+      dateOfBirth: this.userDetails.dateOfBirth
+        ? new Date(this.userDetails.dateOfBirth)
+        : null,
       isProfilePublic: this.userDetails.isProfilePublic,
       sendBudgetReports: this.userDetails.sendBudgetReports,
     });

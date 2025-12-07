@@ -62,4 +62,33 @@ export interface UserInventoryItemFilter {
   size: number;
 }
 
+export interface PagedResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+}
+
+export interface EditUserRequest {
+  firstName: string;
+  lastName: string;
+  username: string;
+  dateOfBirth: string;
+  sendBudgetReports: boolean;
+  isProfilePublic: boolean;
+}
+
+export interface EditUserResult {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  dateOfBirth: string;
+  sendBudgetReports: boolean;
+  isProfilePublic: boolean;
+  isEmailVerified: boolean;
+}
+
 export type { UserDetails };
