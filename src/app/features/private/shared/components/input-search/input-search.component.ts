@@ -95,7 +95,6 @@ import { GroupType } from '../../../../shared/models/group/group-type.model';
   ],
 })
 export class InputSearchComponent implements OnInit {
-
   readonly groupTypes = signal<GroupType[]>([]);
 
   selectedGroupTypeId?: number;
