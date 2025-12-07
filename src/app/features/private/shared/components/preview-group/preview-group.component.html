@@ -2,6 +2,26 @@
   <nz-spin [nzSpinning]="loading()" nzSize="large">
     <div class="two-column-layout">
       <div class="left-column">
+        <div
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="admin-actions-bar"
+        >
+          <button
+            nz-button
+            nzType="default"
+            nzSize="large"
+            (click)="openEditModal()"
+          >
+            <span nz-icon nzType="edit"></span>
+            Edit Group
+          </button>
+
+          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
+            <span nz-icon nzType="delete"></span>
+            Delete Group
+          </button>
+        </div>
+
         <app-group-info-card *ngIf="group()" [group]="group()!">
           <app-group-actions
             [group]="group()!"
@@ -58,26 +78,6 @@
             mode() === GroupPreviewMode.ADMIN)
         "
       >
-        <div
-          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
-          class="admin-actions-bar"
-        >
-          <button
-            nz-button
-            nzType="default"
-            nzSize="large"
-            (click)="openEditModal()"
-          >
-            <span nz-icon nzType="edit"></span>
-            Edit Group
-          </button>
-
-          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
-            <span nz-icon nzType="delete"></span>
-            Delete Group
-          </button>
-        </div>
-
         <nz-card class="main-content-card">
           <div class="placeholder-content">
             <span

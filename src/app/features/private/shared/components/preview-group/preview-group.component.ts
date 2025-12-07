@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -7,6 +14,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
@@ -43,7 +51,7 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
 })
-export class PreviewGroupComponent implements OnInit {
+export class PreviewGroupComponent implements OnInit, OnDestroy {
   mode = signal<GroupPreviewMode>(GroupPreviewMode.PUBLIC);
   protected group = signal<Group | undefined>(undefined);
   protected groupId = signal<string | undefined>(undefined);
@@ -53,6 +61,7 @@ export class PreviewGroupComponent implements OnInit {
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
 
+  private destroy$ = new Subject<void>();
   private readonly groupApi = inject(GroupApiService);
   private readonly requestsApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
@@ -62,12 +71,22 @@ export class PreviewGroupComponent implements OnInit {
   editGroupForm!: EditGroupFormComponent;
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('groupId');
-    if (!id) return;
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const id = params['groupId'];
+      if (!id) return;
 
-    this.groupId.set(id);
-    this.loadGroup();
-    this.loadGroupRequests();
+      this.groupId.set(id);
+      this.group.set(undefined);
+      this.membersList.set([]);
+      this.requestsList.set([]);
+      this.loadGroup();
+      this.loadGroupRequests();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadGroup(): void {

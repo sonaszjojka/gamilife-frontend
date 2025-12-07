@@ -19,6 +19,7 @@ import { GroupMembersPageComponent } from './features/private/group-members-page
 import { GroupInvitationResponseComponent } from './features/private/my-groups/components/group-invitation-response/group-invitation-response.component';
 import { GroupRequestsPageComponent } from './features/private/group-requests-page/components/group-requests-page/group-requests-page.component';
 import { GroupRankingPageComponent } from './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component';
+import { UserProfilePageComponent } from './features/private/user-profile/components/user-profile-page/user-profile-page.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +35,6 @@ export const routes: Routes = [
   {
     path: 'reset-password',
     component: ResetPasswordComponent,
-    canActivate: [GuestGuard],
   },
   {
     path: 'login',
@@ -81,6 +81,10 @@ export const routes: Routes = [
       {
         path: 'groups/:groupId/ranking',
         component: GroupRankingPageComponent,
+      },
+      {
+        path: 'users/:userId',
+        component: UserProfilePageComponent,
       },
     ],
   },

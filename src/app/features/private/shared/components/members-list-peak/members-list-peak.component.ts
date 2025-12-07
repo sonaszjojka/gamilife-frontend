@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
             nzTheme="outline"
             class="header-icon"
           ></span>
-          Members
+          Manage members
         </h3>
         @if (showManageButton()) {
           <button

@@ -1,0 +1,108 @@
+<div class="profile-sidebar">
+  <nz-card [nzBordered]="false">
+    <div class="profile-picture-container">
+      <nz-avatar
+        [nzSize]="120"
+        nzIcon="user"
+        class="profile-avatar"
+      ></nz-avatar>
+    </div>
+
+    <div class="user-info">
+      <h2>{{ "@" + userDetails.username }}</h2>
+      <p class="user-title" *ngIf="viewMode !== ProfileViewMode.PRIVATE">
+        {{ userDetails.firstName }} {{ userDetails.lastName }}
+      </p>
+    </div>
+    @if (viewMode !== ProfileViewMode.PRIVATE) {
+      <div class="level-section">
+        <div class="level-header">
+          <nz-avatar
+            [nzSize]="32"
+            nzIcon="star"
+            nzStyle="background-color: #52c41a"
+          >
+          </nz-avatar>
+          <div class="level-info">
+            <h3>Level {{ currentLevel }}</h3>
+            @if (viewMode === ProfileViewMode.OWNER) {
+              <p *ngIf="!isMaxLevel">
+                {{ pointsToNextLevel }} Points to next level
+              </p>
+            }
+            <p *ngIf="isMaxLevel" class="max-level-text">Max level reached!</p>
+          </div>
+        </div>
+
+        <nz-progress
+          [nzPercent]="levelProgress"
+          [nzShowInfo]="false"
+          nzStrokeColor="#52c41a"
+        >
+        </nz-progress>
+        @if (viewMode === ProfileViewMode.OWNER) {
+          <div class="level-range">
+            <span>{{ currentLevel }}</span>
+            <ng-container *ngIf="!isMaxLevel">
+              <span class="experience-text"
+                >{{ userDetails.experience }}/{{ requiredExperience }}</span
+              >
+              <span>{{ (currentLevel ?? 0) + 1 }}</span>
+            </ng-container>
+            <ng-container *ngIf="isMaxLevel">
+              <span class="experience-text"
+                >{{ userDetails.experience }} EXP</span
+              >
+              <span>MAX</span>
+            </ng-container>
+          </div>
+        }
+      </div>
+
+      <div class="money-section">
+        <nz-statistic
+          [nzValue]="userDetails.money ?? 0"
+          [nzSuffix]="moneySuffix"
+          [nzValueStyle]="{ color: '#faad14' }"
+        >
+        </nz-statistic>
+        <ng-template #moneySuffix>
+          <i nz-icon nzType="dollar" nzTheme="outline"></i>
+        </ng-template>
+      </div>
+
+      <div class="badges-section">
+        <div class="section-header">
+          <h3>Badges ({{ badges.length }})</h3>
+        </div>
+
+        <nz-spin [nzSpinning]="loadingBadges">
+          <div
+            class="badges-grid"
+            *ngIf="displayedBadges.length > 0; else noBadges"
+          >
+            <app-badge-item
+              *ngFor="let badge of displayedBadges; trackBy: trackByBadgeId"
+              [item]="badge"
+            >
+            </app-badge-item>
+          </div>
+
+          <ng-template #noBadges>
+            <nz-empty
+              nzNotFoundContent="No badges yet"
+              [nzNotFoundImage]="'simple'"
+            >
+            </nz-empty>
+          </ng-template>
+        </nz-spin>
+      </div>
+    } @else {
+      <div class="private-overlay" *ngIf="viewMode === ProfileViewMode.PRIVATE">
+        <i nz-icon nzType="lock" nzTheme="outline" class="lock-icon"></i>
+        <h3>This Profile is Private</h3>
+        <p>This user has chosen to keep their profile private.</p>
+      </div>
+    }
+  </nz-card>
+</div>

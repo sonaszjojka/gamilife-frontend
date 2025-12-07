@@ -1,0 +1,45 @@
+.avatar-customization-container {
+  padding: var(--spacing-large);
+}
+
+.avatar-preview-section {
+  margin-bottom: var(--spacing-large);
+}
+
+.avatar-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-medium);
+  padding: var(--spacing-large);
+}
+
+.avatar-image {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  border: 2px solid var(--border-color-base);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-secondary);
+}
+
+.edit-button {
+  margin-top: var(--spacing-medium);
+}
+
+.items-section {
+  margin-top: var(--spacing-large);
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-medium);
+  margin-top: var(--spacing-medium);
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-large);
+}

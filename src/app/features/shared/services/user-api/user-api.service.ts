@@ -7,14 +7,11 @@ import {
   UserFilterParams,
   User,
 } from '../../models/group/user.model';
-
-export interface PagedResponse<T> {
-  content: T[];
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  number: number;
-}
+import {
+  EditUserRequest,
+  EditUserResult,
+  PagedResponse,
+} from '../../models/user-profile/user-profile.models';
 
 @Injectable({
   providedIn: 'root',
@@ -59,5 +56,16 @@ export class UserApiService {
     return this.http.get<UserDetails>(`${this.apiUrl}/users/${userId}`, {
       withCredentials: true,
     });
+  }
+
+  updateUser(
+    userId: string,
+    request: EditUserRequest,
+  ): Observable<EditUserResult> {
+    return this.http.put<EditUserResult>(
+      `${this.apiUrl}/users/${userId}`,
+      request,
+      { withCredentials: true },
+    );
   }
 }

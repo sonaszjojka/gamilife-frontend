@@ -52,6 +52,7 @@
         <th>Username</th>
         <th>Group Money</th>
         <th>Total Earned</th>
+        <th nzWidth="80px">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -104,6 +105,18 @@
           <span class="money-value earned">
             {{ member.totalEarnedMoney ?? 0 | number: "1.2-2" }}
           </span>
+        </td>
+        <td>
+          <button
+            nz-button
+            nzType="link"
+            nzSize="small"
+            (click)="viewProfile(member)"
+            nz-tooltip
+            nzTooltipTitle="View Profile"
+          >
+            <span nz-icon nzType="user"></span>
+          </button>
         </td>
       </tr>
     </tbody>
