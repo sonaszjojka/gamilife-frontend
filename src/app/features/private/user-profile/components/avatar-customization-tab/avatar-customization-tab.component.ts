@@ -99,7 +99,7 @@ export class AvatarCustomizationTabComponent implements OnInit {
 
   onItemClick(item: UserInventoryItemDto): void {
     if (this.viewMode === ProfileViewMode.OWNER) {
-      //todo
+      console.error(item, 'implement equipping item!');
     }
   }
 }
