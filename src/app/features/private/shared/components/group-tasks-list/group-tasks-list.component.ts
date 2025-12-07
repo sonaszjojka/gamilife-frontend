@@ -117,6 +117,7 @@ export class GroupTasksListComponent implements OnInit {
       },
     });
   }
+
   onListScroll(event: Event): void {
     const target = event.target as HTMLElement;
     const threshold = 100;
@@ -130,10 +131,14 @@ export class GroupTasksListComponent implements OnInit {
   }
 
   public onTaskListUpdate() {
+    this.tasksRequestParams.page = 0;
+    this.hasMore.set(true);
     this.loadGroupTasks();
   }
 
   public onGroupRefresh() {
+    this.tasksRequestParams.page = 0;
+    this.hasMore.set(true);
     this.loadGroupTasks();
     this.refreshGroup.emit();
   }

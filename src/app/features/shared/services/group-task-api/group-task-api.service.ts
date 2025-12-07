@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import {
   EditGroupTaskDto,
+  GetGroupTaskRequest,
   GroupTask,
 } from '../../models/group/group-task.model';
 import { Observable } from 'rxjs';
@@ -46,7 +47,7 @@ export class GroupTaskApiService {
 
   public getGroupTasks(
     groupId: string,
-    requestParams: any,
+    requestParams: GetGroupTaskRequest,
   ): Observable<Page<GroupTask>> {
     return this.http.get<Page<GroupTask>>(
       `${this.apiUrl}/groups/${groupId}/tasks`,

@@ -53,7 +53,6 @@ export class GroupTaskComponent implements OnInit {
 
   userIsParticipant = signal<GroupTaskMemberModel | null>(null);
 
-  formatedStartDate!: string;
   formatedEndDate!: string;
   formatedAcceptedDate!: string;
 

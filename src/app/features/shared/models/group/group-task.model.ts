@@ -49,4 +49,5 @@ export interface GetGroupTaskRequest {
   page: number;
   isAccepted: boolean;
   isDeclined: boolean;
+  [key: string]: string | number | boolean;
 }
