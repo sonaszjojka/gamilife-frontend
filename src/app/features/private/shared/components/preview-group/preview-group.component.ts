@@ -76,7 +76,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
       if (!id) return;
 
       this.groupId.set(id);
-      this.group.set(undefined); // Wyczyść stare dane
+      this.group.set(undefined);
       this.membersList.set([]);
       this.requestsList.set([]);
       this.loadGroup();
