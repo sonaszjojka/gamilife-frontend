@@ -19,7 +19,6 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
 import { GroupTaskComponent } from '../group-task/group-task.component';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { Page } from '../../../../shared/services/tasks/individual-task.service';
@@ -39,7 +38,6 @@ import { Page } from '../../../../shared/services/tasks/individual-task.service'
     NzModalModule,
     GroupTaskComponent,
     GroupTaskFormComponent,
-    EditGroupFormComponent,
   ],
 })
 export class GroupTasksListComponent implements OnInit {
