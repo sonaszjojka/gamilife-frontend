@@ -96,7 +96,6 @@ import { GroupType } from '../../../../shared/models/group/group-type.model';
   ],
 })
 export class InputSearchComponent implements OnInit {
-  private readonly http = inject(HttpClient);
 
   readonly groupTypes = signal<GroupType[]>([]);
 
