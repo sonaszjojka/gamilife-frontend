@@ -43,3 +43,10 @@ export interface EditGroupTaskDto {
   isAccepted: boolean | null;
   declineMessage: string | null;
 }
+
+export interface GetGroupTaskRequest {
+  size: number;
+  page: number;
+  isAccepted: boolean;
+  isDeclined: boolean;
+}

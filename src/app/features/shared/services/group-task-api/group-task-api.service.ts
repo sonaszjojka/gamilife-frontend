@@ -15,7 +15,7 @@ export class GroupTaskApiService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
-  public postGroupTask(groupId: string, request: any) {
+  public postGroupTask(groupId: string, request: unknown) {
     return this.http.post(`${this.apiUrl}/groups/${groupId}/tasks`, request, {
       withCredentials: true,
     });

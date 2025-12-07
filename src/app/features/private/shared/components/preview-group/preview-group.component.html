@@ -78,25 +78,6 @@
             mode() === GroupPreviewMode.ADMIN)
         "
       >
-        <div
-          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
-          class="admin-actions-bar"
-        >
-          <button
-            nz-button
-            nzType="default"
-            nzSize="large"
-            (click)="openEditModal()"
-          >
-            <span nz-icon nzType="edit"></span>
-            Edit Group
-          </button>
-
-          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
-            <span nz-icon nzType="delete"></span>
-            Delete Group
-          </button>
-        </div>
         <app-group-task-list
           [mode]="mode()"
           [groupMembersList]="membersList()"

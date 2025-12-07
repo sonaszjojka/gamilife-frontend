@@ -16,7 +16,7 @@ export class GroupTaskMemberApiService {
   public assignMemberToTask(
     groupId: string,
     taskId: string,
-    request: any,
+    request: unknown,
   ): Observable<GroupTaskMemberModel> {
     return this.http.post<GroupTaskMemberModel>(
       `${this.apiUrl}/groups/${groupId}/group-tasks/${taskId}/participants`,

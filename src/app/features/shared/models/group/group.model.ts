@@ -31,3 +31,12 @@ export interface EditGroupDto {
   groupTypeId: number;
   membersLimit: number;
 }
+
+export interface GroupFilterParams {
+  joinCode?: string;
+  groupType?: number;
+  groupName?: string;
+  isForLoggedUser?: boolean;
+  page: number;
+  size: number;
+}

@@ -23,6 +23,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
       </div>
     </div>
   `,
+  standalone: true,
 })
 export class GroupListComponent {
   groups = input.required<Group[]>();

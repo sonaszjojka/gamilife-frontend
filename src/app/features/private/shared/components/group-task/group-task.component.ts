@@ -101,7 +101,7 @@ export class GroupTaskComponent implements OnInit {
   }
   protected complete(): void {
     if (this.userIsParticipant() != null) {
-      let request: EditGroupTaskMemberDto = {
+      const request: EditGroupTaskMemberDto = {
         isMarkedDone: true,
       };
       this.groupTaskMemberApi
@@ -119,7 +119,7 @@ export class GroupTaskComponent implements OnInit {
               groupMemberId: response.groupMemberId,
             });
 
-            let participant = this.task().groupTaskMembers.find(
+            const participant = this.task().groupTaskMembers.find(
               (currentMember) =>
                 currentMember.groupTaskMemberId == response.groupTaskMemberId,
             );
@@ -134,7 +134,7 @@ export class GroupTaskComponent implements OnInit {
 
   protected removeCompletion(): void {
     if (this.userIsParticipant() != null) {
-      let request: EditGroupTaskMemberDto = {
+      const request: EditGroupTaskMemberDto = {
         isMarkedDone: false,
       };
       this.groupTaskMemberApi
@@ -152,7 +152,7 @@ export class GroupTaskComponent implements OnInit {
               groupMemberId: response.groupMemberId,
             });
 
-            let participant = this.task().groupTaskMembers.find(
+            const participant = this.task().groupTaskMembers.find(
               (currentMember) =>
                 currentMember.groupTaskMemberId == response.groupTaskMemberId,
             );
@@ -166,7 +166,7 @@ export class GroupTaskComponent implements OnInit {
   }
 
   protected acceptTask(): void {
-    let request: EditGroupTaskDto = {
+    const request: EditGroupTaskDto = {
       title: this.task().taskDto.title,
       description: this.task().taskDto.description,
       startTime: this.task().taskDto.startTime,
@@ -202,7 +202,7 @@ export class GroupTaskComponent implements OnInit {
   }
 
   public checkUserIsParticipant(): void {
-    let participant = this.task().groupTaskMembers.find(
+    const participant = this.task().groupTaskMembers.find(
       (currentMember) =>
         currentMember.groupMemberId ===
         this.group().loggedUserMembershipDto!.groupMemberId,

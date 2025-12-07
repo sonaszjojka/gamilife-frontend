@@ -66,7 +66,7 @@ export class GroupTaskDeclineFormComponent {
     if (this.validateForm.valid) {
       const formValue = this.validateForm.getRawValue();
 
-      let editGroupTaskRequest: EditGroupTaskDto = {
+      const editGroupTaskRequest: EditGroupTaskDto = {
         title: this.task().taskDto.title,
         description: this.task().taskDto.description,
         startTime: this.task().taskDto.startTime,

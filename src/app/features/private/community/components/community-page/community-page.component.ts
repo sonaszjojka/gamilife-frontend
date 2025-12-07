@@ -6,7 +6,7 @@ import { InputSearchComponent } from '../../../shared/components/input-search/in
 import { CommonModule } from '@angular/common';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { GroupFilterParams } from '../../../../shared/models/group/group-filter-params.model';
+import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 @Component({

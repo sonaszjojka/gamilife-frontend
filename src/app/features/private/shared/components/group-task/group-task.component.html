@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    @if (task().declineMessage != null) {
+    @if (task().declineMessage !== null) {
       <div class="info-item">
         <nz-icon nzType="warning" class="info-icon"></nz-icon>
         <div class="info-label">Decline Message</div>
@@ -85,7 +85,7 @@
   </div>
 
   <div class="task-actions-footer">
-    @if (task().acceptedDate == null && task().declineMessage == null) {
+    @if (task().acceptedDate === null && task().declineMessage === null) {
       <button nz-button nzShape="circle" (click)="editTask()">
         <nz-icon nzType="setting"></nz-icon>
       </button>
@@ -96,9 +96,9 @@
     }
 
     @if (
-      userIsParticipant() != null &&
-      task().acceptedDate == null &&
-      task().declineMessage == null
+      userIsParticipant() !== null &&
+      task().acceptedDate === null &&
+      task().declineMessage === null
     ) {
       @if (checkIfTaskIsCompletedByUser()) {
         <button nz-button nzShape="circle" (click)="removeCompletion()">
@@ -120,7 +120,7 @@
             [nzTwotoneColor]="'#c41a1a'"
           ></nz-icon>
         </button>
-        @if (task().acceptedDate == null && task().declineMessage == null) {
+        @if (task().acceptedDate === null && task().declineMessage === null) {
           <button nz-button (click)="confirmAccept()">Accept Task</button>
           <button nz-button (click)="decline()" style="border-color: #c41a1a">
             Decline Task

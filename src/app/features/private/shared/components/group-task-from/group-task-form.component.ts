@@ -164,7 +164,8 @@ export class GroupTaskFormComponent {
         0,
         0,
       );
-      let editGroupTaskRequest: EditGroupTaskDto = {
+
+      const editGroupTaskRequest: EditGroupTaskDto = {
         title: formValue.title,
         description: formValue.description,
         startTime: formValue.startTime!.toISOString(),

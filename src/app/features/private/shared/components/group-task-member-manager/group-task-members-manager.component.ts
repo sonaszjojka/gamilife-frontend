@@ -48,14 +48,14 @@ export class GroupTaskMembersManagerComponent implements OnInit {
   changed = output<void>();
 
   protected addMemberToTask(memberId: string): void {
-    let request = {
+    const request = {
       groupMemberId: memberId,
     };
     this.groupTaskMemberApi
       .assignMemberToTask(this.groupId(), this.task().groupTaskId, request)
       .subscribe({
         next: (response) => {
-          let assignedMember: GroupTaskMemberModel = {
+          const assignedMember: GroupTaskMemberModel = {
             groupTaskMemberId: response.groupTaskMemberId,
             groupMemberId: response.groupMemberId,
             isMarkedDone: response.isMarkedDone,
@@ -80,9 +80,9 @@ export class GroupTaskMembersManagerComponent implements OnInit {
   }
 
   protected removeMemberFromTask(memberId: string): void {
-    let taskMemberId = this.task().groupTaskMembers.find(
+    const taskMemberId = this.task().groupTaskMembers!.find(
       (taskMember) => taskMember.groupMemberId === memberId,
-    )?.groupTaskMemberId!;
+    )!.groupTaskMemberId!;
 
     this.groupTaskMemberApi
       .removeMemberFromTask(
