@@ -130,46 +130,6 @@
     </form>
   </nz-card>
 
-  <nz-card
-    [nzTitle]="'Email Settings'"
-    [nzBordered]="true"
-    style="margin-top: 24px"
-  >
-    <nz-alert
-      nzType="info"
-      nzMessage="Email Management"
-      nzDescription="Email changes require verification and will be available soon. Your current email is displayed below."
-      nzShowIcon
-      style="margin-bottom: 16px"
-    >
-    </nz-alert>
-
-    <nz-descriptions nzBordered [nzColumn]="1">
-      <nz-descriptions-item nzTitle="Current Email">
-        {{ userDetails.email }}
-        <nz-tag
-          *ngIf="userDetails.isEmailVerified"
-          nzColor="success"
-          style="margin-left: 8px"
-        >
-          <i nz-icon nzType="check-circle"></i> Verified
-        </nz-tag>
-        <nz-tag
-          *ngIf="!userDetails.isEmailVerified"
-          nzColor="warning"
-          style="margin-left: 8px"
-        >
-          <i nz-icon nzType="exclamation-circle"></i> Not Verified
-        </nz-tag>
-      </nz-descriptions-item>
-    </nz-descriptions>
-
-    <!-- <button nz-button nzType="default" disabled style="margin-top: 16px">
-      <i nz-icon nzType="mail"></i>
-      Change Email (Coming Soon)
-    </button> -->
-  </nz-card>
-
   <nz-card [nzTitle]="'Security'" [nzBordered]="true" style="margin-top: 24px">
     <nz-alert
       nzType="info"
@@ -199,6 +159,23 @@
     <nz-descriptions nzBordered [nzColumn]="1">
       <nz-descriptions-item nzTitle="Account ID">
         {{ userDetails.id }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Email">
+        {{ userDetails.email }}
+        <nz-tag
+          *ngIf="userDetails.isEmailVerified"
+          nzColor="success"
+          style="margin-left: 8px"
+        >
+          <i nz-icon nzType="check-circle"></i> Verified
+        </nz-tag>
+        <nz-tag
+          *ngIf="!userDetails.isEmailVerified"
+          nzColor="warning"
+          style="margin-left: 8px"
+        >
+          <i nz-icon nzType="exclamation-circle"></i> Not Verified
+        </nz-tag>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Experience Points">
         {{ userDetails.experience }}
