@@ -1,7 +1,8 @@
 .div-registration-page {
   width: 100%;
   min-height: calc(100vh - 64px);
-  background: url("/assets/background_guest_page.png") center center / cover no-repeat;
+  background: url("/assets/background_guest_page.png") center center / cover
+    no-repeat;
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -172,7 +173,7 @@
   color: var(--third-color) !important;
 }
 
-::ng-deep .registration-form .ant-form-item-label>label {
+::ng-deep .registration-form .ant-form-item-label > label {
   color: var(--text-secondary-color);
 }
 
@@ -199,7 +200,7 @@
   border-color: var(--third-color) !important;
 }
 
-::ng-deep .registration-form .ant-checkbox-input:focus+.ant-checkbox-inner {
+::ng-deep .registration-form .ant-checkbox-input:focus + .ant-checkbox-inner {
   border-color: var(--third-color) !important;
 }
 
@@ -273,7 +274,11 @@
   background: rgba(0, 0, 0, 0.2) !important;
 }
 
-::ng-deep .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
+::ng-deep
+  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -305,7 +310,10 @@
 }
 
 ::ng-deep .ant-picker-year-panel .ant-picker-cell:hover .ant-picker-cell-inner,
-::ng-deep .ant-picker-month-panel .ant-picker-cell:hover .ant-picker-cell-inner {
+::ng-deep
+  .ant-picker-month-panel
+  .ant-picker-cell:hover
+  .ant-picker-cell-inner {
   background: rgba(255, 255, 255, 0.1) !important;
 }
 

@@ -1,62 +1,62 @@
 .badge-item {
-    width: auto;
-    height: 60px;
-    border: 2px solid var(--border-color-base);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-xs);
-    cursor: pointer;
-    position: relative;
-    transition: all var(--transition-speed);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+  width: auto;
+  height: 60px;
+  border: 2px solid var(--border-color-base);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-speed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .badge-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--box-shadow-md);
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-md);
 }
 
 .badge-item.equipped {
-    box-shadow: 0 0 12px rgba(24, 144, 255, 0.6);
+  box-shadow: 0 0 12px rgba(24, 144, 255, 0.6);
 }
 
 .badge-image {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .badge-quantity {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--text-secondary-color);
-    border-radius: var(--border-radius-sm);
-    padding: 0 var(--spacing-xs);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--text-secondary-color);
+  border-radius: var(--border-radius-sm);
+  padding: 0 var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
 }
 
 .badge-tooltip h4 {
-    margin: 0 0 var(--spacing-small) 0;
-    color: var(--text-secondary-color);
+  margin: 0 0 var(--spacing-small) 0;
+  color: var(--text-secondary-color);
 }
 
 .badge-tooltip p {
-    margin: 0 0 var(--spacing-small) 0;
-    color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 var(--spacing-small) 0;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 ::ng-deep .badge-tooltip-overlay {
-    z-index: 10000 !important;
+  z-index: 10000 !important;
 }
 
 ::ng-deep .badge-tooltip-overlay .ant-tooltip-inner {
-    max-width: 300px;
+  max-width: 300px;
 }

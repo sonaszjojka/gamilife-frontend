@@ -8,9 +8,8 @@ describe('AvatarCustomizationTabComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AvatarCustomizationTabComponent]
-    })
-    .compileComponents();
+      imports: [AvatarCustomizationTabComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AvatarCustomizationTabComponent);
     component = fixture.componentInstance;

@@ -1,7 +1,8 @@
 .pomodoro-view {
   display: flex;
   min-height: 100vh;
-  background: url("/assets/background_guest_page.png") center center / cover no-repeat;
+  background: url("/assets/background_guest_page.png") center center / cover
+    no-repeat;
 }
 
 .not-pomodoro-column {
@@ -16,12 +17,12 @@
   flex: 0 0 25%;
 }
 
-.pomodoro-view>div {
+.pomodoro-view > div {
   position: relative;
   padding: 0 10px;
 }
 
-.pomodoro-view>div:not(:last-child)::after {
+.pomodoro-view > div:not(:last-child)::after {
   content: "";
   position: absolute;
   top: 0;

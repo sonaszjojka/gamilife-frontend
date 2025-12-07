@@ -1,10 +1,10 @@
 .settings-container {
-    padding: var(--spacing-large);
-    max-width: 900px;
+  padding: var(--spacing-large);
+  max-width: 900px;
 }
 
 .form-help-text {
-    margin: var(--spacing-xs) 0 0;
-    color: rgba(0, 0, 0, 0.45);
-    font-size: var(--font-size-xs);
+  margin: var(--spacing-xs) 0 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: var(--font-size-xs);
 }

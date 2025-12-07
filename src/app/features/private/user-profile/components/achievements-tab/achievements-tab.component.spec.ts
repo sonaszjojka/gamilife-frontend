@@ -8,9 +8,8 @@ describe('AchievementsTabComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AchievementsTabComponent]
-    })
-    .compileComponents();
+      imports: [AchievementsTabComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AchievementsTabComponent);
     component = fixture.componentInstance;

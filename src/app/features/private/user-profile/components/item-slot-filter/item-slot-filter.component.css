@@ -1,6 +1,6 @@
 .filter-container {
-    padding: var(--spacing-medium);
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius-lg);
-    margin-bottom: var(--spacing-medium);
+  padding: var(--spacing-medium);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-medium);
 }
