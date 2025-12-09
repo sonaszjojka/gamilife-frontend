@@ -12,9 +12,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
-import { HttpClient } from '@angular/common/http';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { GroupFilterParams } from '../../../../shared/models/group/group-filter-params.model';
+import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
 
 @Component({
@@ -96,8 +95,6 @@ import { GroupType } from '../../../../shared/models/group/group-type.model';
   ],
 })
 export class InputSearchComponent implements OnInit {
-  private readonly http = inject(HttpClient);
-
   readonly groupTypes = signal<GroupType[]>([]);
 
   selectedGroupTypeId?: number;

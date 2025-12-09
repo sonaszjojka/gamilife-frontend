@@ -29,6 +29,7 @@ import { MembersListPeakComponent } from '../members-list-peak/members-list-peak
 import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
+import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
 
 @Component({
   selector: 'app-preview-group',
@@ -46,6 +47,7 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
     MembersListPeakComponent,
     RankingListPeakComponent,
     GroupRequestsListPeakComponent,
+    GroupTasksListComponent,
     EditGroupFormComponent,
   ],
   templateUrl: './preview-group.component.html',
@@ -58,6 +60,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
   protected loading = signal<boolean>(true);
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
+
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
 

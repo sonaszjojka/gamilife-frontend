@@ -1,0 +1,35 @@
+<nz-card class="group-tasks-card" nzTitle="GroupTasks">
+  <div class="group-tasks-filter">
+    <button nz-button (click)="onActiveTasks()">Active Tasks</button>
+    <button nz-button (click)="onAcceptedTasks()">Accepted Tasks</button>
+    <button nz-button (click)="onDeclinedTasks()">Declined Tasks</button>
+  </div>
+  <div class="group-tasks-list" (scroll)="onListScroll($event)">
+    <nz-spin [nzSpinning]="loading()" nzSize="large">
+      @for (task of tasksList(); track task.taskDto.id) {
+        <app-group-task
+          [task]="task"
+          [group]="group()!"
+          [mode]="mode()"
+          [membersList]="groupMembersList()"
+          (taskUpdated)="onTaskListUpdate()"
+          (rewardGiven)="onGroupRefresh()"
+        ></app-group-task>
+      }
+    </nz-spin>
+  </div>
+
+  <div class="bottom-tasks-list-panel">
+    @if (mode() !== GroupPreviewMode.PUBLIC) {
+      <button nz-button nzShape="circle" (click)="createTask()">
+        <nz-icon nzType="plus"></nz-icon>
+      </button>
+    }
+  </div>
+</nz-card>
+
+<app-group-task-form
+  [groupId]="group()!.groupId"
+  (formSubmitted)="onTaskListUpdate()"
+>
+</app-group-task-form>

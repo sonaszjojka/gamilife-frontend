@@ -78,17 +78,14 @@
             mode() === GroupPreviewMode.ADMIN)
         "
       >
-        <nz-card class="main-content-card">
-          <div class="placeholder-content">
-            <span
-              nz-icon
-              nzType="inbox"
-              nzTheme="outline"
-              class="placeholder-icon"
-            ></span>
-            <p>Main content area - 2/3 width</p>
-          </div>
-        </nz-card>
+        <app-group-task-list
+          [mode]="mode()"
+          [groupMembersList]="membersList()"
+          [group]="group()!"
+          [groupId]="groupId()!"
+          (refreshGroup)="onActionComplete()"
+        >
+        </app-group-task-list>
       </div>
     </div>
 
@@ -100,9 +97,7 @@
       </div>
     </nz-card>
   </nz-spin>
-
   <app-edit-group-form
-    *ngIf="group()"
     [group]="group()!"
     [members]="membersList()"
     (groupUpdated)="onActionComplete()"

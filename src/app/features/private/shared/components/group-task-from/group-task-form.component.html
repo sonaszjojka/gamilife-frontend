@@ -1,0 +1,121 @@
+<nz-modal
+  [nzTitle]="getTitle()"
+  [nzVisible]="isVisible"
+  nzOkText="Save"
+  nzCancelText="Cancel"
+  (nzOnOk)="handleSubmit()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="title">Title</nz-form-label>
+        <nz-form-control nzErrorTip="Please input the task title!">
+          <input
+            nz-input
+            id="title"
+            formControlName="title"
+            placeholder="Enter task title"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="description">Description</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            id="description"
+            formControlName="description"
+            placeholder="Enter task description"
+            rows="4"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="startTime">Start Time</nz-form-label>
+        <nz-form-control nzErrorTip="Please select Start Time!">
+          <nz-date-picker
+            id="startTime"
+            formControlName="startTime"
+            style="width: 100%"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>End Time</nz-form-label>
+        <nz-form-control nzErrorTip="Please select End Time!">
+          <div style="display: flex; gap: 8px">
+            <nz-date-picker
+              id="endDate"
+              formControlName="endDate"
+              style="flex: 1"
+            ></nz-date-picker>
+            <nz-time-picker
+              id="endTime"
+              formControlName="endTime"
+              nzFormat="HH:mm"
+              style="flex: 1"
+            ></nz-time-picker>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="categoryId">Category</nz-form-label>
+        <nz-form-control nzErrorTip="Please select a category!">
+          <nz-select
+            id="categoryId"
+            formControlName="categoryId"
+            nzShowSearch
+            nzPlaceHolder="Select a category"
+            nzAllowClear
+            style="width: 100%"
+          >
+            <nz-option
+              *ngFor="let category of categories"
+              [nzLabel]="category.categoryName"
+              [nzValue]="category.categoryId"
+            >
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="difficultyId"
+          >Difficulty</nz-form-label
+        >
+        <nz-form-control nzErrorTip="Please select a difficulty!">
+          <nz-select
+            id="difficultyId"
+            formControlName="difficultyId"
+            nzShowSearch
+            nzPlaceHolder="Select a difficulty"
+            nzAllowClear
+            style="width: 100%"
+          >
+            <nz-option
+              *ngFor="let difficulty of difiiculties"
+              [nzLabel]="difficulty.difficultyName"
+              [nzValue]="difficulty.difficultyId"
+            >
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="reward">Reward</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please input a valid reward (from 1 to 9999)!"
+        >
+          <input
+            nz-input
+            id="reward"
+            formControlName="reward"
+            placeholder="Enter task reward"
+            type="number"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

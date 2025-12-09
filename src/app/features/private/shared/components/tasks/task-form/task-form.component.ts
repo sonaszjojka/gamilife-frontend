@@ -183,7 +183,6 @@ export class TaskFormComponent {
     );
     mergedEndTime = endTimeDate!.toISOString();
 
-    //ToDo make two different classes for task requests or change name of edit task request
     const request: EditTaskRequest = {
       title: formValue.title,
       startTime: mergedStartTime,
