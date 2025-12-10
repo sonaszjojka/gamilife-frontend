@@ -1,0 +1,24 @@
+<div class="search-container">
+  <div class="search-bar-container">
+    <div class="search-bar">
+      <app-store-input-search
+        (inputChange)="onInputChange($event)"
+        (itemSlotChange)="onItemSlotChange($event)"
+        (itemRarityChange)="onItemRarityChange($event)"
+      >
+      </app-store-input-search>
+    </div>
+  </div>
+
+  <div class="search-result-container">
+    <app-store-item-list [items]="items()"> </app-store-item-list>
+  </div>
+
+  <div class="paging-div">
+    <app-pagination-more
+      [maxPageIndex]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination-more>
+  </div>
+</div>
