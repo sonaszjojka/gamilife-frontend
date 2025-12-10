@@ -20,6 +20,7 @@ import { GroupInvitationResponseComponent } from './features/private/my-groups/c
 import { GroupRequestsPageComponent } from './features/private/group-requests-page/components/group-requests-page/group-requests-page.component';
 import { GroupRankingPageComponent } from './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component';
 import { UserProfilePageComponent } from './features/private/user-profile/components/user-profile-page/user-profile-page.component';
+import {StorePageComponent} from './features/private/store/store-page.component';
 
 export const routes: Routes = [
   {
@@ -66,6 +67,7 @@ export const routes: Routes = [
       { path: 'groups/:groupId', component: PreviewGroupComponent },
       { path: 'my-groups', component: MyGroupsPageComponent },
       { path: 'tasks/pomodoro-session', component: PomodoroSessionComponent },
+      { path: 'store', component:StorePageComponent},
       {
         path: 'groups/:groupId/members',
         component: GroupMembersPageComponent,
