@@ -50,3 +50,14 @@ export interface StoreFiltersModel
   size: number;
   page: number;
 }
+
+export interface GetAllItemSlotsResult {
+  itemSlots: ItemSlotDto[];
+}
+
+export interface GetAllRaritiesResult {
+  itemRarities: RarityDto[];
+}
+
+
+

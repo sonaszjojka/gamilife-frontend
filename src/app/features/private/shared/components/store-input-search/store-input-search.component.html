@@ -17,7 +17,7 @@
   >
 
       <nz-option
-        *ngFor="let slot of itemSlots()"
+        *ngFor="let slot of this.itemSlots()"
         [nzValue]="slot.id"
         [nzLabel]="slot.name"
       ></nz-option>
@@ -32,7 +32,7 @@
   >
 
     <nz-option
-      *ngFor="let rarity of rarities()"
+      *ngFor="let rarity of this.rarities()"
       [nzValue]="rarity.id"
       [nzLabel]="rarity.name"
     ></nz-option>

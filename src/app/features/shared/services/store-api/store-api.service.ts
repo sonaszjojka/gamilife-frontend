@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {
+  GetAllItemSlotsResult, GetAllRaritiesResult,
   ItemSlotDto,
   PurchaseStoreItemResult,
   RarityDto,
@@ -24,23 +25,23 @@ export class StoreApiService
   {
     const params = this.buildHttpParamsForGetItems(filters)
 
-    return this.http.get<Page<StoreItemDto>>(`${this.API_URL}/store`,
+    return this.http.get<Page<StoreItemDto>>(`${this.API_URL}/store/item`,
       {
         params:params,
         withCredentials:true
       })
   }
 
-  public getItemSlots():Observable<ItemSlotDto[]>
+  public getItemSlots():Observable<GetAllItemSlotsResult>
   {
-    return this.http.get<ItemSlotDto[]>(`${this.API_URL}/item-slots`,
+    return this.http.get<GetAllItemSlotsResult>(`${this.API_URL}/item-slots`,
       {
         withCredentials:true
       })
   }
-  public getRarities():Observable<RarityDto[]>
+  public getRarities():Observable<GetAllRaritiesResult>
   {
-    return this.http.get<RarityDto[]>(`${this.API_URL}/item-rarities`,
+    return this.http.get<GetAllRaritiesResult>(`${this.API_URL}/item-rarities`,
       {
         withCredentials:true
       })
