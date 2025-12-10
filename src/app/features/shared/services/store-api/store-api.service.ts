@@ -50,7 +50,10 @@ export class StoreApiService
   public purchaseItem(itemId:string):Observable<PurchaseStoreItemResult>
   {
     const userId= localStorage.getItem('userId')
-    return this.http.post<PurchaseStoreItemResult>(`${this.API_URL}/users/${userId}/inventory/items`,itemId,{
+    const request= {
+      itemId:itemId
+    }
+    return this.http.post<PurchaseStoreItemResult>(`${this.API_URL}/users/${userId}/inventory/items`,request,{
       withCredentials:true
     } )
 
