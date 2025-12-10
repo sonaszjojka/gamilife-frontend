@@ -3,10 +3,8 @@ import {environment} from '../../../../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {
   GetAllItemSlotsResult, GetAllRaritiesResult,
-  ItemSlotDto,
   PurchaseStoreItemResult,
-  RarityDto,
-  StoreFiltersModel,
+  StoreFiltersModel, StoreItemDetailsDto,
   StoreItemDto
 } from '../../models/store/store.model';
 import {Observable} from 'rxjs';
@@ -45,6 +43,16 @@ export class StoreApiService
       {
         withCredentials:true
       })
+  }
+
+  public getItemDetails(itemId:string):Observable<StoreItemDetailsDto>
+  {
+    return this.http.get<StoreItemDetailsDto>(`${this.API_URL}/store/item/${itemId}`,
+      {
+        withCredentials:true
+      }
+      )
+
   }
 
   public purchaseItem(itemId:string):Observable<PurchaseStoreItemResult>

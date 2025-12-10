@@ -11,8 +11,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import {ItemSlotDto, RarityDto} from '../../../../shared/models/store/store.model';
-import {StoreApiService} from '../../../../shared/services/store-api/store-api.service';
+import {ItemSlotDto, RarityDto} from '../../../shared/models/store/store.model';
+import {StoreApiService} from '../../../shared/services/store-api/store-api.service';
 
 @Component({
   selector: 'app-store-input-search',

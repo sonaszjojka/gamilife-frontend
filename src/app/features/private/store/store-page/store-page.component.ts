@@ -1,9 +1,9 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {StoreApiService} from '../../shared/services/store-api/store-api.service';
-import {StoreFiltersModel, StoreItemDto} from '../../shared/models/store/store.model';
-import {StoreInputSearchComponent} from '../shared/components/store-input-search/store-input-search.component';
-import {PaginationMoreComponent} from '../shared/components/pagination-more/pagination-more.component';
-import {StoreItemListComponent} from '../shared/components/store-item-list/store-item-list.component';
+import {StoreApiService} from '../../../shared/services/store-api/store-api.service';
+import {StoreFiltersModel, StoreItemDto} from '../../../shared/models/store/store.model';
+import {StoreInputSearchComponent} from '../store-input-search/store-input-search.component';
+import {PaginationMoreComponent} from '../../shared/components/pagination-more/pagination-more.component';
+import {StoreItemListComponent} from '../store-item-list/store-item-list.component';
 
 
 @Component({

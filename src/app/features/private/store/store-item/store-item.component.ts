@@ -1,11 +1,12 @@
-import {Component, inject, input} from '@angular/core';
-import {StoreItemDto} from '../../../../shared/models/store/store.model';
+import {Component, inject, input, ViewChild} from '@angular/core';
+import {StoreItemDto} from '../../../shared/models/store/store.model';
 import {NzCardComponent} from 'ng-zorro-antd/card';
-import {StoreApiService} from '../../../../shared/services/store-api/store-api.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NgOptimizedImage, NgStyle} from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import {RARITY_COLORS, RarityEnum} from '../../../../shared/models/gamification/rarity.enum';
+import {StoreApiService} from '../../../shared/services/store-api/store-api.service';
+import {RARITY_COLORS, RarityEnum} from '../../../shared/models/gamification/rarity.enum';
+import {StoreItemDetailsComponent} from '../store-item-details/store-item-details.component';
 
 @Component({
   selector: 'app-store-item',
@@ -15,7 +16,8 @@ import {RARITY_COLORS, RarityEnum} from '../../../../shared/models/gamification/
     NzCardComponent,
     NzButtonComponent,
     NgOptimizedImage,
-    NgStyle
+    NgStyle,
+    StoreItemDetailsComponent
   ],
   standalone: true
 })
@@ -23,6 +25,9 @@ import {RARITY_COLORS, RarityEnum} from '../../../../shared/models/gamification/
 export class StoreItemComponent{
 
   item=input.required<StoreItemDto>();
+
+  @ViewChild(StoreItemDetailsComponent)
+  storeItemDetails!:StoreItemDetailsComponent
 
   private readonly storeApi = inject(StoreApiService)
   private readonly messageService=inject(NzMessageService)
@@ -47,6 +52,11 @@ export class StoreItemComponent{
       }
     )
 
+  }
+
+  onDetails()
+  {
+    this.storeItemDetails.show()
   }
 
 }
