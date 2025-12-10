@@ -17,7 +17,7 @@ import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
 
 @Component({
-  selector: 'app-input-search',
+  selector: 'app-community-input-search',
   standalone: true,
   imports: [
     CommonModule,
@@ -94,7 +94,7 @@ import { GroupType } from '../../../../shared/models/group/group-type.model';
     `,
   ],
 })
-export class InputSearchComponent implements OnInit {
+export class CommunityInputSearchComponent implements OnInit {
   readonly groupTypes = signal<GroupType[]>([]);
 
   selectedGroupTypeId?: number;

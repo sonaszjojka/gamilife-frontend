@@ -5,7 +5,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
-import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
+import { CommunityInputSearchComponent } from '../../../shared/components/community-input-search/community-input-search.component';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
@@ -20,7 +20,7 @@ import { AddGroupFormComponent } from '../add-group-form/add-group-form.componen
     NzIconModule,
     NzButtonModule,
     NzGridModule,
-    InputSearchComponent,
+    CommunityInputSearchComponent,
     PaginationMoreComponent,
     GroupListComponent,
     AddGroupFormComponent,
@@ -38,7 +38,7 @@ export class MyGroupsPageComponent implements OnInit {
   groupName = signal<string | undefined>(undefined);
   groupTypeId = signal<number | undefined>(undefined);
   @ViewChild(AddGroupFormComponent) addGroupForm!: AddGroupFormComponent;
-  @ViewChild(InputSearchComponent) inputSearch!: InputSearchComponent;
+  @ViewChild(CommunityInputSearchComponent) inputSearch!: CommunityInputSearchComponent;
   ngOnInit() {
     this.loadMyGroups(0, 0);
   }
