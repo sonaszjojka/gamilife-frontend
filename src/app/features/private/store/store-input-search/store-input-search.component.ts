@@ -23,10 +23,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 })
 export class StoreInputSearchComponent {
   readonly value = signal('');
-
   public inputChange = output<string>();
-  public itemSlotChange = output<number[] | undefined>();
-  public itemRarityChange = output<number[] | undefined>();
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
