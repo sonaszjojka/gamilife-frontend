@@ -85,8 +85,9 @@ export class StoreInputSearchComponent implements OnInit {
     this.selectedItemSlotId = undefined;
     this.selectedItemRarityId = undefined;
     this.inputChange.emit('');
-    this.itemSlotChange.emit(undefined);
     this.itemRarityChange.emit(undefined);
+    this.itemSlotChange.emit(undefined);
+
 
   }
 }
