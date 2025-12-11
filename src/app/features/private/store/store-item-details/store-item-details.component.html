@@ -13,22 +13,38 @@
         <ng-container *nzModalContent>
           <div class="item-details-container">
             <div class="image-section">
-              <img ngSrc="../../../../../assets/placeholder.png" [alt]="itemDetails.name" class="item-image"  width="100" height="100"/>
+              <img
+                ngSrc="../../../../../assets/placeholder.png"
+                [alt]="itemDetails.name"
+                class="item-image"
+                width="100"
+                height="100"
+              />
             </div>
 
             <div class="attributes-section">
               <p class="attribute-row">
                 <strong>Status:</strong>
-                <span [class]="itemDetails.isAlreadyOwned ? 'owned-status' : 'not-owned-status'">
-              {{ itemDetails.isAlreadyOwned ? 'Already Owned' : 'Available in store' }}
-            </span>
+                <span
+                  [class]="
+                    itemDetails.isAlreadyOwned
+                      ? 'owned-status'
+                      : 'not-owned-status'
+                  "
+                >
+                  {{
+                    itemDetails.isAlreadyOwned
+                      ? "Already Owned"
+                      : "Available in store"
+                  }}
+                </span>
               </p>
 
               <p class="attribute-row">
                 <strong>Rarity:</strong>
-                <span class="rarity" [ngStyle]="{'color': rarityColor}">
-              {{ itemDetails.rarity.name }}
-            </span>
+                <span class="rarity" [ngStyle]="{ color: rarityColor }">
+                  {{ itemDetails.rarity.name }}
+                </span>
               </p>
 
               <p class="attribute-row">

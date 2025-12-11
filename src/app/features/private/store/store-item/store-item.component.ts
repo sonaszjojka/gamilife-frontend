@@ -1,13 +1,16 @@
-import {Component, inject, input, ViewChild} from '@angular/core';
-import {StoreItemDto} from '../../../shared/models/store/store.model';
-import {NzCardComponent} from 'ng-zorro-antd/card';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NgOptimizedImage, NgStyle} from '@angular/common';
+import { Component, inject, input, ViewChild } from '@angular/core';
+import { StoreItemDto } from '../../../shared/models/store/store.model';
+import { NzCardComponent } from 'ng-zorro-antd/card';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NgOptimizedImage, NgStyle } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import {StoreApiService} from '../../../shared/services/store-api/store-api.service';
-import {RARITY_COLORS, RarityEnum} from '../../../shared/models/gamification/rarity.enum';
-import {StoreItemDetailsComponent} from '../store-item-details/store-item-details.component';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
+import {
+  RARITY_COLORS,
+  RarityEnum,
+} from '../../../shared/models/gamification/rarity.enum';
+import { StoreItemDetailsComponent } from '../store-item-details/store-item-details.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-store-item',
@@ -18,42 +21,33 @@ import {NzModalService} from 'ng-zorro-antd/modal';
     NzButtonComponent,
     NgOptimizedImage,
     NgStyle,
-    StoreItemDetailsComponent
+    StoreItemDetailsComponent,
   ],
-  standalone: true
+  standalone: true,
 })
-
-export class StoreItemComponent{
-
-  item=input.required<StoreItemDto>();
+export class StoreItemComponent {
+  item = input.required<StoreItemDto>();
 
   @ViewChild(StoreItemDetailsComponent)
-  storeItemDetails!:StoreItemDetailsComponent
+  storeItemDetails!: StoreItemDetailsComponent;
 
-  private readonly storeApi = inject(StoreApiService)
-  private readonly messageService=inject(NzMessageService)
+  private readonly storeApi = inject(StoreApiService);
+  private readonly messageService = inject(NzMessageService);
   private modal = inject(NzModalService);
 
   get borderColor() {
     return RARITY_COLORS[this.item().rarity.id as RarityEnum];
   }
 
-  onPurchase()
-  {
-    this.storeApi.purchaseItem(this.item().id).subscribe(
-      {
-        next:()=>
-        {
-          this.messageService.success('Successfully bought an item');
-
-        },
-        error:(err)=>
-        {
-          this.messageService.error('Could not buy and item');
-        }
-      }
-    )
-
+  onPurchase() {
+    this.storeApi.purchaseItem(this.item().id).subscribe({
+      next: () => {
+        this.messageService.success('Successfully bought an item');
+      },
+      error: () => {
+        this.messageService.error('Could not buy and item');
+      },
+    });
   }
 
   protected confirmPurchase(): void {
@@ -67,9 +61,7 @@ export class StoreItemComponent{
     });
   }
 
-  onDetails()
-  {
-    this.storeItemDetails.show()
+  onDetails() {
+    this.storeItemDetails.show();
   }
-
 }

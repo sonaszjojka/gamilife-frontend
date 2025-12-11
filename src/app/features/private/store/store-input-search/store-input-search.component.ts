@@ -1,18 +1,15 @@
-import {
-  Component,
-  inject,
-  OnInit, output,
-
-  signal,
-} from '@angular/core';
+import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import {ItemSlotDto, RarityDto} from '../../../shared/models/store/store.model';
-import {StoreApiService} from '../../../shared/services/store-api/store-api.service';
+import {
+  ItemSlotDto,
+  RarityDto,
+} from '../../../shared/models/store/store.model';
+import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 
 @Component({
   selector: 'app-store-input-search',
@@ -25,27 +22,27 @@ import {StoreApiService} from '../../../shared/services/store-api/store-api.serv
     NzButtonModule,
     NzSelectModule,
   ],
-templateUrl:'store-input-search.component.html',
-styleUrl:'store-input-search.component.css'
+  templateUrl: 'store-input-search.component.html',
+  styleUrl: 'store-input-search.component.css',
 })
 export class StoreInputSearchComponent implements OnInit {
-   itemSlots = signal<ItemSlotDto[]>([]);
-   rarities = signal<RarityDto[]>([])
+  itemSlots = signal<ItemSlotDto[]>([]);
+  rarities = signal<RarityDto[]>([]);
 
-   selectedItemSlotId?: number;
-   selectedItemRarityId?:number;
+  selectedItemSlotId?: number;
+  selectedItemRarityId?: number;
 
   readonly value = signal('');
 
   protected storeApi = inject(StoreApiService);
 
   public inputChange = output<string>();
-  public itemSlotChange = output<number|undefined>();
-  public itemRarityChange = output<number|undefined>();
+  public itemSlotChange = output<number | undefined>();
+  public itemRarityChange = output<number | undefined>();
 
   ngOnInit(): void {
     this.loadItemSlots();
-    this.loadItemRarities()
+    this.loadItemRarities();
   }
 
   onInputChange(event: Event): void {
@@ -64,10 +61,9 @@ export class StoreInputSearchComponent implements OnInit {
 
   private loadItemSlots(): void {
     this.storeApi.getItemSlots().subscribe({
-      next: (slots) =>
-      {
+      next: (slots) => {
         console.log('Item slots response:', slots);
-        this.itemSlots.set(slots.itemSlots)
+        this.itemSlots.set(slots.itemSlots);
       },
       error: (err) => console.error('Failed to load group item slots:', err),
     });
@@ -87,7 +83,5 @@ export class StoreInputSearchComponent implements OnInit {
     this.inputChange.emit('');
     this.itemRarityChange.emit(undefined);
     this.itemSlotChange.emit(undefined);
-
-
   }
 }

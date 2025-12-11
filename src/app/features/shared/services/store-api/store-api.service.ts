@@ -1,76 +1,76 @@
-import {inject, Injectable} from '@angular/core';
-import {environment} from '../../../../../environments/environment';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
-  GetAllItemSlotsResult, GetAllRaritiesResult,
+  GetAllItemSlotsResult,
+  GetAllRaritiesResult,
   PurchaseStoreItemResult,
-  StoreFiltersModel, StoreItemDetailsDto,
-  StoreItemDto
+  StoreFiltersModel,
+  StoreItemDetailsDto,
+  StoreItemDto,
 } from '../../models/store/store.model';
-import {Observable} from 'rxjs';
-import {Page} from '../tasks/individual-task.service';
+import { Observable } from 'rxjs';
+import { Page } from '../tasks/individual-task.service';
 
 @Injectable({
-  providedIn:"root"
+  providedIn: 'root',
 })
-export class StoreApiService
-{
+export class StoreApiService {
   private API_URL = `${environment.apiUrl}`;
   private http = inject(HttpClient);
 
+  public getFilteredItems(
+    filters: StoreFiltersModel,
+  ): Observable<Page<StoreItemDto>> {
+    const params = this.buildHttpParamsForGetItems(filters);
 
-  public getFilteredItems(filters:StoreFiltersModel) :Observable<Page<StoreItemDto>>
-  {
-    const params = this.buildHttpParamsForGetItems(filters)
-
-    return this.http.get<Page<StoreItemDto>>(`${this.API_URL}/store/item`,
-      {
-        params:params,
-        withCredentials:true
-      })
+    return this.http.get<Page<StoreItemDto>>(`${this.API_URL}/store/item`, {
+      params: params,
+      withCredentials: true,
+    });
   }
 
-  public getItemSlots():Observable<GetAllItemSlotsResult>
-  {
-    return this.http.get<GetAllItemSlotsResult>(`${this.API_URL}/item-slots`,
-      {
-        withCredentials:true
-      })
+  public getItemSlots(): Observable<GetAllItemSlotsResult> {
+    return this.http.get<GetAllItemSlotsResult>(`${this.API_URL}/item-slots`, {
+      withCredentials: true,
+    });
   }
-  public getRarities():Observable<GetAllRaritiesResult>
-  {
-    return this.http.get<GetAllRaritiesResult>(`${this.API_URL}/item-rarities`,
+  public getRarities(): Observable<GetAllRaritiesResult> {
+    return this.http.get<GetAllRaritiesResult>(
+      `${this.API_URL}/item-rarities`,
       {
-        withCredentials:true
-      })
-  }
-
-  public getItemDetails(itemId:string):Observable<StoreItemDetailsDto>
-  {
-    return this.http.get<StoreItemDetailsDto>(`${this.API_URL}/store/item/${itemId}`,
-      {
-        withCredentials:true
-      }
-      )
-
+        withCredentials: true,
+      },
+    );
   }
 
-  public purchaseItem(itemId:string):Observable<PurchaseStoreItemResult>
-  {
-    const userId= localStorage.getItem('userId')
-    const request= {
-      itemId:itemId
-    }
-    return this.http.post<PurchaseStoreItemResult>(`${this.API_URL}/users/${userId}/inventory/items`,request,{
-      withCredentials:true
-    } )
+  public getItemDetails(itemId: string): Observable<StoreItemDetailsDto> {
+    return this.http.get<StoreItemDetailsDto>(
+      `${this.API_URL}/store/item/${itemId}`,
+      {
+        withCredentials: true,
+      },
+    );
+  }
 
+  public purchaseItem(itemId: string): Observable<PurchaseStoreItemResult> {
+    const userId = localStorage.getItem('userId');
+    const request = {
+      itemId: itemId,
+    };
+    return this.http.post<PurchaseStoreItemResult>(
+      `${this.API_URL}/users/${userId}/inventory/items`,
+      request,
+      {
+        withCredentials: true,
+      },
+    );
   }
 
   protected buildHttpParamsForGetItems(params: StoreFiltersModel) {
     let httpParams = new HttpParams();
 
-    if (params.itemSlot!==undefined) {
+    if (params.itemSlot !== undefined) {
       httpParams = httpParams.set('itemSlot', params.itemSlot);
     }
     if (params.rarity !== undefined) {
@@ -87,5 +87,4 @@ export class StoreApiService
     }
     return httpParams;
   }
-
 }

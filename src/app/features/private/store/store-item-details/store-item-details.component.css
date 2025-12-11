@@ -7,7 +7,6 @@
   font-weight: bold;
 }
 
-
 .item-details-container {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -43,7 +42,6 @@
   border-top: 1px solid #eee;
 }
 
-
 .attribute-row {
   margin-bottom: 8px;
   font-size: 1.1em;
@@ -56,7 +54,6 @@
 .attribute-row strong {
   color: #333;
 }
-
 
 .owned-status {
   color: #ff4d4f;

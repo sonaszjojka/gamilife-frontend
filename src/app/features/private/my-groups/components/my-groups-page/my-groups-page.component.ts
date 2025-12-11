@@ -38,7 +38,8 @@ export class MyGroupsPageComponent implements OnInit {
   groupName = signal<string | undefined>(undefined);
   groupTypeId = signal<number | undefined>(undefined);
   @ViewChild(AddGroupFormComponent) addGroupForm!: AddGroupFormComponent;
-  @ViewChild(CommunityInputSearchComponent) inputSearch!: CommunityInputSearchComponent;
+  @ViewChild(CommunityInputSearchComponent)
+  inputSearch!: CommunityInputSearchComponent;
   ngOnInit() {
     this.loadMyGroups(0, 0);
   }

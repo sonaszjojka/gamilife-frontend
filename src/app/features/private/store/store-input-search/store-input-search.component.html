@@ -1,4 +1,3 @@
-
 <div class="input-search-container">
   <nz-input-group nzSearch>
     <input
@@ -15,13 +14,11 @@
     nzPlaceHolder="Filter by item slot"
     (ngModelChange)="onItemSlotChange($event)"
   >
-
-      <nz-option
-        *ngFor="let slot of this.itemSlots()"
-        [nzValue]="slot.id"
-        [nzLabel]="slot.name"
-      ></nz-option>
-
+    <nz-option
+      *ngFor="let slot of this.itemSlots()"
+      [nzValue]="slot.id"
+      [nzLabel]="slot.name"
+    ></nz-option>
   </nz-select>
 
   <nz-select
@@ -30,12 +27,11 @@
     nzPlaceHolder="Filter by item rarity"
     (ngModelChange)="onItemRarityChange($event)"
   >
-
     <nz-option
       *ngFor="let rarity of this.rarities()"
       [nzValue]="rarity.id"
       [nzLabel]="rarity.name"
     ></nz-option>
   </nz-select>
-  <button nz-button (click)="resetFilters()"> Reset Filters</button>
+  <button nz-button (click)="resetFilters()">Reset Filters</button>
 </div>
