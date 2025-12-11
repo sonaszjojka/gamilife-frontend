@@ -6,7 +6,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
-
 @Component({
   selector: 'app-store-input-search',
   standalone: true,
