@@ -11,7 +11,7 @@
             [value]="slot.id"
             [(ngModel)]="slot.selected"
             (ngModelChange)="onItemSlotChange()"
-            name="itemSlot_{{slot.id}}"
+            name="itemSlot_{{ slot.id }}"
           />
           {{ slot.name }}
           <span class="checkmark"></span>
@@ -20,7 +20,7 @@
     </div>
   </details>
 
-  <hr class="divider">
+  <hr class="divider" />
 
   <details open class="filter-group">
     <summary class="group-header">
@@ -34,7 +34,7 @@
             [value]="rarity.id"
             [(ngModel)]="rarity.selected"
             (ngModelChange)="onItemRarityChange()"
-            name="rarity_{{rarity.id}}"
+            name="rarity_{{ rarity.id }}"
           />
           {{ rarity.name }}
           <span class="checkmark"></span>

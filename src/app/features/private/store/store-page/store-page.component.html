@@ -1,9 +1,7 @@
 <div class="search-container">
   <div class="search-bar-container">
     <div class="search-bar">
-      <app-store-input-search
-        (inputChange)="onInputChange($event)"
-      >
+      <app-store-input-search (inputChange)="onInputChange($event)">
       </app-store-input-search>
     </div>
   </div>
@@ -13,7 +11,8 @@
       <app-store-filter-panel
         (itemSlotChange)="onItemSlotChange($event)"
         (itemRarityChange)="onItemRarityChange($event)"
-      > </app-store-filter-panel>
+      >
+      </app-store-filter-panel>
     </div>
 
     <div class="search-result-container">

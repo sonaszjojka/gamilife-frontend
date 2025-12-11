@@ -7,7 +7,7 @@ import {
 import { StoreInputSearchComponent } from '../store-input-search/store-input-search.component';
 import { PaginationMoreComponent } from '../../shared/components/pagination-more/pagination-more.component';
 import { StoreItemListComponent } from '../store-item-list/store-item-list.component';
-import {StoreFilterPanelComponent} from '../store-filter-panel/store-filter-panel.component';
+import { StoreFilterPanelComponent } from '../store-filter-panel/store-filter-panel.component';
 
 @Component({
   selector: 'app-store-page',
