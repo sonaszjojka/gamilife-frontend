@@ -25,7 +25,7 @@ import { StoreApiService } from '../../../shared/services/store-api/store-api.se
   templateUrl: 'store-input-search.component.html',
   styleUrl: 'store-input-search.component.css',
 })
-export class StoreInputSearchComponent implements OnInit {
+export class StoreInputSearchComponent {
   itemSlots = signal<ItemSlotDto[]>([]);
   rarities = signal<RarityDto[]>([]);
 
@@ -34,16 +34,11 @@ export class StoreInputSearchComponent implements OnInit {
 
   readonly value = signal('');
 
-  protected storeApi = inject(StoreApiService);
 
   public inputChange = output<string>();
-  public itemSlotChange = output<number | undefined>();
-  public itemRarityChange = output<number | undefined>();
+  public itemSlotChange = output<number[] | undefined>();
+  public itemRarityChange = output<number[] | undefined>();
 
-  ngOnInit(): void {
-    this.loadItemSlots();
-    this.loadItemRarities();
-  }
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -51,37 +46,5 @@ export class StoreInputSearchComponent implements OnInit {
     this.inputChange.emit(this.value());
   }
 
-  onItemSlotChange(newSlotId: number | undefined) {
-    this.itemSlotChange.emit(newSlotId);
-  }
 
-  onItemRarityChange(newTypeId: number | undefined) {
-    this.itemRarityChange.emit(newTypeId);
-  }
-
-  private loadItemSlots(): void {
-    this.storeApi.getItemSlots().subscribe({
-      next: (slots) => {
-        console.log('Item slots response:', slots);
-        this.itemSlots.set(slots.itemSlots);
-      },
-      error: (err) => console.error('Failed to load group item slots:', err),
-    });
-  }
-
-  private loadItemRarities(): void {
-    this.storeApi.getRarities().subscribe({
-      next: (rarities) => this.rarities.set(rarities.itemRarities),
-      error: (err) => console.error('Failed to load group item slots:', err),
-    });
-  }
-
-  resetFilters(): void {
-    this.value.set('');
-    this.selectedItemSlotId = undefined;
-    this.selectedItemRarityId = undefined;
-    this.inputChange.emit('');
-    this.itemRarityChange.emit(undefined);
-    this.itemSlotChange.emit(undefined);
-  }
 }

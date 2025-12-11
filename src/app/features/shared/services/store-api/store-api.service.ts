@@ -71,10 +71,16 @@ export class StoreApiService {
     let httpParams = new HttpParams();
 
     if (params.itemSlot !== undefined) {
-      httpParams = httpParams.set('itemSlot', params.itemSlot);
+
+      params.itemSlot.forEach(slot=>{
+        httpParams = httpParams.append('itemSlot', slot);
+      })
     }
     if (params.rarity !== undefined) {
-      httpParams = httpParams.set('rarity', params.rarity);
+     params.rarity.forEach(rarity=>
+     {
+       httpParams = httpParams.append('rarity', rarity);
+     })
     }
     if (params.itemName) {
       httpParams = httpParams.set('itemName', params.itemName);

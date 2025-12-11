@@ -3,15 +3,22 @@
     <div class="search-bar">
       <app-store-input-search
         (inputChange)="onInputChange($event)"
-        (itemSlotChange)="onItemSlotChange($event)"
-        (itemRarityChange)="onItemRarityChange($event)"
       >
       </app-store-input-search>
     </div>
   </div>
-  <div class="filter-panel"></div>
-  <div class="search-result-container">
-    <app-store-item-list [items]="items()"> </app-store-item-list>
+
+  <div class="content-body">
+    <div class="filter-panel">
+      <app-store-filter-panel
+        (itemSlotChange)="onItemSlotChange($event)"
+        (itemRarityChange)="onItemRarityChange($event)"
+      > </app-store-filter-panel>
+    </div>
+
+    <div class="search-result-container">
+      <app-store-item-list [items]="items()"> </app-store-item-list>
+    </div>
   </div>
 
   <div class="paging-div">

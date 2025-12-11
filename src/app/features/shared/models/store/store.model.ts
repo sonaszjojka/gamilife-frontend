@@ -36,8 +36,8 @@ export interface PurchaseStoreItemResult {
 }
 export interface StoreFiltersModel {
   itemName?: string;
-  itemSlot?: number;
-  rarity?: number;
+  itemSlot?: number[];
+  rarity?: number[];
   size: number;
   page: number;
 }

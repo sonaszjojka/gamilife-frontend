@@ -7,6 +7,7 @@ import {
 import { StoreInputSearchComponent } from '../store-input-search/store-input-search.component';
 import { PaginationMoreComponent } from '../../shared/components/pagination-more/pagination-more.component';
 import { StoreItemListComponent } from '../store-item-list/store-item-list.component';
+import {StoreFilterPanelComponent} from '../store-filter-panel/store-filter-panel.component';
 
 @Component({
   selector: 'app-store-page',
@@ -16,6 +17,7 @@ import { StoreItemListComponent } from '../store-item-list/store-item-list.compo
     StoreInputSearchComponent,
     PaginationMoreComponent,
     StoreItemListComponent,
+    StoreFilterPanelComponent,
   ],
 
   standalone: true,
@@ -25,8 +27,8 @@ export class StorePageComponent implements OnInit {
   totalPages = signal<number>(0);
   currentPage = signal<number>(0);
   itemName = signal<string | undefined>(undefined);
-  itemSlot = signal<number | undefined>(undefined);
-  rarity = signal<number | undefined>(undefined);
+  itemSlot = signal<number[] | undefined>(undefined);
+  rarity = signal<number[] | undefined>(undefined);
 
   private readonly storeApi = inject(StoreApiService);
 
@@ -62,11 +64,11 @@ export class StorePageComponent implements OnInit {
     this.itemName.set(itemName);
     this.loadItems(0);
   }
-  onItemSlotChange(itemSlotId: number | undefined) {
+  onItemSlotChange(itemSlotId: number[] | undefined) {
     this.itemSlot.set(itemSlotId);
     this.loadItems(0);
   }
-  onItemRarityChange(rarityId: number | undefined) {
+  onItemRarityChange(rarityId: number[] | undefined) {
     this.rarity.set(rarityId);
     this.loadItems(0);
   }
