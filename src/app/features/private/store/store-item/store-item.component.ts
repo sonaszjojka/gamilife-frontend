@@ -7,6 +7,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import {StoreApiService} from '../../../shared/services/store-api/store-api.service';
 import {RARITY_COLORS, RarityEnum} from '../../../shared/models/gamification/rarity.enum';
 import {StoreItemDetailsComponent} from '../store-item-details/store-item-details.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-store-item',
@@ -31,6 +32,7 @@ export class StoreItemComponent{
 
   private readonly storeApi = inject(StoreApiService)
   private readonly messageService=inject(NzMessageService)
+  private modal = inject(NzModalService);
 
   get borderColor() {
     return RARITY_COLORS[this.item().rarity.id as RarityEnum];
@@ -52,6 +54,17 @@ export class StoreItemComponent{
       }
     )
 
+  }
+
+  protected confirmPurchase(): void {
+    this.modal.confirm({
+      nzTitle: 'Confirm Purchase',
+      nzContent:
+        'Are you sure you want to buy this item? This action cannot be undone.',
+      nzOkText: 'Accept',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => this.onPurchase(),
+    });
   }
 
   onDetails()
