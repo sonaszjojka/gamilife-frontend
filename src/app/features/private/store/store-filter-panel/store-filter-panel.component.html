@@ -1,0 +1,45 @@
+<div class="filter-panel">
+  <details open class="filter-group">
+    <summary class="group-header">
+      <h3 class="group-title">Equipment</h3>
+    </summary>
+    <div class="filter-options">
+      @for (slot of itemSlots(); track slot.id) {
+        <label class="filter-checkbox-container">
+          <input
+            type="checkbox"
+            [value]="slot.id"
+            [(ngModel)]="slot.selected"
+            (ngModelChange)="onItemSlotChange()"
+            name="itemSlot_{{ slot.id }}"
+          />
+          {{ slot.name }}
+          <span class="checkmark"></span>
+        </label>
+      }
+    </div>
+  </details>
+
+  <hr class="divider" />
+
+  <details open class="filter-group">
+    <summary class="group-header">
+      <h3 class="group-title">Rarities</h3>
+    </summary>
+    <div class="filter-options">
+      @for (rarity of rarities(); track rarity.id) {
+        <label class="filter-checkbox-container">
+          <input
+            type="checkbox"
+            [value]="rarity.id"
+            [(ngModel)]="rarity.selected"
+            (ngModelChange)="onItemRarityChange()"
+            name="rarity_{{ rarity.id }}"
+          />
+          {{ rarity.name }}
+          <span class="checkmark"></span>
+        </label>
+      }
+    </div>
+  </details>
+</div>

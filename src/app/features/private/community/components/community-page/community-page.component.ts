@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
+import { CommunityInputSearchComponent } from '../../../shared/components/community-input-search/community-input-search.component';
 import { CommonModule } from '@angular/common';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -14,7 +14,7 @@ import { GroupListComponent } from '../../../shared/components/group-list/group-
   imports: [
     NzInputModule,
     NzIconModule,
-    InputSearchComponent,
+    CommunityInputSearchComponent,
     CommonModule,
     PaginationMoreComponent,
     NzGridModule,

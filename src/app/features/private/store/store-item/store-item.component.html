@@ -1,0 +1,22 @@
+<nz-card [ngStyle]="{ 'border-color': borderColor }">
+  <div class="item-image">
+    <img
+      ngSrc="../../../../../assets/placeholder.png"
+      height="100"
+      width="100"
+      [alt]="this.item().name"
+    />
+  </div>
+  <div class="name-panel">
+    <h1>{{ this.item().name }}</h1>
+  </div>
+  <div class="info-panel">
+    <span>{{ this.item().itemSlot.name }}</span>
+    <span>{{ this.item().price }}</span>
+  </div>
+  <div class="button-panel">
+    <button nz-button (click)="onDetails()">Details</button>
+    <button nz-button (click)="confirmPurchase()">Buy</button>
+  </div>
+</nz-card>
+<app-store-item-details [itemId]="this.item().id"> </app-store-item-details>
