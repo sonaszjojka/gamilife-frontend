@@ -19,6 +19,7 @@ import {
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { GroupTaskMemberModel } from '../../../../shared/models/group/group-task-member.model';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-task-members-manager',
@@ -44,6 +45,7 @@ export class GroupTaskMembersManagerComponent implements OnInit {
   assignedMembers = signal<GroupMember[]>([]);
 
   private readonly groupTaskMemberApi = inject(GroupTaskMemberApiService);
+  private readonly notification = inject(NotificationService);
 
   changed = output<void>();
 
@@ -74,7 +76,15 @@ export class GroupTaskMembersManagerComponent implements OnInit {
           ]);
 
           this.task().groupTaskMembers.push(assignedMember);
+          this.notification.success('Member assigned to task successfully');
           this.changed.emit();
+        },
+        error: (err) => {
+          console.error('Error assigning member:', err);
+          this.notification.handleApiError(
+            err,
+            'Failed to assign member to task',
+          );
         },
       });
   }
@@ -90,24 +100,34 @@ export class GroupTaskMembersManagerComponent implements OnInit {
         this.task().groupTaskId,
         taskMemberId,
       )
-      .subscribe(() => {
-        this.assignedMembers.set(
-          this.assignedMembers().filter(
-            (member) => member.groupMemberId != memberId,
-          ),
-        );
+      .subscribe({
+        next: () => {
+          this.assignedMembers.set(
+            this.assignedMembers().filter(
+              (member) => member.groupMemberId != memberId,
+            ),
+          );
 
-        this.notAssignedMembers.set([
-          ...this.notAssignedMembers(),
-          this.membersList().find(
-            (member) => member.groupMemberId === memberId,
-          )!,
-        ]);
+          this.notAssignedMembers.set([
+            ...this.notAssignedMembers(),
+            this.membersList().find(
+              (member) => member.groupMemberId === memberId,
+            )!,
+          ]);
 
-        this.task().groupTaskMembers = this.task().groupTaskMembers.filter(
-          (taskMember) => taskMember.groupMemberId != memberId,
-        );
-        this.changed.emit();
+          this.task().groupTaskMembers = this.task().groupTaskMembers.filter(
+            (taskMember) => taskMember.groupMemberId != memberId,
+          );
+          this.notification.success('Member removed from task successfully');
+          this.changed.emit();
+        },
+        error: (err) => {
+          console.error('Error removing member:', err);
+          this.notification.handleApiError(
+            err,
+            'Failed to remove member from task',
+          );
+        },
       });
   }
 

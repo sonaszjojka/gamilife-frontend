@@ -12,6 +12,7 @@ import { Task } from '../../../shared/models/task-models/task.model';
 import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TaskCalendarComponent } from '../../shared/components/tasks/task-calendar/task-calendar.component';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-list',
@@ -56,6 +57,7 @@ export class TaskListComponent {
     this.loadTasks();
   });
   private taskService = inject(IndividualTaskService);
+  private notificationService = inject(NotificationService);
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -96,6 +98,10 @@ export class TaskListComponent {
         error: (error) => {
           console.error('Error loading tasks:', error);
           this.loading = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load tasks',
+          );
         },
       });
   }
@@ -126,6 +132,10 @@ export class TaskListComponent {
         error: (error) => {
           console.error('Error loading more tasks:', error);
           this.loadingMore = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load more tasks',
+          );
         },
       });
   }

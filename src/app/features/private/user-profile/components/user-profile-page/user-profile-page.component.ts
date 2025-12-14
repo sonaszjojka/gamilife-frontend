@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { Subject, takeUntil } from 'rxjs';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-user-profile-page',
@@ -35,6 +36,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
   protected route = inject(ActivatedRoute);
   protected userApiService = inject(UserApiService);
   protected authService = inject(AuthService);
+  private readonly notificationService = inject(NotificationService);
 
   public ProfileViewMode = ProfileViewMode;
 
@@ -65,6 +67,10 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error loading user profile:', error);
         this.loading = false;
+        this.notificationService.handleApiError(
+          error,
+          'Failed to load user profile',
+        );
       },
     });
   }

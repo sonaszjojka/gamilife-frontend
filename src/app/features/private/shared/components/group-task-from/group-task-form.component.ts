@@ -21,6 +21,8 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+
 @Component({
   selector: 'app-group-task-form',
   templateUrl: './group-task-form.component.html',
@@ -45,6 +47,7 @@ export class GroupTaskFormComponent {
 
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
+  private notification = inject(NotificationService);
 
   task = input<GroupTask | null>(null);
   groupId = input.required<string>();
@@ -122,26 +125,35 @@ export class GroupTaskFormComponent {
 
       this.groupTaskApi.postGroupTask(this.groupId(), request).subscribe({
         next: () => {
+          this.notification.success('Task created successfully');
           this.formSubmitted.emit();
         },
         error: (error) => {
           console.error('Error creating task:', error);
+          this.notification.handleApiError(error, 'Failed to create task');
         },
       });
     }
   }
 
   handleSubmit(): void {
-    if (this.task() == null) {
-      this.handleCreate();
+    if (this.validateForm.valid) {
+      if (this.task() == null) {
+        this.handleCreate();
+      } else {
+        this.handleEdit();
+      }
       this.isVisible = false;
       this.validateForm.reset();
     } else {
-      this.handleEdit();
-      this.isVisible = false;
-      this.validateForm.reset();
+      this.notification.showValidationError();
+      Object.values(this.validateForm.controls).forEach((control) => {
+        control.markAsDirty();
+        control.updateValueAndValidity();
+      });
     }
   }
+
   handleCancel(): void {
     this.isVisible = false;
     this.validateForm.reset();
@@ -186,10 +198,12 @@ export class GroupTaskFormComponent {
         )
         .subscribe({
           next: () => {
+            this.notification.success('Task updated successfully');
             this.formSubmitted.emit();
           },
           error: (error) => {
             console.error('Error editing group task:', error);
+            this.notification.handleApiError(error, 'Failed to update task');
           },
         });
     }

@@ -28,6 +28,7 @@ import {
 import { formatDateTime } from '../../../../../shared/util/DateFormatterUtil';
 import { GroupTaskDeclineFormComponent } from '../group-task-decline-form/group-task-decline-form.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-task',
@@ -61,7 +62,8 @@ export class GroupTaskComponent implements OnInit {
 
   private readonly groupTaskApi = inject(GroupTaskApiService);
   private readonly groupTaskMemberApi = inject(GroupTaskMemberApiService);
-  private modal = inject(NzModalService);
+  private readonly modal = inject(NzModalService);
+  private readonly notification = inject(NotificationService);
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
@@ -87,10 +89,12 @@ export class GroupTaskComponent implements OnInit {
       .deleteGroupTask(this.group().groupId, this.task().groupTaskId)
       .subscribe({
         next: () => {
+          this.notification.success('Task deleted successfully');
           this.onUpdate();
         },
         error: (err) => {
           console.error('Error deleting task:', err);
+          this.notification.handleApiError(err, 'Failed to delete task');
         },
       });
   }
@@ -98,6 +102,7 @@ export class GroupTaskComponent implements OnInit {
   protected manageParticipants(): void {
     this.groupTaskMembersManager.show();
   }
+
   protected complete(): void {
     if (this.userIsParticipant() != null) {
       const request: EditGroupTaskMemberDto = {
@@ -112,6 +117,7 @@ export class GroupTaskComponent implements OnInit {
         )
         .subscribe({
           next: (response) => {
+            this.notification.success('Task marked as complete');
             this.userIsParticipant.set({
               isMarkedDone: response.isMarkedDone,
               groupTaskMemberId: response.groupTaskMemberId,
@@ -126,6 +132,10 @@ export class GroupTaskComponent implements OnInit {
           },
           error: (err) => {
             console.error('Error marking task as complete:', err);
+            this.notification.handleApiError(
+              err,
+              'Failed to mark task as complete',
+            );
           },
         });
     }
@@ -145,6 +155,7 @@ export class GroupTaskComponent implements OnInit {
         )
         .subscribe({
           next: (response) => {
+            this.notification.success('Task completion removed');
             this.userIsParticipant.set({
               isMarkedDone: response.isMarkedDone,
               groupTaskMemberId: response.groupTaskMemberId,
@@ -158,7 +169,11 @@ export class GroupTaskComponent implements OnInit {
             participant!.isMarkedDone = response.isMarkedDone;
           },
           error: (err) => {
-            console.error('Error marking task as complete:', err);
+            console.error('Error removing completion:', err);
+            this.notification.handleApiError(
+              err,
+              'Failed to remove completion',
+            );
           },
         });
     }
@@ -181,10 +196,12 @@ export class GroupTaskComponent implements OnInit {
       .editGroupTask(this.group().groupId, this.task().groupTaskId, request)
       .subscribe({
         next: () => {
+          this.notification.success('Task accepted and rewards distributed');
           this.onRewardGiven();
         },
         error: (err) => {
           console.error('Error accepting task:', err);
+          this.notification.handleApiError(err, 'Failed to accept task');
         },
       });
   }

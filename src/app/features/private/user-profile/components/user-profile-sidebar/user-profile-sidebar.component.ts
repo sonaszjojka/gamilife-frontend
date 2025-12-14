@@ -15,6 +15,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-user-profile-sidebar',
@@ -51,6 +52,7 @@ export class UserProfileSidebarComponent implements OnInit {
   isMaxLevel = false;
 
   protected inventoryService = inject(UserInventoryService);
+  private readonly notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.calculateLevel();
@@ -76,8 +78,13 @@ export class UserProfileSidebarComponent implements OnInit {
           this.displayedBadges = this.badges.slice(0, 8);
           this.loadingBadges = false;
         },
-        error: () => {
+        error: (error) => {
+          console.error('Error loading badges:', error);
           this.loadingBadges = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load user badges',
+          );
         },
       });
   }

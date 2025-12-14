@@ -25,11 +25,11 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { UserDetails } from '../../../../shared/models/group/user.model';
 import { environment } from '../../../../../../environments/environment';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -62,7 +62,7 @@ export class ProfileSettingsTabComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
-  private message = inject(NzMessageService);
+  private notificationService = inject(NotificationService);
   private userApi = inject(UserApiService);
   protected authService = inject(AuthService);
 
@@ -104,7 +104,7 @@ export class ProfileSettingsTabComponent implements OnInit {
         next: (response) => {
           this.saving = false;
           this.settingsForm.markAsPristine();
-          this.message.success('Profile updated successfully!');
+          this.notificationService.success('Profile updated successfully!');
 
           const updatedUser: UserDetails = {
             ...this.userDetails,
@@ -117,11 +117,12 @@ export class ProfileSettingsTabComponent implements OnInit {
           };
           this.settingsUpdated.emit(updatedUser);
         },
-        error: (err) => {
+        error: (error) => {
           this.saving = false;
-          const detail =
-            err.error?.detail || 'Failed to update profile. Please try again.';
-          this.message.error(detail);
+          this.notificationService.handleApiError(
+            error,
+            'Failed to update profile',
+          );
         },
       });
     }
@@ -152,16 +153,16 @@ export class ProfileSettingsTabComponent implements OnInit {
       .subscribe({
         next: () => {
           this.sendingResetEmail = false;
-          this.message.success(
+          this.notificationService.success(
             'Password reset email sent! Please check your inbox.',
           );
         },
-        error: (err) => {
+        error: (error) => {
           this.sendingResetEmail = false;
-          const detail =
-            err.error?.detail ||
-            'Failed to send reset email. Please try again.';
-          this.message.error(detail);
+          this.notificationService.handleApiError(
+            error,
+            'Failed to send reset email',
+          );
         },
       });
   }

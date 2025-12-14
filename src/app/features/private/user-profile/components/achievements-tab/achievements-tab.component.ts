@@ -7,6 +7,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { UserAchievementsApiService } from '../../../../shared/services/user-achievements-api/user-achievements-api.service';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-achievements-tab',
@@ -28,6 +29,7 @@ export class AchievementsTabComponent implements OnInit {
   loading = false;
 
   protected achievementsService = inject(UserAchievementsApiService);
+  private readonly notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.loadAchievements();
@@ -43,6 +45,10 @@ export class AchievementsTabComponent implements OnInit {
       error: (error) => {
         console.error('Error loading achievements:', error);
         this.loading = false;
+        this.notificationService.handleApiError(
+          error,
+          'Failed to load achievements',
+        );
       },
     });
   }

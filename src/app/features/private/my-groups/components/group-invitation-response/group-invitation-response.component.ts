@@ -9,6 +9,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
 import { InvitationStatus } from '../../../../shared/models/group/group-invitation.model';
 import { take } from 'rxjs/operators';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 type PageStatus = 'loading' | 'ready' | 'accepted' | 'rejected' | 'error';
 
@@ -30,6 +31,7 @@ type PageStatus = 'loading' | 'ready' | 'accepted' | 'rejected' | 'error';
 export class GroupInvitationResponseComponent implements OnInit {
   private invitationApi = inject(GroupInvitationApiService);
   private route = inject(ActivatedRoute);
+  private notification = inject(NotificationService);
 
   status = signal<PageStatus>('loading');
   processing = signal(false);
@@ -47,6 +49,7 @@ export class GroupInvitationResponseComponent implements OnInit {
     if (!groupId || !invitationId || !token) {
       this.status.set('error');
       this.errorMessage.set('Invalid invitation link');
+      this.notification.error('Invalid invitation link');
       return;
     }
 
@@ -72,21 +75,28 @@ export class GroupInvitationResponseComponent implements OnInit {
         next: () => {
           this.processing.set(false);
           this.status.set('accepted');
+          this.notification.success(
+            'Invitation accepted successfully! Welcome to the group!',
+          );
         },
         error: (err) => {
           this.processing.set(false);
           this.status.set('error');
           console.error('Failed to accept invitation:', err);
 
+          let errorMsg = '';
           if (err.status === 404) {
-            this.errorMessage.set('Invitation not found or expired');
+            errorMsg = 'Invitation not found or expired';
           } else if (err.status === 409) {
-            this.errorMessage.set('You are already a member of this group');
+            errorMsg = 'You are already a member of this group';
           } else if (err.status === 401) {
-            this.errorMessage.set('Invalid or expired token');
+            errorMsg = 'Invalid or expired token';
           } else {
-            this.errorMessage.set('Something went wrong. Please try again.');
+            errorMsg = 'Something went wrong. Please try again.';
           }
+
+          this.errorMessage.set(errorMsg);
+          this.notification.error(errorMsg);
         },
       });
   }
@@ -106,19 +116,24 @@ export class GroupInvitationResponseComponent implements OnInit {
         next: () => {
           this.processing.set(false);
           this.status.set('rejected');
+          this.notification.success('Invitation rejected');
         },
         error: (err) => {
           this.processing.set(false);
           this.status.set('error');
           console.error('Failed to reject invitation:', err);
 
+          let errorMsg = '';
           if (err.status === 404) {
-            this.errorMessage.set('Invitation not found or expired');
+            errorMsg = 'Invitation not found or expired';
           } else if (err.status === 401) {
-            this.errorMessage.set('Invalid or expired token');
+            errorMsg = 'Invalid or expired token';
           } else {
-            this.errorMessage.set('Something went wrong. Please try again.');
+            errorMsg = 'Something went wrong. Please try again.';
           }
+
+          this.errorMessage.set(errorMsg);
+          this.notification.error(errorMsg);
         },
       });
   }

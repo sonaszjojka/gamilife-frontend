@@ -37,6 +37,7 @@ import { EditHabitRequest } from '../../../../../shared/models/task-models/edit-
 import { HabitFormComponent } from '../habit-form/habit-form.component';
 import { HabitTaskService } from '../../../../../shared/services/tasks/habit-task.service';
 import { daysAsDuration } from '../../../../../../shared/util/DateFormatterUtil';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-form',
@@ -83,6 +84,7 @@ export class TaskFormComponent {
   private taskService = inject(IndividualTaskService);
   private pomodoroService = inject(PomodoroTaskService);
   private habitService = inject(HabitTaskService);
+  private notificationService = inject(NotificationService);
 
   validTaskForm = this.formBuilder.group({
     title: this.formBuilder.control('', [
@@ -157,6 +159,7 @@ export class TaskFormComponent {
       Object.values(this.validTaskForm.controls).forEach((control) => {
         control.markAsTouched();
       });
+      this.notificationService.showValidationError();
       return;
     }
 
@@ -197,10 +200,14 @@ export class TaskFormComponent {
       this.taskService.createTask(request).subscribe({
         next: () => {
           this.validTaskForm.reset();
+          this.notificationService.handleApiSuccess(
+            'POST',
+            'Task created successfully',
+          );
           this.taskFormSubmitted.emit();
         },
         error: (error) => {
-          console.error('Error creating task:', error);
+          this.notificationService.handleApiError(error);
           this.taskFormSubmitted.emit();
         },
       });
@@ -220,6 +227,13 @@ export class TaskFormComponent {
                 workCyclesCompleted: response.workCyclesCompleted,
                 createdAt: response.createdAt,
               };
+              this.notificationService.handleApiSuccess(
+                'POST',
+                'Pomodoro added successfully',
+              );
+            },
+            error: (error) => {
+              this.notificationService.handleApiError(error);
             },
           });
       } else if (this.pomodoroEditRequest && this.pomodoroEdition()) {
@@ -234,6 +248,13 @@ export class TaskFormComponent {
                     response.workCyclesCompleted;
                   task.pomodoro.createdAt = response.createdAt;
                 }
+                this.notificationService.handleApiSuccess(
+                  'PUT',
+                  'Pomodoro updated successfully',
+                );
+              },
+              error: (error) => {
+                this.notificationService.handleApiError(error);
               },
             });
         }
@@ -255,7 +276,14 @@ export class TaskFormComponent {
                 longestStreak: response.longestStreak,
                 acceptedDate: response.acceptedDate,
               };
+              this.notificationService.handleApiSuccess(
+                'POST',
+                'Habit added successfully',
+              );
               //ToDo decide if we need to set task.endTime from here or use already existing one
+            },
+            error: (error) => {
+              this.notificationService.handleApiError(error);
             },
           });
       } else if (this.habitEditRequest && this.habitEdition()) {
@@ -277,6 +305,13 @@ export class TaskFormComponent {
                   task.taskHabit.longestStreak = response.longestStreak;
                   task.taskHabit.acceptedDate = response.acceptedDate;
                 }
+                this.notificationService.handleApiSuccess(
+                  'PUT',
+                  'Habit updated successfully',
+                );
+              },
+              error: (error) => {
+                this.notificationService.handleApiError(error);
               },
             });
         }
@@ -285,10 +320,14 @@ export class TaskFormComponent {
       this.taskService.editTask(task.taskId, request).subscribe({
         next: () => {
           this.validTaskForm.reset();
+          this.notificationService.handleApiSuccess(
+            'PUT',
+            'Task updated successfully',
+          );
           this.taskFormSubmitted.emit();
         },
         error: (error) => {
-          console.error('Error editing task:', error);
+          this.notificationService.handleApiError(error);
           this.taskFormSubmitted.emit();
         },
       });
@@ -299,10 +338,14 @@ export class TaskFormComponent {
     this.taskService.deleteTask(this.task()!.taskId).subscribe({
       next: () => {
         this.validTaskForm.reset();
+        this.notificationService.handleApiSuccess(
+          'DELETE',
+          'Task deleted successfully',
+        );
         this.taskDeleted.emit();
       },
       error: (error) => {
-        console.error('Error deleting task:', error);
+        this.notificationService.handleApiError(error);
         this.taskFormSubmitted.emit();
       },
     });

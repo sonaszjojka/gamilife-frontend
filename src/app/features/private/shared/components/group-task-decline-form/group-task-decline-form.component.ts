@@ -18,6 +18,8 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+
 @Component({
   selector: 'app-group-task-decline-form',
   templateUrl: './group-task-decline-form.component.html',
@@ -38,6 +40,7 @@ export class GroupTaskDeclineFormComponent {
 
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
+  private notification = inject(NotificationService);
 
   task = input.required<GroupTask>();
   groupId = input.required<string>();
@@ -54,9 +57,18 @@ export class GroupTaskDeclineFormComponent {
   }
 
   handleSubmit(): void {
-    this.handleEdit();
-    this.isVisible = false;
+    if (this.validateForm.valid) {
+      this.handleEdit();
+      this.isVisible = false;
+    } else {
+      this.notification.showValidationError();
+      Object.values(this.validateForm.controls).forEach((control) => {
+        control.markAsDirty();
+        control.updateValueAndValidity();
+      });
+    }
   }
+
   handleCancel(): void {
     this.isVisible = false;
     this.validateForm.reset();
@@ -86,10 +98,13 @@ export class GroupTaskDeclineFormComponent {
         )
         .subscribe({
           next: () => {
+            this.notification.success('Task declined successfully');
+            this.validateForm.reset();
             this.formSubmitted.emit();
           },
           error: (error) => {
-            console.error('Error editing group task:', error);
+            console.error('Error declining task:', error);
+            this.notification.handleApiError(error, 'Failed to decline task');
           },
         });
     }

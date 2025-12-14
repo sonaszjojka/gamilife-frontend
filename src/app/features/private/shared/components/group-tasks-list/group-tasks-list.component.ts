@@ -25,6 +25,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { GroupTaskComponent } from '../group-task/group-task.component';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { Page } from '../../../../shared/services/tasks/individual-task.service';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-task-list',
@@ -63,6 +64,7 @@ export class GroupTasksListComponent implements OnInit {
   };
 
   private readonly groupTaskApi = inject(GroupTaskApiService);
+  private readonly notification = inject(NotificationService);
   protected readonly GroupPreviewMode = GroupPreviewMode;
 
   @ViewChild(GroupTaskFormComponent)
@@ -85,7 +87,9 @@ export class GroupTasksListComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error loading group tasks:', err);
+          this.notification.handleApiError(err, 'Failed to load group tasks');
           this.tasksList.set([]);
+          this.loading.set(false);
         },
       });
   }
@@ -113,6 +117,7 @@ export class GroupTasksListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading more tasks:', error);
+        this.notification.handleApiError(error, 'Failed to load more tasks');
         this.loadingMore.set(false);
       },
     });

@@ -11,6 +11,7 @@ import { UserInventoryService } from '../../../../shared/services/user-inventory
 import { ProfileViewMode } from '../../../../shared/models/user-profile/profile-view-mode.enum';
 import { ItemSlotFilterComponent } from '../item-slot-filter/item-slot-filter.component';
 import { InventoryItemComponent } from '../inventory-item/inventory-item.component';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-avatar-customization-tab',
@@ -48,6 +49,7 @@ export class AvatarCustomizationTabComponent implements OnInit {
   } = {};
 
   protected inventoryService = inject(UserInventoryService);
+  private readonly notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.loadItems();
@@ -72,6 +74,10 @@ export class AvatarCustomizationTabComponent implements OnInit {
         error: (error) => {
           console.error('Error loading items:', error);
           this.loading = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load inventory items',
+          );
         },
       });
   }
