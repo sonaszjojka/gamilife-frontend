@@ -19,7 +19,7 @@ registerLocaleData(en);
 const ngZorroConfig: NzConfig = {
   message: {
     nzDuration: 3000,
-    nzMaxStack: 8,
+    nzMaxStack: 5,
     nzPauseOnHover: false,
     nzAnimate: true,
   },
