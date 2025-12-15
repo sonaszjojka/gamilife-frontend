@@ -10,6 +10,7 @@ import { GroupRequestApiService } from '../../../../shared/services/group-reques
 import { take } from 'rxjs/operators';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-requests-list',
@@ -38,6 +39,7 @@ export class GroupRequestsListComponent {
 
   private readonly groupRequestApi = inject(GroupRequestApiService);
   private readonly modal = inject(NzModalService);
+  private readonly notification = inject(NotificationService);
 
   paginatedRequests = () => {
     const requests = this.requests();
@@ -83,11 +85,15 @@ export class GroupRequestsListComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.notification.success(
+            `Request from ${request.username} approved successfully`,
+          );
           this.currentPage.set(1);
           this.requestChanged.emit();
         },
         error: (err) => {
           console.error('Failed to approve request:', err);
+          this.notification.handleApiError(err, 'Failed to approve request');
         },
       });
   }
@@ -98,11 +104,15 @@ export class GroupRequestsListComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.notification.success(
+            `Request from ${request.username} rejected`,
+          );
           this.currentPage.set(1);
           this.requestChanged.emit();
         },
         error: (err) => {
           console.error('Failed to reject request:', err);
+          this.notification.handleApiError(err, 'Failed to reject request');
         },
       });
   }

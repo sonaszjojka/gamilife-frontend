@@ -20,6 +20,7 @@ import { PomodoroTaskProgressComponent } from '../pomodoro-task-progress/pomodor
 import { durationToDays } from '../../../../../../shared/util/DateFormatterUtil';
 import { HabitTaskService } from '../../../../../shared/services/tasks/habit-task.service';
 import { EditHabitRequest } from '../../../../../shared/models/task-models/edit-habit-request';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-item',
@@ -51,6 +52,7 @@ export class TaskItemComponent implements OnInit {
 
   taskService = inject(IndividualTaskService);
   habitService = inject(HabitTaskService);
+  notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.isCompleted.set(this.task.completedAt != null);
@@ -71,10 +73,15 @@ export class TaskItemComponent implements OnInit {
       next: (response) => {
         this.task.completedAt = response.completedAt;
         this.taskUpdated.emit(this.task.taskId);
+        this.notificationService.success('Task completed successfully');
       },
       error: (error) => {
         console.error('Error:', error);
         this.isCompleted.set(false);
+        this.notificationService.handleApiError(
+          error,
+          'Failed to complete task',
+        );
       },
     });
   }
@@ -120,15 +127,30 @@ export class TaskItemComponent implements OnInit {
           .subscribe({
             next: () => {
               this.taskUpdated.emit(this.task.taskId);
+              this.notificationService.success(
+                `Habit cycle completed! Current streak: ${this.task.taskHabit!.currentStreak}`,
+              );
+            },
+            error: (error) => {
+              console.error('Error:', error);
+              this.notificationService.handleApiError(
+                error,
+                'Failed to update habit streak',
+              );
             },
           });
       },
       error: (error) => {
         console.error('Error:', error);
         this.isCompleted.set(false);
+        this.notificationService.handleApiError(
+          error,
+          'Failed to complete habit cycle',
+        );
       },
     });
   }
+
   completeHabit(): void {
     const acceptedDate = new Date(Date.now());
 
@@ -151,6 +173,13 @@ export class TaskItemComponent implements OnInit {
           this.completeTask();
           this.taskUpdated.emit(this.task.taskId);
         },
+        error: (error) => {
+          console.error('Error:', error);
+          this.notificationService.handleApiError(
+            error,
+            'Failed to complete habit',
+          );
+        },
       });
   }
 
@@ -172,6 +201,7 @@ export class TaskItemComponent implements OnInit {
   removeTaskFromPomodoroSession() {
     this.removeFromCurrentSession.emit(this.task);
   }
+
   addCycleLengthToEndTime(endTime: string, cycleLength: string): string {
     const endDate = new Date(endTime);
     const cycleLengthInDays = durationToDays(cycleLength);

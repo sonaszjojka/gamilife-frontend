@@ -26,6 +26,7 @@ import { PomodoroTaskService } from '../../../shared/services/tasks/pomodoro-tas
 import { EditPomodoroRequest } from '../../../shared/models/task-models/edit-pomodoro-request';
 import { EditTaskRequest } from '../../../shared/models/task-models/edit-task-request';
 import { PomodoroSessionBreakModalComponent } from '../../shared/components/tasks/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -73,6 +74,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
 
   taskService = inject(IndividualTaskService);
   pomodoroService = inject(PomodoroTaskService);
+  private notificationService = inject(NotificationService);
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -105,6 +107,10 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error loading tasks:', error);
           this.loading = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load tasks',
+          );
         },
       });
   }
@@ -129,6 +135,10 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error loading tasks:', error);
           this.loadingMore = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load more tasks',
+          );
         },
       });
   }
@@ -155,7 +165,12 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   }
 
   onSessionStarted(): void {
-    if (!this.currentSessionPomodoroTasks[0]) return;
+    if (!this.currentSessionPomodoroTasks[0]) {
+      this.notificationService.warning(
+        'Add at least one task to start the session',
+      );
+      return;
+    }
 
     if (this.isSessionActive) {
       this.stopTimer();
@@ -265,16 +280,25 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         this.currentSessionPomodoroTasks[0].pomodoro!.pomodoroId!,
         request,
       )
-      .subscribe();
-
-    if (
-      this.currentSessionPomodoroTasks[0].pomodoro!.workCyclesCompleted ==
-      this.currentSessionPomodoroTasks[0].pomodoro!.workCyclesNeeded
-    ) {
-      this.pomodoroSessionAcceptTaskModal.task =
-        this.currentSessionPomodoroTasks[0];
-      this.pomodoroSessionAcceptTaskModal.showModal();
-    }
+      .subscribe({
+        next: () => {
+          if (
+            this.currentSessionPomodoroTasks[0].pomodoro!.workCyclesCompleted ==
+            this.currentSessionPomodoroTasks[0].pomodoro!.workCyclesNeeded
+          ) {
+            this.pomodoroSessionAcceptTaskModal.task =
+              this.currentSessionPomodoroTasks[0];
+            this.pomodoroSessionAcceptTaskModal.showModal();
+          }
+        },
+        error: (error) => {
+          console.error('Error updating pomodoro:', error);
+          this.notificationService.handleApiError(
+            error,
+            'Failed to update work cycle',
+          );
+        },
+      });
   }
 
   removeFromPanel(task: Task) {
@@ -288,14 +312,25 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       completedAt: new Date(Date.now()).toISOString(),
     };
 
-    this.taskService.editTask(task.taskId, request).subscribe();
-
-    this.currentSessionPomodoroTasks = this.currentSessionPomodoroTasks.filter(
-      (t) => t.taskId != task.taskId,
-    );
-    this.allUsersTasks = this.allUsersTasks.filter(
-      (t) => t.taskId != task.taskId,
-    );
+    this.taskService.editTask(task.taskId, request).subscribe({
+      next: () => {
+        this.currentSessionPomodoroTasks =
+          this.currentSessionPomodoroTasks.filter(
+            (t) => t.taskId != task.taskId,
+          );
+        this.allUsersTasks = this.allUsersTasks.filter(
+          (t) => t.taskId != task.taskId,
+        );
+        this.notificationService.success('Task completed and removed');
+      },
+      error: (error) => {
+        console.error('Error completing task:', error);
+        this.notificationService.handleApiError(
+          error,
+          'Failed to complete task',
+        );
+      },
+    });
   }
 
   removeFromCurrentSession(task: Task) {

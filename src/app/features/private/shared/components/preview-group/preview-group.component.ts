@@ -30,6 +30,7 @@ import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
 import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-preview-group',
@@ -69,6 +70,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
   private readonly requestsApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly modal = inject(NzModalService);
+  private readonly notification = inject(NotificationService);
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
@@ -113,6 +115,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.error(err);
+          this.notification.handleApiError(err, 'Failed to load group');
           this.loading.set(false);
         },
       });
@@ -131,6 +134,10 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.error('Error loading group requests:', err);
+          this.notification.handleApiError(
+            err,
+            'Failed to load group requests',
+          );
           this.requestsList.set([]);
         },
       });
@@ -195,10 +202,12 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.notification.success('Group deleted successfully');
           this.router.navigate(['app/groups']);
         },
         error: (err) => {
           console.error('Failed to delete group:', err);
+          this.notification.handleApiError(err, 'Failed to delete group');
         },
       });
   }

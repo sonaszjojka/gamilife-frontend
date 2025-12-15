@@ -3,7 +3,6 @@ import { StoreItemDto } from '../../../shared/models/store/store.model';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NgOptimizedImage, NgStyle } from '@angular/common';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 import {
   RARITY_COLORS,
@@ -11,6 +10,7 @@ import {
 } from '../../../shared/models/gamification/rarity.enum';
 import { StoreItemDetailsComponent } from '../store-item-details/store-item-details.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-store-item',
@@ -32,7 +32,7 @@ export class StoreItemComponent {
   storeItemDetails!: StoreItemDetailsComponent;
 
   private readonly storeApi = inject(StoreApiService);
-  private readonly messageService = inject(NzMessageService);
+  private readonly notificationService = inject(NotificationService);
   private modal = inject(NzModalService);
 
   get borderColor() {
@@ -42,10 +42,15 @@ export class StoreItemComponent {
   onPurchase() {
     this.storeApi.purchaseItem(this.item().id).subscribe({
       next: () => {
-        this.messageService.success('Successfully bought an item');
+        this.notificationService.success(
+          `Successfully purchased ${this.item().name}!`,
+        );
       },
-      error: () => {
-        this.messageService.error('Could not buy and item');
+      error: (error) => {
+        this.notificationService.handleApiError(
+          error,
+          'Could not purchase item',
+        );
       },
     });
   }

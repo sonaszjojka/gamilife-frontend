@@ -8,6 +8,7 @@ import { StoreInputSearchComponent } from '../store-input-search/store-input-sea
 import { PaginationMoreComponent } from '../../shared/components/pagination-more/pagination-more.component';
 import { StoreItemListComponent } from '../store-item-list/store-item-list.component';
 import { StoreFilterPanelComponent } from '../store-filter-panel/store-filter-panel.component';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-store-page',
@@ -31,6 +32,7 @@ export class StorePageComponent implements OnInit {
   rarity = signal<number[] | undefined>(undefined);
 
   private readonly storeApi = inject(StoreApiService);
+  private readonly notificationService = inject(NotificationService);
 
   ngOnInit() {
     this.loadItems(0);
@@ -51,8 +53,12 @@ export class StorePageComponent implements OnInit {
         this.totalPages.set(response.totalPages - 1);
         this.currentPage.set(page);
       },
-      error: (err) => {
-        console.error(err);
+      error: (error) => {
+        console.error(error);
+        this.notificationService.handleApiError(
+          error,
+          'Failed to load store items',
+        );
       },
     });
   }

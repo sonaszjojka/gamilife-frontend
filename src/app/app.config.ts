@@ -13,8 +13,17 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './shared/auth.interceptor';
+import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
 
 registerLocaleData(en);
+const ngZorroConfig: NzConfig = {
+  message: {
+    nzDuration: 3000,
+    nzMaxStack: 5,
+    nzPauseOnHover: false,
+    nzAnimate: true,
+  },
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +33,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authInterceptor])),
+    { provide: NZ_CONFIG, useValue: ngZorroConfig },
   ],
 };

@@ -11,6 +11,7 @@ import { GroupApiService } from '../../../../shared/services/groups-api/group-ap
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-add-group-form',
@@ -29,6 +30,7 @@ import { GroupType } from '../../../../shared/models/group/group-type.model';
 export class AddGroupFormComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   protected groupApiService = inject(GroupApiService);
+  private notification = inject(NotificationService);
 
   groupCreated = output<void>();
 
@@ -62,7 +64,10 @@ export class AddGroupFormComponent implements OnInit {
   private loadGroupTypes(): void {
     this.groupApiService.getGroupTypes().subscribe({
       next: (types) => this.groupTypes.set(types),
-      error: (err) => console.error('Failed to load group types:', err),
+      error: (err) => {
+        console.error('Failed to load group types:', err);
+        this.notification.handleApiError(err, 'Failed to load group types');
+      },
     });
   }
 
@@ -77,6 +82,7 @@ export class AddGroupFormComponent implements OnInit {
 
       this.groupApiService.createGroup(formValue).subscribe({
         next: () => {
+          this.notification.success('Group created successfully');
           this.isVisible.set(false);
           this.validateForm.reset();
           this.isLoading.set(false);
@@ -84,10 +90,12 @@ export class AddGroupFormComponent implements OnInit {
         },
         error: (err) => {
           console.error('Failed to create group:', err);
+          this.notification.handleApiError(err, 'Failed to create group');
           this.isLoading.set(false);
         },
       });
     } else {
+      this.notification.showValidationError();
       Object.values(this.validateForm.controls).forEach((control) => {
         control.markAsDirty();
         control.updateValueAndValidity();

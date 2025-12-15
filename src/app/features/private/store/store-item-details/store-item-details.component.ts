@@ -10,6 +10,7 @@ import {
   RarityEnum,
 } from '../../../shared/models/gamification/rarity.enum';
 import { NgOptimizedImage, NgStyle } from '@angular/common';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-store-item-details',
@@ -33,6 +34,7 @@ export class StoreItemDetailsComponent {
   protected rarity!: RarityEnum;
 
   private readonly storeService = inject(StoreApiService);
+  private readonly notificationService = inject(NotificationService);
 
   handleOk(): void {
     this.loading.set(true);
@@ -56,10 +58,14 @@ export class StoreItemDetailsComponent {
         this.rarity = this.itemDetails.rarity.id as RarityEnum;
         this.loading.set(false);
       },
-      error: (err) => {
-        console.log(err);
+      error: (error) => {
+        console.error(error);
         this.loading.set(false);
         this.isVisible.set(false);
+        this.notificationService.handleApiError(
+          error,
+          'Failed to load item details',
+        );
       },
     });
   }

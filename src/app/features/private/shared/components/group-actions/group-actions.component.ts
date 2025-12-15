@@ -17,6 +17,7 @@ import { GroupMemberApiService } from '../../../../shared/services/group-member-
 import { Router } from '@angular/router';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-actions',
@@ -68,6 +69,7 @@ export class GroupActionsComponent {
   private readonly groupMemberApi = inject(GroupMemberApiService);
   private readonly requestsApi = inject(GroupRequestApiService);
   private readonly modal = inject(NzModalService);
+  private readonly notification = inject(NotificationService);
   private router = inject(Router);
 
   protected buttonText = computed(() => {
@@ -176,11 +178,13 @@ export class GroupActionsComponent {
         .pipe(take(1))
         .subscribe({
           next: () => {
+            this.notification.success('Successfully joined the group!');
             this.loading.set(false);
             this.actionComplete.emit();
           },
           error: (err) => {
             console.error(err);
+            this.notification.handleApiError(err, 'Failed to join group');
             this.loading.set(false);
           },
         });
@@ -190,11 +194,13 @@ export class GroupActionsComponent {
         .pipe(take(1))
         .subscribe({
           next: () => {
+            this.notification.success('Join request sent successfully');
             this.loading.set(false);
             this.actionComplete.emit();
           },
           error: (err) => {
             console.error(err);
+            this.notification.handleApiError(err, 'Failed to send request');
             this.loading.set(false);
           },
         });
@@ -214,6 +220,7 @@ export class GroupActionsComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.notification.success('Successfully left the group');
           this.loading.set(false);
           this.actionComplete.emit();
           this.router.navigate(['/app/community']);
@@ -225,6 +232,8 @@ export class GroupActionsComponent {
 
           if (errorObj.code === '3001') {
             this.showAdminCannotLeaveModal();
+          } else {
+            this.notification.handleApiError(err, 'Failed to leave group');
           }
         },
       });

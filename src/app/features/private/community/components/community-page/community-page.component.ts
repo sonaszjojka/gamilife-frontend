@@ -9,6 +9,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+
 @Component({
   selector: 'app-community-page',
   imports: [
@@ -26,6 +28,8 @@ import { GroupListComponent } from '../../../shared/components/group-list/group-
 })
 export class CommunityPageComponent implements OnInit {
   private groupApiService = inject(GroupApiService);
+  private notification = inject(NotificationService);
+
   readonly value = signal('');
   groups = signal<Group[]>([]);
   totalPages = signal<number>(0);
@@ -53,7 +57,10 @@ export class CommunityPageComponent implements OnInit {
           this.currentPage.set(page);
         }, timeout);
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error(err);
+        this.notification.handleApiError(err, 'Failed to load groups');
+      },
     });
   }
 

@@ -7,6 +7,7 @@ import { BadgeItemComponent } from '../badge-item/badge-item.component';
 import { UserInventoryItemDto } from '../../../../shared/models/user-profile/user-profile.models';
 import { UserInventoryService } from '../../../../shared/services/user-inventory-api/user-inventory-api.service';
 import { ItemSlotEnum } from '../../../../shared/models/gamification/item-slot.enum';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-badges-tab',
@@ -32,6 +33,7 @@ export class BadgesTabComponent implements OnInit {
   totalPages = 0;
 
   protected inventoryService = inject(UserInventoryService);
+  private readonly notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.loadBadges();
@@ -56,6 +58,10 @@ export class BadgesTabComponent implements OnInit {
         error: (error) => {
           console.error('Error loading badges:', error);
           this.loading = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load badges',
+          );
         },
       });
   }

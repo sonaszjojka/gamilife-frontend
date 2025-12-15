@@ -1,13 +1,10 @@
-// store-filter-panel.component.ts
-
 import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 import {
   ItemSlotDto,
   RarityDto,
 } from '../../../shared/models/store/store.model';
-import { FormsModule } from '@angular/forms'; // <-- Dodaj import FormsModule
-
+import { FormsModule } from '@angular/forms';
 interface SelectableItemSlotDto extends ItemSlotDto {
   selected?: boolean;
 }

@@ -122,7 +122,6 @@ export class SendGroupInvitationFormComponent {
         },
         error: (err) => {
           this.sending.set(false);
-          console.error('Failed to send invitation:', err);
           if (err.status === 409) {
             this.errorMessage.set('User already invited or is a member');
           } else if (err.status === 404) {

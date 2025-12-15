@@ -12,6 +12,7 @@ import { GroupMember } from '../../../../shared/models/group/group-member.model'
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberDto } from '../../../../shared/models/group/group-member.model';
 import { take } from 'rxjs/operators';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-edit-group-member-form',
@@ -28,6 +29,7 @@ import { take } from 'rxjs/operators';
 export class EditGroupMemberFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private groupMemberApi = inject(GroupMemberApiService);
+  private notification = inject(NotificationService);
 
   groupId = input.required<string>();
   member = input<GroupMember | null>(null);
@@ -70,16 +72,19 @@ export class EditGroupMemberFormComponent {
         .pipe(take(1))
         .subscribe({
           next: () => {
+            this.notification.success('Member updated successfully');
             this.isVisible.set(false);
             this.isLoading.set(false);
             this.memberUpdated.emit();
           },
           error: (err) => {
             console.error('Failed to update member:', err);
+            this.notification.handleApiError(err, 'Failed to update member');
             this.isLoading.set(false);
           },
         });
     } else {
+      this.notification.showValidationError();
       Object.values(this.validateForm.controls).forEach((control) => {
         control.markAsDirty();
         control.updateValueAndValidity();

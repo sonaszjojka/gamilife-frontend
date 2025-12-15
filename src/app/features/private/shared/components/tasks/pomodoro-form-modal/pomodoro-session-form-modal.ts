@@ -14,6 +14,7 @@ import { Task } from '../../../../../shared/models/task-models/task.model';
 import { PomodoroTaskService } from '../../../../../shared/services/tasks/pomodoro-task.service';
 import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
 import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-pomdoro-form-modal',
@@ -46,6 +47,7 @@ export class PomodoroSessionFormModal {
   title = '';
 
   pomodoroService = inject(PomodoroTaskService);
+  notificationService = inject(NotificationService);
   pomodoroRequest?: CreatePomodoroRequest;
   pomodoroEditRequest?: EditPomodoroRequest;
   isVisible = false;
@@ -69,7 +71,6 @@ export class PomodoroSessionFormModal {
       this.pomodoroService
         .createPomodoro(this.task.taskId, this.pomodoroRequest)
         .subscribe({
-          //ToDo Take care of Validation Errors
           next: (response) => {
             this.task.pomodoro = {
               pomodoroId: response.pomodoroId,
@@ -79,7 +80,14 @@ export class PomodoroSessionFormModal {
             };
 
             this.moveToCurrentSession.emit(this.task);
+            this.notificationService.handleApiSuccess(
+              'POST',
+              'Pomodoro task created successfully',
+            );
             this.isVisible = false;
+          },
+          error: (error) => {
+            this.notificationService.handleApiError(error);
           },
         });
     } else if (
@@ -95,7 +103,14 @@ export class PomodoroSessionFormModal {
             this.task.pomodoro!.workCyclesCompleted =
               response.workCyclesCompleted;
             this.moveToCurrentSession.emit(this.task);
+            this.notificationService.handleApiSuccess(
+              'PUT',
+              'Pomodoro task updated successfully',
+            );
             this.isVisible = false;
+          },
+          error: (error) => {
+            this.notificationService.handleApiError(error);
           },
         });
     }

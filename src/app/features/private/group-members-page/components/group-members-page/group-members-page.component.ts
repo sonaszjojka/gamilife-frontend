@@ -10,6 +10,7 @@ import { take } from 'rxjs/operators';
 import { SendGroupInvitationFormComponent } from '../send-group-invitation-form/send-group-invitation-form.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-members-page',
@@ -84,6 +85,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 export class GroupMembersPageComponent implements OnInit {
   private readonly groupApi = inject(GroupApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly notification = inject(NotificationService);
 
   @ViewChild(SendGroupInvitationFormComponent)
   invitationForm!: SendGroupInvitationFormComponent;
@@ -121,6 +123,7 @@ export class GroupMembersPageComponent implements OnInit {
         },
         error: (err) => {
           console.error('Failed to load members:', err);
+          this.notification.handleApiError(err, 'Failed to load group members');
           this.loading.set(false);
         },
       });
