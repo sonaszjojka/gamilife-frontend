@@ -1,17 +1,15 @@
-import { formatDate } from '@angular/common';
-import { Component, HostListener, signal, effect, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
-import { TaskFilterComponent } from '../../shared/components/tasks/task-filter/task-filter.component';
-import {
-  IndividualTaskService,
-  Page,
-} from '../../../shared/services/tasks/individual-task.service';
+import {CommonModule, formatDate} from '@angular/common';
+import {Component, effect, HostListener, inject, signal} from '@angular/core';
+import {TaskItemComponent} from '../../shared/components/tasks/task-item/task-item.component';
+import {TaskFilterComponent} from '../../shared/components/tasks/task-filter/task-filter.component';
 
-import { Task } from '../../../shared/models/task-models/task.model';
-import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
-import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { TaskCalendarComponent } from '../../shared/components/tasks/task-calendar/task-calendar.component';
+
+import {TaskFormComponent} from '../../shared/components/tasks/task-form/task-form.component';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar/task-calendar.component';
+import {IndividualTaskService} from '../../../shared/services/tasks/individual-task.service';
+import {Page} from '../../../shared/models/util/page.model';
+import {ActivityItemDetails, ActivityStatus} from '../../../shared/models/task-models/activity.model';
 
 @Component({
   selector: 'app-task-list',
@@ -28,29 +26,31 @@ import { TaskCalendarComponent } from '../../shared/components/tasks/task-calend
   styleUrl: './task-list.component.css',
 })
 export class TaskListComponent {
-  tasks: Task[] = [];
-  groupedTasks: Record<string, Task[]> = {};
+  activities: ActivityItemDetails[] = [];
+  groupedTasks: Record<string, ActivityItemDetails[]> = {};
 
   loading = false;
   loadingMore = false;
   editionMode = signal<boolean | null>(false);
   creationMode = signal<boolean | null>(false);
+  title= signal<string|null>(null);
+  startDate=signal<string|null>(null)
+  endDate=signal<string|null>(null)
   categoryId = signal<number | null>(null);
   difficultyId = signal<number | null>(null);
-  isCompleted = signal<boolean | null>(false);
-  isGroupTask = signal<boolean | null>(null);
-  selectedTask = signal<Task | null>(null);
+  selectedTask = signal<ActivityItemDetails | null>(null);
 
   currentPage = 0;
-  pageSize = 4;
+  pageSize = 5;
   totalPages = 0;
   hasMore = true;
 
   private changeFilterEffect = effect(() => {
+    this.title();
+    this.startDate();
+    this.endDate();
     this.categoryId();
     this.difficultyId();
-    this.isCompleted();
-    this.isGroupTask();
 
     this.currentPage = 0;
     this.loadTasks();
@@ -76,17 +76,18 @@ export class TaskListComponent {
   loadTasks(): void {
     this.loading = true;
     this.taskService
-      .getUserTasks(
+      .getAllActivities(
         this.currentPage,
         this.pageSize,
+        this.title(),
+        this.startDate(),
+        this.endDate(),
         this.categoryId(),
         this.difficultyId(),
-        this.isCompleted(),
-        this.isGroupTask(),
       )
       .subscribe({
-        next: (response: Page<Task>) => {
-          this.tasks = response.content;
+        next: (response: Page<ActivityItemDetails>) => {
+          this.activities = response.content;
           this.groupTasksByDate();
           this.totalPages = response.totalPages;
           this.currentPage = response.number;
@@ -107,17 +108,18 @@ export class TaskListComponent {
     const nextPage = this.currentPage + 1;
 
     this.taskService
-      .getUserTasks(
+      .getAllActivities(
         nextPage,
         this.pageSize,
+        this.title(),
+        this.startDate(),
+        this.endDate(),
         this.categoryId(),
         this.difficultyId(),
-        this.isCompleted(),
-        this.isGroupTask(),
       )
       .subscribe({
-        next: (response: Page<Task>) => {
-          this.tasks = [...this.tasks, ...response.content];
+        next: (response: Page<ActivityItemDetails>) => {
+          this.activities = [...this.activities, ...response.content];
           this.groupTasksByDate();
           this.currentPage = response.number;
           this.hasMore = !response.last;
@@ -131,13 +133,13 @@ export class TaskListComponent {
   }
 
   private groupTasksByDate(): void {
-    const grouped: Record<string, Task[]> = {};
+    const grouped: Record<string, ActivityItemDetails[]> = {};
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
 
-    this.tasks.forEach((task) => {
-      const date = task.endTime ? new Date(task.endTime) : null;
+    this.activities.forEach((activity) => {
+      const date = activity.deadlineDate ? new Date(activity.deadlineDate) : null;
       if (!date) return;
 
       let label: string;
@@ -146,7 +148,7 @@ export class TaskListComponent {
       else label = formatDate(date, 'd MMMM yyyy', 'en-US');
 
       if (!grouped[label]) grouped[label] = [];
-      grouped[label].push(task);
+      grouped[label].push(activity);
     });
 
     this.groupedTasks = grouped;
@@ -164,27 +166,24 @@ export class TaskListComponent {
     return Object.keys(this.groupedTasks);
   }
 
-  onTaskUpdated(taskId: string): void {
-    const changedTask = this.tasks.find((t) => t.taskId == taskId)!;
+  onTaskUpdated(activityId: string): void {
+    const changedActivity = this.activities.find((t) => t.id == activityId)!;
     const isTaskNoneActive: boolean =
-      changedTask.completedAt != null ||
-      new Date(changedTask.endTime!) < new Date(Date.now());
+      //Todo get into Dto completion status
+      changedActivity.status != ActivityStatus.DEADLINE_MISSED
 
     if (
-      (changedTask.categoryId != this.categoryId() &&
+      (changedActivity.categoryId != this.categoryId() &&
         this.categoryId() != null) ||
-      (changedTask.difficultyId != this.difficultyId() &&
-        this.difficultyId() != null) ||
-      (changedTask.isGroupTask != this.isGroupTask() &&
-        this.isGroupTask() != null) ||
-      (isTaskNoneActive != this.isCompleted() && this.isCompleted() != null)
+      (changedActivity.difficultyId != this.difficultyId() &&
+        this.difficultyId() != null)
     ) {
-      this.tasks = this.tasks.filter((t) => t.taskId != taskId);
+      this.activities = this.activities.filter((t) => t.id != activityId);
       this.groupTasksByDate();
     }
   }
 
-  onTaskEdit(selectedTask: Task): void {
+  onTaskEdit(selectedTask: ActivityItemDetails): void {
     this.selectedTask.set(selectedTask);
     this.editionMode.set(true);
     this.creationMode.set(false);
@@ -197,8 +196,9 @@ export class TaskListComponent {
   }
 
   onTaskSubmit(): void {
-    this.isCompleted.set(false);
-    this.isGroupTask.set(null);
+    this.title.set(null);
+    this.startDate.set(null);
+    this.endDate.set(null);
     this.categoryId.set(null);
     this.difficultyId.set(null);
     this.currentPage = 0;
@@ -208,7 +208,7 @@ export class TaskListComponent {
     this.selectedTask.set(null);
   }
   onTaskDelete(): void {
-    this.tasks = this.tasks.filter((t) => t != this.selectedTask());
+    this.activities = this.activities.filter((t) => t != this.selectedTask());
     this.groupTasksByDate();
     this.editionMode.set(false);
     this.creationMode.set(false);

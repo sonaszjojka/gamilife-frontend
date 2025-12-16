@@ -10,10 +10,10 @@ import {
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { PomodoroFormComponent } from '../pomodoro-form/pomodoro-form.component';
-import { Task } from '../../../../../shared/models/task-models/task.model';
 import { PomodoroTaskService } from '../../../../../shared/services/tasks/pomodoro-task.service';
 import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
 import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import {ActivityItemDetails} from '../../../../../shared/models/task-models/activity.model';
 
 @Component({
   selector: 'app-pomdoro-form-modal',
@@ -39,8 +39,8 @@ import { EditPomodoroRequest } from '../../../../../shared/models/task-models/ed
   `,
 })
 export class PomodoroSessionFormModal {
-  @Input() task!: Task;
-  @Output() moveToCurrentSession = new EventEmitter<Task>();
+  @Input() task!: ActivityItemDetails;
+  @Output() moveToCurrentSession = new EventEmitter<ActivityItemDetails>();
   editionMode = signal<boolean>(false);
   creationMode = signal<boolean>(false);
   title = '';
@@ -51,7 +51,7 @@ export class PomodoroSessionFormModal {
   isVisible = false;
 
   showModal(): void {
-    if (this.task.pomodoro?.pomodoroId) {
+    if (this.task.pomodoro?.id) {
       this.editionMode.set(true);
       this.creationMode.set(false);
       this.title = 'Edit Pomodoro Task';
@@ -67,15 +67,14 @@ export class PomodoroSessionFormModal {
   handleOk(): void {
     if (this.creationMode() && this.pomodoroRequest) {
       this.pomodoroService
-        .createPomodoro(this.task.taskId, this.pomodoroRequest)
+        .createPomodoro(this.task.id, this.pomodoroRequest)
         .subscribe({
           //ToDo Take care of Validation Errors
           next: (response) => {
             this.task.pomodoro = {
-              pomodoroId: response.pomodoroId,
-              workCyclesNeeded: response.workCyclesNeeded,
-              workCyclesCompleted: response.workCyclesCompleted,
-              createdAt: response.createdAt,
+              id: response.pomodoroId,
+              cyclesRequired: response.workCyclesNeeded,
+              cyclesCompleted: response.workCyclesCompleted,
             };
 
             this.moveToCurrentSession.emit(this.task);
@@ -85,14 +84,14 @@ export class PomodoroSessionFormModal {
     } else if (
       this.editionMode() &&
       this.pomodoroEditRequest != null &&
-      this.task.pomodoro?.pomodoroId
+      this.task.pomodoro?.id
     ) {
       this.pomodoroService
-        .editPomodoro(this.task.pomodoro.pomodoroId, this.pomodoroEditRequest)
+        .editPomodoro(this.task.pomodoro.id, this.pomodoroEditRequest)
         .subscribe({
           next: (response) => {
-            this.task.pomodoro!.workCyclesNeeded = response.workCyclesNeeded;
-            this.task.pomodoro!.workCyclesCompleted =
+            this.task.pomodoro!.cyclesRequired = response.workCyclesNeeded;
+            this.task.pomodoro!.cyclesCompleted =
               response.workCyclesCompleted;
             this.moveToCurrentSession.emit(this.task);
             this.isVisible = false;

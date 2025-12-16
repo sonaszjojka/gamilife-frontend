@@ -66,41 +66,26 @@
         ></textarea>
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzRequired>Start Time</nz-form-label>
-      <nz-form-control nzErrorTip="Please provide valid Start Time">
-        <nz-date-picker
-          nzId="startTimeDate"
-          formControlName="startTimeDate"
-          nzPlaceHolder="2003-11-29"
-        >
-        </nz-date-picker>
-        <nz-time-picker
-          nzId="startTimeHour"
-          formControlName="startTimeHour"
-          nzPlaceHolder="11:59:30"
-        >
-        </nz-time-picker>
-      </nz-form-control>
-    </nz-form-item>
+
 
     @if (!this.habitEdition() && !this.habitCreation()) {
       <nz-form-item>
         <nz-form-label nzRequired>End Time</nz-form-label>
         <nz-form-control nzErrorTip="Please provide valid End Time">
           <nz-date-picker
-            nzId="endTimeDate"
-            formControlName="endTimeDate"
+            nzId="deadlineDate"
+            formControlName="deadlineDate"
             nzPlaceHolder="2003-11-30"
           ></nz-date-picker>
           <nz-time-picker
-            nzId="endTimeHour"
-            formControlName="endTimeHour"
+            nzId="deadlineHour"
+            formControlName="deadlineHour"
             nzPlaceHolder="12:00:00"
           >
           </nz-time-picker>
         </nz-form-control>
       </nz-form-item>
+
     } @else if (this.habitCreation() || this.habitEdition()) {
       <app-habit-form
         [habitCreation]="habitCreation"
@@ -121,62 +106,6 @@
   </form>
   <div class="button-panel">
     <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
-
-    @if (
-      this.task()?.taskHabit === null &&
-      this.task()?.pomodoro === null &&
-      this.editionMode?.()
-    ) {
-      <button
-        class="habit-button"
-        nz-button
-        nzShape="round"
-        (click)="onHabitCreation()"
-      >
-        Make task habit<nz-icon nzType="smile"></nz-icon>
-      </button>
-    } @else if (
-      this.task()?.taskHabit?.habitId !== null &&
-      this.task()?.pomodoro === null &&
-      this.editionMode?.()
-    ) {
-      <button
-        class="habit-button"
-        nz-button
-        nzShape="round"
-        (click)="onHabitEdition()"
-      >
-        Edit Habit Task<nz-icon nzType="smile"> </nz-icon>
-      </button>
-    }
-
-    @if (
-      this.task()?.pomodoro === null &&
-      this.task()?.taskHabit === null &&
-      this.editionMode?.()
-    ) {
-      <button
-        class="pomodoro-button"
-        nz-button
-        nzShape="round"
-        (click)="onPomodoroCreation()"
-      >
-        Make task pomodoro<nz-icon nzType="clock-circle"></nz-icon>
-      </button>
-    } @else if (
-      this.task()?.pomodoro?.pomodoroId !== null &&
-      this.task()?.taskHabit === null &&
-      this.editionMode?.()
-    ) {
-      <button
-        class="pomodoro-button"
-        nz-button
-        nzShape="round"
-        (click)="onPomodoroEdition()"
-      >
-        Pomodoro Task<nz-icon nzType="clock-circle"></nz-icon>
-      </button>
-    }
     @if (this.editionMode?.()) {
       <button
         class="delete-button"

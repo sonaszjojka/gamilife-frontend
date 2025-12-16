@@ -6,11 +6,11 @@
   </div>
   <nz-calendar>
     <ul *nzDateCell="let date" class="events">
-      @for (task of this.taskCalendarList; track task.taskId) {
-        @if (isSameDay(task.endTime, date)) {
+      @for (activity of this.taskCalendarList; track activity.id) {
+        @if (isSameDay(activity.deadlineDate, date)) {
           <li>
             <span class="event-badge"></span>
-            {{ task.title }}
+            {{ activity.title }}
           </li>
         }
       }
