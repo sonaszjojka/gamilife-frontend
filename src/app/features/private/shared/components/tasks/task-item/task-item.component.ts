@@ -8,20 +8,26 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
 import {HabitTaskService} from '../../../../../shared/services/tasks/habit-task.service';
 import {ActivityItemDetails, ActivityStatus} from '../../../../../shared/models/task-models/activity.model';
+import {GroupTaskDeclineFormComponent} from "../../group-task-decline-form/group-task-decline-form.component";
+import {GroupTaskFormComponent} from "../../group-task-from/group-task-form.component";
+import {GroupTaskMembersManagerComponent} from "../../group-task-member-manager/group-task-members-manager.component";
 
 @Component({
   selector: 'app-task-item',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzCardModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DatePipe,
-    NzIconDirective,
-    NzButtonComponent,
-    PomodoroTaskProgressComponent,
-  ],
+    imports: [
+        CommonModule,
+        NzCardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        DatePipe,
+        NzIconDirective,
+        NzButtonComponent,
+        PomodoroTaskProgressComponent,
+        GroupTaskDeclineFormComponent,
+        GroupTaskFormComponent,
+        GroupTaskMembersManagerComponent,
+    ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css',
 })

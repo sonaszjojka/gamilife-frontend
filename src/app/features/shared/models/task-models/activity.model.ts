@@ -1,21 +1,21 @@
-
-
 export interface ActivityItemDetails
 {
-  id: string,
-  type:ActivityType,
-  title:string,
-  description:string,
-  userId:string,
-  categoryId:number,
-  categoryName:string,
-  difficultyId:number,
-  difficultyName:string,
-  deadlineDate:string,
-  deadlineTime:string,
-  status:ActivityStatus,
-  pomodoro?:Pomodoro
-
+  id: string
+  type:ActivityType
+  title:string
+  description:string
+  userId:string
+  categoryId:number
+  categoryName:string
+  difficultyId:number
+  difficultyName:string
+  deadlineDate:string
+  deadlineTime:string
+  status:ActivityStatus
+  pomodoro?:Pomodoro | undefined
+  currentStreak?:number|undefined
+  longestStreak?:number|undefined
+  completedAt?:string|undefined
 }
 
 export enum ActivityType {
