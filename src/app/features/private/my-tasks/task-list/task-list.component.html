@@ -46,7 +46,13 @@
       >
       </app-task-form>
     } @else {
-      <app-task-calendar [taskCalendarList]="this.activities"></app-task-calendar>
+      <app-task-calendar
+        [taskCalendarList]="this.activities"
+        (deadlineSelected)="endDate.set($event)"
+        (deadlineSelected)="startDate.set($event)"
+
+      >
+      </app-task-calendar>
     }
   </div>
 </div>

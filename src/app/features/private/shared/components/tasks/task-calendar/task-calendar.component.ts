@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, input, Input, output} from '@angular/core';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -18,7 +18,8 @@ import {ActivityItemDetails} from '../../../../../shared/models/task-models/acti
   styleUrl: './task-calendar.component.css',
 })
 export class TaskCalendarComponent {
-  @Input() taskCalendarList: ActivityItemDetails[] = [];
+ taskCalendarList=input.required<ActivityItemDetails[]>();
+ deadlineSelected= output<string>()
 
   isSameDay(activityDeadline: string | Date, calendarDate: Date): boolean {
     const activityDate = new Date(activityDeadline);
@@ -28,5 +29,10 @@ export class TaskCalendarComponent {
       activityDate.getMonth() === calendarDate.getMonth() &&
       activityDate.getFullYear() === calendarDate.getFullYear()
     );
+  }
+
+
+  onDateSelect($event: Date) {
+   this.deadlineSelected.emit($event.toISOString().slice(0,10))
   }
 }
