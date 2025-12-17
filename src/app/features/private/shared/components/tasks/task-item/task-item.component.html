@@ -1,7 +1,79 @@
-<nz-card [nzTitle]="titleTemplate">
-  <ng-template #titleTemplate>
-    <div class="title-container">
-      <span class="title-text">{{ activity.title }}</span>
+<nz-card class="task-card">
+  <div class="task-header-controls"></div>
+
+  <div class="task-content">
+    <div class="task-header">
+      <h1 class="task-title">{{ activity.title }}</h1>
     </div>
-  </ng-template>
+
+    <div class="info-container">
+      <div class="info-item">
+        <nz-icon nzType="file-text" class="info-icon"></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Description</div>
+          <div class="info-value">{{ activity.description }}</div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <nz-icon nzType="tag" class="info-icon"></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Difficulty / Category</div>
+          <div class="info-value">
+            {{ activity.difficultyName }}
+            <span class="limit">/</span>
+            {{ activity.categoryName}}
+          </div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <nz-icon nzType="calendar" class="info-icon"></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Deadline</div>
+          <div class="info-value">{{ activity.deadlineDate }}</div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <nz-icon nzType="info" class="info-icon"></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Type</div>
+          <div class="info-value">{{ activity.type }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-item participants-list">
+      <nz-icon nzType="team" class="info-icon"></nz-icon>
+      <div class="info-content">
+        <div class="info-label">Participants</div>
+        <div class="info-value participants-container">
+
+            <span class="participant-item">
+
+            </span>
+
+        </div>
+      </div>
+    </div>
+
+      <div class="info-item">
+        <nz-icon nzType="warning" class="info-icon"></nz-icon>
+        <div class="info-label">Decline Message</div>
+        <div class="info-value">
+
+        </div>
+      </div>
+
+  </div>
+
+  <div class="task-actions-footer">
+
+
+    <div class="action-right">
+
+    </div>
+  </div>
 </nz-card>
+
