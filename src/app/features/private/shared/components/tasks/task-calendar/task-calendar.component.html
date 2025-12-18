@@ -6,7 +6,7 @@
   </div>
   <nz-calendar (nzSelectChange)="onDateSelect($event)">
     <ul *nzDateCell="let date" class="events">
-      @for (activity of this.taskCalendarList(); track activity.id) {
+      @for (activity of this.taskCalendarList; track activity.id) {
         @if (isSameDay(activity.deadlineDate, date)) {
           <li>
             <span class="event-badge"></span>
