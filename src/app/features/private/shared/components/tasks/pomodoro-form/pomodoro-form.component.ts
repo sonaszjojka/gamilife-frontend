@@ -1,7 +1,7 @@
 import {
   Component,
   EventEmitter,
-  inject,
+  inject, input,
   Input,
   OnInit,
   Output,
@@ -22,6 +22,7 @@ import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
 import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/task-models/activity.model';
 
 @Component({
   selector: 'app-pomodoro-form',
@@ -39,6 +40,7 @@ import { EditPomodoroRequest } from '../../../../../shared/models/task-models/ed
   styleUrl: './pomodoro-form.component.css',
 })
 export class PomodoroFormComponent implements OnInit {
+  activity =input.required<ActivityItemDetails>()
   @Input() pomodoroCreation!: WritableSignal<boolean>;
   @Input() pomodoroEdition!: WritableSignal<boolean>;
   @Output() formChanged = new EventEmitter<CreatePomodoroRequest>();
@@ -47,17 +49,19 @@ export class PomodoroFormComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
 
   validPomodoroForm = this.formBuilder.group({
-    workCyclesNeeded: this.formBuilder.control<number | null>(null, [
+    cyclesRequired: this.formBuilder.control<number | null>(null, [
       Validators.required,
       Validators.min(1),
-    ]),
-    workCyclesCompleted: this.formBuilder.control<number | null>(null, [
-      Validators.required,
-      Validators.min(0),
     ]),
   });
 
   ngOnInit() {
+    if (this.activity().pomodoro!=undefined)
+    {
+      this.validPomodoroForm.patchValue({
+          cyclesRequired: this.activity().pomodoro?.cyclesRequired
+      })
+    }
     this.validPomodoroForm.valueChanges.subscribe((value) => {
       if (this.validPomodoroForm.valid) {
         if (this.pomodoroCreation()) {

@@ -1,4 +1,15 @@
-import {Component, effect, EventEmitter, inject, Input, input, Output, signal, WritableSignal,} from '@angular/core';
+import {
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  Input,
+  input,
+  Output,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent,} from 'ng-zorro-antd/form';
@@ -16,6 +27,7 @@ import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.s
 import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/task-models/activity.model';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
+import {PomodoroSessionFormModal} from '../pomodoro-form-modal/pomodoro-session-form-modal';
 
 @Component({
   selector: 'app-task-form',
@@ -36,6 +48,7 @@ import {HabitRequest} from '../../../../../shared/models/task-models/habit-reque
     NzAutosizeDirective,
     HabitFormComponent,
     NzInputNumberComponent,
+    PomodoroSessionFormModal,
   ],
   templateUrl: './task-form.component.html',
   standalone: true,
@@ -46,7 +59,7 @@ export class TaskFormComponent {
   pomodoroCreation = signal<boolean>(false);
   pomodoroEdition = signal<boolean>(false);
   type=input.required<ActivityType>()
-   activity= input<ActivityItemDetails>()
+  activity= input<ActivityItemDetails>()
   @Input() creationMode?: WritableSignal<boolean | null>;
   @Input() editionMode?: WritableSignal<boolean | null>;
   @Output() activityFormSubmitted = new EventEmitter<void>();
@@ -56,6 +69,8 @@ export class TaskFormComponent {
   private taskService = inject(IndividualTaskService);
   private habitApi = inject(HabitTaskService)
 
+  @ViewChild(PomodoroSessionFormModal)
+  protected pomodoroModal= new PomodoroSessionFormModal
 
 
   validActivityForm = this.formBuilder.group({
@@ -92,7 +107,6 @@ export class TaskFormComponent {
       const activity = this.activity?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
-        console.log(this.type())
       if(activity?.type==ActivityType.HABIT&&isEditing)
       {
         this.validActivityForm.patchValue({
@@ -218,8 +232,6 @@ export class TaskFormComponent {
 
   }
 
-
-
   onDelete() {
     if (this.activity()?.type==ActivityType.TASK)
     {
@@ -240,14 +252,15 @@ export class TaskFormComponent {
 
       //this.habitService.deleteHabit()
     }
+
   }
 
   onPomodoroCreation() {
-    this.pomodoroCreation.update((value) => !value);
+    this.pomodoroModal.activity =this.activity()!
+    this.pomodoroModal.showModal()
   }
 
   onPomodoroEdition() {
-    this.pomodoroEdition.update((value) => !value);
   }
 
   protected readonly ActivityType = ActivityType;
