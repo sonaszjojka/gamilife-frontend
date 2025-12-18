@@ -59,7 +59,7 @@ export class TaskItemComponent implements OnInit {
     const request: EditTaskRequest = {
       title: this.activity.title,
       startTime: this.activity.startTime,
-      endTime: this.activity.endDatew,
+      endTime: this.activity.endDate,
       categoryId: this.activity.categoryId,
       difficultyId: this.activity.difficultyId,
       completedAt: new Date(Date.now()).toISOString(),
@@ -151,11 +151,11 @@ export class TaskItemComponent implements OnInit {
         },
       });
   }
-
+*/
   onTaskEdit() {
     this.editTask.emit(this.activity);
   }
-
+/*
   isInactive(): boolean {
     return (
       !!this.activity.completedAt ||
@@ -176,6 +176,6 @@ export class TaskItemComponent implements OnInit {
     endDate.setDate(endDate.getDate() + cycleLengthInDays);
     return endDate.toISOString();
   }
+*/
 
- */
 }

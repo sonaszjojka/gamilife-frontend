@@ -1,4 +1,5 @@
 export interface CreatePomodoroRequest {
-  workCyclesNeeded: number;
-  workCyclesCompleted: number;
+  taskId?:string;
+  habitId?:string;
+  cyclesRequired: number;
 }

@@ -11,15 +11,14 @@ import { EditPomodoroRequest } from '../../models/task-models/edit-pomodoro-requ
   providedIn: 'root',
 })
 export class PomodoroTaskService {
-  private API_URL = `${environment.apiUrl}/tasks`;
+  private API_URL = `${environment.apiUrl}`;
   private http = inject(HttpClient);
 
   createPomodoro(
-    taskId: string,
     request: CreatePomodoroRequest,
   ): Observable<CreatePomodoroResponse> {
     return this.http.post<CreatePomodoroResponse>(
-      `${this.API_URL}/${taskId}/pomodoro-tasks`,
+      `${this.API_URL}/pomodoro-items`,
       request,
       { withCredentials: true },
     );
@@ -30,14 +29,14 @@ export class PomodoroTaskService {
     request: EditPomodoroRequest,
   ): Observable<EditPomodoroResponse> {
     return this.http.put<EditPomodoroResponse>(
-      `${this.API_URL}/pomodoro-tasks/${pomodoroId}`,
+      `${this.API_URL}/pomodoro-items/${pomodoroId}`,
       request,
       { withCredentials: true },
     );
   }
 
   deletePomodoro(pomodoroId: string): Observable<unknown> {
-    return this.http.delete(`${this.API_URL}/pomodoro-tasks/${pomodoroId}`, {
+    return this.http.delete(`${this.API_URL}/pomodoro-items/${pomodoroId}`, {
       withCredentials: true,
     });
   }

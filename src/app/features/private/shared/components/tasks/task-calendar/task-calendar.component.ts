@@ -35,7 +35,6 @@ ngOnInit() {
 
   isSameDay(activityDeadline: string | Date, calendarDate: Date): boolean {
     const activityDate = new Date(activityDeadline);
-
     return (
       activityDate.getDate() === calendarDate.getDate() &&
       activityDate.getMonth() === calendarDate.getMonth() &&
@@ -43,16 +42,15 @@ ngOnInit() {
     );
   }
 
-
-  onDateSelect($event: Date) {
-   if ($event.toISOString()==this.currentlySelectedDate()?.toISOString())
+  onDateSelect(calendarDate: Date) {
+   if (calendarDate.toISOString()==this.currentlySelectedDate()?.toISOString())
    {
      this.deadlineSelected.emit(null)
      this.currentlySelectedDate.set(null)
    }
    else {
-     this.currentlySelectedDate.set($event)
-     this.deadlineSelected.emit($event.toISOString().slice(0, 10))
+     this.currentlySelectedDate.set(calendarDate)
+     this.deadlineSelected.emit(calendarDate.toISOString().slice(0, 10))
    }
 
   }

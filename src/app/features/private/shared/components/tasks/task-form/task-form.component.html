@@ -110,13 +110,6 @@
       </nz-form-item>
 
     }
-
-    @if (this.pomodoroCreation() || this.pomodoroEdition()) {
-      <app-pomodoro-form
-        [pomodoroCreation]="pomodoroCreation"
-        [pomodoroEdition]="pomodoroEdition"
-      ></app-pomodoro-form>
-    }
   </form>
   <div class="button-panel">
     <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
@@ -129,6 +122,14 @@
       >
         Delete <nz-icon nzType="delete"></nz-icon>
       </button>
+      @if (activity()?.pomodoro==undefined)
+      {
+      <button nz-button nzShape="round" (click)="onPomodoroCreation()">Make Activity Pomodoro</button>
+      } @else {
+        <button nz-button nzShape="round" (click)="onPomodoroCreation()">Edit Pomodoro Parameters</button>
+      }
     }
   </div>
 </div>
+<app-pomdoro-form-modal>
+</app-pomdoro-form-modal>

@@ -255,9 +255,9 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted =
       this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted! + 1;
     const request: EditPomodoroRequest = {
-      workCyclesCompleted:
+      cyclesCompleted:
         this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted,
-      workCyclesNeeded:
+      cyclesRequired:
         this.currentSessionPomodoroTasks[0].pomodoro!.cyclesRequired,
     };
     this.pomodoroService
@@ -311,7 +311,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   moveTaskToCurrentSession(activity: ActivityItemDetails) {
     if (!activity) return;
     if (activity.pomodoro?.id == null) {
-      this.pomodoroSessionFormModal.task = activity;
+      this.pomodoroSessionFormModal.activity = activity;
       this.pomodoroSessionFormModal.showModal();
     }
 
@@ -319,7 +319,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       if (
         activity.pomodoro.cyclesCompleted! >= activity.pomodoro.cyclesRequired!
       ) {
-        this.pomodoroSessionFormModal.task = activity;
+        this.pomodoroSessionFormModal.activity = activity;
         this.pomodoroSessionFormModal.showModal();
       } else {
         this.currentSessionPomodoroTasks.push(
