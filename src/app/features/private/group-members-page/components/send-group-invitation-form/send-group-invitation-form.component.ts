@@ -92,8 +92,7 @@ export class SendGroupInvitationFormComponent {
           this.users.set(response.content);
           this.searching.set(false);
         },
-        error: (err) => {
-          console.error('Failed to search users:', err);
+        error: () => {
           this.searching.set(false);
         },
       });

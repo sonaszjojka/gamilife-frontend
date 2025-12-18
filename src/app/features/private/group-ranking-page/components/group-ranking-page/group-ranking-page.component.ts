@@ -59,7 +59,6 @@ export class GroupRankingPageComponent implements OnInit {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error('Failed to load group ranking:', err);
           this.notification.handleApiError(err, 'Failed to load group ranking');
           this.loading.set(false);
         },

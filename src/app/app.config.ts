@@ -16,12 +16,21 @@ import { authInterceptor } from './shared/auth.interceptor';
 import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
 
 registerLocaleData(en);
+
 const ngZorroConfig: NzConfig = {
   message: {
     nzDuration: 3000,
     nzMaxStack: 5,
     nzPauseOnHover: false,
     nzAnimate: true,
+    nzTop: '88px',
+  },
+  notification: {
+    nzPlacement: 'topRight',
+    nzTop: '88px',
+    nzDuration: 4500,
+    nzMaxStack: 3,
+    nzPauseOnHover: true,
   },
 };
 

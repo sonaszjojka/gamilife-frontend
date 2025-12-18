@@ -105,7 +105,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error loading tasks:', error);
           this.loading = false;
           this.notificationService.handleApiError(
             error,
@@ -133,7 +132,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.loadingMore = false;
         },
         error: (error) => {
-          console.error('Error loading tasks:', error);
           this.loadingMore = false;
           this.notificationService.handleApiError(
             error,
@@ -292,7 +290,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error updating pomodoro:', error);
           this.notificationService.handleApiError(
             error,
             'Failed to update work cycle',
@@ -324,7 +321,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         this.notificationService.success('Task completed and removed');
       },
       error: (error) => {
-        console.error('Error completing task:', error);
         this.notificationService.handleApiError(
           error,
           'Failed to complete task',

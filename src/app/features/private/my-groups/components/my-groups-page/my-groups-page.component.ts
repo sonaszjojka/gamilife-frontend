@@ -62,7 +62,6 @@ export class MyGroupsPageComponent implements OnInit {
             this.currentPage.set(page);
           }, timeout);
         },
-        error: (err) => console.error(err),
       });
   }
 

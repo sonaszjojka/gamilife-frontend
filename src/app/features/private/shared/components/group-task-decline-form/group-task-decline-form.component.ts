@@ -103,7 +103,6 @@ export class GroupTaskDeclineFormComponent {
             this.formSubmitted.emit();
           },
           error: (error) => {
-            console.error('Error declining task:', error);
             this.notification.handleApiError(error, 'Failed to decline task');
           },
         });

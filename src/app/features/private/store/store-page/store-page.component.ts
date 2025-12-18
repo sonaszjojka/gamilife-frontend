@@ -54,7 +54,6 @@ export class StorePageComponent implements OnInit {
         this.currentPage.set(page);
       },
       error: (error) => {
-        console.error(error);
         this.notificationService.handleApiError(
           error,
           'Failed to load store items',

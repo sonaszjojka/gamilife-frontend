@@ -78,7 +78,6 @@ export class EditGroupMemberFormComponent {
             this.memberUpdated.emit();
           },
           error: (err) => {
-            console.error('Failed to update member:', err);
             this.notification.handleApiError(err, 'Failed to update member');
             this.isLoading.set(false);
           },

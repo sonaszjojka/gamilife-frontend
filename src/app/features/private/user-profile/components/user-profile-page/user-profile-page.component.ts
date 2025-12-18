@@ -65,7 +65,6 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading user profile:', error);
         this.loading = false;
         this.notificationService.handleApiError(
           error,

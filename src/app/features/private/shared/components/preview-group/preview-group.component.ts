@@ -114,7 +114,6 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error(err);
           this.notification.handleApiError(err, 'Failed to load group');
           this.loading.set(false);
         },
@@ -133,7 +132,6 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
           this.requestsList.set(result.content);
         },
         error: (err) => {
-          console.error('Error loading group requests:', err);
           this.notification.handleApiError(
             err,
             'Failed to load group requests',
@@ -152,8 +150,6 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
       this.router.navigate([`app/groups/${groupId}/members`]);
-    } else {
-      console.error('Group ID not found in route');
     }
   }
 
@@ -161,8 +157,6 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
       this.router.navigate([`app/groups/${groupId}/requests`]);
-    } else {
-      console.error('Group ID not found in route');
     }
   }
 
@@ -170,8 +164,6 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
       this.router.navigate([`app/groups/${groupId}/ranking`]);
-    } else {
-      console.error('Group ID not found in route');
     }
   }
 
@@ -204,10 +196,6 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
         next: () => {
           this.notification.success('Group deleted successfully');
           this.router.navigate(['app/groups']);
-        },
-        error: (err) => {
-          console.error('Failed to delete group:', err);
-          this.notification.handleApiError(err, 'Failed to delete group');
         },
       });
   }

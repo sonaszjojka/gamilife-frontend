@@ -100,7 +100,6 @@ export class GroupRequestsPageComponent implements OnInit {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error('Failed to load requests:', err);
           this.notification.handleApiError(
             err,
             'Failed to load group requests',

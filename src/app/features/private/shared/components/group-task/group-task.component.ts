@@ -93,7 +93,6 @@ export class GroupTaskComponent implements OnInit {
           this.onUpdate();
         },
         error: (err) => {
-          console.error('Error deleting task:', err);
           this.notification.handleApiError(err, 'Failed to delete task');
         },
       });
@@ -131,7 +130,6 @@ export class GroupTaskComponent implements OnInit {
             participant!.isMarkedDone = response.isMarkedDone;
           },
           error: (err) => {
-            console.error('Error marking task as complete:', err);
             this.notification.handleApiError(
               err,
               'Failed to mark task as complete',
@@ -169,7 +167,6 @@ export class GroupTaskComponent implements OnInit {
             participant!.isMarkedDone = response.isMarkedDone;
           },
           error: (err) => {
-            console.error('Error removing completion:', err);
             this.notification.handleApiError(
               err,
               'Failed to remove completion',
@@ -200,7 +197,6 @@ export class GroupTaskComponent implements OnInit {
           this.onRewardGiven();
         },
         error: (err) => {
-          console.error('Error accepting task:', err);
           this.notification.handleApiError(err, 'Failed to accept task');
         },
       });

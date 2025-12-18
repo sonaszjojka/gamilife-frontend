@@ -31,6 +31,13 @@
       <li nz-menu-item routerLink="/app/tasks">Tasks</li>
       <li nz-menu-item routerLink="/app/store">Store</li>
     </ul>
+    <div class="navbar-actions">
+      <div class="money-display">
+        <nz-icon nzType="dollar" nzTheme="outline"></nz-icon>
+        <span class="money-amount">{{ userMoney() }}</span>
+      </div>
+      <app-notification-dropdown></app-notification-dropdown>
+      <app-user-account-button></app-user-account-button>
+    </div>
   }
-  <app-user-account-button></app-user-account-button>
 </nav>

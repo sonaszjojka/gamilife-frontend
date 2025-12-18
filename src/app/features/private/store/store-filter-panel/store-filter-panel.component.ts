@@ -36,14 +36,12 @@ export class StoreFilterPanelComponent implements OnInit {
   private loadItemSlots(): void {
     this.storeApi.getItemSlots().subscribe({
       next: (slots) => {
-        console.log('Item slots response:', slots);
         const selectableSlots = slots.itemSlots.map((slot) => ({
           ...slot,
           selected: false,
         }));
         this.itemSlots.set(selectableSlots);
       },
-      error: (err) => console.error('Failed to load item slots:', err),
     });
   }
 
@@ -56,7 +54,6 @@ export class StoreFilterPanelComponent implements OnInit {
         }));
         this.rarities.set(selectableRarities);
       },
-      error: (err) => console.error('Failed to load item rarities:', err),
     });
   }
 

@@ -59,7 +59,6 @@ export class StoreItemDetailsComponent {
         this.loading.set(false);
       },
       error: (error) => {
-        console.error(error);
         this.loading.set(false);
         this.isVisible.set(false);
         this.notificationService.handleApiError(

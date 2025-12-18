@@ -98,7 +98,6 @@ export class EditGroupFormComponent implements OnInit {
     this.groupApiService.getGroupTypes().subscribe({
       next: (types) => this.groupTypes.set(types),
       error: (err) => {
-        console.error('Failed to load group types:', err);
         this.notification.handleApiError(err, 'Failed to load group types');
       },
     });
@@ -133,7 +132,6 @@ export class EditGroupFormComponent implements OnInit {
             this.groupUpdated.emit();
           },
           error: (err) => {
-            console.error('Failed to update group:', err);
             this.notification.handleApiError(err, 'Failed to update group');
             this.isLoading.set(false);
           },

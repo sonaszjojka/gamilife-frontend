@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../shared/services/auth/auth.service';
+import { WebSocketNotificationService } from '../websocket-notification-service/web-socket-notification.service';
 
 export interface OAuthCodeRequest {
   code: string;
@@ -23,6 +24,7 @@ export interface AfterLoginResponse {
   username: string;
   isEmailVerified: boolean;
   isTutorialCompleted: boolean;
+  money: number;
 }
 
 export interface OAuth2LinkResponse {
@@ -38,6 +40,7 @@ export class OAuth2Service {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/oauth2`;
   private authService = inject(AuthService);
+  private notificationService = inject(WebSocketNotificationService);
 
   private generateCodeVerifier(): string {
     const array = new Uint8Array(32);
@@ -100,15 +103,8 @@ export class OAuth2Service {
       .pipe(
         tap((response) => {
           if ('isTutorialCompleted' in response) {
-            this.authService.userId.set(response.userId);
-            this.authService.username.set(response.username);
-            this.authService.loggedIn.set(true);
-            localStorage.setItem(
-              'isTutorialCompleted',
-              String(response.isTutorialCompleted),
-            );
-            localStorage.setItem('userId', response.userId);
-            localStorage.setItem('username', response.username);
+            this.updateAuthServiceState(response);
+            this.notificationService.connect();
           }
         }),
       );
@@ -123,23 +119,29 @@ export class OAuth2Service {
       })
       .pipe(
         tap((response) => {
-          this.authService.userId.set(response.userId);
-          this.authService.username.set(response.username);
-          this.authService.loggedIn.set(true);
-          this.authService.isTutorialCompleted.set(
-            response.isTutorialCompleted,
-          );
-          localStorage.setItem('userId', response.userId);
-          localStorage.setItem(
-            'isTutorialCompleted',
-            String(response.isTutorialCompleted),
-          );
-          localStorage.setItem('username', response.username);
+          this.updateAuthServiceState(response);
+          this.notificationService.connect();
         }),
       );
   }
 
   clearOAuthData(): void {
     sessionStorage.removeItem('oauth2_code_verifier');
+  }
+
+  private updateAuthServiceState(response: AfterLoginResponse): void {
+    this.authService.userId.set(response.userId);
+    this.authService.username.set(response.username);
+    this.authService.loggedIn.set(true);
+    this.authService.isTutorialCompleted.set(response.isTutorialCompleted);
+    this.authService.money.set(response.money);
+
+    localStorage.setItem('userId', response.userId);
+    localStorage.setItem('username', response.username);
+    localStorage.setItem(
+      'isTutorialCompleted',
+      String(response.isTutorialCompleted),
+    );
+    localStorage.setItem('money', String(response.money));
   }
 }

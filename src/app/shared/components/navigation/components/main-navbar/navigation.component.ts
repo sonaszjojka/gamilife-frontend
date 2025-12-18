@@ -9,6 +9,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { FormsModule } from '@angular/forms';
 import { UserAccountButtonComponent } from '../user-account-button/user-account-button/user-account-button.component';
+import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown/notification-dropdown.component';
 
 @Component({
   selector: 'app-navigation',
@@ -23,6 +24,7 @@ import { UserAccountButtonComponent } from '../user-account-button/user-account-
     NzSwitchModule,
     FormsModule,
     UserAccountButtonComponent,
+    NotificationDropdownComponent,
   ],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
@@ -30,6 +32,7 @@ import { UserAccountButtonComponent } from '../user-account-button/user-account-
 export class NavigationComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
+  userMoney = this.authService.money;
   isLoggedIn = this.authService.loggedIn;
   isDarkTheme = signal(true);
 

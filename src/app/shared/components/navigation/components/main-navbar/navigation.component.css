@@ -134,6 +134,65 @@
   background-color: var(--bg-hover);
 }
 
+.money-display {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  padding: var(--spacing-small) var(--spacing-medium);
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed);
+}
+
+.money-display:hover {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
+.money-display nz-icon {
+  font-size: var(--font-size-medium);
+  color: #ffd700;
+  transition: color var(--transition-speed);
+}
+
+.money-amount {
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  color: #ffd700;
+  letter-spacing: 0.5px;
+  font-family: var(--main-font);
+}
+
+@media (max-width: 768px) {
+  .money-display {
+    padding: 6px 12px;
+    gap: 4px;
+  }
+
+  .money-display nz-icon {
+    font-size: 18px;
+  }
+
+  .money-amount {
+    font-size: var(--font-size-small);
+  }
+}
+
+@media (max-width: 576px) {
+  .money-display {
+    padding: 4px 8px;
+  }
+
+  .money-display nz-icon {
+    font-size: 16px;
+  }
+
+  .money-amount {
+    font-size: var(--font-size-xs);
+  }
+}
+
 @media (max-width: 768px) {
   .navbar {
     padding: 0 4px;

@@ -99,9 +99,6 @@ export class GroupMembersListComponent {
           this.currentPage.set(1);
           this.memberChanged.emit();
         },
-        error: (err) => {
-          console.error('Failed to remove member:', err);
-        },
       });
   }
 

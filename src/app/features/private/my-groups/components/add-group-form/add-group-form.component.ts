@@ -65,7 +65,6 @@ export class AddGroupFormComponent implements OnInit {
     this.groupApiService.getGroupTypes().subscribe({
       next: (types) => this.groupTypes.set(types),
       error: (err) => {
-        console.error('Failed to load group types:', err);
         this.notification.handleApiError(err, 'Failed to load group types');
       },
     });
@@ -89,7 +88,6 @@ export class AddGroupFormComponent implements OnInit {
           this.groupCreated.emit();
         },
         error: (err) => {
-          console.error('Failed to create group:', err);
           this.notification.handleApiError(err, 'Failed to create group');
           this.isLoading.set(false);
         },

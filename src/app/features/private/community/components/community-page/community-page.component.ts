@@ -58,7 +58,6 @@ export class CommunityPageComponent implements OnInit {
         }, timeout);
       },
       error: (err) => {
-        console.error(err);
         this.notification.handleApiError(err, 'Failed to load groups');
       },
     });

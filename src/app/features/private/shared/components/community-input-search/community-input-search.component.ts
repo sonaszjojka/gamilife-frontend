@@ -129,7 +129,6 @@ export class CommunityInputSearchComponent implements OnInit {
   private loadGroupTypes(): void {
     this.groupApiService.getGroupTypes().subscribe({
       next: (types) => this.groupTypes.set(types),
-      error: (err) => console.error('Failed to load group types:', err),
     });
   }
 
