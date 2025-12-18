@@ -13,6 +13,7 @@ export interface ActivityItemDetails
   deadlineTime:string
   status:ActivityStatus
   pomodoro?:Pomodoro | undefined
+  cycleLength?:number|undefined
   currentStreak?:number|undefined
   longestStreak?:number|undefined
   completedAt?:string|undefined

@@ -1,5 +1,5 @@
 import { PomodoroModel } from './pomodoro.model';
-import { HabitModel } from './habit-model';
+import { HabitRequestModel } from './habit-request.model';
 
 export interface Task {
 

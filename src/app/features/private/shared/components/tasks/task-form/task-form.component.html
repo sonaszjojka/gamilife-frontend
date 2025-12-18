@@ -2,8 +2,15 @@
   <button nz-button nzType="default" nzShape="circle" (click)="onClose()">
     <nz-icon nzType="close"></nz-icon>
   </button>
-  <form class="task-form" [formGroup]="validTaskForm">
-    <h2>TASK</h2>
+  <form class="task-form" [formGroup]="validActivityForm">
+    @if (this.type()==ActivityType.TASK)
+    {
+      <h2>TASK</h2>
+    } @else {
+
+      <h2>Habit</h2>
+    }
+
     <nz-form-item>
       <nz-form-label nzRequired nzFor="title">Title</nz-form-label>
       <nz-form-control nzErrorTip="Please provide valid Title">
@@ -68,9 +75,9 @@
     </nz-form-item>
 
 
-    @if (!this.habitEdition() && !this.habitCreation()) {
+    @if (this.type()==ActivityType.TASK) {
       <nz-form-item>
-        <nz-form-label nzRequired>End Time</nz-form-label>
+        <nz-form-label >End Time</nz-form-label>
         <nz-form-control nzErrorTip="Please provide valid End Time">
           <nz-date-picker
             nzId="deadlineDate"
@@ -88,21 +95,26 @@
         </nz-form-control>
       </nz-form-item>
 
-    } @else if (this.habitCreation() || this.habitEdition()) {
-      <app-habit-form
-        [habitCreation]="habitCreation"
-        [habitEdition]="habitEdition"
-        (formChanged)="onHabitFormChange($event)"
-        (editFormChanged)="onHabitEditFormChange($event)"
-      ></app-habit-form>
+    } @else
+    {
+      <nz-form-item>
+        <nz-form-label> Habit Cycle Length</nz-form-label>
+        <nz-form-control nzErrorTip="Provide valid number of cycle lenght days">
+          <nz-input-number
+            formControlName="cycleLength"
+            nzMin="1"
+            nzMax="100"
+            nzPlaceHolder="1"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
     }
 
     @if (this.pomodoroCreation() || this.pomodoroEdition()) {
       <app-pomodoro-form
         [pomodoroCreation]="pomodoroCreation"
         [pomodoroEdition]="pomodoroEdition"
-        (formChanged)="onPomodoroFormChange($event)"
-        (editFormChanged)="onPomodoroEditFormChange($event)"
       ></app-pomodoro-form>
     }
   </form>

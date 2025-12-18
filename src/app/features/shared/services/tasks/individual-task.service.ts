@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { CreateTaskResponse } from '../../models/task-models/create-task-response';
 import { EditTaskResponse } from '../../models/task-models/edit-task-response';
-import { EditTaskRequest } from '../../models/task-models/edit-task-request';
+import { TaskRequest } from '../../models/task-models/task-request';
 import {Page} from '../../models/util/page.model';
 import {ActivityItemDetails} from '../../models/task-models/activity.model';
 
@@ -59,7 +59,7 @@ export class IndividualTaskService {
 
   editTask(
     taskId: string,
-    request: EditTaskRequest,
+    request: TaskRequest,
   ): Observable<EditTaskResponse> {
     return this.http.put<EditTaskResponse>(
       `${this.TASK_API_URL}/${taskId}`,
@@ -69,7 +69,7 @@ export class IndividualTaskService {
   }
 
 
-  createTask(request: EditTaskRequest): Observable<CreateTaskResponse> {
+  createTask(request: TaskRequest): Observable<CreateTaskResponse> {
     return this.http.post<CreateTaskResponse>(
       `${this.TASK_API_URL}`,
       request,

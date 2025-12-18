@@ -9,7 +9,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar/task-calendar.component';
 import {IndividualTaskService} from '../../../shared/services/tasks/individual-task.service';
 import {Page} from '../../../shared/models/util/page.model';
-import {ActivityItemDetails, ActivityStatus} from '../../../shared/models/task-models/activity.model';
+import {ActivityItemDetails, ActivityStatus, ActivityType} from '../../../shared/models/task-models/activity.model';
 
 @Component({
   selector: 'app-task-list',
@@ -38,7 +38,8 @@ export class TaskListComponent {
   endDate=signal<string|null>(null)
   categoryId = signal<number | null>(null);
   difficultyId = signal<number | null>(null);
-  selectedTask = signal<ActivityItemDetails | null>(null);
+  selectedActivity= signal<ActivityItemDetails | undefined>(undefined);
+  formType= signal<ActivityType>(ActivityType.TASK)
 
   currentPage = 0;
   pageSize = 5;
@@ -183,14 +184,23 @@ export class TaskListComponent {
     }
   }
 
-  onTaskEdit(selectedTask: ActivityItemDetails): void {
-    this.selectedTask.set(selectedTask);
+  onActivityEdit(selectedActivity: ActivityItemDetails): void {
+    this.selectedActivity.set(selectedActivity);
+    this.formType.set(selectedActivity.type)
     this.editionMode.set(true);
     this.creationMode.set(false);
   }
 
   onTaskCreation(): void {
-    this.selectedTask.set(null);
+    this.selectedActivity.set(undefined);
+    this.formType.set(ActivityType.TASK)
+    this.creationMode.set(true);
+    this.editionMode.set(false);
+  }
+
+  onHabitCreation(): void {
+    this.selectedActivity.set(undefined);
+    this.formType.set(ActivityType.HABIT)
     this.creationMode.set(true);
     this.editionMode.set(false);
   }
@@ -205,13 +215,18 @@ export class TaskListComponent {
     this.loadTasks();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedTask.set(null);
+    this.selectedActivity.set(undefined);
   }
+
   onTaskDelete(): void {
-    this.activities = this.activities.filter((t) => t != this.selectedTask());
-    this.groupTasksByDate();
-    this.editionMode.set(false);
-    this.creationMode.set(false);
-    this.selectedTask.set(null);
-  }
+    /*
+   this.activities = this.activities.filter((t) => t != this.selectedActivity());
+   this.groupTasksByDate();
+   this.editionMode.set(false);
+   this.creationMode.set(false);
+   this.selectedActivity.emit(null);
+
+     */
+ }
+
 }

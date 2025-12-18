@@ -5,10 +5,10 @@ import {IndividualTaskService} from '../../../../../shared/services/tasks/indivi
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {EditTaskRequest} from '../../../../../shared/models/task-models/edit-task-request';
+import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
 import {durationToDays} from '../../../../../../shared/util/DateFormatterUtil';
-import {HabitTaskService} from '../../../../../shared/services/tasks/habit-task.service';
+import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.service';
 import {EditHabitRequest} from '../../../../../shared/models/task-models/edit-habit-request';
 import {ActivityItemDetails, ActivityStatus} from '../../../../../shared/models/task-models/activity.model';
 import {GroupTaskDeclineFormComponent} from "../../group-task-decline-form/group-task-decline-form.component";
