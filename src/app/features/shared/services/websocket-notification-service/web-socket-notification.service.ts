@@ -179,7 +179,7 @@ export class WebSocketNotificationService implements OnDestroy {
     };
 
     switch (notification.notificationType) {
-      case 'TASK_COMPLETED':
+      case 'TASK_COMPLETED': // TODO: updating money
       case 'LEVEL_UP':
         this.nzNotification.success(
           notification.title,
