@@ -22,7 +22,7 @@ import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
 import { PomodoroSessionAcceptTaskModalComponent } from '../../shared/components/tasks/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
 import { PomodoroTaskService } from '../../../shared/services/tasks/pomodoro-task.service';
 import { EditPomodoroRequest } from '../../../shared/models/task-models/edit-pomodoro-request';
-import { EditTaskRequest } from '../../../shared/models/task-models/edit-task-request';
+import { TaskRequest } from '../../../shared/models/task-models/task-request';
 import { PomodoroSessionBreakModalComponent } from '../../shared/components/tasks/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
 import {ActivityItemDetails} from '../../../shared/models/task-models/activity.model';
 import {Page} from '../../../shared/models/util/page.model';
@@ -291,7 +291,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   }
 
   removeFromPanel(activity: ActivityItemDetails) {
-    const request: EditTaskRequest = {
+    const request: TaskRequest = {
       title: activity.title,
       description: activity.description,
       difficultyId: activity.difficultyId,

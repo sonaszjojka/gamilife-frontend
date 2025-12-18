@@ -1,42 +1,21 @@
-import {
-  Component,
-  inject,
-  Input,
-  effect,
-  WritableSignal,
-  Output,
-  EventEmitter,
-  signal, input,
-} from '@angular/core';
-import { NzButtonComponent } from 'ng-zorro-antd/button';
-import {
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import {
-  NzFormControlComponent,
-  NzFormItemComponent,
-  NzFormLabelComponent,
-} from 'ng-zorro-antd/form';
-import { NzColDirective } from 'ng-zorro-antd/grid';
-import { NzAutosizeDirective, NzInputDirective } from 'ng-zorro-antd/input';
-import { IndividualTaskService } from '../../../../../shared/services/tasks/individual-task.service';
-import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
-import { EditTaskRequest } from '../../../../../shared/models/task-models/edit-task-request';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
-import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { PomodoroFormComponent } from '../pomodoro-form/pomodoro-form.component';
-import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
-import { PomodoroTaskService } from '../../../../../shared/services/tasks/pomodoro-task.service';
-import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
-import { CreateHabitRequest } from '../../../../../shared/models/task-models/create-habit-request';
-import { EditHabitRequest } from '../../../../../shared/models/task-models/edit-habit-request';
-import { HabitFormComponent } from '../habit-form/habit-form.component';
-import { HabitTaskService } from '../../../../../shared/services/tasks/habit-task.service';
-import {ActivityItemDetails} from '../../../../../shared/models/task-models/activity.model';
-import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import {Component, effect, EventEmitter, inject, Input, input, Output, signal, WritableSignal,} from '@angular/core';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NonNullableFormBuilder, ReactiveFormsModule, Validators,} from '@angular/forms';
+import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent,} from 'ng-zorro-antd/form';
+import {NzColDirective} from 'ng-zorro-antd/grid';
+import {NzAutosizeDirective, NzInputDirective} from 'ng-zorro-antd/input';
+import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
+import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
+import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
+import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
+import {HabitFormComponent} from '../habit-form/habit-form.component';
+import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.service';
+import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/task-models/activity.model';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
+import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
 
 @Component({
   selector: 'app-task-form',
@@ -56,6 +35,7 @@ import { NotificationService } from '../../../../../shared/services/notification
     PomodoroFormComponent,
     NzAutosizeDirective,
     HabitFormComponent,
+    NzInputNumberComponent,
   ],
   templateUrl: './task-form.component.html',
   standalone: true,
@@ -65,44 +45,33 @@ export class TaskFormComponent {
   isDisabled = input<boolean>(true)
   pomodoroCreation = signal<boolean>(false);
   pomodoroEdition = signal<boolean>(false);
-  habitCreation = signal<boolean>(false);
-  habitEdition = signal<boolean>(false);
-  @Input() activity!: WritableSignal<ActivityItemDetails | null>;
+  type=input.required<ActivityType>()
+   activity= input<ActivityItemDetails>()
   @Input() creationMode?: WritableSignal<boolean | null>;
   @Input() editionMode?: WritableSignal<boolean | null>;
-  @Output() taskFormSubmitted = new EventEmitter<void>();
-  @Output() taskDeleted = new EventEmitter<void>();
-  pomodoroRequest?: CreatePomodoroRequest;
-  pomodoroEditRequest?: EditPomodoroRequest;
-  habitRequest?: CreateHabitRequest;
-  habitEditRequest?: EditHabitRequest;
-
-  habitCreateDurationDays?: number;
-  habitEditDurationDays?: number;
+  @Output() activityFormSubmitted = new EventEmitter<void>();
+  @Output() activityDeleted = new EventEmitter<void>();
 
   private formBuilder = inject(NonNullableFormBuilder);
   private taskService = inject(IndividualTaskService);
-  private pomodoroService = inject(PomodoroTaskService);
-  private habitService = inject(HabitTaskService);
-  private notificationService = inject(NotificationService);
+  private habitApi = inject(HabitTaskService)
 
-  validTaskForm = this.formBuilder.group({
+
+
+  validActivityForm = this.formBuilder.group({
     title: this.formBuilder.control('', [
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(300),
     ]),
 
-    deadlineDate: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
-    deadlineHour: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
+    deadlineDate: this.formBuilder.control<Date | null>(null, []),
+    deadlineHour: this.formBuilder.control<Date | null>(null, []),
     categoryId: this.formBuilder.control<number>(0, [Validators.required]),
     difficultyId: this.formBuilder.control<number>(0, [Validators.required]),
-    completedAt: this.formBuilder.control(''),
     description: this.formBuilder.control('', [Validators.required]),
+    cycleLength: this.formBuilder.control<number>(0)
+
   });
 
   categories = [
@@ -117,16 +86,27 @@ export class TaskFormComponent {
     {difficultyId: 3, difficultyName: 'Hard'},
   ];
 
+
   constructor() {
     effect(() => {
       const activity = this.activity?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
-
-      if (activity && isEditing) {
+        console.log(this.type())
+      if(activity?.type==ActivityType.HABIT&&isEditing)
+      {
+        this.validActivityForm.patchValue({
+          title: activity.title || '',
+          categoryId: activity.categoryId,
+          difficultyId: activity.difficultyId,
+          description: activity.description || '',
+          cycleLength: activity.cycleLength
+        });
+      }
+      else if (activity?.type==ActivityType.TASK && isEditing) {
         const endDate = activity.deadlineDate ? new Date(activity.deadlineDate) : null;
         const endHour = activity.deadlineTime ? new Date(activity.deadlineTime) : null;
-        this.validTaskForm.patchValue({
+        this.validActivityForm.patchValue({
           title: activity.title || '',
           deadlineDate: endDate,
           deadlineHour: endHour,
@@ -135,7 +115,7 @@ export class TaskFormComponent {
           description: activity.description || '',
         });
       } else if (isCreating) {
-        this.validTaskForm.reset();
+        this.validActivityForm.reset();
       }
     });
   }
@@ -143,189 +123,123 @@ export class TaskFormComponent {
   onClose() {
     this.editionMode?.set(false);
     this.creationMode?.set(false);
-    this.validTaskForm.reset();
+    this.validActivityForm.reset();
   }
 
   onSubmit() {
-    if (this.validTaskForm.invalid) {
-      Object.values(this.validTaskForm.controls).forEach((control) => {
+    if (this.validActivityForm.invalid) {
+      Object.values(this.validActivityForm.controls).forEach((control) => {
         control.markAsTouched();
       });
-      this.notificationService.showValidationError();
+      return;
+    }
+    if (this.type() == ActivityType.TASK && (this.validActivityForm.value.deadlineDate == null || this.validActivityForm.value.deadlineHour == null)) {
+      Object.values(this.validActivityForm.controls).forEach((control) => {
+        control.markAsTouched();
+      });
       return;
     }
 
-    const formValue = this.validTaskForm.getRawValue();
-
-
-
-    const request: EditTaskRequest = {
-      title: formValue.title,
-      deadlineDate: formValue.deadlineDate!.toISOString().slice(0,10),
-      deadlineTime: formValue.deadlineHour!.toISOString().slice(11,19),
-      categoryId: formValue.categoryId,
-      difficultyId: formValue.difficultyId,
-      description: formValue.description,
-    };
-
-    if (this.creationMode?.()) {
-      this.taskService.createTask(request).subscribe({
-        next: () => {
-          this.validTaskForm.reset();
-          this.notificationService.handleApiSuccess(
-            'POST',
-            'Task created successfully',
-          );
-          this.taskFormSubmitted.emit();
-        },
-        error: (error) => {
-          this.notificationService.handleApiError(error);
-          this.taskFormSubmitted.emit();
-        },
+    if (this.type() == ActivityType.HABIT && (this.validActivityForm.value.cycleLength == undefined || this.validActivityForm.value.cycleLength <= 0)) {
+      Object.values(this.validActivityForm.controls).forEach((control) => {
+        control.markAsTouched();
       });
-
-    } else if (this.editionMode?.()) {
-      const activity = this.activity?.();
-      if (activity == null) {
-        return;
-      }
-      /*
-      if (this.pomodoroRequest && this.pomodoroCreation()) {
-        this.pomodoroService
-          .createPomodoro(activity.taskId, this.pomodoroRequest)
-          .subscribe({
-            next: (response) => {
-              activity.pomodoro = {
-                pomodoroId: response.pomodoroId,
-                workCyclesNeeded: response.workCyclesNeeded,
-                workCyclesCompleted: response.workCyclesCompleted,
-                createdAt: response.createdAt,
-              };
-              this.notificationService.handleApiSuccess(
-                'POST',
-                'Pomodoro added successfully',
-              );
-            },
-            error: (error) => {
-              this.notificationService.handleApiError(error);
-            },
-          });
-      } else if (this.pomodoroEditRequest && this.pomodoroEdition()) {
-        if (activity.pomodoro && activity.pomodoro.pomodoroId) {
-          this.pomodoroService
-            .editPomodoro(activity.pomodoro.pomodoroId, this.pomodoroEditRequest)
-            .subscribe({
-              next: (response) => {
-                if (activity.pomodoro) {
-                  activity.pomodoro.workCyclesNeeded = response.workCyclesNeeded;
-                  activity.pomodoro.workCyclesCompleted =
-                    response.workCyclesCompleted;
-                  activity.pomodoro.createdAt = response.createdAt;
-                }
-                this.notificationService.handleApiSuccess(
-                  'PUT',
-                  'Pomodoro updated successfully',
-                );
-              },
-              error: (error) => {
-                this.notificationService.handleApiError(error);
-              },
-            });
-
-        }
-      }
-
-      if (this.habitRequest && this.habitCreation()) {
-        this.habitRequest.cycleLength = daysAsDuration(
-          this.habitCreateDurationDays!,
-        );
-
-        this.habitService
-          .createHabitTask(activity.taskId, this.habitRequest)
-          .subscribe({
-            next: (response) => {
-              activity.taskHabit = {
-                habitId: response.habitId,
-                cycleLength: response.cycleLength,
-                currentStreak: response.currentStreak,
-                longestStreak: response.longestStreak,
-                acceptedDate: response.acceptedDate,
-              };
-              //ToDo decide if we need to set activity.endTime from here or use already existing one
-              this.notificationService.handleApiSuccess(
-                'POST',
-                'Habit added successfully',
-              );
-              //ToDo decide if we need to set task.endTime from here or use already existing one
-            },
-            error: (error) => {
-              this.notificationService.handleApiError(error);
-            },
-          });
-      } else if (this.habitEditRequest && this.habitEdition()) {
-        this.habitEditRequest.cycleLength = daysAsDuration(
-          this.habitEditDurationDays!,
-        );
-        if (activity.taskHabit && activity.taskHabit.habitId) {
-          this.habitService
-            .editHabitTask(
-              activity.taskHabit.habitId,
-              activity.taskId,
-              this.habitEditRequest,
-            )
-            .subscribe({
-              next: (response) => {
-                if (activity.taskHabit) {
-                  activity.taskHabit.cycleLength = response.cycleLength;
-                  activity.taskHabit.currentStreak = response.currentStreak;
-                  activity.taskHabit.longestStreak = response.longestStreak;
-                  activity.taskHabit.acceptedDate = response.acceptedDate;
-                }
-                this.notificationService.handleApiSuccess(
-                  'PUT',
-                  'Habit updated successfully',
-                );
-              },
-              error: (error) => {
-                this.notificationService.handleApiError(error);
-              },
-            });
-
-
-        }
-
-       */
+      return;
     }
 
-    this.taskService.editTask(this.activity()!.id, request).subscribe({
-      next: () => {
-        this.validTaskForm.reset();
-        this.taskFormSubmitted.emit();
-      },
-      error: (error) => {
-        console.error('Error editing task:', error);
-        this.taskFormSubmitted.emit();
-      },
-    });
+
+    const formValue = this.validActivityForm.getRawValue();
+
+    if (this.type() == ActivityType.TASK) {
+      formValue.deadlineHour!.setHours(formValue.deadlineHour!.getHours(), formValue.deadlineHour!.getMinutes(), 0, 0)
+      const request: TaskRequest = {
+        title: formValue.title,
+        deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
+        deadlineTime: formValue.deadlineHour!.toISOString().slice(11, 19),
+        categoryId: formValue.categoryId,
+        difficultyId: formValue.difficultyId,
+        description: formValue.description,
+      };
+
+      if (this.creationMode?.()) {
+        this.taskService.createTask(request).subscribe({
+          next: () => {
+            this.validActivityForm.reset();
+            this.activityFormSubmitted.emit();
+          },
+          error: (error) => {
+            console.error('Error creating task:', error);
+            this.activityFormSubmitted.emit();
+          },
+        });
+
+      } else if (this.editionMode?.()) {
+        const activity = this.activity?.();
+        if (activity == null) {
+          return;
+        }
+
+        this.taskService.editTask(this.activity()!.id, request).subscribe({
+          next: () => {
+            this.validActivityForm.reset();
+            this.activityFormSubmitted.emit();
+          },
+          error: (error) => {
+            console.error('Error editing task:', error);
+            this.activityFormSubmitted.emit();
+          },
+        });
+      }
+    }
+    else if (this.type()==ActivityType.HABIT)
+    {
+      const request: HabitRequest = {
+        title: formValue.title,
+        cycleLength:formValue.cycleLength,
+        categoryId: formValue.categoryId,
+        difficultyId: formValue.difficultyId,
+        description: formValue.description,
+      };
+
+      if (this.creationMode!())
+      {
+        this.habitApi.createHabitTask(request).subscribe({
+          next:(response)=>{console.log(response)},
+          error:(err)=>{console.log(err)}
+          });
+      }
+      else
+      {
+
+
+      }
+
+    }
+
   }
 
 
 
   onDelete() {
+    if (this.activity()?.type==ActivityType.TASK)
+    {
+
     this.taskService.deleteTask(this.activity()!.id).subscribe({
       next: () => {
-        this.validTaskForm.reset();
-        this.notificationService.handleApiSuccess(
-          'DELETE',
-          'Task deleted successfully',
-        );
-        this.taskDeleted.emit();
+        this.validActivityForm.reset();
+        this.activityDeleted.emit();
       },
       error: (error) => {
-        this.notificationService.handleApiError(error);
-        this.taskFormSubmitted.emit();
+        console.error('Error deleting task:', error);
+        this.activityFormSubmitted.emit();
       },
     });
+    }
+    else
+    {
+
+      //this.habitService.deleteHabit()
+    }
   }
 
   onPomodoroCreation() {
@@ -336,36 +250,5 @@ export class TaskFormComponent {
     this.pomodoroEdition.update((value) => !value);
   }
 
-  onPomodoroFormChange(pomodoroRequest: CreatePomodoroRequest) {
-    if (pomodoroRequest != null) this.pomodoroRequest = pomodoroRequest;
-  }
-
-  onPomodoroEditFormChange(pomodoroEditRequest: EditPomodoroRequest) {
-    if (pomodoroEditRequest != null)
-      this.pomodoroEditRequest = pomodoroEditRequest;
-  }
-
-  onHabitCreation() {
-    this.habitCreation.update((value) => !value);
-    this.habitRequest = {
-      cycleLength: '',
-      currentStreak: 0,
-      longestStreak: 0,
-      acceptedDate: null,
-    };
-  }
-
-  onHabitEdition() {
-    this.habitEdition.update((value) => !value);
-  }
-
-  onHabitFormChange(habitCreateDurationInDays: number) {
-    if (habitCreateDurationInDays != null)
-      this.habitCreateDurationDays = habitCreateDurationInDays;
-  }
-
-  onHabitEditFormChange(habitEditDurationInDays: number) {
-    if (habitEditDurationInDays != null)
-      this.habitEditDurationDays = habitEditDurationInDays;
-  }
+  protected readonly ActivityType = ActivityType;
 }

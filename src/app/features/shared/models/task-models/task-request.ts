@@ -1,5 +1,4 @@
-export interface EditTaskRequest {
-  //ToDo change after adding habits
+export interface TaskRequest {
   title: string;
   deadlineDate: string;
   deadlineTime:string;
