@@ -82,7 +82,6 @@ export class GroupInvitationResponseComponent implements OnInit {
         error: (err) => {
           this.processing.set(false);
           this.status.set('error');
-          console.error('Failed to accept invitation:', err);
 
           let errorMsg = '';
           if (err.status === 404) {
@@ -121,7 +120,6 @@ export class GroupInvitationResponseComponent implements OnInit {
         error: (err) => {
           this.processing.set(false);
           this.status.set('error');
-          console.error('Failed to reject invitation:', err);
 
           let errorMsg = '';
           if (err.status === 404) {

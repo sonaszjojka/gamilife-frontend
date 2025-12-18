@@ -1,18 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal, Signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { finalize, Observable, Subject, tap } from 'rxjs';
-
-export interface IAuthService {
-  isLoggedIn: Signal<boolean>;
-  username: Signal<string | null>;
-  userId: Signal<string | null>;
-
-  login(credentials: LoginCredentials): Observable<LoginResponse>;
-  logout(): void;
-  loadUserData(): Observable<UserData>;
-}
+import { WebSocketNotificationService } from '../../../features/shared/services/websocket-notification-service/web-socket-notification.service';
 
 export interface LoginCredentials {
   email: string;
@@ -25,19 +16,14 @@ export interface LoginResponse {
   username: string;
   isEmailVerified: boolean;
   isTutorialCompleted: boolean;
-}
-
-export interface UserData {
-  userId: string;
-  username: string;
-  email: string;
-  isTutorialCompleted: boolean;
+  money: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private router = inject(Router);
   private http = inject(HttpClient);
+  private notificationService = inject(WebSocketNotificationService);
   private refreshSubject = new Subject<void>();
 
   refreshInProgress = false;
@@ -48,6 +34,19 @@ export class AuthService {
   isTutorialCompleted = signal<boolean>(
     localStorage.getItem('isTutorialCompleted') === 'true',
   );
+  money = signal<number>(Number(localStorage.getItem('money')) || 0);
+
+  constructor() {
+    this.initializeWebSocketOnStartup();
+  }
+
+  private initializeWebSocketOnStartup(): void {
+    const isLoggedIn = this.loggedIn();
+
+    if (isLoggedIn) {
+      this.notificationService.connect();
+    }
+  }
 
   login(credentials: LoginCredentials): Observable<LoginResponse> {
     const url = `${environment.apiUrl}/auth/login`;
@@ -59,11 +58,13 @@ export class AuthService {
             res.userId,
             res.username,
             res.isTutorialCompleted,
+            res.money,
           );
           this.updateAuthState(
             res.userId,
             res.username,
             res.isTutorialCompleted,
+            res.money,
           );
         }),
       );
@@ -79,14 +80,20 @@ export class AuthService {
   }
 
   logoutLocal() {
+    this.notificationService.disconnect();
+    this.notificationService.clearAllNotifications();
+
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
     localStorage.removeItem('isTutorialCompleted');
+    localStorage.removeItem('money');
 
     this.userId.set(null);
     this.username.set(null);
     this.loggedIn.set(false);
     this.isTutorialCompleted.set(false);
+    this.money.set(0);
+
     this.router.navigate(['/login']);
   }
 
@@ -102,6 +109,9 @@ export class AuthService {
       .pipe(
         tap(() => {
           this.refreshSubject.next();
+          if (!this.isWebSocketConnected()) {
+            this.notificationService.connect();
+          }
         }),
         finalize(() => {
           this.refreshInProgress = false;
@@ -114,24 +124,58 @@ export class AuthService {
     localStorage.setItem('isTutorialCompleted', 'true');
   }
 
+  updateMoney(amount: number): void {
+    this.money.set(amount);
+    localStorage.setItem('money', String(amount));
+  }
+
+  adjustMoney(delta: number): void {
+    const newAmount = this.money() + delta;
+    this.updateMoney(newAmount);
+  }
+
+  private isWebSocketConnected(): boolean {
+    let connected = false;
+    const subscription = this.notificationService.connected$.subscribe(
+      (status: boolean) => {
+        connected = status;
+      },
+    );
+    subscription.unsubscribe();
+    return connected;
+  }
+
+  reconnectWebSocket(): void {
+    if (this.loggedIn()) {
+      this.notificationService.disconnect();
+      setTimeout(() => {
+        this.notificationService.connect();
+      }, 500);
+    }
+  }
+
   private updateAuthState(
     userId: string,
     username: string,
     isTutorialCompleted: boolean,
+    money: number,
   ): void {
     this.userId.set(userId);
     this.username.set(username);
     this.loggedIn.set(true);
     this.isTutorialCompleted.set(isTutorialCompleted);
+    this.money.set(money);
   }
 
   private saveAuthDataToStorage(
     userId: string,
     username: string,
     isTutorialCompleted: boolean,
+    money: number,
   ) {
     localStorage.setItem('userId', userId);
     localStorage.setItem('username', username);
     localStorage.setItem('isTutorialCompleted', String(isTutorialCompleted));
+    localStorage.setItem('money', String(money));
   }
 }

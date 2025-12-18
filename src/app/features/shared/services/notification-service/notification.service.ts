@@ -1,11 +1,33 @@
 import { Injectable, inject } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { WebSocketNotificationService } from '../websocket-notification-service/web-socket-notification.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
   private message = inject(NzMessageService);
+  private wsNotification = inject(WebSocketNotificationService);
+
+  connectWebSocket(): void {
+    this.wsNotification.connect();
+  }
+
+  disconnectWebSocket(): void {
+    this.wsNotification.disconnect();
+  }
+
+  get webSocketConnected$() {
+    return this.wsNotification.connected$;
+  }
+
+  get unreadNotificationCount$() {
+    return this.wsNotification.unreadCount$;
+  }
+
+  get notifications$() {
+    return this.wsNotification.notifications$;
+  }
 
   handleApiError(
     error: { status: number; message: string },

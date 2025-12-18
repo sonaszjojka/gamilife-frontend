@@ -56,7 +56,6 @@ export class BadgesTabComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error loading badges:', error);
           this.loading = false;
           this.notificationService.handleApiError(
             error,

@@ -76,7 +76,6 @@ export class TaskItemComponent implements OnInit {
         this.notificationService.success('Task completed successfully');
       },
       error: (error) => {
-        console.error('Error:', error);
         this.isCompleted.set(false);
         this.notificationService.handleApiError(
           error,
@@ -132,7 +131,6 @@ export class TaskItemComponent implements OnInit {
               );
             },
             error: (error) => {
-              console.error('Error:', error);
               this.notificationService.handleApiError(
                 error,
                 'Failed to update habit streak',
@@ -141,7 +139,6 @@ export class TaskItemComponent implements OnInit {
           });
       },
       error: (error) => {
-        console.error('Error:', error);
         this.isCompleted.set(false);
         this.notificationService.handleApiError(
           error,
@@ -174,7 +171,6 @@ export class TaskItemComponent implements OnInit {
           this.taskUpdated.emit(this.task.taskId);
         },
         error: (error) => {
-          console.error('Error:', error);
           this.notificationService.handleApiError(
             error,
             'Failed to complete habit',

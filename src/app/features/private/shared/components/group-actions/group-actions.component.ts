@@ -183,7 +183,6 @@ export class GroupActionsComponent {
             this.actionComplete.emit();
           },
           error: (err) => {
-            console.error(err);
             this.notification.handleApiError(err, 'Failed to join group');
             this.loading.set(false);
           },
@@ -199,7 +198,6 @@ export class GroupActionsComponent {
             this.actionComplete.emit();
           },
           error: (err) => {
-            console.error(err);
             this.notification.handleApiError(err, 'Failed to send request');
             this.loading.set(false);
           },

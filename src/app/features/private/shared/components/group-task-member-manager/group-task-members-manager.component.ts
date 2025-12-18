@@ -80,7 +80,6 @@ export class GroupTaskMembersManagerComponent implements OnInit {
           this.changed.emit();
         },
         error: (err) => {
-          console.error('Error assigning member:', err);
           this.notification.handleApiError(
             err,
             'Failed to assign member to task',
@@ -122,7 +121,6 @@ export class GroupTaskMembersManagerComponent implements OnInit {
           this.changed.emit();
         },
         error: (err) => {
-          console.error('Error removing member:', err);
           this.notification.handleApiError(
             err,
             'Failed to remove member from task',

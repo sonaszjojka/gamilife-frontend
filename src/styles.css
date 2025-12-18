@@ -213,6 +213,7 @@ ol {
 }
 
 ::ng-deep {
+
   .ant-btn-primary,
   .ant-switch-checked {
     background-color: var(--main-color) !important;
@@ -272,7 +273,7 @@ ol {
     color: var(--main-color);
   }
 
-  .ant-form-item-label > label {
+  .ant-form-item-label>label {
     font-family: var(--main-font);
     font-weight: var(--font-weight-medium);
   }
@@ -296,13 +297,13 @@ ol {
     font-family: var(--main-font);
   }
 
-  .ant-table-thead > tr > th {
+  .ant-table-thead>tr>th {
     background-color: var(--main-color);
     color: var(--text-secondary-color);
     font-weight: var(--font-weight-bold);
   }
 
-  .ant-table-tbody > tr:hover > td {
+  .ant-table-tbody>tr:hover>td {
     background-color: var(--bg-hover);
   }
 
@@ -379,12 +380,14 @@ ol {
   padding: 0 var(--spacing-medium);
 }
 
-/* Messages css config */
+/* Messages css */
 .ant-message {
   position: fixed;
-  top: 80px !important;
-  right: 24px !important;
-  left: auto !important;
+  /* NZ_CONFIG zarządza już top: 88px, ale zostawiamy opcjonalne ustawienie dla kompatybilności */
+  top: 88px !important;
+  /* Zmiana z prawej na lewą */
+  right: auto !important;
+  left: 24px !important;
   z-index: 500 !important;
   pointer-events: none;
 }
@@ -396,7 +399,7 @@ ol {
 .ant-message .ant-message-notice {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   pointer-events: auto;
 }
 
@@ -405,7 +408,7 @@ ol {
 }
 
 .ant-message .ant-message-notice-content {
-  text-align: right;
+  text-align: left;
 }
 
 @media (max-width: 768px) {

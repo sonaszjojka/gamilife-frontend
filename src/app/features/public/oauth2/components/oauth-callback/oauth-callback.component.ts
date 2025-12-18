@@ -98,7 +98,6 @@ export class OAuthCallbackComponent implements OnInit {
 
         this.oauth2Service.clearOAuthData();
         this.error = 'Authentication failed. Please try again.';
-        console.error('OAuth error:', err);
         setTimeout(() => this.router.navigate(['/login']), 3000);
       },
     });

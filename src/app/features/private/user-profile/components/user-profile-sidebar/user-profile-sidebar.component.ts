@@ -79,7 +79,6 @@ export class UserProfileSidebarComponent implements OnInit {
           this.loadingBadges = false;
         },
         error: (error) => {
-          console.error('Error loading badges:', error);
           this.loadingBadges = false;
           this.notificationService.handleApiError(
             error,

@@ -96,7 +96,6 @@ export class TaskListComponent {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error loading tasks:', error);
           this.loading = false;
           this.notificationService.handleApiError(
             error,
@@ -130,7 +129,6 @@ export class TaskListComponent {
           this.loadingMore = false;
         },
         error: (error) => {
-          console.error('Error loading more tasks:', error);
           this.loadingMore = false;
           this.notificationService.handleApiError(
             error,

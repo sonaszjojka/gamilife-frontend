@@ -129,7 +129,6 @@ export class GroupTaskFormComponent {
           this.formSubmitted.emit();
         },
         error: (error) => {
-          console.error('Error creating task:', error);
           this.notification.handleApiError(error, 'Failed to create task');
         },
       });
@@ -202,7 +201,6 @@ export class GroupTaskFormComponent {
             this.formSubmitted.emit();
           },
           error: (error) => {
-            console.error('Error editing group task:', error);
             this.notification.handleApiError(error, 'Failed to update task');
           },
         });

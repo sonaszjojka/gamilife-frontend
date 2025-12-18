@@ -86,7 +86,6 @@ export class GroupTasksListComponent implements OnInit {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error('Error loading group tasks:', err);
           this.notification.handleApiError(err, 'Failed to load group tasks');
           this.tasksList.set([]);
           this.loading.set(false);
@@ -116,7 +115,6 @@ export class GroupTasksListComponent implements OnInit {
         this.loadingMore.set(false);
       },
       error: (error) => {
-        console.error('Error loading more tasks:', error);
         this.notification.handleApiError(error, 'Failed to load more tasks');
         this.loadingMore.set(false);
       },

@@ -43,7 +43,6 @@ export class AchievementsTabComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading achievements:', error);
         this.loading = false;
         this.notificationService.handleApiError(
           error,

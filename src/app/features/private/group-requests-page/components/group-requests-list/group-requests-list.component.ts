@@ -92,7 +92,6 @@ export class GroupRequestsListComponent {
           this.requestChanged.emit();
         },
         error: (err) => {
-          console.error('Failed to approve request:', err);
           this.notification.handleApiError(err, 'Failed to approve request');
         },
       });
@@ -111,7 +110,6 @@ export class GroupRequestsListComponent {
           this.requestChanged.emit();
         },
         error: (err) => {
-          console.error('Failed to reject request:', err);
           this.notification.handleApiError(err, 'Failed to reject request');
         },
       });

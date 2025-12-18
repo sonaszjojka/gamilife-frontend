@@ -72,7 +72,6 @@ export class AvatarCustomizationTabComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error loading items:', error);
           this.loading = false;
           this.notificationService.handleApiError(
             error,
