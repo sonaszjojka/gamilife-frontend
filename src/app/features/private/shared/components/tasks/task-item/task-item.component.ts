@@ -7,13 +7,17 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
-import {durationToDays} from '../../../../../../shared/util/DateFormatterUtil';
 import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.service';
 import {EditHabitRequest} from '../../../../../shared/models/task-models/edit-habit-request';
-import {ActivityItemDetails, ActivityStatus} from '../../../../../shared/models/task-models/activity.model';
+import {
+  ActivityItemDetails,
+  ActivityStatus,
+  ActivityType
+} from '../../../../../shared/models/task-models/activity.model';
 import {GroupTaskDeclineFormComponent} from "../../group-task-decline-form/group-task-decline-form.component";
 import {GroupTaskFormComponent} from "../../group-task-from/group-task-form.component";
 import {GroupTaskMembersManagerComponent} from "../../group-task-member-manager/group-task-members-manager.component";
+import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
 
 @Component({
   selector: 'app-task-item',
@@ -53,22 +57,22 @@ export class TaskItemComponent implements OnInit {
     //todo Change
     this.isCompleted.set(this.activity.status != ActivityStatus.DEADLINE_MISSED);
   }
-/*
+
   completeTask(): void {
     this.isCompleted.set(true);
-    const request: EditTaskRequest = {
+    const request: TaskRequest = {
       title: this.activity.title,
-      startTime: this.activity.startTime,
-      endTime: this.activity.endDate,
+      deadlineDate: this.activity.deadlineDate,
+      deadlineTime: this.activity.deadlineTime,
       categoryId: this.activity.categoryId,
       difficultyId: this.activity.difficultyId,
-      completedAt: new Date(Date.now()).toISOString(),
+      completed: true,
       description: this.activity.description,
     };
-    this.taskService.editTask(this.activity.taskId, request).subscribe({
+    this.taskService.editTask(this.activity.id, request).subscribe({
       next: (response) => {
         this.activity.completedAt = response.completedAt;
-        this.taskUpdated.emit(this.activity.taskId);
+        this.taskUpdated.emit(this.activity.id);
       },
       error: (error) => {
         console.error('Error:', error);
@@ -76,82 +80,35 @@ export class TaskItemComponent implements OnInit {
       },
     });
   }
+
 
   completeHabitCycle(): void {
-    if (this.activity.taskHabit !== null)
-      this.activity.endDatew = this.addCycleLengthToEndTime(
-        this.activity.endDatew!,
-        this.activity.taskHabit.cycleLength,
-      );
-    const request: EditTaskRequest = {
-      title: this.activity.title,
-      startTime: this.activity.startTime,
-      endTime: this.activity.endDatew,
-      categoryId: this.activity.categoryId,
-      difficultyId: this.activity.difficultyId,
-      completedAt: this.activity.completedAt,
-      description: this.activity.description,
-    };
-    this.taskService.editTask(this.activity.taskId, request).subscribe({
-      next: () => {
-        this.activity.taskHabit!.currentStreak++;
-        if (
-          this.activity.taskHabit!.longestStreak <
-          this.activity.taskHabit!.currentStreak
-        ) {
-          this.activity.taskHabit!.longestStreak =
-            this.activity.taskHabit!.currentStreak;
-        }
+    if (this.activity.type == ActivityType.HABIT) {
 
-        const request: EditHabitRequest = {
-          currentStreak: this.activity.taskHabit!.currentStreak,
-          longestStreak: this.activity.taskHabit!.longestStreak,
-          cycleLength: this.activity.taskHabit!.cycleLength,
-          acceptedDate: this.activity.taskHabit!.acceptedDate,
-        };
-        this.habitService
-          .editHabitTask(
-            this.activity.taskHabit!.habitId,
-            this.activity.taskId,
-            request,
-          )
-          .subscribe({
-            next: () => {
-              this.taskUpdated.emit(this.activity.taskId);
-            },
-          });
-      },
-      error: (error) => {
-        console.error('Error:', error);
-        this.isCompleted.set(false);
-      },
-    });
-  }
-  completeHabit(): void {
-    const acceptedDate = new Date(Date.now());
+      const request: HabitRequest = {
+        title: this.activity.title,
+        categoryId: this.activity.categoryId,
+        difficultyId: this.activity.difficultyId,
+        description: this.activity.description,
+        cycleLength: this.activity.cycleLength!,
+        iterationCompleted: true,
 
-    acceptedDate.setHours(
-      acceptedDate.getHours() + 1,
-      acceptedDate.getMinutes(),
-      acceptedDate.getSeconds(),
-      acceptedDate.getMilliseconds(),
-    );
-    const request: EditHabitRequest = {
-      currentStreak: this.activity.taskHabit!.currentStreak,
-      longestStreak: this.activity.taskHabit!.longestStreak,
-      cycleLength: this.activity.taskHabit!.cycleLength,
-      acceptedDate: acceptedDate.toISOString(),
-    };
-    this.habitService
-      .editHabitTask(this.activity.taskHabit!.habitId, this.activity.taskId, request)
-      .subscribe({
+      }
+      this.habitService.editHabitTask(this.activity.id, request).subscribe({
         next: () => {
-          this.completeTask();
-          this.taskUpdated.emit(this.activity.taskId);
+          this.taskUpdated.emit(this.activity.id);
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.isCompleted.set(false);
         },
       });
+    }
   }
-*/
+
+
+
+
   onTaskEdit() {
     this.editTask.emit(this.activity);
   }
@@ -178,4 +135,5 @@ export class TaskItemComponent implements OnInit {
   }
 */
 
+  protected readonly ActivityType = ActivityType;
 }

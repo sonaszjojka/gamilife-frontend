@@ -5,4 +5,5 @@ export interface TaskRequest {
   categoryId: number;
   difficultyId: number;
   description: string;
+  completed?:boolean|null;
 }

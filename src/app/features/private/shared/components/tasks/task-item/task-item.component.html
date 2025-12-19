@@ -54,6 +54,8 @@
       </div>
     </div>
 
+    @if (activity.type==ActivityType.HABIT)
+    {
     <div class="info-item participants-list">
       <nz-icon nzType="team" class="info-icon"></nz-icon>
       <div class="info-content">
@@ -67,6 +69,7 @@
         </div>
       </div>
     </div>
+    }
 
       <div class="info-item">
         <nz-icon nzType="warning" class="info-icon"></nz-icon>
@@ -82,6 +85,13 @@
 
 
     <div class="action-right">
+      @if (this.activity.type==ActivityType.TASK)
+      {
+        <button nz-button nzShape="circle" (click)="completeTask()"><nz-icon nzType="check-circle"></nz-icon> </button>
+      }
+      @else {
+        <button nz-button nzShape="circle" (click)="completeHabitCycle()"><nz-icon nzType="check-circle"></nz-icon> </button>
+      }
 
     </div>
   </div>
