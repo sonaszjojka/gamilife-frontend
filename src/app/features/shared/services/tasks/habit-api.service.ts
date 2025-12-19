@@ -22,13 +22,19 @@ export class HabitTaskService {
   }
   editHabitTask(
     habitId: string,
-    taskId: string,
     editHabitRequest: HabitRequest,
   ): Observable<HabitRequest> {
-    return this.http.put<HabitRequest>(
-      `${this.API_URL}/${taskId}/habits/${habitId}`,
+    return this.http.patch<HabitRequest>(
+      `${this.API_URL}/${habitId}`,
       editHabitRequest,
       { withCredentials: true },
     );
+  }
+
+  deleteHabit(
+    habitId: string
+  ): Observable<unknown> {
+    return this.http.delete( `${this.API_URL}/${habitId}`,
+       {withCredentials:true});
   }
 }

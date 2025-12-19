@@ -34,10 +34,14 @@
 }
 
 .task-header {
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
+  gap: 10px;
   padding: var(--spacing-medium);
   border-bottom: 1px solid var(--border-color-light);
+  width: 100%;
 }
 
 .task-title {

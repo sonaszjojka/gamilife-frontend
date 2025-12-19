@@ -1,12 +1,19 @@
 <nz-card class="task-card">
   <div class="task-header-controls">
-
     <button nz-button nzShape="circle" (click)="onTaskEdit()"><nz-icon nzType ="setting"></nz-icon></button>
   </div>
 
   <div class="task-content">
     <div class="task-header">
       <h1 class="task-title">{{ activity.title }}</h1>
+      @if (activity.pomodoro!=undefined)
+      {
+        <app-pomodoro-task-progress
+        [cyclesCompleted]="activity.pomodoro.cyclesCompleted"
+        [cyclesRequired]="activity.pomodoro.cyclesRequired"
+        >
+        </app-pomodoro-task-progress>
+      }
     </div>
 
     <div class="info-container">
