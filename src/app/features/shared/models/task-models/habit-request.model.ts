@@ -4,4 +4,5 @@ export interface HabitRequest {
   categoryId: number;
   difficultyId: number;
   description: string;
+  iterationCompleted?:boolean|undefined;
 }

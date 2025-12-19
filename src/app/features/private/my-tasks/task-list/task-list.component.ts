@@ -167,12 +167,11 @@ export class TaskListComponent {
     return Object.keys(this.groupedTasks);
   }
 
+
+  //adjust filters to completed tasks
   onTaskUpdated(activityId: string): void {
     const changedActivity = this.activities.find((t) => t.id == activityId)!;
-    const isTaskNoneActive: boolean =
-      //Todo get into Dto completion status
-      changedActivity.status != ActivityStatus.DEADLINE_MISSED
-
+    const isTaskNoneActive: boolean = (changedActivity.status != ActivityStatus.DEADLINE_MISSED)|| changedActivity.completedAt!=null
     if (
       (changedActivity.categoryId != this.categoryId() &&
         this.categoryId() != null) ||
