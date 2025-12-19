@@ -245,6 +245,12 @@ export class TaskFormComponent {
       else
       {
 
+          this.habitApi.editHabitTask(this.activity()!.id,request).subscribe({
+            next:()=>{
+              this.activityFormSubmitted.emit()
+            },
+            error:(err)=>{console.error(err)}
+          })
 
       }
 
