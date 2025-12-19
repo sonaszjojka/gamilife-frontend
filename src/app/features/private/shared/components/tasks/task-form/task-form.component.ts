@@ -56,8 +56,6 @@ import {PomodoroSessionFormModal} from '../pomodoro-form-modal/pomodoro-session-
 })
 export class TaskFormComponent {
   isDisabled = input<boolean>(true)
-  pomodoroCreation = signal<boolean>(false);
-  pomodoroEdition = signal<boolean>(false);
   type=input.required<ActivityType>()
   activity= input<ActivityItemDetails>()
   @Input() creationMode?: WritableSignal<boolean | null>;
@@ -80,8 +78,8 @@ export class TaskFormComponent {
       Validators.maxLength(300),
     ]),
 
-    deadlineDate: this.formBuilder.control<Date | null>(null, []),
-    deadlineHour: this.formBuilder.control<Date | null>(null, []),
+    deadlineDate: this.formBuilder.control<Date | undefined>(undefined, []),
+    deadlineHour: this.formBuilder.control<Date | undefined>(undefined, []),
     categoryId: this.formBuilder.control<number>(0, [Validators.required]),
     difficultyId: this.formBuilder.control<number>(0, [Validators.required]),
     description: this.formBuilder.control('', [Validators.required]),
@@ -107,6 +105,7 @@ export class TaskFormComponent {
       const activity = this.activity?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
+
       if(activity?.type==ActivityType.HABIT&&isEditing)
       {
         this.validActivityForm.patchValue({
@@ -117,9 +116,15 @@ export class TaskFormComponent {
           cycleLength: activity.cycleLength
         });
       }
-      else if (activity?.type==ActivityType.TASK && isEditing) {
-        const endDate = activity.deadlineDate ? new Date(activity.deadlineDate) : null;
-        const endHour = activity.deadlineTime ? new Date(activity.deadlineTime) : null;
+      else if (activity?.type == ActivityType.TASK && isEditing) {
+        const endDate = activity.deadlineDate ? new Date(activity.deadlineDate) : undefined;
+        let endHour: Date | undefined = undefined;
+        if (activity.deadlineTime) {
+          const [hours, minutes, seconds] = activity.deadlineTime.split(':').map(Number);
+          endHour = new Date();
+          endHour.setHours(hours, minutes, seconds || 0, 0);
+        }
+
         this.validActivityForm.patchValue({
           title: activity.title || '',
           deadlineDate: endDate,
@@ -147,7 +152,7 @@ export class TaskFormComponent {
       });
       return;
     }
-    if (this.type() == ActivityType.TASK && (this.validActivityForm.value.deadlineDate == null || this.validActivityForm.value.deadlineHour == null)) {
+    if (this.type() == ActivityType.TASK && this.validActivityForm.value.deadlineDate == undefined ) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
         control.markAsTouched();
       });
@@ -165,46 +170,59 @@ export class TaskFormComponent {
     const formValue = this.validActivityForm.getRawValue();
 
     if (this.type() == ActivityType.TASK) {
-      formValue.deadlineHour!.setHours(formValue.deadlineHour!.getHours(), formValue.deadlineHour!.getMinutes(), 0, 0)
-      const request: TaskRequest = {
-        title: formValue.title,
-        deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
-        deadlineTime: formValue.deadlineHour!.toISOString().slice(11, 19),
-        categoryId: formValue.categoryId,
-        difficultyId: formValue.difficultyId,
-        description: formValue.description,
-      };
-
-      if (this.creationMode?.()) {
-        this.taskService.createTask(request).subscribe({
-          next: () => {
-            this.validActivityForm.reset();
-            this.activityFormSubmitted.emit();
-          },
-          error: (error) => {
-            console.error('Error creating task:', error);
-            this.activityFormSubmitted.emit();
-          },
-        });
-
-      } else if (this.editionMode?.()) {
-        const activity = this.activity?.();
-        if (activity == null) {
-          return;
-        }
-
-        this.taskService.editTask(this.activity()!.id, request).subscribe({
-          next: () => {
-            this.validActivityForm.reset();
-            this.activityFormSubmitted.emit();
-          },
-          error: (error) => {
-            console.error('Error editing task:', error);
-            this.activityFormSubmitted.emit();
-          },
-        });
+      let request;
+      if (formValue.deadlineHour != undefined) {
+        formValue.deadlineHour!.setHours(formValue.deadlineHour!.getHours(), formValue.deadlineHour!.getMinutes(), 0, 0)
+         request= {
+          title: formValue.title,
+          deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
+          deadlineTime: formValue.deadlineHour!.toISOString().slice(11, 19),
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          description: formValue.description,
+        };
       }
-    }
+      else {
+        request = {
+          title: formValue.title,
+          deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
+          deadlineTime: null,
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          description: formValue.description,
+        }
+      }
+
+
+        if (this.creationMode?.()) {
+          this.taskService.createTask(request).subscribe({
+            next: () => {
+              this.validActivityForm.reset();
+              this.activityFormSubmitted.emit();
+            },
+            error: (error) => {
+              console.error('Error creating task:', error);
+              this.activityFormSubmitted.emit();
+            },
+          });
+
+        } else if (this.editionMode?.()) {
+          const activity = this.activity?.();
+          if (activity == null) {
+            return;
+          }
+          this.taskService.editTask(this.activity()!.id, request).subscribe({
+            next: () => {
+              this.validActivityForm.reset();
+              this.activityFormSubmitted.emit();
+            },
+            error: (error) => {
+              console.error('Error editing task:', error);
+              this.activityFormSubmitted.emit();
+            },
+          });
+        }
+      }
     else if (this.type()==ActivityType.HABIT)
     {
       const request: HabitRequest = {
@@ -218,7 +236,9 @@ export class TaskFormComponent {
       if (this.creationMode!())
       {
         this.habitApi.createHabitTask(request).subscribe({
-          next:(response)=>{console.log(response)},
+          next:()=>{
+            this.activityFormSubmitted.emit();
+          },
           error:(err)=>{console.log(err)}
           });
       }
@@ -249,8 +269,13 @@ export class TaskFormComponent {
     }
     else
     {
-
-      //this.habitService.deleteHabit()
+      this.habitApi.deleteHabit(this.activity()!.id).subscribe( {
+        next:(response)=>{
+          this.activityFormSubmitted.emit();
+        },
+        error:(err)=>{console.error(err)}
+    }
+      )
     }
 
   }
@@ -259,9 +284,5 @@ export class TaskFormComponent {
     this.pomodoroModal.activity =this.activity()!
     this.pomodoroModal.showModal()
   }
-
-  onPomodoroEdition() {
-  }
-
   protected readonly ActivityType = ActivityType;
 }

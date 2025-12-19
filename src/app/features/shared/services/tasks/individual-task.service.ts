@@ -61,7 +61,7 @@ export class IndividualTaskService {
     taskId: string,
     request: TaskRequest,
   ): Observable<EditTaskResponse> {
-    return this.http.put<EditTaskResponse>(
+    return this.http.patch<EditTaskResponse>(
       `${this.TASK_API_URL}/${taskId}`,
       request,
       { withCredentials: true },
