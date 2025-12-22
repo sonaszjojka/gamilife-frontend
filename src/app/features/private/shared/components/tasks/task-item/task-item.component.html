@@ -1,6 +1,6 @@
-<nz-card class="task-card">
+<nz-card class="task-card" (click)="onTaskView($event)">
   <div class="task-header-controls">
-    <button nz-button nzShape="circle" (click)="onTaskEdit()"><nz-icon nzType ="setting"></nz-icon></button>
+    <button nz-button nzShape="circle" (click)="onTaskEdit($event)"><nz-icon nzType ="setting"></nz-icon></button>
   </div>
 
   <div class="task-content">
@@ -57,40 +57,58 @@
     @if (activity.type==ActivityType.HABIT)
     {
     <div class="info-item participants-list">
-      <nz-icon nzType="team" class="info-icon"></nz-icon>
+      <nz-icon nzType="fire" class="info-icon"></nz-icon>
       <div class="info-content">
-        <div class="info-label">Participants</div>
+        <div class="info-label">Longest Streak</div>
         <div class="info-value participants-container">
 
             <span class="participant-item">
-
+            {{activity.longestStreak}}
             </span>
 
         </div>
       </div>
     </div>
-    }
 
-      <div class="info-item">
-        <nz-icon nzType="warning" class="info-icon"></nz-icon>
-        <div class="info-label">Decline Message</div>
-        <div class="info-value">
+      <div class="info-item current-streak">
+        <nz-icon nzType="thunderbolt" class="info-icon"></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Current Streak</div>
+          <div class="info-value participants-container">
 
+            <span class="highlighted-item">
+            {{activity.currentStreak}}
+            </span>
+
+          </div>
         </div>
       </div>
+    }
+    @if (activity.pomodoro!=undefined)
+    {
+      <div class="info-item">
+        <nz-icon nzType="clock-circle" class="info-icon"></nz-icon>
+        <div class="info-label">Pomodoro Progress</div>
+        <div class="info-value">
+              <span class="highlighted-item">
+            {{activity.pomodoro.cyclesCompleted}}/{{activity.pomodoro.cyclesRequired}}
+            </span>
+        </div>
+      </div>
+
+    }
 
   </div>
 
   <div class="task-actions-footer">
-
-
     <div class="action-right">
       @if (this.activity.type==ActivityType.TASK)
       {
-        <button nz-button nzShape="circle" (click)="completeTask()"><nz-icon nzType="check-circle"></nz-icon> </button>
+        <button nz-button nzShape="circle" (click)="completeTask($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
       }
-      @else {
-        <button nz-button nzShape="circle" (click)="completeHabitCycle()"><nz-icon nzType="check-circle"></nz-icon> </button>
+      @else
+      {
+        <button nz-button nzShape="circle" (click)="completeHabitCycle($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
       }
 
     </div>

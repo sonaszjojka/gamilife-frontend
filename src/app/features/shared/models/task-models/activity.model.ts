@@ -17,12 +17,20 @@ export interface ActivityItemDetails
   currentStreak?:number|undefined
   longestStreak?:number|undefined
   completedAt?:string|undefined
+  workable?:boolean|undefined
 }
 
 export enum ActivityType {
   TASK = 'TASK',
   HABIT = 'HABIT',
 }
+
+export const ActivityTypeColors:Record <ActivityType,string>=
+  {
+    [ActivityType.HABIT]:'#2196f3',
+    [ActivityType.TASK]:'#9c27b0'
+  }
+
 
 export enum ActivityStatus {
   ALIVE = 'ALIVE',

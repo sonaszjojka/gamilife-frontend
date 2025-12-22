@@ -4,9 +4,9 @@ import {
   EventEmitter,
   inject,
   Input,
-  input,
+  input, OnChanges, OnInit,
   Output,
-  signal,
+  signal, SimpleChanges,
   ViewChild,
   WritableSignal,
 } from '@angular/core';
@@ -17,7 +17,6 @@ import {NzColDirective} from 'ng-zorro-antd/grid';
 import {NzAutosizeDirective, NzInputDirective} from 'ng-zorro-antd/input';
 import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
-import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
@@ -54,8 +53,8 @@ import {PomodoroSessionFormModal} from '../pomodoro-form-modal/pomodoro-session-
   standalone: true,
   styleUrl: './task-form.component.css',
 })
-export class TaskFormComponent {
-  isDisabled = input<boolean>(true)
+export class TaskFormComponent implements OnInit,OnChanges{
+  viewMode = input<boolean>(false)
   type=input.required<ActivityType>()
   activity= input<ActivityItemDetails>()
   @Input() creationMode?: WritableSignal<boolean | null>;
@@ -100,11 +99,13 @@ export class TaskFormComponent {
   ];
 
 
-  constructor() {
-    effect(() => {
+  ngOnInit() {
+
       const activity = this.activity?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
+
+
 
       if(activity?.type==ActivityType.HABIT&&isEditing)
       {
@@ -117,8 +118,10 @@ export class TaskFormComponent {
         });
       }
       else if (activity?.type == ActivityType.TASK && isEditing) {
+
         const endDate = activity.deadlineDate ? new Date(activity.deadlineDate) : undefined;
         let endHour: Date | undefined = undefined;
+
         if (activity.deadlineTime) {
           const [hours, minutes, seconds] = activity.deadlineTime.split(':').map(Number);
           endHour = new Date();
@@ -136,8 +139,21 @@ export class TaskFormComponent {
       } else if (isCreating) {
         this.validActivityForm.reset();
       }
-    });
-  }
+    if (this.viewMode()) {
+      this.validActivityForm.disable();
+    } else {
+      this.validActivityForm.enable();
+    }
+
+    }
+    ngOnChanges() {
+      if (this.viewMode()) {
+        this.validActivityForm.disable();
+      } else {
+        this.validActivityForm.enable();
+      }
+    }
+
 
   onClose() {
     this.editionMode?.set(false);
@@ -172,11 +188,16 @@ export class TaskFormComponent {
     if (this.type() == ActivityType.TASK) {
       let request;
       if (formValue.deadlineHour != undefined) {
-        formValue.deadlineHour!.setHours(formValue.deadlineHour!.getHours(), formValue.deadlineHour!.getMinutes(), 0, 0)
+
+        const date = formValue.deadlineHour;
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const deadlineTime = `${hours}:${minutes}:00`;
+
          request= {
           title: formValue.title,
           deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
-          deadlineTime: formValue.deadlineHour!.toISOString().slice(11, 19),
+          deadlineTime: deadlineTime,
           categoryId: formValue.categoryId,
           difficultyId: formValue.difficultyId,
           description: formValue.description,
@@ -190,6 +211,7 @@ export class TaskFormComponent {
           categoryId: formValue.categoryId,
           difficultyId: formValue.difficultyId,
           description: formValue.description,
+
         }
       }
 

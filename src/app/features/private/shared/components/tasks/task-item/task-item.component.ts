@@ -8,7 +8,6 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
 import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.service';
-import {EditHabitRequest} from '../../../../../shared/models/task-models/edit-habit-request';
 import {
   ActivityItemDetails,
   ActivityStatus,
@@ -43,7 +42,7 @@ export class TaskItemComponent implements OnInit {
   isCompleted = signal(false);
 
   @Output() taskUpdated = new EventEmitter<string>();
-  @Output() editTask = new EventEmitter<ActivityItemDetails>();
+  @Output() editTask = new EventEmitter<{activity:ActivityItemDetails,viewMode:boolean}>();
 
   isInSession = input<boolean>(false);
   inPomodoroList = input<boolean>(false);
@@ -58,7 +57,8 @@ export class TaskItemComponent implements OnInit {
     this.isCompleted.set(this.activity.status != ActivityStatus.DEADLINE_MISSED);
   }
 
-  completeTask(): void {
+  completeTask(event:MouseEvent): void {
+    event.stopPropagation();
     this.isCompleted.set(true);
     const request: TaskRequest = {
       title: this.activity.title,
@@ -82,7 +82,8 @@ export class TaskItemComponent implements OnInit {
   }
 
 
-  completeHabitCycle(): void {
+  completeHabitCycle(event:MouseEvent): void {
+    event.stopPropagation()
     if (this.activity.type == ActivityType.HABIT) {
 
       const request: HabitRequest = {
@@ -109,8 +110,16 @@ export class TaskItemComponent implements OnInit {
 
 
 
-  onTaskEdit() {
-    this.editTask.emit(this.activity);
+  onTaskEdit(event:MouseEvent) {
+    event.stopPropagation()
+    console.log("EDIT")
+    this.editTask.emit({activity:this.activity,viewMode:false});
+  }
+  onTaskView(event:MouseEvent)
+  {
+    event.stopPropagation()
+    console.log("VIEW")
+    this.editTask.emit({activity:this.activity,viewMode:true})
   }
 /*
   isInactive(): boolean {
@@ -136,4 +145,5 @@ export class TaskItemComponent implements OnInit {
 */
 
   protected readonly ActivityType = ActivityType;
+
 }
