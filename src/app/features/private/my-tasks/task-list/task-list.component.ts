@@ -44,9 +44,8 @@ export class TaskListComponent implements  OnInit{
   pageSize = 5;
   totalPages = 0;
   hasMore = true;
-
-
   private taskService = inject(IndividualTaskService);
+
    ngOnInit () {
     this.title();
     this.startDate();
