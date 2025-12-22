@@ -27,7 +27,7 @@
               @for (activity of groupedTasks[date]; track activity.id) {
                 <app-task-item
                   [activity]="activity"
-                  (editTask)="onActivityEdit(activity)"
+                  (editTask)="onActivityEdit($event)"
                   (taskUpdated)="onTaskUpdated($event)"
                 >
                 </app-task-item>
@@ -42,6 +42,7 @@
         [activity]="selectedActivity()"
         [editionMode]="editionMode"
         [creationMode]="creationMode"
+        [viewMode]="viewMode()"
         (activityFormSubmitted)="onTaskSubmit()"
         (activityDeleted)="onTaskDelete()"
         [type] ="formType()"

@@ -1,9 +1,7 @@
 import {CommonModule, formatDate} from '@angular/common';
-import {Component, effect, HostListener, inject, signal} from '@angular/core';
+import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
 import {TaskItemComponent} from '../../shared/components/tasks/task-item/task-item.component';
 import {TaskFilterComponent} from '../../shared/components/tasks/task-filter/task-filter.component';
-
-
 import {TaskFormComponent} from '../../shared/components/tasks/task-form/task-form.component';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar/task-calendar.component';
@@ -25,7 +23,7 @@ import {ActivityItemDetails, ActivityStatus, ActivityType} from '../../../shared
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
 })
-export class TaskListComponent {
+export class TaskListComponent implements  OnInit{
   activities: ActivityItemDetails[] = [];
   groupedTasks: Record<string, ActivityItemDetails[]> = {};
 
@@ -33,6 +31,7 @@ export class TaskListComponent {
   loadingMore = false;
   editionMode = signal<boolean | null>(false);
   creationMode = signal<boolean | null>(false);
+  viewMode = signal<boolean>(true)
   title= signal<string|null>(null);
   startDate=signal<string|null>(null)
   endDate=signal<string|null>(null)
@@ -46,7 +45,9 @@ export class TaskListComponent {
   totalPages = 0;
   hasMore = true;
 
-  private changeFilterEffect = effect(() => {
+
+  private taskService = inject(IndividualTaskService);
+   ngOnInit () {
     this.title();
     this.startDate();
     this.endDate();
@@ -55,8 +56,7 @@ export class TaskListComponent {
 
     this.currentPage = 0;
     this.loadTasks();
-  });
-  private taskService = inject(IndividualTaskService);
+  };
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -168,7 +168,6 @@ export class TaskListComponent {
   }
 
 
-  //adjust filters to completed tasks
   onTaskUpdated(activityId: string): void {
     const changedActivity = this.activities.find((t) => t.id == activityId)!;
     const isTaskNoneActive: boolean = (changedActivity.status != ActivityStatus.DEADLINE_MISSED)|| changedActivity.completedAt!=null
@@ -183,9 +182,10 @@ export class TaskListComponent {
     }
   }
 
-  onActivityEdit(selectedActivity: ActivityItemDetails): void {
-    this.selectedActivity.set(selectedActivity);
-    this.formType.set(selectedActivity.type)
+  onActivityEdit(event: { activity: ActivityItemDetails, viewMode: boolean }): void {
+    this.selectedActivity.set(event.activity);
+    this.viewMode.set(event.viewMode)
+    this.formType.set(event.activity.type)
     this.editionMode.set(true);
     this.creationMode.set(false);
   }
@@ -227,5 +227,6 @@ export class TaskListComponent {
 
      */
  }
+
 
 }

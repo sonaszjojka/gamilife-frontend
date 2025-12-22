@@ -112,6 +112,8 @@
 
     }
   </form>
+  @if (!viewMode())
+  {
   <div class="button-panel">
     <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
     @if (this.editionMode?.()) {
@@ -131,5 +133,6 @@
       }
     }
   </div>
+  }
 </div>
 <app-pomdoro-form-modal></app-pomdoro-form-modal>
