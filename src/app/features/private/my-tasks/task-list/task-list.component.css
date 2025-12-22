@@ -1,11 +1,11 @@
 h3 {
   text-align: center;
-  color: var(--bg-primary);
+  color: black;
 }
 
 h1 {
   text-align: center;
-  color: var(--bg-primary);
+  color: black;
   display: flex;
   flex-direction: column;
 }
@@ -14,8 +14,6 @@ h1 {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: url("/assets/background_guest_page.png") center center / cover
-    no-repeat;
 }
 
 h1 {
@@ -23,7 +21,24 @@ h1 {
   margin-bottom: 2rem;
   font-size: 2.5rem;
 }
+.task-create, .habit-create {
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: none;
+  color: white;
+}
 
+.task-create { background-color: #2196f3; }
+.habit-create { background-color: #9c27b0; }
+
+.task-create:hover, .habit-create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  filter: brightness(1.1);
+  color: white;
+}
 .task-layout {
   display: flex;
   align-items: flex-start;

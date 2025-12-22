@@ -192,6 +192,7 @@ export class TaskListComponent implements  OnInit{
 
   onTaskCreation(): void {
     this.selectedActivity.set(undefined);
+    this.viewMode.set(false)
     this.formType.set(ActivityType.TASK)
     this.creationMode.set(true);
     this.editionMode.set(false);
@@ -199,6 +200,7 @@ export class TaskListComponent implements  OnInit{
 
   onHabitCreation(): void {
     this.selectedActivity.set(undefined);
+    this.viewMode.set(false)
     this.formType.set(ActivityType.HABIT)
     this.creationMode.set(true);
     this.editionMode.set(false);
