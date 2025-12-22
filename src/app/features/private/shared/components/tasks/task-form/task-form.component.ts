@@ -53,7 +53,7 @@ import {PomodoroSessionFormModal} from '../pomodoro-form-modal/pomodoro-session-
   standalone: true,
   styleUrl: './task-form.component.css',
 })
-export class TaskFormComponent implements OnInit,OnChanges{
+export class TaskFormComponent implements OnChanges{
   viewMode = input<boolean>(false)
   type=input.required<ActivityType>()
   activity= input<ActivityItemDetails>()
@@ -97,10 +97,7 @@ export class TaskFormComponent implements OnInit,OnChanges{
     {difficultyId: 2, difficultyName: 'Medium'},
     {difficultyId: 3, difficultyName: 'Hard'},
   ];
-
-
-  ngOnInit() {
-
+    ngOnChanges() {
       const activity = this.activity?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
@@ -139,14 +136,6 @@ export class TaskFormComponent implements OnInit,OnChanges{
       } else if (isCreating) {
         this.validActivityForm.reset();
       }
-    if (this.viewMode()) {
-      this.validActivityForm.disable();
-    } else {
-      this.validActivityForm.enable();
-    }
-
-    }
-    ngOnChanges() {
       if (this.viewMode()) {
         this.validActivityForm.disable();
       } else {
@@ -311,6 +300,11 @@ export class TaskFormComponent implements OnInit,OnChanges{
   onPomodoroCreation() {
     this.pomodoroModal.activity =this.activity()!
     this.pomodoroModal.showModal()
+  }
+
+  onVieModeChange()
+  {
+
   }
   protected readonly ActivityType = ActivityType;
 }

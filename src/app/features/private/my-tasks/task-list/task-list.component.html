@@ -1,8 +1,10 @@
 <div class="task-panel">
   <h1>
     My Tasks
-    <button nz-button (click)="onTaskCreation()">Create New Task</button>
-    <button nz-button (click)="onHabitCreation()">Create New Habit</button>
+    <div class="creation-panel">
+      <button class="task-create" nz-button (click)="onTaskCreation()">Create New Task</button>
+      <button class="habit-create" nz-button (click)="onHabitCreation()">Create New Habit</button>
+    </div>
   </h1>
 
   <div class="task-layout">
@@ -38,6 +40,7 @@
       }
     </div>
     @if (editionMode() || creationMode()) {
+
       <app-task-form
         [activity]="selectedActivity()"
         [editionMode]="editionMode"
@@ -48,7 +51,8 @@
         [type] ="formType()"
       >
       </app-task-form>
-    } @else {
+    }
+    @else {
       <app-task-calendar
         (deadlineSelected)="endDate.set($event)"
         (deadlineSelected)="startDate.set($event)"

@@ -112,11 +112,10 @@
 
     }
   </form>
-  @if (!viewMode())
-  {
+
   <div class="button-panel">
-    <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
-    @if (this.editionMode?.()) {
+    @if (viewMode())
+    {
       <button
         class="delete-button"
         nz-button
@@ -125,6 +124,11 @@
       >
         Delete <nz-icon nzType="delete"></nz-icon>
       </button>
+    }
+    @if (!viewMode())
+    {
+    <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
+    @if (this.editionMode?.()) {
       @if (activity()?.pomodoro==undefined)
       {
       <button nz-button nzShape="round" (click)="onPomodoroCreation()">Make Activity Pomodoro</button>
@@ -132,7 +136,7 @@
         <button nz-button nzShape="round" (click)="onPomodoroCreation()">Edit Pomodoro Parameters</button>
       }
     }
-  </div>
-  }
+    }
+      </div>
 </div>
 <app-pomdoro-form-modal></app-pomdoro-form-modal>
