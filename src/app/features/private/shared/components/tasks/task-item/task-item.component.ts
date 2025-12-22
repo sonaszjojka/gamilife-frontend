@@ -106,43 +106,25 @@ export class TaskItemComponent implements OnInit {
       });
     }
   }
-
-
-
-
   onTaskEdit(event:MouseEvent) {
     event.stopPropagation()
-    console.log("EDIT")
     this.editTask.emit({activity:this.activity,viewMode:false});
   }
   onTaskView(event:MouseEvent)
   {
     event.stopPropagation()
-    console.log("VIEW")
     this.editTask.emit({activity:this.activity,viewMode:true})
   }
-/*
-  isInactive(): boolean {
-    return (
-      !!this.activity.completedAt ||
-      new Date(this.activity.endDatew!) < new Date(Date.now())
-    );
-  }
 
-  addTaskToPomodoroSession() {
-    this.moveToCurrentSession.emit(this.activity);
-  }
+    addTaskToPomodoroSession() {
+      this.moveToCurrentSession.emit(this.activity);
+    }
 
-  removeTaskFromPomodoroSession() {
-    this.removeFromCurrentSession.emit(this.activity);
-  }
-  addCycleLengthToEndTime(endTime: string, cycleLength: string): string {
-    const endDate = new Date(endTime);
-    const cycleLengthInDays = durationToDays(cycleLength);
-    endDate.setDate(endDate.getDate() + cycleLengthInDays);
-    return endDate.toISOString();
-  }
-*/
+    removeTaskFromPomodoroSession() {
+      this.removeFromCurrentSession.emit(this.activity);
+    }
+
+
 
   protected readonly ActivityType = ActivityType;
 

@@ -1,7 +1,31 @@
 <nz-card class="task-card" (click)="onTaskView($event)">
-  <div class="task-header-controls">
-    <button nz-button nzShape="circle" (click)="onTaskEdit($event)"><nz-icon nzType ="setting"></nz-icon></button>
-  </div>
+  @if (inPomodoroList())
+  {
+    @if (!isInSession())
+    {
+      <button nz-button nzShape="circle" (click)="addTaskToPomodoroSession()">
+        @if (this.activity.pomodoro)
+        {
+          <nz-icon nzType="arrow-left"></nz-icon>
+        }
+        @else {
+          <nz-icon nzType="arrow-right"></nz-icon>
+        }
+      </button>
+    }
+    @else {
+      <button nz-button nzShape="circle" (click)="removeTaskFromPomodoroSession()">
+        <nz-icon nzType="arrow-right"></nz-icon>
+      </button>
+    }
+  }
+  @if (!inPomodoroList())
+  {
+    <div class="task-header-controls">
+      <button nz-button nzShape="circle" (click)="onTaskEdit($event)"><nz-icon nzType ="setting"></nz-icon></button>
+    </div>
+  }
+
 
   <div class="task-content">
     <div class="task-header">
@@ -101,17 +125,21 @@
   </div>
 
   <div class="task-actions-footer">
-    <div class="action-right">
-      @if (this.activity.type==ActivityType.TASK)
-      {
-        <button nz-button nzShape="circle" (click)="completeTask($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
-      }
-      @else
-      {
-        <button nz-button nzShape="circle" (click)="completeHabitCycle($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
-      }
+    @if (!inPomodoroList())
+    {
+      <div class="action-right">
+        @if (this.activity.type==ActivityType.TASK)
+        {
+          <button nz-button nzShape="circle" (click)="completeTask($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
+        }
+        @else
+        {
+          <button nz-button nzShape="circle" (click)="completeHabitCycle($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
+        }
 
-    </div>
+      </div>
+    }
+
   </div>
 </nz-card>
 
