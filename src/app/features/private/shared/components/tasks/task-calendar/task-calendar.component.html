@@ -14,7 +14,6 @@
   <nz-calendar
     [(ngModel)]="activeViewDate"
     (nzSelectChange)="onDateSelect($event)">
-
     <ul *nzDateCell="let date" class="events">
       @for (activity of this.taskCalendarList; track activity.id) {
         @if (isSameDay(activity.deadlineDate, date)) {

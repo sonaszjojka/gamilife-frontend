@@ -21,7 +21,7 @@ export class UserTaskApiService {
 
   getAllActivities(
     page:number,
-    size:number,
+    size:number|null,
     title:string|null,
     startDate:string|null,
     endDate:string|null,
@@ -34,8 +34,10 @@ export class UserTaskApiService {
     let httpParams = new HttpParams();
 
     httpParams = httpParams.set('page', page.toString());
-    httpParams = httpParams.set('size', size.toString());
-
+    if (size !== null)
+    {
+      httpParams = httpParams.set('size', size.toString());
+    }
     if (title) {
       httpParams = httpParams.set('title', title);
     }
