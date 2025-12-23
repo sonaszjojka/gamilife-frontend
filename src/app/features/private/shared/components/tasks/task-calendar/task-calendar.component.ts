@@ -1,4 +1,4 @@
-import {Component, inject, input, Input, OnInit, output, signal} from '@angular/core';
+import {Component, inject, input, Input, OnChanges, OnInit, output, signal} from '@angular/core';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -23,7 +23,7 @@ import {FormsModule} from '@angular/forms';
   standalone: true,
   styleUrl: './task-calendar.component.css',
 })
-export class TaskCalendarComponent implements OnInit{
+export class TaskCalendarComponent implements  OnInit {
   activeViewDate: Date = new Date();
  taskCalendarList:ActivityItemDetails[]=[] ;
  deadlineSelected= output<string|null>();
@@ -31,12 +31,22 @@ export class TaskCalendarComponent implements OnInit{
  private taskService = inject(UserTaskApiService)
 
 ngOnInit() {
+  this.loadActivities();
 
-   this.taskService.getAllActivities(0,1000,null, null,null,null,null).subscribe({
-     next:(response)=> {this.taskCalendarList=response.content},
-     error:(err)=>console.error(err)
-     }
-   )
+}
+
+loadActivities() {
+  this.taskService.getAllActivities(0,
+    null,
+    null,
+    (this.getFirstDayOfMonth(this.activeViewDate)) .toISOString().slice(0,10),
+    (this.getLastDayOfMonth(this.activeViewDate)).toISOString().slice(0,10),
+    null,
+    null).subscribe({
+      next:(response)=> {this.taskCalendarList=response.content},
+      error:(err)=>console.error(err)
+    }
+  )
 }
 
   isSameDay(activityDeadline: string | Date, calendarDate: Date): boolean {
@@ -58,13 +68,21 @@ ngOnInit() {
      this.currentlySelectedDate.set(calendarDate)
      this.deadlineSelected.emit(calendarDate.toISOString().slice(0, 10))
    }
-
   }
 
   changeMonth(direction: number) {
     const newDate = new Date(this.activeViewDate);
     newDate.setMonth(newDate.getMonth() + direction);
     this.activeViewDate = newDate;
+    this.loadActivities();
+  }
+
+  getLastDayOfMonth(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  }
+
+  getFirstDayOfMonth(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
   }
 
   protected readonly activityColors = ActivityTypeColors;
