@@ -13,6 +13,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -30,6 +31,7 @@ import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
 import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
+import { GroupChatComponent } from '../group-chat/group-chat/group-chat.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
@@ -43,6 +45,7 @@ import { NotificationService } from '../../../../shared/services/notification-se
     NzListModule,
     NzButtonModule,
     NzModalModule,
+    NzFloatButtonModule,
     GroupInfoCardComponent,
     GroupActionsComponent,
     MembersListPeakComponent,
@@ -50,6 +53,7 @@ import { NotificationService } from '../../../../shared/services/notification-se
     GroupRequestsListPeakComponent,
     GroupTasksListComponent,
     EditGroupFormComponent,
+    GroupChatComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
@@ -74,6 +78,9 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
+
+  @ViewChild(GroupChatComponent)
+  groupChat!: GroupChatComponent;
 
   ngOnInit(): void {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
@@ -173,6 +180,12 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected openChat(): void {
+    if (this.groupChat) {
+      this.groupChat.open();
+    }
+  }
+
   protected confirmDelete(): void {
     this.modal.confirm({
       nzTitle: 'Delete Group',
@@ -198,5 +211,16 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
           this.router.navigate(['app/groups']);
         },
       });
+  }
+
+  protected canAccessChat(): boolean {
+    return (
+      this.mode() === GroupPreviewMode.ADMIN ||
+      this.mode() === GroupPreviewMode.MEMBER
+    );
+  }
+
+  protected getLoggedUserGroupMemberId(): string | undefined {
+    return this.group()?.loggedUserMembershipDto?.groupMemberId;
   }
 }
