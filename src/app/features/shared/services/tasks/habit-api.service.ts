@@ -3,15 +3,16 @@ import { environment } from '../../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {HabitRequest} from '../../models/task-models/habit-request.model';
+import {EditHabitResponse} from '../../models/task-models/edit-habit-response';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HabitTaskService {
+export class HabitApiService {
   private API_URL = `${environment.apiUrl}/habits`;
   private http = inject(HttpClient);
 
-  createHabitTask(
+  createHabit(
     createHabitRequest: HabitRequest,
   ): Observable<HabitRequest> {
     return this.http.post<HabitRequest>(
@@ -20,11 +21,11 @@ export class HabitTaskService {
       { withCredentials: true },
     );
   }
-  editHabitTask(
+  editHabit(
     habitId: string,
     editHabitRequest: HabitRequest,
-  ): Observable<HabitRequest> {
-    return this.http.patch<HabitRequest>(
+  ): Observable<EditHabitResponse> {
+    return this.http.patch<EditHabitResponse>(
       `${this.API_URL}/${habitId}`,
       editHabitRequest,
       { withCredentials: true },

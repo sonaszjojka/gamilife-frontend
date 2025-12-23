@@ -1,8 +1,6 @@
 .pomodoro-view {
   display: flex;
   min-height: 100vh;
-  background: url("/assets/background_guest_page.png") center center / cover
-    no-repeat;
 }
 
 .not-pomodoro-column {
@@ -37,11 +35,11 @@
 }
 
 h1 {
-  color: var(--bg-primary);
+  color: black;
 }
 
 h2 {
-  color: var(--bg-primary);
+  color: black;
 }
 
 .start-session-button {

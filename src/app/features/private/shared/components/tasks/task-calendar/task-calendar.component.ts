@@ -3,8 +3,10 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import {ActivityItemDetails} from '../../../../../shared/models/task-models/activity.model';
-import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
+import {ActivityItemDetails, ActivityTypeColors} from '../../../../../shared/models/task-models/activity.model';
+import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
+import {DatePipe, NgStyle} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-task-calendar',
@@ -13,16 +15,20 @@ import {IndividualTaskService} from '../../../../../shared/services/tasks/indivi
     NzCalendarModule,
     NzButtonComponent,
     NzIconDirective,
+    DatePipe,
+    FormsModule,
+    NgStyle
   ],
   templateUrl: './task-calendar.component.html',
   standalone: true,
   styleUrl: './task-calendar.component.css',
 })
 export class TaskCalendarComponent implements OnInit{
+  activeViewDate: Date = new Date();
  taskCalendarList:ActivityItemDetails[]=[] ;
  deadlineSelected= output<string|null>();
  currentlySelectedDate=signal<Date|null>(null);
- private taskService = inject(IndividualTaskService)
+ private taskService = inject(UserTaskApiService)
 
 ngOnInit() {
 
@@ -54,4 +60,12 @@ ngOnInit() {
    }
 
   }
+
+  changeMonth(direction: number) {
+    const newDate = new Date(this.activeViewDate);
+    newDate.setMonth(newDate.getMonth() + direction);
+    this.activeViewDate = newDate;
+  }
+
+  protected readonly activityColors = ActivityTypeColors;
 }

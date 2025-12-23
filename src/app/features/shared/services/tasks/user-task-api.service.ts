@@ -11,7 +11,7 @@ import {ActivityItemDetails} from '../../models/task-models/activity.model';
 @Injectable({
   providedIn: 'root',
 })
-export class IndividualTaskService {
+export class UserTaskApiService {
 
   private API_URL = `${environment.apiUrl}/activities`;
   private TASK_API_URL = `${environment.apiUrl}/tasks`;

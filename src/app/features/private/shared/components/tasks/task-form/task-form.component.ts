@@ -15,14 +15,14 @@ import {NonNullableFormBuilder, ReactiveFormsModule, Validators,} from '@angular
 import {NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent,} from 'ng-zorro-antd/form';
 import {NzColDirective} from 'ng-zorro-antd/grid';
 import {NzAutosizeDirective, NzInputDirective} from 'ng-zorro-antd/input';
-import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
+import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
 import {HabitFormComponent} from '../habit-form/habit-form.component';
-import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.service';
+import {HabitApiService} from '../../../../../shared/services/tasks/habit-api.service';
 import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/task-models/activity.model';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
@@ -43,9 +43,7 @@ import {PomodoroSessionFormModal} from '../pomodoro-form-modal/pomodoro-session-
     NzDatePickerComponent,
     NzTimePickerComponent,
     NzIconDirective,
-    PomodoroFormComponent,
     NzAutosizeDirective,
-    HabitFormComponent,
     NzInputNumberComponent,
     PomodoroSessionFormModal,
   ],
@@ -63,8 +61,8 @@ export class TaskFormComponent implements OnChanges{
   @Output() activityDeleted = new EventEmitter<void>();
 
   private formBuilder = inject(NonNullableFormBuilder);
-  private taskService = inject(IndividualTaskService);
-  private habitApi = inject(HabitTaskService)
+  private taskService = inject(UserTaskApiService);
+  private habitApi = inject(HabitApiService)
 
   @ViewChild(PomodoroSessionFormModal)
   protected pomodoroModal= new PomodoroSessionFormModal
@@ -246,7 +244,7 @@ export class TaskFormComponent implements OnChanges{
 
       if (this.creationMode!())
       {
-        this.habitApi.createHabitTask(request).subscribe({
+        this.habitApi.createHabit(request).subscribe({
           next:()=>{
             this.activityFormSubmitted.emit();
           },
@@ -256,7 +254,7 @@ export class TaskFormComponent implements OnChanges{
       else
       {
 
-          this.habitApi.editHabitTask(this.activity()!.id,request).subscribe({
+          this.habitApi.editHabit(this.activity()!.id,request).subscribe({
             next:()=>{
               this.activityFormSubmitted.emit()
             },

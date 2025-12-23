@@ -27,8 +27,8 @@ export enum ActivityType {
 
 export const ActivityTypeColors:Record <ActivityType,string>=
   {
-    [ActivityType.HABIT]:'#2196f3',
-    [ActivityType.TASK]:'#9c27b0'
+    [ActivityType.TASK]:'#2196f3',
+    [ActivityType.HABIT]:'#9c27b0'
   }
 
 
