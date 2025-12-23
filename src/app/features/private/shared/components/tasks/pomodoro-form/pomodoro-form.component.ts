@@ -20,9 +20,8 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
-import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
-import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/task-models/activity.model';
+import { PomodoroRequest } from '../../../../../shared/models/task-models/pomodoro-request';
+import {ActivityItemDetails} from '../../../../../shared/models/task-models/activity.model';
 
 @Component({
   selector: 'app-pomodoro-form',
@@ -43,8 +42,7 @@ export class PomodoroFormComponent implements OnInit {
   activity =input.required<ActivityItemDetails>()
   @Input() pomodoroCreation!: WritableSignal<boolean>;
   @Input() pomodoroEdition!: WritableSignal<boolean>;
-  @Output() formChanged = new EventEmitter<CreatePomodoroRequest>();
-  @Output() editFormChanged = new EventEmitter<EditPomodoroRequest>();
+  @Output() formChanged = new EventEmitter<PomodoroRequest>();
 
   private formBuilder = inject(NonNullableFormBuilder);
 
@@ -64,12 +62,8 @@ export class PomodoroFormComponent implements OnInit {
     }
     this.validPomodoroForm.valueChanges.subscribe((value) => {
       if (this.validPomodoroForm.valid) {
-        if (this.pomodoroCreation()) {
-          this.formChanged.emit(value as CreatePomodoroRequest);
-        } else if (this.pomodoroEdition()) {
-          this.editFormChanged.emit(value as EditPomodoroRequest);
+          this.formChanged.emit(value as PomodoroRequest);
         }
-      }
     });
   }
 }

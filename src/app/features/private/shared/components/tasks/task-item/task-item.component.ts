@@ -1,21 +1,18 @@
 import {Component, EventEmitter, inject, input, Input, OnInit, Output, signal,} from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {NzCardModule} from 'ng-zorro-antd/card';
-import {IndividualTaskService} from '../../../../../shared/services/tasks/individual-task.service';
+import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
 import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
-import {HabitTaskService} from '../../../../../shared/services/tasks/habit-api.service';
+import {HabitApiService} from '../../../../../shared/services/tasks/habit-api.service';
 import {
   ActivityItemDetails,
   ActivityStatus,
   ActivityType
 } from '../../../../../shared/models/task-models/activity.model';
-import {GroupTaskDeclineFormComponent} from "../../group-task-decline-form/group-task-decline-form.component";
-import {GroupTaskFormComponent} from "../../group-task-from/group-task-form.component";
-import {GroupTaskMembersManagerComponent} from "../../group-task-member-manager/group-task-members-manager.component";
 import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
 
 @Component({
@@ -26,13 +23,9 @@ import {HabitRequest} from '../../../../../shared/models/task-models/habit-reque
         NzCardModule,
         FormsModule,
         ReactiveFormsModule,
-        DatePipe,
         NzIconDirective,
         NzButtonComponent,
         PomodoroTaskProgressComponent,
-        GroupTaskDeclineFormComponent,
-        GroupTaskFormComponent,
-        GroupTaskMembersManagerComponent,
     ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css',
@@ -49,12 +42,16 @@ export class TaskItemComponent implements OnInit {
   @Output() moveToCurrentSession = new EventEmitter<ActivityItemDetails>();
   @Output() removeFromCurrentSession = new EventEmitter<ActivityItemDetails>();
 
-  taskService = inject(IndividualTaskService);
-  habitService = inject(HabitTaskService);
+  taskService = inject(UserTaskApiService);
+  habitService = inject(HabitApiService);
 
   ngOnInit(): void {
-    //todo Change
     this.isCompleted.set(this.activity.status != ActivityStatus.DEADLINE_MISSED);
+    if (this.activity.type==ActivityType.HABIT)
+    {
+      this.activity.workable=true;
+    }
+
   }
 
   completeTask(event:MouseEvent): void {
@@ -95,13 +92,15 @@ export class TaskItemComponent implements OnInit {
         iterationCompleted: true,
 
       }
-      this.habitService.editHabitTask(this.activity.id, request).subscribe({
-        next: () => {
-          this.taskUpdated.emit(this.activity.id);
+      this.habitService.editHabit(this.activity.id, request).subscribe({
+        next: (response) => {
+          this.activity.deadlineDate=response.deadlineDate;
+          this.activity.currentStreak=response.currentStreak;
+          this.activity.longestStreak=response.longestStreak
+          this.activity.workable=response.workable
         },
         error: (error) => {
           console.error('Error:', error);
-          this.isCompleted.set(false);
         },
       });
     }

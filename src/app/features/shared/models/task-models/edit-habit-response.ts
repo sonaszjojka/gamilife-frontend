@@ -1,8 +1,7 @@
 export interface EditHabitResponse {
-  habitId: string;
-  taskId: string;
-  cycleLength: string;
+  cycleLength: number;
   currentStreak: number;
   longestStreak: number;
-  acceptedDate: string | null;
+  deadlineDate: string;
+  workable: boolean;
 }

@@ -3,9 +3,8 @@ import {Component, EventEmitter, inject, Output, signal,} from '@angular/core';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {PomodoroFormComponent} from '../pomodoro-form/pomodoro-form.component';
-import {PomodoroTaskService} from '../../../../../shared/services/tasks/pomodoro-task.service';
-import {CreatePomodoroRequest} from '../../../../../shared/models/task-models/create-pomodoro-request';
-import {EditPomodoroRequest} from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import {PomodoroApiService} from '../../../../../shared/services/tasks/pomodoro-api.service';
+import {PomodoroRequest} from '../../../../../shared/models/task-models/pomodoro-request';
 import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/task-models/activity.model';
 
 @Component({
@@ -22,7 +21,6 @@ import {ActivityItemDetails, ActivityType} from '../../../../../shared/models/ta
       <ng-container *nzModalContent>
         <app-pomodoro-form
           (formChanged)="onPomodoroFormChange($event)"
-          (editFormChanged)="onPomodoroEditFormChange($event)"
           [pomodoroEdition]="editionMode"
           [pomodoroCreation]="creationMode"
           [activity]="activity"
@@ -39,9 +37,8 @@ export class PomodoroSessionFormModal {
   creationMode = signal<boolean>(false);
   title = '';
 
-  pomodoroService = inject(PomodoroTaskService);
-  pomodoroRequest?: CreatePomodoroRequest;
-  pomodoroEditRequest?: EditPomodoroRequest;
+  pomodoroService = inject(PomodoroApiService);
+  pomodoroRequest?: PomodoroRequest;
   isVisible = false;
 
   showModal(): void {
@@ -87,18 +84,16 @@ export class PomodoroSessionFormModal {
         });
     } else if (
       this.editionMode() &&
-      this.pomodoroEditRequest != null &&
+      this.pomodoroRequest != null &&
       this.activity.pomodoro?.id
     ) {
-      this.pomodoroEditRequest.cyclesCompleted=this.activity.pomodoro.cyclesCompleted
-
       this.pomodoroService
-        .editPomodoro(this.activity.pomodoro!.id, this.pomodoroEditRequest)
+        .editPomodoro(this.activity.pomodoro!.id, this.pomodoroRequest)
         .subscribe({
           next: (response) => {
-            this.activity.pomodoro!.cyclesRequired = response.workCyclesNeeded;
+            this.activity.pomodoro!.cyclesRequired = response.cyclesRequired;
             this.activity.pomodoro!.cyclesCompleted =
-              response.workCyclesCompleted;
+              response.cyclesCompleted;
             this.moveToCurrentSession.emit(this.activity);
             this.isVisible = false;
           },
@@ -110,11 +105,7 @@ export class PomodoroSessionFormModal {
     this.isVisible = false;
   }
 
-  onPomodoroFormChange(pomodoroRequest: CreatePomodoroRequest) {
+  onPomodoroFormChange(pomodoroRequest: PomodoroRequest) {
     this.pomodoroRequest = pomodoroRequest;
-  }
-
-  onPomodoroEditFormChange(pomodoroRequest: EditPomodoroRequest) {
-    this.pomodoroEditRequest = pomodoroRequest;
   }
 }

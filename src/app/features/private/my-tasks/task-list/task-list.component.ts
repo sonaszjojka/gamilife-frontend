@@ -5,7 +5,7 @@ import {TaskFilterComponent} from '../../shared/components/tasks/task-filter/tas
 import {TaskFormComponent} from '../../shared/components/tasks/task-form/task-form.component';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar/task-calendar.component';
-import {IndividualTaskService} from '../../../shared/services/tasks/individual-task.service';
+import {UserTaskApiService} from '../../../shared/services/tasks/user-task-api.service';
 import {Page} from '../../../shared/models/util/page.model';
 import {ActivityItemDetails, ActivityStatus, ActivityType} from '../../../shared/models/task-models/activity.model';
 
@@ -43,8 +43,7 @@ export class TaskListComponent implements  OnInit{
   currentPage = 0;
   pageSize = 5;
   totalPages = 0;
-  hasMore = true;
-  private taskService = inject(IndividualTaskService);
+  private taskService = inject(UserTaskApiService);
 
    ngOnInit () {
     this.title();
@@ -52,7 +51,6 @@ export class TaskListComponent implements  OnInit{
     this.endDate();
     this.categoryId();
     this.difficultyId();
-
     this.currentPage = 0;
     this.loadTasks();
   };
@@ -67,7 +65,7 @@ export class TaskListComponent implements  OnInit{
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      this.hasMore
+      this.currentPage+1 < this.totalPages
     ) {
       this.loadMoreTasks();
     }
@@ -91,7 +89,6 @@ export class TaskListComponent implements  OnInit{
           this.groupTasksByDate();
           this.totalPages = response.totalPages;
           this.currentPage = response.number;
-          this.hasMore = !response.last;
           this.loading = false;
         },
         error: (error) => {
@@ -102,7 +99,7 @@ export class TaskListComponent implements  OnInit{
   }
 
   loadMoreTasks(): void {
-    if (!this.hasMore || this.loadingMore) return;
+    if (this.loadingMore) return;
 
     this.loadingMore = true;
     const nextPage = this.currentPage + 1;
@@ -122,7 +119,6 @@ export class TaskListComponent implements  OnInit{
           this.activities = [...this.activities, ...response.content];
           this.groupTasksByDate();
           this.currentPage = response.number;
-          this.hasMore = !response.last;
           this.loadingMore = false;
         },
         error: (error) => {

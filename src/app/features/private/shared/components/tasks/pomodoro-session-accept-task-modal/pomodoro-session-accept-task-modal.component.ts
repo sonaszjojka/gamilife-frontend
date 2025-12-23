@@ -20,7 +20,7 @@ import {ActivityItemDetails} from '../../../../../shared/models/task-models/acti
   `,
 })
 export class PomodoroSessionAcceptTaskModalComponent {
-  @Input() task!: ActivityItemDetails;
+  @Input() activity!: ActivityItemDetails;
   @Output() removeFromPanel = new EventEmitter<ActivityItemDetails>();
   @Output() removeFromSession = new EventEmitter<ActivityItemDetails>();
 
@@ -31,12 +31,12 @@ export class PomodoroSessionAcceptTaskModalComponent {
   }
 
   handleOk(): void {
-    this.removeFromPanel.emit(this.task);
+    this.removeFromPanel.emit(this.activity);
     this.isVisible = false;
   }
 
   handleCancel(): void {
     this.isVisible = false;
-    this.removeFromSession.emit(this.task);
+    this.removeFromSession.emit(this.activity);
   }
 }
