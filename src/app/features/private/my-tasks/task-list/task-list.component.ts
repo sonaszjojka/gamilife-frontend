@@ -325,4 +325,5 @@ export class TaskListComponent implements  OnInit{
  }
 
 
+  protected readonly ActivityListView = ActivityListView;
 }
