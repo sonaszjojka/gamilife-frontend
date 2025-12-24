@@ -9,8 +9,10 @@
 
   <div class="task-layout">
     <app-task-filter
+      [listView]="activityListType"
       [categoryId]="categoryId"
       [difficultyId]="difficultyId"
+      [isAlive]="isAlive"
     ></app-task-filter>
 
     <div class="task-list">
@@ -30,7 +32,7 @@
                 <app-task-item
                   [activity]="activity"
                   (editTask)="onActivityEdit($event)"
-                  (taskUpdated)="onTaskUpdated($event)"
+                  (taskUpdated)="onActivityUpdated($event)"
                 >
                 </app-task-item>
               }
@@ -56,6 +58,7 @@
       <app-task-calendar
         (deadlineSelected)="endDate.set($event)"
         (deadlineSelected)="startDate.set($event)"
+
       >
       </app-task-calendar>
     }

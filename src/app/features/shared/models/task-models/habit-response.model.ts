@@ -1,4 +1,4 @@
-export interface EditHabitResponse {
+export interface HabitResponseModel {
   cycleLength: number;
   currentStreak: number;
   longestStreak: number;

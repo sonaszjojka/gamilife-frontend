@@ -1,8 +1,9 @@
-import { Component, inject, Input, WritableSignal } from '@angular/core';
+import {Component, inject, input, Input, WritableSignal} from '@angular/core';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { Router } from '@angular/router';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
+import {ActivityListView} from '../../../../../shared/models/task-models/activity-list-view.model';
 
 @Component({
   selector: 'app-task-filter',
@@ -20,8 +21,9 @@ export class TaskFilterComponent {
 
   @Input() difficultyId?: WritableSignal<number | null>;
   @Input() categoryId?: WritableSignal<number | null>;
-  @Input() isGroupTask?: WritableSignal<boolean | null>;
-  @Input() isCompleted?: WritableSignal<boolean | null>;
+  @Input() listView?:WritableSignal<ActivityListView>;
+  @Input() isAlive?:WritableSignal<boolean>;
+
 
   router = inject(Router);
 
@@ -33,39 +35,43 @@ export class TaskFilterComponent {
     }
   }
 
+  activitiesSelected(): void {
+    this.listView?.set(ActivityListView.Activities);
+    this.categoryId?.set(null);
+    this.difficultyId?.set(null);
+  }
+
   categorySelected(category: number): void {
+    this.listView?.set(ActivityListView.Activities);
     this.categoryId?.set(category);
     this.difficultyId?.set(null);
-    this.isGroupTask?.set(null);
-    this.isCompleted?.set(false);
+
   }
 
   difficultySelected(difficulty: number): void {
+    this.listView?.set(ActivityListView.Activities);
     this.categoryId?.set(null);
     this.difficultyId?.set(difficulty);
-    this.isGroupTask?.set(null);
-    this.isCompleted?.set(false);
-  }
 
-  groupTaskSelected(): void {
-    this.categoryId?.set(null);
-    this.difficultyId?.set(null);
-    this.isGroupTask?.set(true);
-    this.isCompleted?.set(false);
   }
 
   activeTaskSelected(): void {
-    this.categoryId?.set(null);
-    this.difficultyId?.set(null);
-    this.isGroupTask?.set(null);
-    this.isCompleted?.set(false);
+    this.listView?.set(ActivityListView.Tasks);
+    this.isAlive?.set(true);
   }
 
   inactiveTaskSelected(): void {
-    this.categoryId?.set(null);
-    this.difficultyId?.set(null);
-    this.isGroupTask?.set(null);
-    this.isCompleted?.set(true);
+    this.listView?.set(ActivityListView.Tasks);
+    this.isAlive?.set(false);
+  }
+
+  activeHabitSelected(): void {
+    this.listView?.set(ActivityListView.Habits);
+    this.isAlive?.set(true);
+  }
+  inactiveHabitSelected(): void {
+    this.listView?.set(ActivityListView.Habits);
+    this.isAlive?.set(false);
   }
 
   pomodoroSessionSelected() {
