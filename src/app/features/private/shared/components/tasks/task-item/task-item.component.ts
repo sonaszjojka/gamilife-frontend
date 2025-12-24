@@ -128,4 +128,17 @@ export class TaskItemComponent implements OnInit {
 
   protected readonly ActivityType = ActivityType;
 
+  protected readonly ActivityStatus = ActivityStatus;
+
+  restoreTask($event: MouseEvent) {
+
+    $event.stopPropagation();
+
+
+  }
+
+  restoreHabit($event: MouseEvent) {
+    $event.stopPropagation();
+
+  }
 }
