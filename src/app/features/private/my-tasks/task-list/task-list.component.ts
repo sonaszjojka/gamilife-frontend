@@ -1,5 +1,5 @@
 import {CommonModule, formatDate} from '@angular/common';
-import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
+import {Component, effect, HostListener, inject, OnInit, output, signal, untracked} from '@angular/core';
 import {TaskItemComponent} from '../../shared/components/tasks/task-item/task-item.component';
 import {TaskFilterComponent} from '../../shared/components/tasks/task-filter/task-filter.component';
 import {TaskFormComponent} from '../../shared/components/tasks/task-form/task-form.component';
@@ -8,6 +8,8 @@ import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar
 import {UserTaskApiService} from '../../../shared/services/tasks/user-task-api.service';
 import {Page} from '../../../shared/models/util/page.model';
 import {ActivityItemDetails, ActivityStatus, ActivityType} from '../../../shared/models/task-models/activity.model';
+import {ActivityListView} from '../../../shared/models/task-models/activity-list-view.model';
+import {HabitApiService} from '../../../shared/services/tasks/habit-api.service';
 
 @Component({
   selector: 'app-task-list',
@@ -26,17 +28,23 @@ import {ActivityItemDetails, ActivityStatus, ActivityType} from '../../../shared
 export class TaskListComponent implements  OnInit{
   activities: ActivityItemDetails[] = [];
   groupedTasks: Record<string, ActivityItemDetails[]> = {};
-
   loading = false;
   loadingMore = false;
+
   editionMode = signal<boolean | null>(false);
   creationMode = signal<boolean | null>(false);
   viewMode = signal<boolean>(true)
+
   title= signal<string|null>(null);
   startDate=signal<string|null>(null)
   endDate=signal<string|null>(null)
   categoryId = signal<number | null>(null);
   difficultyId = signal<number | null>(null);
+
+  activityListType = signal<ActivityListView>(ActivityListView.Activities)
+  isAlive=signal<boolean>(true)
+
+  refreshCalendar=output<void>();
   selectedActivity= signal<ActivityItemDetails | undefined>(undefined);
   formType= signal<ActivityType>(ActivityType.TASK)
 
@@ -44,16 +52,26 @@ export class TaskListComponent implements  OnInit{
   pageSize = 5;
   totalPages = 0;
   private taskService = inject(UserTaskApiService);
+  private habitService = inject(HabitApiService);
 
    ngOnInit () {
+    this.currentPage = 0;
+    this.load();
+  };
+
+  private filterEffect = effect(() => {
     this.title();
     this.startDate();
     this.endDate();
     this.categoryId();
     this.difficultyId();
-    this.currentPage = 0;
-    this.loadTasks();
-  };
+    this.isAlive();
+    this.activityListType();
+    untracked(() => {
+      this.currentPage = 0;
+      this.load();
+    });
+  });
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -67,26 +85,67 @@ export class TaskListComponent implements  OnInit{
       !this.loadingMore &&
       this.currentPage+1 < this.totalPages
     ) {
-      this.loadMoreTasks();
+      this.loadMore();
     }
   }
 
-  loadTasks(): void {
+  load(): void {
     this.loading = true;
-    this.taskService
-      .getAllActivities(
+    if (this.activityListType() === ActivityListView.Activities) {
+      console.log('Loading activities with filters:')
+      this.taskService
+        .getAllActivities(
+          this.currentPage,
+          this.pageSize,
+          this.title(),
+          this.startDate(),
+          this.endDate(),
+          this.categoryId(),
+          this.difficultyId(),
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = response.content;
+            this.groupActivitiesByDate();
+            this.totalPages = response.totalPages;
+            this.currentPage = response.number;
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('Error loading activities:', error);
+            this.loading = false;
+          },
+        });
+    }
+    else if (this.activityListType() === ActivityListView.Habits) {
+      this.habitService.getHabits(
         this.currentPage,
         this.pageSize,
-        this.title(),
-        this.startDate(),
-        this.endDate(),
-        this.categoryId(),
-        this.difficultyId(),
-      )
-      .subscribe({
+        this.isAlive(),
+      ).subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.activities = response.content;
-          this.groupTasksByDate();
+          this.groupActivitiesByDate();
+          this.totalPages = response.totalPages;
+          this.currentPage = response.number;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading habits:', error);
+          this.loading = false;
+        }
+      });
+    }
+
+    else if (this.activityListType() === ActivityListView.Tasks) {
+      this.taskService.getTasks(
+        this.currentPage,
+        this.pageSize,
+        this.isAlive(),
+      ).subscribe({
+        next: (response: Page<ActivityItemDetails>) => {
+          this.activities = response.content;
+          this.groupActivitiesByDate();
           this.totalPages = response.totalPages;
           this.currentPage = response.number;
           this.loading = false;
@@ -94,41 +153,62 @@ export class TaskListComponent implements  OnInit{
         error: (error) => {
           console.error('Error loading tasks:', error);
           this.loading = false;
-        },
+        }
       });
+
+
+    }
   }
 
-  loadMoreTasks(): void {
+  loadMore(): void {
     if (this.loadingMore) return;
-
     this.loadingMore = true;
     const nextPage = this.currentPage + 1;
-
-    this.taskService
-      .getAllActivities(
+    if (this.activityListType() === ActivityListView.Activities) {
+      this.taskService
+        .getAllActivities(
+          nextPage,
+          this.pageSize,
+          this.title(),
+          this.startDate(),
+          this.endDate(),
+          this.categoryId(),
+          this.difficultyId(),
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = [...this.activities, ...response.content];
+            this.groupActivitiesByDate();
+            this.currentPage = response.number;
+            this.loadingMore = false;
+          },
+          error: (error) => {
+            console.error('Error loading more tasks:', error);
+            this.loadingMore = false;
+          },
+        });
+    }
+    else if (this.activityListType() === ActivityListView.Habits) {
+      this.habitService.getHabits(
         nextPage,
         this.pageSize,
-        this.title(),
-        this.startDate(),
-        this.endDate(),
-        this.categoryId(),
-        this.difficultyId(),
-      )
-      .subscribe({
+        this.isAlive(),
+      ).subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.activities = [...this.activities, ...response.content];
-          this.groupTasksByDate();
+          this.groupActivitiesByDate();
           this.currentPage = response.number;
           this.loadingMore = false;
         },
         error: (error) => {
-          console.error('Error loading more tasks:', error);
+          console.error('Error loading more habits:', error);
           this.loadingMore = false;
-        },
+        }
       });
+    }
   }
 
-  private groupTasksByDate(): void {
+  private groupActivitiesByDate(): void {
     const grouped: Record<string, ActivityItemDetails[]> = {};
     const today = new Date();
     const tomorrow = new Date(today);
@@ -146,7 +226,7 @@ export class TaskListComponent implements  OnInit{
       if (!grouped[label]) grouped[label] = [];
       grouped[label].push(activity);
     });
-
+    this.refreshCalendar.emit();
     this.groupedTasks = grouped;
   }
 
@@ -163,18 +243,21 @@ export class TaskListComponent implements  OnInit{
   }
 
 
-  onTaskUpdated(activityId: string): void {
+  onActivityUpdated(activityId: string): void {
     const changedActivity = this.activities.find((t) => t.id == activityId)!;
     const isTaskNoneActive: boolean = (changedActivity.status != ActivityStatus.DEADLINE_MISSED)|| changedActivity.completedAt!=null
     if (
       (changedActivity.categoryId != this.categoryId() &&
         this.categoryId() != null) ||
       (changedActivity.difficultyId != this.difficultyId() &&
-        this.difficultyId() != null)
+        this.difficultyId() != null)||
+      ((changedActivity.deadlineDate != this.endDate() &&
+        this.endDate() != null))
     ) {
       this.activities = this.activities.filter((t) => t.id != activityId);
-      this.groupTasksByDate();
     }
+
+    this.groupActivitiesByDate();
   }
 
   onActivityEdit(event: { activity: ActivityItemDetails, viewMode: boolean }): void {
@@ -208,21 +291,21 @@ export class TaskListComponent implements  OnInit{
     this.categoryId.set(null);
     this.difficultyId.set(null);
     this.currentPage = 0;
-    this.loadTasks();
+    this.load();
     this.editionMode.set(false);
     this.creationMode.set(false);
     this.selectedActivity.set(undefined);
   }
 
   onTaskDelete(): void {
-    /*
+
    this.activities = this.activities.filter((t) => t != this.selectedActivity());
-   this.groupTasksByDate();
+   this.groupActivitiesByDate();
    this.editionMode.set(false);
    this.creationMode.set(false);
-   this.selectedActivity.emit(null);
+   this.selectedActivity.set(undefined);
 
-     */
+
  }
 
 

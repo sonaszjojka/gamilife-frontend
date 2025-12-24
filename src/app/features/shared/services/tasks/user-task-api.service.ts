@@ -28,8 +28,6 @@ export class UserTaskApiService {
     categoryId:number|null,
     difficultyId:number|null
 
-
-
   ): Observable<Page<ActivityItemDetails>> {
     let httpParams = new HttpParams();
 
@@ -58,6 +56,34 @@ export class UserTaskApiService {
       withCredentials: true,
     });
   }
+
+
+  getTasks(
+    page:number,
+    size:number|null,
+    isCompleted:boolean|null,
+  ): Observable<Page<ActivityItemDetails>>
+  {
+    let httpParams = new HttpParams();
+
+    httpParams = httpParams.set('page', page.toString());
+
+    if (size !== null)
+    {
+      httpParams = httpParams.set('size', size.toString());
+    }
+    if (isCompleted!==null) {
+      httpParams = httpParams.set('isCompleted', isCompleted);
+    }
+    httpParams= httpParams.set('isGroupTask','false');
+
+    return this.http.get<Page<ActivityItemDetails>>(`${this.TASK_API_URL}`,
+      {
+        params: httpParams,
+        withCredentials: true,
+      })
+  }
+
 
   editTask(
     taskId: string,

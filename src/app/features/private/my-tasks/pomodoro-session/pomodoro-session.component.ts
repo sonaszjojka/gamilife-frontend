@@ -252,7 +252,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       cyclesRequired:
         this.currentSessionPomodoroTasks[0].pomodoro!.cyclesRequired,
     };
-    console.log(this.currentSessionPomodoroTasks[0].pomodoro!.id!);
     this.pomodoroService
       .editPomodoro(
         this.currentSessionPomodoroTasks[0].pomodoro!.id!,

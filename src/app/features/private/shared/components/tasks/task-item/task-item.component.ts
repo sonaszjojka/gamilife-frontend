@@ -98,6 +98,7 @@ export class TaskItemComponent implements OnInit {
           this.activity.currentStreak=response.currentStreak;
           this.activity.longestStreak=response.longestStreak
           this.activity.workable=response.workable
+          this.taskUpdated.emit(this.activity.id);
         },
         error: (error) => {
           console.error('Error:', error);
