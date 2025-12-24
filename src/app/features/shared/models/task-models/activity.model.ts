@@ -25,6 +25,7 @@ export enum ActivityType {
   HABIT = 'HABIT',
 }
 
+
 export const ActivityTypeColors:Record <ActivityType,string>=
   {
     [ActivityType.TASK]:'#2196f3',
@@ -37,6 +38,8 @@ export enum ActivityStatus {
   INCOMPLETE = 'INCOMPLETE',
   DEADLINE_TODAY = 'DEADLINE_TODAY',
   DEADLINE_MISSED = 'DEADLINE_MISSED',
+  COMPLETED = 'COMPLETED',
+  DEAD='DEAD'
 }
 
 export interface Pomodoro
