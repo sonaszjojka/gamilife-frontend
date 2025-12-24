@@ -44,7 +44,8 @@
 
 .calendar-panel {
   width: 100%;
-  background-color: #757575;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
 }
 
 .button-panel {
@@ -54,10 +55,12 @@
   padding: 10px;
   background-color: #757575;
   border-bottom: 1px solid #f0f0f0;
+  border-radius: 10px;
 }
 
 .button-panel h1 {
   margin: 0;
   font-size: 1.2rem;
   text-transform: capitalize;
+  border-radius: 10px;
 }

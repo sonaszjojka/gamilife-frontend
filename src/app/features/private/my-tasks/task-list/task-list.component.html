@@ -1,6 +1,19 @@
 <div class="task-panel">
   <h1>
-    My Tasks
+    @if (activityListType()==ActivityListView.Habits) {
+     My Habits
+    }
+    @else
+    {
+      @if (activityListType()==ActivityListView.Activities)
+      {
+        My Activities
+      } @else
+      {
+        My Tasks
+      }
+    }
+
     <div class="creation-panel">
       <button class="task-create" nz-button (click)="onTaskCreation()">Create New Task</button>
       <button class="habit-create" nz-button (click)="onHabitCreation()">Create New Habit</button>
@@ -17,9 +30,23 @@
 
     <div class="task-list">
       @if (!loading && activities.length === 0) {
-        <div class="empty-state">
-          <h3>You have no tasks yet!</h3>
-        </div>
+        @if (activityListType() == ActivityListView.Habits) {
+          <div class="empty-state">
+            <h3>You have no habits yet!</h3>
+          </div>
+        } @else {
+          @if (activityListType() == ActivityListView.Activities) {
+            <div class="empty-state">
+              <h3>You have no activities yet!</h3>
+            </div>
+          } @else {
+            <div class="empty-state">
+              <h3>You have no tasks yet!</h3>
+            </div>
+          }
+        }
+
+
       }
 
       @if (!loading && activities.length > 0) {
