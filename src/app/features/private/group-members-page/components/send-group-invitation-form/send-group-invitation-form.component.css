@@ -46,6 +46,11 @@
   background: var(--bg-hover);
 }
 
+.user-item.selected {
+  background: var(--bg-hover);
+  border: 1px solid var(--third-color);
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -76,11 +81,6 @@
 .check-icon {
   font-size: var(--font-size-large);
   color: var(--color-success);
-}
-
-::ng-deep .ant-list-item.selected {
-  background: var(--bg-hover);
-  border-color: var(--third-color);
 }
 
 .status-message {

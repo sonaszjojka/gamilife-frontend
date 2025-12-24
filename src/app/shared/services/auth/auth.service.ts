@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { finalize, Observable, Subject, tap } from 'rxjs';
+import {
+  catchError,
+  finalize,
+  Observable,
+  Subject,
+  tap,
+  throwError,
+} from 'rxjs';
 import { WebSocketNotificationService } from '../../../features/shared/services/websocket-notification-service/web-socket-notification.service';
 
 export interface LoginCredentials {
@@ -33,7 +40,8 @@ export class AuthService {
   private router = inject(Router);
   private http = inject(HttpClient);
   private notificationService = inject(WebSocketNotificationService);
-  private refreshSubject = new Subject<void>();
+  private refreshSubject = new Subject<boolean>();
+  refreshSubject$ = this.refreshSubject.asObservable();
 
   refreshInProgress = false;
 
@@ -157,10 +165,14 @@ export class AuthService {
       )
       .pipe(
         tap(() => {
-          this.refreshSubject.next();
+          this.refreshSubject.next(true);
           if (!this.isWebSocketConnected()) {
             this.notificationService.connect();
           }
+        }),
+        catchError((error) => {
+          this.refreshSubject.next(false);
+          return throwError(() => error);
         }),
         finalize(() => {
           this.refreshInProgress = false;
