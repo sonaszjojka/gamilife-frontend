@@ -105,6 +105,7 @@ export class OAuth2Service {
           if ('isTutorialCompleted' in response) {
             this.updateAuthServiceState(response);
             this.notificationService.connect();
+            this.authService.loadGamificationData();
           }
         }),
       );
@@ -121,6 +122,7 @@ export class OAuth2Service {
         tap((response) => {
           this.updateAuthServiceState(response);
           this.notificationService.connect();
+          this.authService.loadGamificationData();
         }),
       );
   }
