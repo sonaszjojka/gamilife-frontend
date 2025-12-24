@@ -187,8 +187,7 @@ export class TaskListComponent implements  OnInit{
             this.loadingMore = false;
           },
         });
-    }
-    else if (this.activityListType() === ActivityListView.Habits) {
+    } else if (this.activityListType() === ActivityListView.Habits) {
       this.habitService.getHabits(
         nextPage,
         this.pageSize,
@@ -202,6 +201,23 @@ export class TaskListComponent implements  OnInit{
         },
         error: (error) => {
           console.error('Error loading more habits:', error);
+          this.loadingMore = false;
+        }
+      });
+    } else if (this.activityListType() === ActivityListView.Tasks) {
+      this.taskService.getTasks(
+        nextPage,
+        this.pageSize,
+        this.isAlive(),
+      ).subscribe({
+        next: (response: Page<ActivityItemDetails>) => {
+          this.activities = [...this.activities, ...response.content];
+          this.groupActivitiesByDate();
+          this.currentPage = response.number;
+          this.loadingMore = false;
+        },
+        error: (error) => {
+          console.error('Error loading more tasks:', error);
           this.loadingMore = false;
         }
       });
