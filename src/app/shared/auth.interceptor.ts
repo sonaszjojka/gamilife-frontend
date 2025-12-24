@@ -1,12 +1,21 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
-import { catchError, switchMap, throwError } from 'rxjs';
+import {
+  catchError,
+  switchMap,
+  throwError,
+  BehaviorSubject,
+  filter,
+  take,
+} from 'rxjs';
 import { ErrorCode } from '../features/shared/models/error-codes/error-codes.enum';
+
+let isRefreshing = false;
+const refreshTokenSubject = new BehaviorSubject<boolean>(false);
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-
   const cloned = req.clone({ withCredentials: true });
 
   return next(cloned).pipe(
@@ -20,24 +29,37 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         if (
           code === ErrorCode.TOKEN_EXPIRED ||
           code === ErrorCode.INVALID_TOKEN ||
-          code === ErrorCode.ACCOUNT_LOCKED
+          code === ErrorCode.ACCOUNT_LOCKED ||
+          code === ErrorCode.REFRESH_TOKEN_EXPIRED
         ) {
           authService.logoutLocal();
           return throwError(() => error);
         }
 
-        if (
-          (code === ErrorCode.ACCESS_TOKEN_EXPIRED ||
-            code === ErrorCode.REFRESH_TOKEN_EXPIRED) &&
-          !isAuthEndpoint
-        ) {
-          return authService.refreshToken().pipe(
-            switchMap(() => next(cloned)),
-            catchError((refreshError) => {
-              authService.logoutLocal();
-              return throwError(() => refreshError);
-            }),
-          );
+        if (code === ErrorCode.ACCESS_TOKEN_EXPIRED && !isAuthEndpoint) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            refreshTokenSubject.next(false);
+
+            return authService.refreshToken().pipe(
+              switchMap(() => {
+                isRefreshing = false;
+                refreshTokenSubject.next(true);
+                return next(cloned);
+              }),
+              catchError((refreshError) => {
+                isRefreshing = false;
+                authService.logoutLocal();
+                return throwError(() => refreshError);
+              }),
+            );
+          } else {
+            return refreshTokenSubject.pipe(
+              filter((ready) => ready === true),
+              take(1),
+              switchMap(() => next(cloned)),
+            );
+          }
         }
 
         if (

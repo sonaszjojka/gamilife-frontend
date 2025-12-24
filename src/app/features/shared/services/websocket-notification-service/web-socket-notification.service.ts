@@ -75,8 +75,9 @@ export class WebSocketNotificationService implements OnDestroy {
     const unreadCount = notifications.filter((n) => !n.read).length;
     this.unreadCountSubject.next(unreadCount);
   }
+
   connect(): void {
-    if (this.client?.connected) {
+    if (this.client?.active) {
       return;
     }
 
@@ -84,7 +85,6 @@ export class WebSocketNotificationService implements OnDestroy {
 
     this.client = new Client({
       brokerURL: wsUrl,
-
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -97,15 +97,6 @@ export class WebSocketNotificationService implements OnDestroy {
 
       onStompError: () => {
         this.connectedSubject.next(false);
-        this.nzNotification.error(
-          'Connection Error',
-          'Failed to connect to notification service. Please refresh the page.',
-          {
-            nzDuration: 5000,
-            nzPlacement: 'topRight',
-            nzClass: 'custom-notification',
-          },
-        );
       },
 
       onWebSocketError: () => {
@@ -125,7 +116,7 @@ export class WebSocketNotificationService implements OnDestroy {
   }
 
   private subscribeToNotifications(): void {
-    if (!this.client) {
+    if (!this.client || !this.client.connected) {
       return;
     }
 
@@ -133,7 +124,6 @@ export class WebSocketNotificationService implements OnDestroy {
       const backendNotification: NotificationDtoFromBackend = JSON.parse(
         message.body,
       );
-
       const notification = this.convertNotification(backendNotification);
 
       const notificationWithRead: NotificationDto = {
@@ -146,8 +136,7 @@ export class WebSocketNotificationService implements OnDestroy {
 
       this.notificationsSubject.next(newNotifications);
       this.saveNotificationsToStorage(newNotifications);
-
-      this.unreadCountSubject.next(this.unreadCountSubject.value + 1);
+      this.updateUnreadCount(newNotifications);
 
       this.displayNotification(notification);
     });
@@ -179,15 +168,8 @@ export class WebSocketNotificationService implements OnDestroy {
     };
 
     switch (notification.notificationType) {
-      case 'TASK_COMPLETED': // TODO: updating money
+      case 'TASK_COMPLETED':
       case 'LEVEL_UP':
-        this.nzNotification.success(
-          notification.title,
-          notification.message,
-          notificationConfig,
-        );
-        break;
-
       case 'ITEM_ACQUIRED':
         this.nzNotification.success(
           notification.title,
@@ -195,15 +177,7 @@ export class WebSocketNotificationService implements OnDestroy {
           notificationConfig,
         );
         break;
-
       case 'GROUP_INVITATION':
-        this.nzNotification.info(
-          notification.title,
-          notification.message,
-          notificationConfig,
-        );
-        break;
-
       case 'OTHER':
       default:
         this.nzNotification.info(
