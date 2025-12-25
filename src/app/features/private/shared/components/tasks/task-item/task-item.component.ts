@@ -24,7 +24,7 @@ import {
   HabitStatus,
 } from '../../../../../shared/models/task-models/activity.model';
 import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
-import {NotificationService} from '../../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-item',
@@ -62,13 +62,13 @@ export class TaskItemComponent implements OnInit {
 
   taskService = inject(UserTaskApiService);
   habitService = inject(HabitApiService);
-  notificationService = inject(NotificationService)
+  notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.isCompleted.set(
       this.activity.status != ActivityStatus.DEADLINE_MISSED,
     );
-    console.log(this.activity)
+    console.log(this.activity);
   }
 
   completeTask(event: MouseEvent): void {
@@ -88,10 +88,14 @@ export class TaskItemComponent implements OnInit {
         this.activity.completedAt = response.completedAt;
         this.activity.status = ActivityStatus.COMPLETED;
         this.taskUpdated.emit(this.activity.id);
-        this.notificationService.success( `You have successfully completed the task: ${this.activity.title}`);
+        this.notificationService.success(
+          `You have successfully completed the task: ${this.activity.title}`,
+        );
       },
       error: () => {
-        this.notificationService.error( `There was an error completing the task: ${this.activity.title}`);
+        this.notificationService.error(
+          `There was an error completing the task: ${this.activity.title}`,
+        );
         this.isCompleted.set(false);
       },
     });
@@ -110,10 +114,14 @@ export class TaskItemComponent implements OnInit {
           this.activity.longestStreak = response.longestStreak;
           this.activity.canBeWorkedOn = response.workable;
           this.taskUpdated.emit(this.activity.id);
-          this.notificationService.success( `You have successfully completed a cycle for the habit: ${this.activity.title}`);
+          this.notificationService.success(
+            `You have successfully completed a cycle for the habit: ${this.activity.title}`,
+          );
         },
-        error: (error) => {
-          this.notificationService.error( `There was an error completing a cycle for the habit: ${this.activity.title}`);
+        error: () => {
+          this.notificationService.error(
+            `There was an error completing a cycle for the habit: ${this.activity.title}`,
+          );
         },
       });
     }
@@ -146,10 +154,14 @@ export class TaskItemComponent implements OnInit {
         this.activity.deadlineDate = response.deadlineDate;
         this.activity.canBeWorkedOn = response.workable;
         this.taskUpdated.emit(this.activity.id);
-        this.notificationService.success( `You have successfully restored the habit: ${this.activity.title}`);
+        this.notificationService.success(
+          `You have successfully restored the habit: ${this.activity.title}`,
+        );
       },
-      error: (error) => {
-        this.notificationService.error( `There was an error restoring the habit: ${this.activity.title}`);
+      error: () => {
+        this.notificationService.error(
+          `There was an error restoring the habit: ${this.activity.title}`,
+        );
       },
     });
   }

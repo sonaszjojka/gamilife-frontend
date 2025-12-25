@@ -35,7 +35,7 @@ import {
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
 import { PomodoroSessionFormModal } from '../pomodoro-form-modal/pomodoro-session-form-modal';
-import {NotificationService} from '../../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-form',
@@ -218,7 +218,7 @@ export class TaskFormComponent implements OnChanges {
             this.activityFormSubmitted.emit();
             this.notificationService.success('Task created successfully!');
           },
-          error: (error) => {
+          error: () => {
             this.notificationService.error('Error creating task.');
             this.activityFormSubmitted.emit();
           },
@@ -234,7 +234,7 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Task edited successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: (error) => {
+          error: () => {
             this.notificationService.error('Error editing task.');
             this.activityFormSubmitted.emit();
           },
@@ -262,7 +262,6 @@ export class TaskFormComponent implements OnChanges {
         this.habitApi.editHabit(this.activity()!.id, request).subscribe({
           next: () => {
             this.activityFormSubmitted.emit();
-
           },
           error: (err) => {
             console.error(err);

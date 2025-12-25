@@ -98,7 +98,7 @@ export class UserTaskApiService {
   }
 
   deleteTask(taskId: string): Observable<void> {
-   return this.http.delete<void>(`${this.TASK_API_URL}/${taskId}`, {
+    return this.http.delete<void>(`${this.TASK_API_URL}/${taskId}`, {
       withCredentials: true,
     });
   }
