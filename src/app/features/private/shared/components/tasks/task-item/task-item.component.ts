@@ -8,7 +8,7 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { UserTaskApiService } from '../../../../../shared/services/tasks/user-task-api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,6 +37,7 @@ import { NotificationService } from '../../../../../shared/services/notification
     NzIconDirective,
     NzButtonComponent,
     PomodoroTaskProgressComponent,
+    DatePipe,
   ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css',
