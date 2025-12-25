@@ -62,6 +62,8 @@ export class UserTaskApiService {
     page:number,
     size:number|null,
     isCompleted:boolean|null,
+    categoryId:number|null,
+    difficultyId:number|null
   ): Observable<Page<ActivityItemDetails>>
   {
     let httpParams = new HttpParams();
@@ -75,7 +77,12 @@ export class UserTaskApiService {
     if (isCompleted!==null) {
       httpParams = httpParams.set('isCompleted', isCompleted);
     }
-    httpParams= httpParams.set('isGroupTask','false');
+    if (categoryId !== undefined && categoryId !== null) {
+      httpParams = httpParams.set('categoryId', categoryId.toString());
+    }
+    if (difficultyId !== undefined && difficultyId !== null) {
+      httpParams = httpParams.set('difficultyId', difficultyId.toString());
+    }
 
     return this.http.get<Page<ActivityItemDetails>>(`${this.TASK_API_URL}`,
       {

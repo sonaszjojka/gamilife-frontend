@@ -1,150 +1,69 @@
 <div class="filter-panel">
   <ul nz-menu nzMode="inline" style="width: 240px">
-    <li
-      nz-submenu
-      [(nzOpen)]="openMap['Activities']"
-      nzTitle="Activities"
-      nzIcon="appstore"
-      >
+
+    <li nz-submenu nzTitle="Activities" nzIcon="appstore" [(nzOpen)]="openMap['Activities']">
       <ul>
-        <li
-          nz-menu-item
-          (click)="activitiesSelected()"
-          (keyup.enter)="activitiesSelected()"
-          tabindex="0"
-        >
-          All Activities
+        <li nz-menu-item (click)="activitiesSelected()">All Activities</li>
+        <li nz-submenu nzTitle="Difficulty" nzIcon="fire">
+          <ul>
+            <li nz-menu-item (click)="difficultySelected(1, 'Activities')">Easy</li>
+            <li nz-menu-item (click)="difficultySelected(2, 'Activities')">Medium</li>
+            <li nz-menu-item (click)="difficultySelected(3, 'Activities')">Hard</li>
+          </ul>
+        </li>
+        <li nz-submenu nzTitle="Category" nzIcon="product">
+          <ul>
+            <li nz-menu-item (click)="categorySelected(1, 'Activities')">Work</li>
+            <li nz-menu-item (click)="categorySelected(2, 'Activities')">Personal</li>
+            <li nz-menu-item (click)="categorySelected(3, 'Activities')">Health</li>
+          </ul>
         </li>
       </ul>
     </li>
 
-    <li
-      nz-submenu
-      [(nzOpen)]="openMap['difficulty']"
-      (nzOpenChange)="openHandler('difficulty')"
-      nzTitle="Difficulty"
-      nzIcon="fire"
-    >
+    <li nz-submenu nzTitle="Tasks" nzIcon="check-square" [(nzOpen)]="openMap['tasks']">
       <ul>
-        <li
-          nz-menu-item
-          (click)="difficultySelected(1)"
-          (keyup.enter)="difficultySelected(1)"
-          tabindex="0"
-        >
-          Easy
+        <li nz-menu-item (click)="activeTaskSelected()">Active Tasks</li>
+        <li nz-menu-item (click)="inactiveTaskSelected()">Journey History</li>
+        <li nz-submenu nzTitle="Difficulty" nzIcon="fire">
+          <ul>
+            <li nz-menu-item (click)="difficultySelected(1, 'Tasks')">Easy</li>
+            <li nz-menu-item (click)="difficultySelected(2, 'Tasks')">Medium</li>
+            <li nz-menu-item (click)="difficultySelected(3, 'Tasks')">Hard</li>
+          </ul>
         </li>
-        <li
-          nz-menu-item
-          (click)="difficultySelected(2)"
-          (keyup.enter)="difficultySelected(2)"
-          tabindex="0"
-        >
-          Medium
-        </li>
-        <li
-          nz-menu-item
-          (click)="difficultySelected(3)"
-          (keyup.enter)="difficultySelected(3)"
-          tabindex="0"
-        >
-          Hard
-        </li>
-      </ul>
-    </li>
-    <li
-      nz-submenu
-      [(nzOpen)]="openMap['category']"
-      (nzOpenChange)="openHandler('category')"
-      nzTitle="Category"
-      nzIcon="product"
-    >
-      <ul>
-        <li
-          nz-menu-item
-          (click)="categorySelected(1)"
-          (keyup.enter)="categorySelected(1)"
-          tabindex="0"
-        >
-          Work
-        </li>
-        <li
-          nz-menu-item
-          (click)="categorySelected(2)"
-          (keyup.enter)="categorySelected(2)"
-          tabindex="0"
-        >
-          Personal
-        </li>
-        <li
-          nz-menu-item
-          (click)="categorySelected(3)"
-          (keyup.enter)="categorySelected(3)"
-          tabindex="0"
-        >
-          Health
-        </li>
-      </ul>
-    </li>
-    <li
-      nz-submenu
-      [(nzOpen)]="openMap['status']"
-      (nzOpenChange)="openHandler('status')"
-      nzTitle="Tasks"
-      nzIcon="check-square"
-    >
-      <ul>
-        <li
-          nz-menu-item
-          (click)="activeTaskSelected()"
-          (keyup.enter)="activeTaskSelected()"
-          tabindex="0"
-        >
-          Active Tasks
-        </li>
-        <li
-          nz-menu-item
-          (click)="inactiveTaskSelected()"
-          (keyup.enter)="inactiveTaskSelected()"
-          tabindex="0"
-        >
-          Journey History
-        </li>
-      </ul>
-    </li>
-    <li
-      nz-submenu
-      [(nzOpen)]="openMap['Habits']"
-      nzTitle="Habit"
-      nzIcon="delete"
-    >
-      <ul>
-        <li
-          nz-menu-item
-          (click)="activeHabitSelected()"
-          (keyup.enter)="activeHabitSelected()"
-          tabindex="0"
-        >
-          Ongoing Habits
-        </li>
-        <li
-          nz-menu-item
-          (click)="inactiveHabitSelected()"
-          (keyup.enter)="inactiveHabitSelected()"
-          tabindex="0"
-        >
-          Past Habits
+        <li nz-submenu nzTitle="Category" nzIcon="product">
+          <ul>
+            <li nz-menu-item (click)="categorySelected(1, 'Tasks')">Work</li>
+            <li nz-menu-item (click)="categorySelected(2, 'Tasks')">Personal</li>
+            <li nz-menu-item (click)="categorySelected(3, 'Tasks')">Health</li>
+          </ul>
         </li>
       </ul>
     </li>
 
+    <li nz-submenu nzTitle="Habit" nzIcon="delete" [(nzOpen)]="openMap['Habits']">
+      <ul>
+        <li nz-menu-item (click)="activeHabitSelected()">Ongoing Habits</li>
+        <li nz-menu-item (click)="inactiveHabitSelected()">Past Habits</li>
+        <li nz-submenu nzTitle="Difficulty" nzIcon="fire">
+          <ul>
+            <li nz-menu-item (click)="difficultySelected(1, 'Habits')">Easy</li>
+            <li nz-menu-item (click)="difficultySelected(2, 'Habits')">Medium</li>
+            <li nz-menu-item (click)="difficultySelected(3, 'Habits')">Hard</li>
+          </ul>
+        </li>
+        <li nz-submenu nzTitle="Category" nzIcon="product">
+          <ul>
+            <li nz-menu-item (click)="categorySelected(1, 'Habits')">Work</li>
+            <li nz-menu-item (click)="categorySelected(2, 'Habits')">Personal</li>
+            <li nz-menu-item (click)="categorySelected(3, 'Habits')">Health</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
 
-    <li
-      nz-menu-item
-      (click)="pomodoroSessionSelected()"
-      (keyup.enter)="pomodoroSessionSelected()"
-      tabindex="0"
-    >
+    <li nz-menu-item (click)="pomodoroSessionSelected()">
       <nz-icon nzType="clock-circle"></nz-icon> Pomodoro Session
     </li>
   </ul>

@@ -25,8 +25,6 @@
       <button nz-button nzShape="circle" (click)="onTaskEdit($event)"><nz-icon nzType ="setting"></nz-icon></button>
     </div>
   }
-
-
   <div class="task-content">
     <div class="task-header">
       <h1 class="task-title">{{ activity.title }}</h1>
@@ -119,7 +117,6 @@
             </span>
         </div>
       </div>
-
     }
 
   </div>
@@ -146,19 +143,16 @@
           }
           @else
           {
-            @if (activity.workable)
-            {
-              <button nz-button nzShape="circle" (click)="completeHabitCycle($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
-            }
-            @else
+            @if (activity.canBeWorkedOn===false)
             {
               <button nz-button nzShape="circle"  disabled><nz-icon nzType="check-circle"></nz-icon> </button>
             }
+            @else
+            {
+              <button nz-button nzShape="circle" (click)="completeHabitCycle($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
+            }
           }
-
-
         }
-
       </div>
     }
 
