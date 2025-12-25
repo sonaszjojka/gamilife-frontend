@@ -1,5 +1,5 @@
 import {CommonModule, formatDate} from '@angular/common';
-import {Component, effect, HostListener, inject, OnInit, output, signal, untracked} from '@angular/core';
+import {Component, effect, HostListener, inject, OnInit, output, signal, untracked, ViewChild} from '@angular/core';
 import {TaskItemComponent} from '../../shared/components/tasks/task-item/task-item.component';
 import {TaskFilterComponent} from '../../shared/components/tasks/task-filter/task-filter.component';
 import {TaskFormComponent} from '../../shared/components/tasks/task-form/task-form.component';
@@ -60,6 +60,9 @@ export class TaskListComponent implements  OnInit{
   totalPages = 0;
   private taskService = inject(UserTaskApiService);
   private habitService = inject(HabitApiService);
+
+  @ViewChild('calendarComponent')
+  calendarComponent?: TaskCalendarComponent;
 
    ngOnInit () {
     this.currentPage = 0;
@@ -284,23 +287,30 @@ export class TaskListComponent implements  OnInit{
 
     let matchesAliveStatus = true;
 
-    if (this.activityListType() === ActivityListView.Tasks) {
+    if (this.activityListType() === ActivityListView.Tasks)
+    {
       const isActuallyAlive = changedActivity.status !== ActivityStatus.COMPLETED;
       matchesAliveStatus = isActuallyAlive === this.isAlive();
-    } else if (this.activityListType() === ActivityListView.Habits) {
+    }
+    else if (this.activityListType() === ActivityListView.Habits)
+    {
       matchesAliveStatus = (changedActivity.habitStatus === HabitStatus.ALIVE) === this.isAlive();
     }
-    else if (this.activityListType() === ActivityListView.Activities) {
-      if (this.isAlive()) {
+
+    else if (this.activityListType() === ActivityListView.Activities)
+    {
+      if (this.isAlive())
+      {
         matchesAliveStatus = changedActivity.status !== ActivityStatus.COMPLETED;
       }
     }
+
     if (!matchesCategory || !matchesDifficulty || !matchesDate || !matchesAliveStatus) {
       this.activities = this.activities.filter((t) => t.id !== activityId);
-      this.groupActivitiesByDate();
-    } else {
-      this.groupActivitiesByDate();
     }
+    this.calendarComponent?.loadActivities();
+    this.groupActivitiesByDate();
+
   }
 
   onActivityEdit(event: { activity: ActivityItemDetails, viewMode: boolean }): void {
