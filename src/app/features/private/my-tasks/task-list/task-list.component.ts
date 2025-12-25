@@ -7,7 +7,12 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {TaskCalendarComponent} from '../../shared/components/tasks/task-calendar/task-calendar.component';
 import {UserTaskApiService} from '../../../shared/services/tasks/user-task-api.service';
 import {Page} from '../../../shared/models/util/page.model';
-import {ActivityItemDetails, ActivityStatus, ActivityType} from '../../../shared/models/task-models/activity.model';
+import {
+  ActivityItemDetails,
+  ActivityStatus,
+  ActivityType,
+  HabitStatus
+} from '../../../shared/models/task-models/activity.model';
 import {ActivityListView} from '../../../shared/models/task-models/activity-list-view.model';
 import {HabitApiService} from '../../../shared/services/tasks/habit-api.service';
 
@@ -30,6 +35,8 @@ export class TaskListComponent implements  OnInit{
   groupedTasks: Record<string, ActivityItemDetails[]> = {};
   loading = false;
   loadingMore = false;
+
+  protected readonly ActivityListView = ActivityListView;
 
   editionMode = signal<boolean | null>(false);
   creationMode = signal<boolean | null>(false);
@@ -143,7 +150,7 @@ export class TaskListComponent implements  OnInit{
       this.taskService.getTasks(
         this.currentPage,
         this.pageSize,
-        this.isAlive(),
+        !this.isAlive(),
         this.categoryId(),
         this.difficultyId(),
       ).subscribe({
@@ -214,7 +221,7 @@ export class TaskListComponent implements  OnInit{
       this.taskService.getTasks(
         nextPage,
         this.pageSize,
-        this.isAlive(),
+        !this.isAlive(),
         this.categoryId(),
         this.difficultyId(),
       ).subscribe({
@@ -268,19 +275,32 @@ export class TaskListComponent implements  OnInit{
 
 
   onActivityUpdated(activityId: string): void {
-    const changedActivity = this.activities.find((t) => t.id == activityId)!;
-    if (
-      (changedActivity.categoryId != this.categoryId() &&
-        this.categoryId() != null) ||
-      (changedActivity.difficultyId != this.difficultyId() &&
-        this.difficultyId() != null)||
-      ((changedActivity.deadlineDate != this.endDate() &&
-        this.endDate() != null))
-    ) {
-      this.activities = this.activities.filter((t) => t.id != activityId);
-    }
+    const changedActivity = this.activities.find((t) => t.id === activityId);
+    if (!changedActivity) return;
 
-    this.groupActivitiesByDate();
+    const matchesCategory = this.categoryId() === null || changedActivity.categoryId === this.categoryId();
+    const matchesDifficulty = this.difficultyId() === null || changedActivity.difficultyId === this.difficultyId();
+    const matchesDate = this.endDate() === null || changedActivity.deadlineDate === this.endDate();
+
+    let matchesAliveStatus = true;
+
+    if (this.activityListType() === ActivityListView.Tasks) {
+      const isActuallyAlive = changedActivity.status !== ActivityStatus.COMPLETED;
+      matchesAliveStatus = isActuallyAlive === this.isAlive();
+    } else if (this.activityListType() === ActivityListView.Habits) {
+      matchesAliveStatus = (changedActivity.habitStatus === HabitStatus.ALIVE) === this.isAlive();
+    }
+    else if (this.activityListType() === ActivityListView.Activities) {
+      if (this.isAlive()) {
+        matchesAliveStatus = changedActivity.status !== ActivityStatus.COMPLETED;
+      }
+    }
+    if (!matchesCategory || !matchesDifficulty || !matchesDate || !matchesAliveStatus) {
+      this.activities = this.activities.filter((t) => t.id !== activityId);
+      this.groupActivitiesByDate();
+    } else {
+      this.groupActivitiesByDate();
+    }
   }
 
   onActivityEdit(event: { activity: ActivityItemDetails, viewMode: boolean }): void {
@@ -318,6 +338,7 @@ export class TaskListComponent implements  OnInit{
     this.editionMode.set(false);
     this.creationMode.set(false);
     this.selectedActivity.set(undefined);
+    this.activityListType.set(ActivityListView.Activities);
   }
 
   onTaskDelete(): void {
@@ -332,5 +353,5 @@ export class TaskListComponent implements  OnInit{
  }
 
 
-  protected readonly ActivityListView = ActivityListView;
+
 }

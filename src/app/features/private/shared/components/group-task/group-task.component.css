@@ -96,14 +96,14 @@
   font-weight: var(--font-weight-normal);
 }
 
-.participants-container {
+.count-container {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-small);
   flex-direction: row;
 }
 
-.participant-item {
+.highlighted-item {
   display: flex;
   align-items: center;
   gap: 4px;

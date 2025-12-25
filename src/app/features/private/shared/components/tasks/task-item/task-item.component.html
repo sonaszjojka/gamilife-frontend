@@ -63,7 +63,7 @@
         <nz-icon nzType="calendar" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Deadline</div>
-          <div class="info-value">{{ activity.deadlineDate }}</div>
+          <div class="info-value">{{ activity.deadlineDate }} @if (activity.deadlineTime){- {{activity.deadlineTime}}}</div>
         </div>
       </div>
 
@@ -82,9 +82,9 @@
       <nz-icon nzType="fire" class="info-icon"></nz-icon>
       <div class="info-content">
         <div class="info-label">Longest Streak</div>
-        <div class="info-value participants-container">
+        <div class="info-value count-container">
 
-            <span class="participant-item">
+            <span class="highlighted-item">
             {{activity.longestStreak}}
             </span>
 
@@ -96,7 +96,7 @@
         <nz-icon nzType="thunderbolt" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Current Streak</div>
-          <div class="info-value participants-container">
+          <div class="info-value count-container">
 
             <span class="highlighted-item">
             {{activity.currentStreak}}
@@ -127,17 +127,15 @@
       <div class="action-right">
         @if (this.activity.type==ActivityType.TASK)
         {
-          @if (this.activity.status==ActivityStatus.DEADLINE_MISSED||this.activity.status==ActivityStatus.COMPLETED)
-           {
-            <button nz-button nzShape="circle" (click)=" restoreTask($event)"><nz-icon nzType="reload"></nz-icon> </button>
-          }
-          @else {
+          @if (this.activity.status!==ActivityStatus.COMPLETED)
+          {
             <button nz-button nzShape="circle" (click)="completeTask($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
+
           }
         }
         @else
         {
-          @if (activity.status==ActivityStatus.DEAD)
+          @if (activity.habitStatus==HabitStatus.DEAD)
           {
             <button nz-button nzShape="circle" (click)=" restoreHabit($event)"><nz-icon nzType="reload"></nz-icon> </button>
           }
@@ -158,4 +156,8 @@
 
   </div>
 </nz-card>
+<app-restore-task-modal
+[activity]="this.activity!"
+>
+</app-restore-task-modal>
 

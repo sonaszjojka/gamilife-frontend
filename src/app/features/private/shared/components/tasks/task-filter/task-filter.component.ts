@@ -32,6 +32,7 @@ export class TaskFilterComponent {
     this.listView?.set(ActivityListView.Activities);
     this.categoryId?.set(null);
     this.difficultyId?.set(null);
+    this.isAlive?.set(true);
   }
 
   categorySelected(category: number, viewType: 'Activities' | 'Tasks' | 'Habits'): void {
@@ -41,6 +42,7 @@ export class TaskFilterComponent {
 
     this.categoryId?.set(category);
     this.difficultyId?.set(null);
+    this.isAlive?.set(true);
   }
 
   difficultySelected(difficulty: number, viewType: 'Activities' | 'Tasks' | 'Habits'): void {
@@ -49,6 +51,7 @@ export class TaskFilterComponent {
     if (viewType === 'Habits') this.listView?.set(ActivityListView.Habits);
     this.difficultyId?.set(difficulty);
     this.categoryId?.set(null);
+    this.isAlive?.set(true);
   }
 
   activeTaskSelected(): void {

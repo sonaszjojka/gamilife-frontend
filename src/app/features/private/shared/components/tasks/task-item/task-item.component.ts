@@ -11,7 +11,7 @@ import {HabitApiService} from '../../../../../shared/services/tasks/habit-api.se
 import {
   ActivityItemDetails,
   ActivityStatus,
-  ActivityType
+  ActivityType, HabitStatus
 } from '../../../../../shared/models/task-models/activity.model';
 import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
 import {RestoreTaskModalComponent} from '../restore-task-modal/restore-task-modal.component';
@@ -19,19 +19,26 @@ import {RestoreTaskModalComponent} from '../restore-task-modal/restore-task-moda
 @Component({
   selector: 'app-task-item',
   standalone: true,
-    imports: [
-        CommonModule,
-        NzCardModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NzIconDirective,
-        NzButtonComponent,
-        PomodoroTaskProgressComponent,
-    ],
+  imports: [
+    CommonModule,
+    NzCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzIconDirective,
+    NzButtonComponent,
+    PomodoroTaskProgressComponent,
+    RestoreTaskModalComponent,
+  ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css',
 })
 export class TaskItemComponent implements OnInit {
+
+  protected readonly ActivityType = ActivityType;
+  protected readonly ActivityStatus = ActivityStatus;
+  protected readonly HabitStatus = HabitStatus;
+
+
   @Input() activity!: ActivityItemDetails;
   isCompleted = signal(false);
 
@@ -68,6 +75,7 @@ export class TaskItemComponent implements OnInit {
     this.taskService.editTask(this.activity.id, request).subscribe({
       next: (response) => {
         this.activity.completedAt = response.completedAt;
+        this.activity.status = ActivityStatus.COMPLETED;
         this.taskUpdated.emit(this.activity.id);
       },
       error: (error) => {
@@ -83,13 +91,7 @@ export class TaskItemComponent implements OnInit {
     if (this.activity.type == ActivityType.HABIT) {
 
       const request: HabitRequest = {
-        title: this.activity.title,
-        categoryId: this.activity.categoryId,
-        difficultyId: this.activity.difficultyId,
-        description: this.activity.description,
-        cycleLength: this.activity.cycleLength!,
         iterationCompleted: true,
-
       }
       this.habitService.editHabit(this.activity.id, request).subscribe({
         next: (response) => {
@@ -123,19 +125,19 @@ export class TaskItemComponent implements OnInit {
       this.removeFromCurrentSession.emit(this.activity);
     }
 
-  protected readonly ActivityType = ActivityType;
-
-  protected readonly ActivityStatus = ActivityStatus;
-
-  restoreTask($event: MouseEvent) {
-    $event.stopPropagation();
-
-  }
-
   restoreHabit($event: MouseEvent) {
     $event.stopPropagation();
-
-
-
+    const request: HabitRequest = {
+      resurrect:true
+    }
+    this.habitService.editHabit(this.activity.id,request).subscribe({
+      next: (response) => {
+        this.activity.habitStatus=HabitStatus.ALIVE;
+        this.activity.deadlineDate=response.deadlineDate;
+        this.activity.canBeWorkedOn=response.workable;
+        this.taskUpdated.emit(this.activity.id);
+      }
+    })
   }
+
 }
