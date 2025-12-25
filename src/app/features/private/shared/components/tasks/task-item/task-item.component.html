@@ -123,7 +123,7 @@
   </div>
 
   <div class="task-actions-footer">
-    @if (!inPomodoroList() && this.activity.pomodoro === undefined) {
+    @if (!inPomodoroList() && !this.activity.pomodoro) {
       <div class="action-right">
         @if (this.activity.type === ActivityType.TASK) {
           @if (this.activity.status !== ActivityStatus.COMPLETED) {

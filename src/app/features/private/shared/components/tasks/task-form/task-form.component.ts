@@ -35,6 +35,7 @@ import {
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
 import { PomodoroSessionFormModal } from '../pomodoro-form-modal/pomodoro-session-form-modal';
+import {NotificationService} from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-form',
@@ -69,8 +70,9 @@ export class TaskFormComponent implements OnChanges {
   @Output() activityDeleted = new EventEmitter<void>();
 
   private formBuilder = inject(NonNullableFormBuilder);
-  private taskService = inject(UserTaskApiService);
+  private taskApi = inject(UserTaskApiService);
   private habitApi = inject(HabitApiService);
+  private notificationService = inject(NotificationService);
 
   @ViewChild(PomodoroSessionFormModal)
   protected pomodoroModal = new PomodoroSessionFormModal();
@@ -210,13 +212,14 @@ export class TaskFormComponent implements OnChanges {
       }
 
       if (this.creationMode?.()) {
-        this.taskService.createTask(request).subscribe({
+        this.taskApi.createTask(request).subscribe({
           next: () => {
             this.validActivityForm.reset();
             this.activityFormSubmitted.emit();
+            this.notificationService.success('Task created successfully!');
           },
           error: (error) => {
-            console.error('Error creating task:', error);
+            this.notificationService.error('Error creating task.');
             this.activityFormSubmitted.emit();
           },
         });
@@ -225,13 +228,14 @@ export class TaskFormComponent implements OnChanges {
         if (activity == null) {
           return;
         }
-        this.taskService.editTask(this.activity()!.id, request).subscribe({
+        this.taskApi.editTask(this.activity()!.id, request).subscribe({
           next: () => {
             this.validActivityForm.reset();
+            this.notificationService.success('Task edited successfully!');
             this.activityFormSubmitted.emit();
           },
           error: (error) => {
-            console.error('Error editing task:', error);
+            this.notificationService.error('Error editing task.');
             this.activityFormSubmitted.emit();
           },
         });
@@ -258,6 +262,7 @@ export class TaskFormComponent implements OnChanges {
         this.habitApi.editHabit(this.activity()!.id, request).subscribe({
           next: () => {
             this.activityFormSubmitted.emit();
+
           },
           error: (err) => {
             console.error(err);
@@ -269,7 +274,7 @@ export class TaskFormComponent implements OnChanges {
 
   onDelete() {
     if (this.activity()?.type == ActivityType.TASK) {
-      this.taskService.deleteTask(this.activity()!.id).subscribe({
+      this.taskApi.deleteTask(this.activity()!.id).subscribe({
         next: () => {
           this.validActivityForm.reset();
           this.activityDeleted.emit();

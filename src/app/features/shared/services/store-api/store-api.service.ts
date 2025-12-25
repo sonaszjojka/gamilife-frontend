@@ -10,7 +10,7 @@ import {
   StoreItemDto,
 } from '../../models/store/store.model';
 import { Observable } from 'rxjs';
-import { Page } from '../tasks/individual-task.service';
+import {Page} from '../../models/util/page.model';
 
 @Injectable({
   providedIn: 'root',
