@@ -7,7 +7,7 @@
 .content-body {
   display: flex;
   flex: 1;
-  padding: var(--spacing-medium) 0;
+  padding: var(--spacing-medium) var(--spacing-xl);
 }
 
 .filter-panel {
