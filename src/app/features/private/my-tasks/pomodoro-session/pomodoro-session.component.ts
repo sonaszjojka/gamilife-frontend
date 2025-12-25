@@ -46,9 +46,8 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   loading = false;
   loadingMore = false;
 
-  allUsersTasks: ActivityItemDetails[] = [];
   currentSessionPomodoroTasks: ActivityItemDetails[] = [];
-  usersPomodoroTasks: ActivityItemDetails[] = [];
+  usersPomodoroActivities: ActivityItemDetails[] = [];
   usersNotPomodoroTasks: ActivityItemDetails[] = [];
 
   timer: ReturnType<typeof setTimeout> | null = null;
@@ -59,10 +58,14 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   private sessionDuration = 10;
   private breakDuration = 10;
 
-  currentPage = 0;
   pageSize = 5;
-  totalPages = 0;
-  hasMore = true;
+
+  currentPomodoroPage = 0;
+  totalPomodoroPages = 0;
+
+  currentNonPomodoroPage = 0;
+  totalNonPomodoroPages = 0;
+
 
   taskService = inject(UserTaskApiService);
   pomodoroService = inject(PomodoroApiService);
@@ -78,21 +81,28 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      (this.currentPage + 1 < this.totalPages)
+      (this.currentPomodoroPage + 1 < this.totalPomodoroPages)
     ) {
-      this.loadMoreTasks();
+      this.loadMorePomodoroActivities();
+    }
+     if (
+      position > height - threshold &&
+      !this.loading &&
+      !this.loadingMore &&
+      (this.currentNonPomodoroPage + 1 < this.totalNonPomodoroPages)
+    ) {
+      this.loadMoreNonPomodoroActivities();
     }
   }
 
   ngOnInit() {
-    this.taskService
-      .getAllActivities(this.currentPage, this.pageSize, null, null, null, null,null)
+    this.pomodoroService
+      .getPomodoroActivities(this.currentPomodoroPage, this.pageSize, null, true, true)
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
-          this.allUsersTasks = response.content;
-          this.dispatchTasks();
-          this.totalPages = response.totalPages;
-          this.currentPage = response.number;
+          this.usersPomodoroActivities = response.content;
+          this.totalPomodoroPages = response.totalPages;
+          this.currentPomodoroPage = response.number;
           this.loading = false;
         },
         error: (error) => {
@@ -100,22 +110,45 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
       });
+
+    this.pomodoroService.getPomodoroActivities(
+      this.currentNonPomodoroPage,
+      this.pageSize,
+      null,
+      true,
+      false,
+    ).subscribe({
+      next: (response: Page<ActivityItemDetails>) => {
+        this.usersNotPomodoroTasks = response.content;
+        this.totalNonPomodoroPages = response.totalPages;
+        this.currentNonPomodoroPage = response.number;
+        this.loading = false;
+        console.log(response)
+      },
+      error: (error) => {
+        console.error('Error loading tasks:', error);
+        this.loading = false;
+      },
+    }
+    )
   }
 
-  loadMoreTasks(): void {
+  loadMorePomodoroActivities(): void {
 
     if ( this.loadingMore) return;
     this.loadingMore = true;
-    const nextPage = this.currentPage + 1;
-    this.taskService
-      .getAllActivities(nextPage, this.pageSize, null, null, null, null,null)
+    const nextPage = this.currentPomodoroPage + 1;
+    this.pomodoroService
+      .getPomodoroActivities(nextPage,
+        this.pageSize,
+        null,
+        true,
+        true)
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
-          this.allUsersTasks = [...this.allUsersTasks, ...response.content];
-          this.dispatchTasks();
-          this.totalPages = response.totalPages;
-          this.currentPage = response.number;
-          this.hasMore = !response.last;
+          this.usersPomodoroActivities = [...this.usersPomodoroActivities, ...response.content];
+          this.totalPomodoroPages = response.totalPages;
+          this.currentPomodoroPage = response.number;
           this.loadingMore = false;
         },
         error: (error) => {
@@ -125,18 +158,30 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       });
   }
 
-  dispatchTasks() {
-    const tasksNotInSession: ActivityItemDetails[] = this.allUsersTasks.filter(
-      (t) => !this.currentSessionPomodoroTasks.includes(t),
-    );
+  loadMoreNonPomodoroActivities(): void {
 
-    this.usersPomodoroTasks = tasksNotInSession.filter(
-      (t) => t.pomodoro?.id != null,
-    );
-    this.usersNotPomodoroTasks = tasksNotInSession.filter(
-      (t) => t.pomodoro?.id == null,
-    );
+    if ( this.loadingMore) return;
+    this.loadingMore = true;
+    const nextPage = this.currentNonPomodoroPage + 1;
+    this.pomodoroService
+      .getPomodoroActivities(nextPage, this.pageSize,
+        null,
+        true,
+        false)
+      .subscribe({
+        next: (response: Page<ActivityItemDetails>) => {
+         this.usersNotPomodoroTasks=[...this.usersNotPomodoroTasks,...response.content];
+         this.totalNonPomodoroPages = response.totalPages;
+          this.currentNonPomodoroPage = response.number;
+          this.loadingMore = false;
+        },
+        error: (error) => {
+          console.error('Error loading tasks:', error);
+          this.loadingMore = false;
+        },
+      });
   }
+
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(
@@ -269,6 +314,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     }
   }
 
+  //todo co to jest!!!!
   removeFromPanel(activity: ActivityItemDetails) {
     if (activity.type==ActivityType.TASK)
     {
@@ -295,25 +341,19 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       }
       this.habitService.editHabit(activity.id,request).subscribe({
         next: () => {
-          console.log('Habit updated successfully');
         },
         error: (error) => {
           console.error('Error updating habit:', error);
         },
       });
     }
-
-
     this.currentSessionPomodoroTasks = this.currentSessionPomodoroTasks.filter(
-      (t) => t.id != activity.id,
-    );
-    this.allUsersTasks = this.allUsersTasks.filter(
       (t) => t.id != activity.id,
     );
   }
 
   removeFromCurrentSession(task: ActivityItemDetails) {
-    this.usersPomodoroTasks.push(
+    this.usersPomodoroActivities.push(
       this.currentSessionPomodoroTasks.find(
         (t) => t.id == task.id,
       ) as ActivityItemDetails,
@@ -325,7 +365,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
 
   moveTaskToCurrentSession(activity: ActivityItemDetails) {
     if (!activity) return;
-    if (activity.pomodoro?.id == null) {
+    if (activity.pomodoro == undefined) {
       this.pomodoroSessionFormModal.activity = activity;
       this.pomodoroSessionFormModal.showModal();
     }
@@ -338,9 +378,9 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         this.pomodoroSessionFormModal.showModal();
       } else {
         this.currentSessionPomodoroTasks.push(
-          this.usersPomodoroTasks.find((a) => a.id == activity.id) as ActivityItemDetails,
+          this.usersPomodoroActivities.find((a) => a.id == activity.id) as ActivityItemDetails,
         );
-        this.usersPomodoroTasks = this.usersPomodoroTasks.filter(
+        this.usersPomodoroActivities = this.usersPomodoroActivities.filter(
           (a) => a.id != activity.id,
         );
       }
@@ -358,9 +398,9 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       );
     } else {
       this.currentSessionPomodoroTasks.push(
-        this.usersPomodoroTasks.find((a) => a.id == activity.id) as ActivityItemDetails,
+        this.usersPomodoroActivities.find((a) => a.id == activity.id) as ActivityItemDetails,
       );
-      this.usersPomodoroTasks = this.usersPomodoroTasks.filter(
+      this.usersPomodoroActivities = this.usersPomodoroActivities.filter(
         (a) => a.id != activity.id,
       );
     }

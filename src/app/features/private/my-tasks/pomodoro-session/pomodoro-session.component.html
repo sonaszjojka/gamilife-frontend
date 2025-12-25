@@ -57,7 +57,7 @@
       <h2>Your Pomodoro Tasks</h2>
     </div>
 
-    @for (activity of usersPomodoroTasks; track activity.id) {
+    @for (activity of usersPomodoroActivities; track activity.id) {
       <app-task-item
         [activity]="activity"
         [inPomodoroList]="true"
