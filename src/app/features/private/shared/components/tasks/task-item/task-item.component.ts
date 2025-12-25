@@ -66,6 +66,7 @@ export class TaskItemComponent implements OnInit {
     this.isCompleted.set(
       this.activity.status != ActivityStatus.DEADLINE_MISSED,
     );
+    console.log(this.activity)
   }
 
   completeTask(event: MouseEvent): void {
