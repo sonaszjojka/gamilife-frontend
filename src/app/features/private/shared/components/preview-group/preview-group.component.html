@@ -97,9 +97,29 @@
       </div>
     </nz-card>
   </nz-spin>
+
   <app-edit-group-form
     [group]="group()!"
     [members]="membersList()"
     (groupUpdated)="onActionComplete()"
   ></app-edit-group-form>
+
+  <nz-float-button
+    *ngIf="group() && canAccessChat() && getLoggedUserGroupMemberId()"
+    nzIcon="message"
+    nzType="primary"
+    nzTooltip="Open Group Chat"
+    (click)="openChat()"
+    [nzShape]="'circle'"
+    [style.width.px]="50"
+    [style.height.px]="50"
+    [style.bottom.px]="mode() === GroupPreviewMode.ADMIN ? 24 : 220"
+  ></nz-float-button>
+
+  <app-group-chat
+    *ngIf="group() && canAccessChat() && getLoggedUserGroupMemberId()"
+    [groupId]="groupId()!"
+    [groupMemberId]="getLoggedUserGroupMemberId()!"
+    [mode]="mode()"
+  ></app-group-chat>
 </div>

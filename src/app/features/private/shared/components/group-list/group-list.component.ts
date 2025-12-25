@@ -7,7 +7,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
   selector: 'app-group-list',
   imports: [GroupCardComponent, CommonModule, NzGridModule],
   template: `
-    <div nz-row [nzGutter]="[16, 16]">
+    <div nz-row class="div-groups-list-container" [nzGutter]="[16, 16]">
       <div
         nz-col
         *ngFor="let group of groups()"
@@ -22,6 +22,11 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
         </app-group-card>
       </div>
     </div>
+  `,
+  styles: `
+    .div-groups-list-container {
+      padding: 0 var(--spacing-large);
+    }
   `,
   standalone: true,
 })

@@ -21,77 +21,95 @@
         </p>
       </div>
 
-      <form nz-form [formGroup]="searchForm" *ngIf="!sentSuccessfully()">
-        <nz-form-item>
-          <nz-form-control>
-            <nz-input-group nzPrefixIcon="search" [nzSuffix]="searchingSuffix">
-              <input
-                type="text"
-                nz-input
-                formControlName="username"
-                placeholder="Search by username (min. 2 characters)"
-              />
-            </nz-input-group>
-            <ng-template #searchingSuffix>
-              <span nz-icon nzType="loading" *ngIf="searching()"></span>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
+      @if (!sentSuccessfully()) {
+        <form nz-form [formGroup]="searchForm">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group
+                nzPrefixIcon="search"
+                [nzSuffix]="searchingSuffix"
+              >
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="username"
+                  placeholder="Search by username (min. 2 characters)"
+                />
+              </nz-input-group>
+              <ng-template #searchingSuffix>
+                @if (searching()) {
+                  <span nz-icon nzType="loading"></span>
+                }
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      }
 
-      <div class="users-list" *ngIf="!sentSuccessfully() && users().length > 0">
-        <nz-list [nzDataSource]="users()" nzBordered>
-          <nz-list-item
-            *ngFor="let user of users()"
-            [class.selected]="selectedUser()?.id === user.id"
-            (click)="selectUser(user)"
-          >
-            <div class="user-item">
-              <div class="user-info">
-                <span nz-icon nzType="user" class="user-icon"></span>
-                <div class="user-details">
-                  <span class="username">{{ user.username }}</span>
-                  <span class="email">{{ user.email }}</span>
+      @if (!sentSuccessfully() && users().length > 0) {
+        <div class="users-list">
+          <nz-list [nzDataSource]="users()" nzBordered>
+            @for (user of users(); track user.id) {
+              <nz-list-item
+                [class.selected]="selectedUser()?.id === user.id"
+                (click)="selectUser(user)"
+              >
+                <div class="user-item">
+                  <div class="user-info">
+                    <span nz-icon nzType="user" class="user-icon"></span>
+                    <div class="user-details">
+                      <span class="username">{{ user.username }}</span>
+                      <span class="email">{{ user.email }}</span>
+                    </div>
+                  </div>
+                  @if (selectedUser()?.id === user.id) {
+                    <span
+                      nz-icon
+                      nzType="check-circle"
+                      nzTheme="fill"
+                      class="check-icon"
+                    ></span>
+                  }
                 </div>
-              </div>
-              <span
-                nz-icon
-                nzType="check-circle"
-                nzTheme="fill"
-                class="check-icon"
-                *ngIf="selectedUser()?.id === user.id"
-              ></span>
-            </div>
-          </nz-list-item>
-        </nz-list>
-      </div>
+              </nz-list-item>
+            }
+          </nz-list>
+        </div>
+      }
 
-      <nz-empty
-        *ngIf="
-          !sentSuccessfully() &&
-          !searching() &&
-          searchForm.value.username &&
-          searchForm.value.username.length >= 2 &&
-          users().length === 0
-        "
-        nzNotFoundContent="No users found"
-        [nzNotFoundImage]="'simple'"
-      ></nz-empty>
+      @if (
+        !sentSuccessfully() &&
+        !searching() &&
+        searchForm.value.username &&
+        searchForm.value.username.length >= 2 &&
+        users().length === 0
+      ) {
+        <nz-empty
+          nzNotFoundContent="No users found"
+          [nzNotFoundImage]="'simple'"
+        ></nz-empty>
+      }
 
-      <div *ngIf="sending()" class="status-message sending-msg">
-        <span nz-icon nzType="loading" nzTheme="outline"></span>
-        <span>Sending invitation...</span>
-      </div>
+      @if (sending()) {
+        <div class="status-message sending-msg">
+          <span nz-icon nzType="loading" nzTheme="outline"></span>
+          <span>Sending invitation...</span>
+        </div>
+      }
 
-      <div *ngIf="sentSuccessfully()" class="status-message success-msg">
-        <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-        <span>Invitation has been sent successfully!</span>
-      </div>
+      @if (sentSuccessfully()) {
+        <div class="status-message success-msg">
+          <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+          <span>Invitation has been sent successfully!</span>
+        </div>
+      }
 
-      <div *ngIf="errorMessage()" class="status-message error-msg">
-        <span nz-icon nzType="close-circle" nzTheme="fill"></span>
-        <span>{{ errorMessage() }}</span>
-      </div>
+      @if (errorMessage()) {
+        <div class="status-message error-msg">
+          <span nz-icon nzType="close-circle" nzTheme="fill"></span>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
     </div>
   </ng-container>
 
@@ -100,16 +118,17 @@
       <span nz-icon nzType="close" nzTheme="outline"></span>
       <span>Close</span>
     </button>
-    <button
-      *ngIf="!sentSuccessfully()"
-      nz-button
-      nzType="primary"
-      (click)="sendInvitation()"
-      [disabled]="!selectedUser() || sending()"
-      class="modal-button modal-button-primary"
-    >
-      <span nz-icon nzType="send" nzTheme="outline"></span>
-      <span>Send Invitation</span>
-    </button>
+    @if (!sentSuccessfully()) {
+      <button
+        nz-button
+        nzType="primary"
+        (click)="sendInvitation()"
+        [disabled]="!selectedUser() || sending()"
+        class="modal-button modal-button-primary"
+      >
+        <span nz-icon nzType="send" nzTheme="outline"></span>
+        <span>Send Invitation</span>
+      </button>
+    }
   </ng-template>
 </nz-modal>

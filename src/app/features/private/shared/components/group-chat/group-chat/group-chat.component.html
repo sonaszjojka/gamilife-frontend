@@ -1,0 +1,113 @@
+<nz-drawer
+  [nzVisible]="visible()"
+  nzPlacement="right"
+  [nzTitle]="drawerTitle"
+  [nzWidth]="500"
+  (nzOnClose)="close()"
+>
+  <ng-template #drawerTitle>
+    <div class="drawer-header">
+      <span nz-icon nzType="message" nzTheme="outline"></span>
+      <span>Group Messages</span>
+    </div>
+  </ng-template>
+
+  <ng-container *nzDrawerContent>
+    <div class="chat-container">
+      <div class="filter-section">
+        <button
+          nz-button
+          [nzType]="showImportantOnly() ? 'primary' : 'default'"
+          (click)="toggleImportantFilter()"
+        >
+          <span nz-icon nzType="flag" nzTheme="outline"></span>
+          {{ showImportantOnly() ? "Show All" : "Important Only" }}
+        </button>
+      </div>
+
+      <nz-spin [nzSpinning]="loading()" class="messages-spinner">
+        <nz-list
+          *ngIf="messages().length > 0"
+          [nzDataSource]="messages()"
+          [nzRenderItem]="messageItem"
+          class="messages-list"
+        >
+          <ng-template #messageItem let-message>
+            <nz-list-item [class.important-message]="message.isImportant">
+              <div class="message-wrapper">
+                <div class="message-header">
+                  <div class="sender-info">
+                    <span class="username">{{ message.senderUsername }}</span>
+                    <span class="timestamp">{{
+                      message.sentAt | date: "short"
+                    }}</span>
+                  </div>
+                  <nz-tag *ngIf="message.isImportant" nzColor="red">
+                    <span nz-icon nzType="flag" nzTheme="fill"></span>
+                    Important
+                  </nz-tag>
+                </div>
+                <div class="message-content">{{ message.content }}</div>
+              </div>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+
+        <nz-empty
+          *ngIf="messages().length === 0 && !loading()"
+          nzNotFoundContent="No messages yet"
+        ></nz-empty>
+      </nz-spin>
+
+      <div class="pagination-section" *ngIf="totalElements() > pageSize()">
+        <nz-pagination
+          [nzPageIndex]="currentPage()"
+          [nzTotal]="totalElements()"
+          [nzPageSize]="pageSize()"
+          (nzPageIndexChange)="onPageChange($event)"
+          nzShowSizeChanger
+        ></nz-pagination>
+      </div>
+
+      <div class="message-form">
+        <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+          <div class="form-content">
+            <div class="textarea-wrapper">
+              <textarea
+                nz-input
+                formControlName="content"
+                placeholder="Write a message..."
+                [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+              ></textarea>
+              <div class="character-counter">
+                {{ messageForm.get("content")?.value?.length || 0 }} / 255
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <nz-checkbox
+                nz-checkbox
+                *ngIf="isAdmin()"
+                formControlName="isImportant"
+              >
+                <span nz-icon nzType="flag" nzTheme="outline"></span>
+                Mark as Important
+              </nz-checkbox>
+
+              <button
+                nz-button
+                nzType="primary"
+                type="submit"
+                [nzLoading]="sending()"
+                [disabled]="messageForm.invalid"
+              >
+                <span nz-icon nzType="send"></span>
+                Send
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+</nz-drawer>
