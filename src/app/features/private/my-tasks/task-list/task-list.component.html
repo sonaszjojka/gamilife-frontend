@@ -83,6 +83,7 @@
     }
     @else {
       <app-task-calendar
+        #calendarComponent
         (deadlineSelected)="endDate.set($event)"
         (deadlineSelected)="startDate.set($event)"
 
