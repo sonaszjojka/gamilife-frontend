@@ -8,9 +8,8 @@ describe('GroupChatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupChatComponent]
-    })
-    .compileComponents();
+      imports: [GroupChatComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GroupChatComponent);
     component = fixture.componentInstance;
