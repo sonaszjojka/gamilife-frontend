@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, input, Input, OnInit, Output, signal,} from '@angular/core';
+import {Component, EventEmitter, inject, input, Input, OnInit, Output, signal, ViewChild,} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
@@ -14,6 +14,7 @@ import {
   ActivityType
 } from '../../../../../shared/models/task-models/activity.model';
 import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
+import {RestoreTaskModalComponent} from '../restore-task-modal/restore-task-modal.component';
 
 @Component({
   selector: 'app-task-item',
@@ -45,13 +46,11 @@ export class TaskItemComponent implements OnInit {
   taskService = inject(UserTaskApiService);
   habitService = inject(HabitApiService);
 
+  @ViewChild(RestoreTaskModalComponent)
+  restoreTaskModalComponent!: RestoreTaskModalComponent;
+
   ngOnInit(): void {
     this.isCompleted.set(this.activity.status != ActivityStatus.DEADLINE_MISSED);
-    if (this.activity.type==ActivityType.HABIT)
-    {
-      this.activity.workable=true;
-    }
-
   }
 
   completeTask(event:MouseEvent): void {
@@ -97,7 +96,7 @@ export class TaskItemComponent implements OnInit {
           this.activity.deadlineDate=response.deadlineDate;
           this.activity.currentStreak=response.currentStreak;
           this.activity.longestStreak=response.longestStreak
-          this.activity.workable=response.workable
+          this.activity.canBeWorkedOn=response.workable;
           this.taskUpdated.emit(this.activity.id);
         },
         error: (error) => {
@@ -124,21 +123,19 @@ export class TaskItemComponent implements OnInit {
       this.removeFromCurrentSession.emit(this.activity);
     }
 
-
-
   protected readonly ActivityType = ActivityType;
 
   protected readonly ActivityStatus = ActivityStatus;
 
   restoreTask($event: MouseEvent) {
-
     $event.stopPropagation();
-
 
   }
 
   restoreHabit($event: MouseEvent) {
     $event.stopPropagation();
+
+
 
   }
 }

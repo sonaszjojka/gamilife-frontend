@@ -5,7 +5,7 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import {ActivityItemDetails, ActivityTypeColors} from '../../../../../shared/models/task-models/activity.model';
 import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
-import {DatePipe, NgStyle} from '@angular/common';
+import {DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 @Component({
@@ -17,7 +17,6 @@ import {FormsModule} from '@angular/forms';
     NzIconDirective,
     DatePipe,
     FormsModule,
-    NgStyle
   ],
   templateUrl: './task-calendar.component.html',
   standalone: true,

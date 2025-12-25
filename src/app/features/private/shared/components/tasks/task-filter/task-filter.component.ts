@@ -27,13 +27,6 @@ export class TaskFilterComponent {
 
   router = inject(Router);
 
-  openHandler(value: string): void {
-    for (const key in this.openMap) {
-      if (key !== value) {
-        this.openMap[key] = false;
-      }
-    }
-  }
 
   activitiesSelected(): void {
     this.listView?.set(ActivityListView.Activities);
@@ -41,37 +34,48 @@ export class TaskFilterComponent {
     this.difficultyId?.set(null);
   }
 
-  categorySelected(category: number): void {
-    this.listView?.set(ActivityListView.Activities);
+  categorySelected(category: number, viewType: 'Activities' | 'Tasks' | 'Habits'): void {
+    if (viewType === 'Activities') this.listView?.set(ActivityListView.Activities);
+    if (viewType === 'Tasks') this.listView?.set(ActivityListView.Tasks);
+    if (viewType === 'Habits') this.listView?.set(ActivityListView.Habits);
+
     this.categoryId?.set(category);
     this.difficultyId?.set(null);
-
   }
 
-  difficultySelected(difficulty: number): void {
-    this.listView?.set(ActivityListView.Activities);
-    this.categoryId?.set(null);
+  difficultySelected(difficulty: number, viewType: 'Activities' | 'Tasks' | 'Habits'): void {
+    if (viewType === 'Activities') this.listView?.set(ActivityListView.Activities);
+    if (viewType === 'Tasks') this.listView?.set(ActivityListView.Tasks);
+    if (viewType === 'Habits') this.listView?.set(ActivityListView.Habits);
     this.difficultyId?.set(difficulty);
-
+    this.categoryId?.set(null);
   }
 
   activeTaskSelected(): void {
     this.listView?.set(ActivityListView.Tasks);
     this.isAlive?.set(true);
+    this.difficultyId?.set(null);
+    this.categoryId?.set(null);
   }
 
   inactiveTaskSelected(): void {
     this.listView?.set(ActivityListView.Tasks);
     this.isAlive?.set(false);
+    this.difficultyId?.set(null);
+    this.categoryId?.set(null);
   }
 
   activeHabitSelected(): void {
     this.listView?.set(ActivityListView.Habits);
     this.isAlive?.set(true);
+    this.difficultyId?.set(null);
+    this.categoryId?.set(null);
   }
   inactiveHabitSelected(): void {
     this.listView?.set(ActivityListView.Habits);
     this.isAlive?.set(false);
+    this.difficultyId?.set(null);
+    this.categoryId?.set(null);
   }
 
   pomodoroSessionSelected() {

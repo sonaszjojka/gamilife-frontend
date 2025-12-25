@@ -122,6 +122,8 @@ export class TaskListComponent implements  OnInit{
         this.currentPage,
         this.pageSize,
         this.isAlive(),
+        this.categoryId(),
+        this.difficultyId(),
       ).subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.activities = response.content;
@@ -142,6 +144,8 @@ export class TaskListComponent implements  OnInit{
         this.currentPage,
         this.pageSize,
         this.isAlive(),
+        this.categoryId(),
+        this.difficultyId(),
       ).subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.activities = response.content;
@@ -192,6 +196,8 @@ export class TaskListComponent implements  OnInit{
         nextPage,
         this.pageSize,
         this.isAlive(),
+        this.categoryId(),
+        this.difficultyId(),
       ).subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.activities = [...this.activities, ...response.content];
@@ -209,6 +215,8 @@ export class TaskListComponent implements  OnInit{
         nextPage,
         this.pageSize,
         this.isAlive(),
+        this.categoryId(),
+        this.difficultyId(),
       ).subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.activities = [...this.activities, ...response.content];
@@ -261,7 +269,6 @@ export class TaskListComponent implements  OnInit{
 
   onActivityUpdated(activityId: string): void {
     const changedActivity = this.activities.find((t) => t.id == activityId)!;
-    const isTaskNoneActive: boolean = (changedActivity.status != ActivityStatus.DEADLINE_MISSED)|| changedActivity.completedAt!=null
     if (
       (changedActivity.categoryId != this.categoryId() &&
         this.categoryId() != null) ||
