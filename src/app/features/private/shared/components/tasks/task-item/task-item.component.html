@@ -71,17 +71,16 @@
           </div>
         </div>
       </div>
-      @if (activity.completedAt)
-      {
-      <div class="info-item">
-        <nz-icon nzType="calendar" class="info-icon"></nz-icon>
-        <div class="info-content">
-          <div class="info-label">Completed At</div>
-          <div class="info-value">
-            {{ activity.completedAt | date: 'dd.MM.yyyy HH:mm' }}
+      @if (activity.completedAt) {
+        <div class="info-item">
+          <nz-icon nzType="calendar" class="info-icon"></nz-icon>
+          <div class="info-content">
+            <div class="info-label">Completed At</div>
+            <div class="info-value">
+              {{ activity.completedAt | date: "dd.MM.yyyy HH:mm" }}
+            </div>
           </div>
         </div>
-      </div>
       }
 
       <div class="info-item">

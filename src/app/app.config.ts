@@ -14,7 +14,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './shared/auth.interceptor';
 import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
-import {timeZoneInterceptor} from './shared/time-zone.interceptor';
+import { timeZoneInterceptor } from './shared/time-zone.interceptor';
 
 registerLocaleData(en);
 
@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor,timeZoneInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, timeZoneInterceptor])),
     { provide: NZ_CONFIG, useValue: ngZorroConfig },
   ],
 };
