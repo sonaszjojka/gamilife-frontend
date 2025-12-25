@@ -18,6 +18,8 @@ export class HabitApiService {
   getHabits(    page:number,
                 size:number|null,
                 isAlive:boolean|null,
+                categoryId:number|null,
+                difficultyId:number|null
                 ): Observable<Page<ActivityItemDetails>>
   {
     let httpParams = new HttpParams();
@@ -30,6 +32,12 @@ export class HabitApiService {
     }
     if (isAlive!==null) {
       httpParams = httpParams.set('isAlive', isAlive);
+    }
+    if (categoryId !== undefined && categoryId !== null) {
+      httpParams = httpParams.set('categoryId', categoryId.toString());
+    }
+    if (difficultyId !== undefined && difficultyId !== null) {
+      httpParams = httpParams.set('difficultyId', difficultyId.toString());
     }
 
     return this.http.get<Page<ActivityItemDetails>>(`${this.API_URL}`,

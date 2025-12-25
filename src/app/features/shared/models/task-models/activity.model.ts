@@ -17,7 +17,7 @@ export interface ActivityItemDetails
   currentStreak?:number|undefined
   longestStreak?:number|undefined
   completedAt?:string|undefined
-  workable?:boolean|undefined
+  canBeWorkedOn?:boolean|undefined
 }
 
 export enum ActivityType {
