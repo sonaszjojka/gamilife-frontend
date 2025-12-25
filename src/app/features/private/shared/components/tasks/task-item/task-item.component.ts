@@ -14,7 +14,6 @@ import {
   ActivityType, HabitStatus
 } from '../../../../../shared/models/task-models/activity.model';
 import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
-import {RestoreTaskModalComponent} from '../restore-task-modal/restore-task-modal.component';
 
 @Component({
   selector: 'app-task-item',
@@ -27,7 +26,6 @@ import {RestoreTaskModalComponent} from '../restore-task-modal/restore-task-moda
     NzIconDirective,
     NzButtonComponent,
     PomodoroTaskProgressComponent,
-    RestoreTaskModalComponent,
   ],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css',
@@ -52,9 +50,6 @@ export class TaskItemComponent implements OnInit {
 
   taskService = inject(UserTaskApiService);
   habitService = inject(HabitApiService);
-
-  @ViewChild(RestoreTaskModalComponent)
-  restoreTaskModalComponent!: RestoreTaskModalComponent;
 
   ngOnInit(): void {
     this.isCompleted.set(this.activity.status != ActivityStatus.DEADLINE_MISSED);
