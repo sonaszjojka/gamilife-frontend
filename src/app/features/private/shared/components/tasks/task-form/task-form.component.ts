@@ -257,7 +257,8 @@ export class TaskFormComponent implements OnChanges {
             this.activityFormSubmitted.emit();
           },
           error: () => {
-            this.notificationService.error('Error creating habit.');},
+            this.notificationService.error('Error creating habit.');
+          },
         });
       } else {
         this.habitApi.editHabit(this.activity()!.id, request).subscribe({
@@ -266,7 +267,8 @@ export class TaskFormComponent implements OnChanges {
             this.activityFormSubmitted.emit();
           },
           error: () => {
-            this.notificationService.error('Error editing habit.');},
+            this.notificationService.error('Error editing habit.');
+          },
         });
       }
     }
@@ -280,7 +282,7 @@ export class TaskFormComponent implements OnChanges {
           this.validActivityForm.reset();
           this.activityDeleted.emit();
         },
-        error: (error) => {
+        error: () => {
           this.notificationService.error('Error deleting task.');
           this.activityFormSubmitted.emit();
         },
@@ -302,5 +304,4 @@ export class TaskFormComponent implements OnChanges {
     this.pomodoroModal.activity = this.activity()!;
     this.pomodoroModal.showModal();
   }
-
 }

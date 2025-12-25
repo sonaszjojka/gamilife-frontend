@@ -9,7 +9,7 @@ import {
   ActivityItemDetails,
   ActivityType,
 } from '../../../../../shared/models/task-models/activity.model';
-import {NotificationService} from '../../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-pomdoro-form-modal',
@@ -79,11 +79,15 @@ export class PomodoroSessionFormModal {
 
           this.moveToCurrentSession.emit(this.activity);
           this.isVisible = false;
-          this.notificationService.success( `Pomodoro created successfully for: ${this.activity.title}`);
+          this.notificationService.success(
+            `Pomodoro created successfully for: ${this.activity.title}`,
+          );
         },
         error: () => {
-          this.notificationService.error( `There was an error creating Pomodoro for: ${this.activity.title}`);
-        }
+          this.notificationService.error(
+            `There was an error creating Pomodoro for: ${this.activity.title}`,
+          );
+        },
       });
     } else if (
       this.editionMode() &&
@@ -98,10 +102,14 @@ export class PomodoroSessionFormModal {
             this.activity.pomodoro!.cyclesCompleted = response.cyclesCompleted;
             this.moveToCurrentSession.emit(this.activity);
             this.isVisible = false;
-            this.notificationService.success( `Pomodoro updated successfully for: ${this.activity.title}`);
+            this.notificationService.success(
+              `Pomodoro updated successfully for: ${this.activity.title}`,
+            );
           },
           error: () => {
-            this.notificationService.error( `There was an error updating Pomodoro for: ${this.activity.title}`);
+            this.notificationService.error(
+              `There was an error updating Pomodoro for: ${this.activity.title}`,
+            );
           },
         });
     }
