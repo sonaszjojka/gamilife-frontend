@@ -3,12 +3,9 @@
     <nz-icon nzType="close"></nz-icon>
   </button>
   <form class="task-form" [formGroup]="validActivityForm">
-    @if (this.type()==ActivityType.TASK)
-    {
+    @if (this.type() === ActivityType.TASK) {
       <h2>TASK</h2>
-    }
-    @else
-    {
+    } @else {
       <h2>Habit</h2>
     }
 
@@ -75,10 +72,9 @@
       </nz-form-control>
     </nz-form-item>
 
-
-    @if (this.type()==ActivityType.TASK) {
+    @if (this.type() === ActivityType.TASK) {
       <nz-form-item>
-        <nz-form-label >End Time</nz-form-label>
+        <nz-form-label>End Time</nz-form-label>
         <nz-form-control nzErrorTip="Please provide valid End Time">
           <nz-date-picker
             nzId="deadlineDate"
@@ -95,9 +91,7 @@
           </nz-time-picker>
         </nz-form-control>
       </nz-form-item>
-
-    } @else
-    {
+    } @else {
       <nz-form-item>
         <nz-form-label> Habit Cycle Length</nz-form-label>
         <nz-form-control nzErrorTip="Provide valid number of cycle lenght days">
@@ -109,13 +103,11 @@
           />
         </nz-form-control>
       </nz-form-item>
-
     }
   </form>
 
   <div class="button-panel">
-    @if (viewMode())
-    {
+    @if (viewMode()) {
       <button
         class="delete-button"
         nz-button
@@ -125,18 +117,20 @@
         Delete <nz-icon nzType="delete"></nz-icon>
       </button>
     }
-    @if (!viewMode())
-    {
-    <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
-    @if (this.editionMode?.()) {
-      @if (activity()?.pomodoro==undefined)
-      {
-      <button nz-button nzShape="round" (click)="onPomodoroCreation()">Make Activity Pomodoro</button>
-      } @else {
-        <button nz-button nzShape="round" (click)="onPomodoroCreation()">Edit Pomodoro Parameters</button>
+    @if (!viewMode()) {
+      <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
+      @if (this.editionMode?.()) {
+        @if (activity()?.pomodoro === undefined) {
+          <button nz-button nzShape="round" (click)="onPomodoroCreation()">
+            Make Activity Pomodoro
+          </button>
+        } @else {
+          <button nz-button nzShape="round" (click)="onPomodoroCreation()">
+            Edit Pomodoro Parameters
+          </button>
+        }
       }
     }
-    }
-      </div>
+  </div>
 </div>
 <app-pomdoro-form-modal></app-pomdoro-form-modal>

@@ -5,35 +5,31 @@ import { environment } from '../../../../../environments/environment';
 import { CreateTaskResponse } from '../../models/task-models/create-task-response';
 import { EditTaskResponse } from '../../models/task-models/edit-task-response';
 import { TaskRequest } from '../../models/task-models/task-request';
-import {Page} from '../../models/util/page.model';
-import {ActivityItemDetails} from '../../models/task-models/activity.model';
+import { Page } from '../../models/util/page.model';
+import { ActivityItemDetails } from '../../models/task-models/activity.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserTaskApiService {
-
   private API_URL = `${environment.apiUrl}/activities`;
   private TASK_API_URL = `${environment.apiUrl}/tasks`;
 
   private http = inject(HttpClient);
 
-
   getAllActivities(
-    page:number,
-    size:number|null,
-    title:string|null,
-    startDate:string|null,
-    endDate:string|null,
-    categoryId:number|null,
-    difficultyId:number|null
-
+    page: number,
+    size: number | null,
+    title: string | null,
+    startDate: string | null,
+    endDate: string | null,
+    categoryId: number | null,
+    difficultyId: number | null,
   ): Observable<Page<ActivityItemDetails>> {
     let httpParams = new HttpParams();
 
     httpParams = httpParams.set('page', page.toString());
-    if (size !== null)
-    {
+    if (size !== null) {
       httpParams = httpParams.set('size', size.toString());
     }
     if (title) {
@@ -57,24 +53,21 @@ export class UserTaskApiService {
     });
   }
 
-
   getTasks(
-    page:number,
-    size:number|null,
-    isCompleted:boolean|null,
-    categoryId:number|null,
-    difficultyId:number|null
-  ): Observable<Page<ActivityItemDetails>>
-  {
+    page: number,
+    size: number | null,
+    isCompleted: boolean | null,
+    categoryId: number | null,
+    difficultyId: number | null,
+  ): Observable<Page<ActivityItemDetails>> {
     let httpParams = new HttpParams();
 
     httpParams = httpParams.set('page', page.toString());
 
-    if (size !== null)
-    {
+    if (size !== null) {
       httpParams = httpParams.set('size', size.toString());
     }
-    if (isCompleted!==null) {
+    if (isCompleted !== null) {
       httpParams = httpParams.set('isCompleted', isCompleted);
     }
     if (categoryId !== undefined && categoryId !== null) {
@@ -84,18 +77,13 @@ export class UserTaskApiService {
       httpParams = httpParams.set('difficultyId', difficultyId.toString());
     }
 
-    return this.http.get<Page<ActivityItemDetails>>(`${this.TASK_API_URL}`,
-      {
-        params: httpParams,
-        withCredentials: true,
-      })
+    return this.http.get<Page<ActivityItemDetails>>(`${this.TASK_API_URL}`, {
+      params: httpParams,
+      withCredentials: true,
+    });
   }
 
-
-  editTask(
-    taskId: string,
-    request: TaskRequest,
-  ): Observable<EditTaskResponse> {
+  editTask(taskId: string, request: TaskRequest): Observable<EditTaskResponse> {
     return this.http.patch<EditTaskResponse>(
       `${this.TASK_API_URL}/${taskId}`,
       request,
@@ -103,17 +91,14 @@ export class UserTaskApiService {
     );
   }
 
-
   createTask(request: TaskRequest): Observable<CreateTaskResponse> {
-    return this.http.post<CreateTaskResponse>(
-      `${this.TASK_API_URL}`,
-      request,
-      { withCredentials: true },
-    );
+    return this.http.post<CreateTaskResponse>(`${this.TASK_API_URL}`, request, {
+      withCredentials: true,
+    });
   }
 
-  deleteTask(taskId: string): Observable<any> {
-    return this.http.delete(`${this.TASK_API_URL}/${taskId}`, {
+  deleteTask(taskId: string): void {
+    this.http.delete(`${this.TASK_API_URL}/${taskId}`, {
       withCredentials: true,
     });
   }

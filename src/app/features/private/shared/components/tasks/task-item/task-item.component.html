@@ -1,38 +1,37 @@
 <nz-card class="task-card" (click)="onTaskView($event)">
-  @if (inPomodoroList())
-  {
-    @if (!isInSession())
-    {
+  @if (inPomodoroList()) {
+    @if (!isInSession()) {
       <button nz-button nzShape="circle" (click)="addTaskToPomodoroSession()">
-        @if (this.activity.pomodoro)
-        {
+        @if (this.activity.pomodoro) {
           <nz-icon nzType="arrow-left"></nz-icon>
-        }
-        @else {
+        } @else {
           <nz-icon nzType="arrow-right"></nz-icon>
         }
       </button>
-    }
-    @else {
-      <button nz-button nzShape="circle" (click)="removeTaskFromPomodoroSession()">
+    } @else {
+      <button
+        nz-button
+        nzShape="circle"
+        (click)="removeTaskFromPomodoroSession()"
+      >
         <nz-icon nzType="arrow-right"></nz-icon>
       </button>
     }
   }
-  @if (!inPomodoroList())
-  {
+  @if (!inPomodoroList()) {
     <div class="task-header-controls">
-      <button nz-button nzShape="circle" (click)="onTaskEdit($event)"><nz-icon nzType ="setting"></nz-icon></button>
+      <button nz-button nzShape="circle" (click)="onTaskEdit($event)">
+        <nz-icon nzType="setting"></nz-icon>
+      </button>
     </div>
   }
   <div class="task-content">
     <div class="task-header">
       <h1 class="task-title">{{ activity.title }}</h1>
-      @if (activity.pomodoro!=undefined)
-      {
+      @if (activity.pomodoro !== undefined) {
         <app-pomodoro-task-progress
-        [cyclesCompleted]="activity.pomodoro.cyclesCompleted"
-        [cyclesRequired]="activity.pomodoro.cyclesRequired"
+          [cyclesCompleted]="activity.pomodoro.cyclesCompleted"
+          [cyclesRequired]="activity.pomodoro.cyclesRequired"
         >
         </app-pomodoro-task-progress>
       }
@@ -54,7 +53,7 @@
           <div class="info-value">
             {{ activity.difficultyName }}
             <span class="limit">/</span>
-            {{ activity.categoryName}}
+            {{ activity.categoryName }}
           </div>
         </div>
       </div>
@@ -63,7 +62,12 @@
         <nz-icon nzType="calendar" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Deadline</div>
-          <div class="info-value">{{ activity.deadlineDate }} @if (activity.deadlineTime){- {{activity.deadlineTime}}}</div>
+          <div class="info-value">
+            {{ activity.deadlineDate }}
+            @if (activity.deadlineTime) {
+              - {{ activity.deadlineTime }}
+            }
+          </div>
         </div>
       </div>
 
@@ -76,84 +80,77 @@
       </div>
     </div>
 
-    @if (activity.type==ActivityType.HABIT)
-    {
-    <div class="info-item participants-list">
-      <nz-icon nzType="fire" class="info-icon"></nz-icon>
-      <div class="info-content">
-        <div class="info-label">Longest Streak</div>
-        <div class="info-value count-container">
-
+    @if (activity.type === ActivityType.HABIT) {
+      <div class="info-item participants-list">
+        <nz-icon nzType="fire" class="info-icon"></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Longest Streak</div>
+          <div class="info-value count-container">
             <span class="highlighted-item">
-            {{activity.longestStreak}}
+              {{ activity.longestStreak }}
             </span>
-
+          </div>
         </div>
       </div>
-    </div>
 
       <div class="info-item current-streak">
         <nz-icon nzType="thunderbolt" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Current Streak</div>
           <div class="info-value count-container">
-
             <span class="highlighted-item">
-            {{activity.currentStreak}}
+              {{ activity.currentStreak }}
             </span>
-
           </div>
         </div>
       </div>
     }
-    @if (activity.pomodoro!=undefined)
-    {
+    @if (activity.pomodoro !== undefined) {
       <div class="info-item">
         <nz-icon nzType="clock-circle" class="info-icon"></nz-icon>
         <div class="info-label">Pomodoro Progress</div>
         <div class="info-value">
-              <span class="highlighted-item">
-            {{activity.pomodoro.cyclesCompleted}}/{{activity.pomodoro.cyclesRequired}}
-            </span>
+          <span class="highlighted-item">
+            {{ activity.pomodoro.cyclesCompleted }}/{{
+              activity.pomodoro.cyclesRequired
+            }}
+          </span>
         </div>
       </div>
     }
-
   </div>
 
   <div class="task-actions-footer">
-    @if (!inPomodoroList() && this.activity.pomodoro==undefined)
-    {
+    @if (!inPomodoroList() && this.activity.pomodoro === undefined) {
       <div class="action-right">
-        @if (this.activity.type==ActivityType.TASK)
-        {
-          @if (this.activity.status!==ActivityStatus.COMPLETED)
-          {
-            <button nz-button nzShape="circle" (click)="completeTask($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
-
+        @if (this.activity.type === ActivityType.TASK) {
+          @if (this.activity.status !== ActivityStatus.COMPLETED) {
+            <button nz-button nzShape="circle" (click)="completeTask($event)">
+              <nz-icon nzType="check-circle"></nz-icon>
+            </button>
           }
-        }
-        @else
-        {
-          @if (activity.habitStatus==HabitStatus.DEAD)
-          {
-            <button nz-button nzShape="circle" (click)=" restoreHabit($event)"><nz-icon nzType="reload"></nz-icon> </button>
-          }
-          @else
-          {
-            @if (activity.canBeWorkedOn===false)
-            {
-              <button nz-button nzShape="circle"  disabled><nz-icon nzType="check-circle"></nz-icon> </button>
-            }
-            @else
-            {
-              <button nz-button nzShape="circle" (click)="completeHabitCycle($event)"><nz-icon nzType="check-circle"></nz-icon> </button>
+        } @else {
+          @if (activity.habitStatus === HabitStatus.DEAD) {
+            <button nz-button nzShape="circle" (click)="restoreHabit($event)">
+              <nz-icon nzType="reload"></nz-icon>
+            </button>
+          } @else {
+            @if (activity.canBeWorkedOn === false) {
+              <button nz-button nzShape="circle" disabled>
+                <nz-icon nzType="check-circle"></nz-icon>
+              </button>
+            } @else {
+              <button
+                nz-button
+                nzShape="circle"
+                (click)="completeHabitCycle($event)"
+              >
+                <nz-icon nzType="check-circle"></nz-icon>
+              </button>
             }
           }
         }
       </div>
     }
-
   </div>
 </nz-card>
-

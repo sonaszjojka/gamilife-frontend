@@ -9,7 +9,7 @@
 }
 
 .task-card:hover {
-  transform: scale(1.10);
+  transform: scale(1.1);
 }
 
 :host ::ng-deep .task-card .ant-card-body {
