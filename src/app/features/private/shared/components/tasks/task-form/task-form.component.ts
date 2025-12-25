@@ -73,6 +73,7 @@ export class TaskFormComponent implements OnChanges {
   private taskApi = inject(UserTaskApiService);
   private habitApi = inject(HabitApiService);
   private notificationService = inject(NotificationService);
+  protected readonly ActivityType = ActivityType;
 
   @ViewChild(PomodoroSessionFormModal)
   protected pomodoroModal = new PomodoroSessionFormModal();
@@ -252,20 +253,20 @@ export class TaskFormComponent implements OnChanges {
       if (this.creationMode!()) {
         this.habitApi.createHabit(request).subscribe({
           next: () => {
+            this.notificationService.success('Habit created successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: (err) => {
-            console.log(err);
-          },
+          error: () => {
+            this.notificationService.error('Error creating habit.');},
         });
       } else {
         this.habitApi.editHabit(this.activity()!.id, request).subscribe({
           next: () => {
+            this.notificationService.success('Habit edited successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: (err) => {
-            console.error(err);
-          },
+          error: () => {
+            this.notificationService.error('Error editing habit.');},
         });
       }
     }
@@ -275,21 +276,23 @@ export class TaskFormComponent implements OnChanges {
     if (this.activity()?.type == ActivityType.TASK) {
       this.taskApi.deleteTask(this.activity()!.id).subscribe({
         next: () => {
+          this.notificationService.success('Task deleted successfully!');
           this.validActivityForm.reset();
           this.activityDeleted.emit();
         },
         error: (error) => {
-          console.error('Error deleting task:', error);
+          this.notificationService.error('Error deleting task.');
           this.activityFormSubmitted.emit();
         },
       });
     } else {
       this.habitApi.deleteHabit(this.activity()!.id).subscribe({
         next: () => {
+          this.notificationService.success('Habit deleted successfully!');
           this.activityFormSubmitted.emit();
         },
-        error: (err) => {
-          console.error(err);
+        error: () => {
+          this.notificationService.error('Error deleting habit.');
         },
       });
     }
@@ -299,5 +302,5 @@ export class TaskFormComponent implements OnChanges {
     this.pomodoroModal.activity = this.activity()!;
     this.pomodoroModal.showModal();
   }
-  protected readonly ActivityType = ActivityType;
+
 }

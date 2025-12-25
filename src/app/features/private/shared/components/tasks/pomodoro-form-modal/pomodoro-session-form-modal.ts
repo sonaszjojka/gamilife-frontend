@@ -9,6 +9,7 @@ import {
   ActivityItemDetails,
   ActivityType,
 } from '../../../../../shared/models/task-models/activity.model';
+import {NotificationService} from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-pomdoro-form-modal',
@@ -40,7 +41,8 @@ export class PomodoroSessionFormModal {
   creationMode = signal<boolean>(false);
   title = '';
 
-  pomodoroService = inject(PomodoroApiService);
+  private pomodoroApi = inject(PomodoroApiService);
+  private notificationService = inject(NotificationService);
   pomodoroRequest?: PomodoroRequest;
   isVisible = false;
 
@@ -67,7 +69,7 @@ export class PomodoroSessionFormModal {
         this.pomodoroRequest.habitId = this.activity.id;
         this.pomodoroRequest.taskId = undefined;
       }
-      this.pomodoroService.createPomodoro(this.pomodoroRequest).subscribe({
+      this.pomodoroApi.createPomodoro(this.pomodoroRequest).subscribe({
         next: (response) => {
           this.activity.pomodoro = {
             id: response.id,
@@ -77,14 +79,18 @@ export class PomodoroSessionFormModal {
 
           this.moveToCurrentSession.emit(this.activity);
           this.isVisible = false;
+          this.notificationService.success( `Pomodoro created successfully for: ${this.activity.title}`);
         },
+        error: () => {
+          this.notificationService.error( `There was an error creating Pomodoro for: ${this.activity.title}`);
+        }
       });
     } else if (
       this.editionMode() &&
       this.pomodoroRequest != null &&
       this.activity.pomodoro?.id
     ) {
-      this.pomodoroService
+      this.pomodoroApi
         .editPomodoro(this.activity.pomodoro!.id, this.pomodoroRequest)
         .subscribe({
           next: (response) => {
@@ -92,6 +98,10 @@ export class PomodoroSessionFormModal {
             this.activity.pomodoro!.cyclesCompleted = response.cyclesCompleted;
             this.moveToCurrentSession.emit(this.activity);
             this.isVisible = false;
+            this.notificationService.success( `Pomodoro updated successfully for: ${this.activity.title}`);
+          },
+          error: () => {
+            this.notificationService.error( `There was an error updating Pomodoro for: ${this.activity.title}`);
           },
         });
     }
