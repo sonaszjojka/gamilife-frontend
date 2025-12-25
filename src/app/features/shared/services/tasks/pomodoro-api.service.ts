@@ -59,7 +59,7 @@ return this.http.get<Page<ActivityItemDetails>>(`${this.API_URL}/pomodoro-activi
     pomodoroId: string,
     request: PomodoroRequest,
   ): Observable<EditPomodoroResponse> {
-    return this.http.put<EditPomodoroResponse>(
+    return this.http.patch<EditPomodoroResponse>(
       `${this.API_URL}/pomodoro-items/${pomodoroId}`,
       request,
       { withCredentials: true },

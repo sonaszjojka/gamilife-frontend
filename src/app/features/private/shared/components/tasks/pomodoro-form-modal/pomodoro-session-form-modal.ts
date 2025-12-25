@@ -70,7 +70,6 @@ export class PomodoroSessionFormModal {
       this.pomodoroService
         .createPomodoro(this.pomodoroRequest)
         .subscribe({
-          //ToDo Take care of Validation Errors
           next: (response) => {
             this.activity.pomodoro = {
               id: response.id,
