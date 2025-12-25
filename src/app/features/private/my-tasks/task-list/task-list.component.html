@@ -8,27 +8,25 @@
     <app-task-filter
       [categoryId]="categoryId"
       [difficultyId]="difficultyId"
-      [isGroupTask]="isGroupTask"
-      [isCompleted]="isCompleted"
     ></app-task-filter>
 
     <div class="task-list">
-      @if (!loading && tasks.length === 0) {
+      @if (!loading && activities.length === 0) {
         <div class="empty-state">
           <h3>You have no tasks yet!</h3>
         </div>
       }
 
-      @if (!loading && tasks.length > 0) {
+      @if (!loading && activities.length > 0) {
         @for (date of getGroupKeys(); track getGroupKeys().keys()) {
           <div class="task-group">
             <h3 class="task-group-title">{{ date }}</h3>
 
             <div class="tasks-grid">
-              @for (task of groupedTasks[date]; track task.taskId) {
+              @for (activity of groupedTasks[date]; track activity.id) {
                 <app-task-item
-                  [task]="task"
-                  (editTask)="onTaskEdit(task)"
+                  [activity]="activity"
+                  (editTask)="onTaskEdit(activity)"
                   (taskUpdated)="onTaskUpdated($event)"
                 >
                 </app-task-item>
@@ -38,10 +36,9 @@
         }
       }
     </div>
-
     @if (editionMode() || creationMode()) {
       <app-task-form
-        [task]="selectedTask"
+        [activity]="selectedTask"
         [editionMode]="editionMode"
         [creationMode]="creationMode"
         (taskFormSubmitted)="onTaskSubmit()"
@@ -49,7 +46,7 @@
       >
       </app-task-form>
     } @else {
-      <app-task-calendar [taskCalendarList]="this.tasks"></app-task-calendar>
+      <app-task-calendar [taskCalendarList]="this.activities"></app-task-calendar>
     }
   </div>
 </div>

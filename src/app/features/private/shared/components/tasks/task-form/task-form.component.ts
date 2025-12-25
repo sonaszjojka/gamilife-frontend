@@ -6,7 +6,7 @@ import {
   WritableSignal,
   Output,
   EventEmitter,
-  signal,
+  signal, input,
 } from '@angular/core';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import {
@@ -21,7 +21,6 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzAutosizeDirective, NzInputDirective } from 'ng-zorro-antd/input';
-import { Task } from '../../../../../shared/models/task-models/task.model';
 import { IndividualTaskService } from '../../../../../shared/services/tasks/individual-task.service';
 import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import { EditTaskRequest } from '../../../../../shared/models/task-models/edit-task-request';
@@ -36,7 +35,7 @@ import { CreateHabitRequest } from '../../../../../shared/models/task-models/cre
 import { EditHabitRequest } from '../../../../../shared/models/task-models/edit-habit-request';
 import { HabitFormComponent } from '../habit-form/habit-form.component';
 import { HabitTaskService } from '../../../../../shared/services/tasks/habit-task.service';
-import { daysAsDuration } from '../../../../../../shared/util/DateFormatterUtil';
+import {ActivityItemDetails} from '../../../../../shared/models/task-models/activity.model';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
@@ -63,11 +62,12 @@ import { NotificationService } from '../../../../../shared/services/notification
   styleUrl: './task-form.component.css',
 })
 export class TaskFormComponent {
+  isDisabled = input<boolean>(true)
   pomodoroCreation = signal<boolean>(false);
   pomodoroEdition = signal<boolean>(false);
   habitCreation = signal<boolean>(false);
   habitEdition = signal<boolean>(false);
-  @Input() task!: WritableSignal<Task | null>;
+  @Input() activity!: WritableSignal<ActivityItemDetails | null>;
   @Input() creationMode?: WritableSignal<boolean | null>;
   @Input() editionMode?: WritableSignal<boolean | null>;
   @Output() taskFormSubmitted = new EventEmitter<void>();
@@ -92,16 +92,11 @@ export class TaskFormComponent {
       Validators.minLength(1),
       Validators.maxLength(300),
     ]),
-    startTimeDate: this.formBuilder.control<Date | null>(null, [
+
+    deadlineDate: this.formBuilder.control<Date | null>(null, [
       Validators.required,
     ]),
-    startTimeHour: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
-    endTimeDate: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
-    endTimeHour: this.formBuilder.control<Date | null>(null, [
+    deadlineHour: this.formBuilder.control<Date | null>(null, [
       Validators.required,
     ]),
     categoryId: this.formBuilder.control<number>(0, [Validators.required]),
@@ -111,36 +106,33 @@ export class TaskFormComponent {
   });
 
   categories = [
-    { categoryId: 1, categoryName: 'Work' },
-    { categoryId: 2, categoryName: 'Personal' },
-    { categoryId: 3, categoryName: 'Health' },
+    {categoryId: 1, categoryName: 'Work'},
+    {categoryId: 2, categoryName: 'Personal'},
+    {categoryId: 3, categoryName: 'Health'},
   ];
 
   difiiculties = [
-    { difficultyId: 1, difficultyName: 'Easy' },
-    { difficultyId: 2, difficultyName: 'Medium' },
-    { difficultyId: 3, difficultyName: 'Hard' },
+    {difficultyId: 1, difficultyName: 'Easy'},
+    {difficultyId: 2, difficultyName: 'Medium'},
+    {difficultyId: 3, difficultyName: 'Hard'},
   ];
 
   constructor() {
     effect(() => {
-      const task = this.task?.();
+      const activity = this.activity?.();
       const isEditing = this.editionMode?.();
       const isCreating = this.creationMode?.();
 
-      if (task && isEditing) {
-        const startDate = task.startTime ? new Date(task.startTime) : null;
-        const endDate = task.endTime ? new Date(task.endTime) : null;
+      if (activity && isEditing) {
+        const endDate = activity.deadlineDate ? new Date(activity.deadlineDate) : null;
+        const endHour = activity.deadlineTime ? new Date(activity.deadlineTime) : null;
         this.validTaskForm.patchValue({
-          title: task.title || '',
-          startTimeDate: startDate,
-          startTimeHour: startDate,
-          endTimeDate: endDate,
-          endTimeHour: endDate,
-          categoryId: task.categoryId,
-          difficultyId: task.difficultyId,
-          completedAt: task.completedAt || '',
-          description: task.description || '',
+          title: activity.title || '',
+          deadlineDate: endDate,
+          deadlineHour: endHour,
+          categoryId: activity.categoryId,
+          difficultyId: activity.difficultyId,
+          description: activity.description || '',
         });
       } else if (isCreating) {
         this.validTaskForm.reset();
@@ -164,35 +156,15 @@ export class TaskFormComponent {
     }
 
     const formValue = this.validTaskForm.getRawValue();
-    let mergedStartTime = '';
-    const startTimeDate = formValue.startTimeDate;
-    const startTimeHour = formValue.startTimeHour;
 
-    startTimeDate!.setHours(
-      startTimeHour!.getHours() + 1,
-      startTimeHour!.getMinutes(),
-      startTimeHour!.getSeconds(),
-    );
-    mergedStartTime = startTimeDate!.toISOString();
 
-    let mergedEndTime = '';
-    const endTimeDate = formValue.endTimeDate;
-    const endTimeHour = formValue.endTimeHour;
-
-    endTimeDate!.setHours(
-      endTimeHour!.getHours() + 1,
-      endTimeHour!.getMinutes(),
-      endTimeHour!.getSeconds(),
-    );
-    mergedEndTime = endTimeDate!.toISOString();
 
     const request: EditTaskRequest = {
       title: formValue.title,
-      startTime: mergedStartTime,
-      endTime: mergedEndTime,
+      deadlineDate: formValue.deadlineDate!.toISOString().slice(0,10),
+      deadlineTime: formValue.deadlineHour!.toISOString().slice(11,19),
       categoryId: formValue.categoryId,
       difficultyId: formValue.difficultyId,
-      completedAt: formValue.completedAt,
       description: formValue.description,
     };
 
@@ -211,17 +183,19 @@ export class TaskFormComponent {
           this.taskFormSubmitted.emit();
         },
       });
+
     } else if (this.editionMode?.()) {
-      const task = this.task?.();
-      if (task == null) {
+      const activity = this.activity?.();
+      if (activity == null) {
         return;
       }
+      /*
       if (this.pomodoroRequest && this.pomodoroCreation()) {
         this.pomodoroService
-          .createPomodoro(task.taskId, this.pomodoroRequest)
+          .createPomodoro(activity.taskId, this.pomodoroRequest)
           .subscribe({
             next: (response) => {
-              task.pomodoro = {
+              activity.pomodoro = {
                 pomodoroId: response.pomodoroId,
                 workCyclesNeeded: response.workCyclesNeeded,
                 workCyclesCompleted: response.workCyclesCompleted,
@@ -237,16 +211,16 @@ export class TaskFormComponent {
             },
           });
       } else if (this.pomodoroEditRequest && this.pomodoroEdition()) {
-        if (task.pomodoro && task.pomodoro.pomodoroId) {
+        if (activity.pomodoro && activity.pomodoro.pomodoroId) {
           this.pomodoroService
-            .editPomodoro(task.pomodoro.pomodoroId, this.pomodoroEditRequest)
+            .editPomodoro(activity.pomodoro.pomodoroId, this.pomodoroEditRequest)
             .subscribe({
               next: (response) => {
-                if (task.pomodoro) {
-                  task.pomodoro.workCyclesNeeded = response.workCyclesNeeded;
-                  task.pomodoro.workCyclesCompleted =
+                if (activity.pomodoro) {
+                  activity.pomodoro.workCyclesNeeded = response.workCyclesNeeded;
+                  activity.pomodoro.workCyclesCompleted =
                     response.workCyclesCompleted;
-                  task.pomodoro.createdAt = response.createdAt;
+                  activity.pomodoro.createdAt = response.createdAt;
                 }
                 this.notificationService.handleApiSuccess(
                   'PUT',
@@ -257,6 +231,7 @@ export class TaskFormComponent {
                 this.notificationService.handleApiError(error);
               },
             });
+
         }
       }
 
@@ -266,16 +241,17 @@ export class TaskFormComponent {
         );
 
         this.habitService
-          .createHabitTask(task.taskId, this.habitRequest)
+          .createHabitTask(activity.taskId, this.habitRequest)
           .subscribe({
             next: (response) => {
-              task.taskHabit = {
+              activity.taskHabit = {
                 habitId: response.habitId,
                 cycleLength: response.cycleLength,
                 currentStreak: response.currentStreak,
                 longestStreak: response.longestStreak,
                 acceptedDate: response.acceptedDate,
               };
+              //ToDo decide if we need to set activity.endTime from here or use already existing one
               this.notificationService.handleApiSuccess(
                 'POST',
                 'Habit added successfully',
@@ -290,20 +266,20 @@ export class TaskFormComponent {
         this.habitEditRequest.cycleLength = daysAsDuration(
           this.habitEditDurationDays!,
         );
-        if (task.taskHabit && task.taskHabit.habitId) {
+        if (activity.taskHabit && activity.taskHabit.habitId) {
           this.habitService
             .editHabitTask(
-              task.taskHabit.habitId,
-              task.taskId,
+              activity.taskHabit.habitId,
+              activity.taskId,
               this.habitEditRequest,
             )
             .subscribe({
               next: (response) => {
-                if (task.taskHabit) {
-                  task.taskHabit.cycleLength = response.cycleLength;
-                  task.taskHabit.currentStreak = response.currentStreak;
-                  task.taskHabit.longestStreak = response.longestStreak;
-                  task.taskHabit.acceptedDate = response.acceptedDate;
+                if (activity.taskHabit) {
+                  activity.taskHabit.cycleLength = response.cycleLength;
+                  activity.taskHabit.currentStreak = response.currentStreak;
+                  activity.taskHabit.longestStreak = response.longestStreak;
+                  activity.taskHabit.acceptedDate = response.acceptedDate;
                 }
                 this.notificationService.handleApiSuccess(
                   'PUT',
@@ -314,28 +290,29 @@ export class TaskFormComponent {
                 this.notificationService.handleApiError(error);
               },
             });
-        }
-      }
 
-      this.taskService.editTask(task.taskId, request).subscribe({
-        next: () => {
-          this.validTaskForm.reset();
-          this.notificationService.handleApiSuccess(
-            'PUT',
-            'Task updated successfully',
-          );
-          this.taskFormSubmitted.emit();
-        },
-        error: (error) => {
-          this.notificationService.handleApiError(error);
-          this.taskFormSubmitted.emit();
-        },
-      });
+
+        }
+
+       */
     }
+
+    this.taskService.editTask(this.activity()!.id, request).subscribe({
+      next: () => {
+        this.validTaskForm.reset();
+        this.taskFormSubmitted.emit();
+      },
+      error: (error) => {
+        console.error('Error editing task:', error);
+        this.taskFormSubmitted.emit();
+      },
+    });
   }
 
+
+
   onDelete() {
-    this.taskService.deleteTask(this.task()!.taskId).subscribe({
+    this.taskService.deleteTask(this.activity()!.id).subscribe({
       next: () => {
         this.validTaskForm.reset();
         this.notificationService.handleApiSuccess(

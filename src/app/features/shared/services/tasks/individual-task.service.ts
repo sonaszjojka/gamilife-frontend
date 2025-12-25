@@ -1,58 +1,58 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Task } from '../../models/task-models/task.model';
-import { EditTaskResponse } from '../../models/task-models/edit-task-response';
 import { environment } from '../../../../../environments/environment';
-import { EditTaskRequest } from '../../models/task-models/edit-task-request';
 import { CreateTaskResponse } from '../../models/task-models/create-task-response';
-
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-}
+import { EditTaskResponse } from '../../models/task-models/edit-task-response';
+import { EditTaskRequest } from '../../models/task-models/edit-task-request';
+import {Page} from '../../models/util/page.model';
+import {ActivityItemDetails} from '../../models/task-models/activity.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IndividualTaskService {
-  private API_URL = `${environment.apiUrl}/tasks`;
+
+  private API_URL = `${environment.apiUrl}/activities`;
+  private TASK_API_URL = `${environment.apiUrl}/tasks`;
 
   private http = inject(HttpClient);
 
-  getUserTasks(
-    page = 0,
-    size = 4,
-    categoryId?: number | null,
-    difficultyId?: number | null,
-    isCompleted?: boolean | null,
-    isGroupTask?: boolean | null,
-  ): Observable<Page<Task>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
 
+  getAllActivities(
+    page:number,
+    size:number,
+    title:string|null,
+    startDate:string|null,
+    endDate:string|null,
+    categoryId:number|null,
+    difficultyId:number|null
+
+
+
+  ): Observable<Page<ActivityItemDetails>> {
+    let httpParams = new HttpParams();
+
+    httpParams = httpParams.set('page', page.toString());
+    httpParams = httpParams.set('size', size.toString());
+
+    if (title) {
+      httpParams = httpParams.set('title', title);
+    }
+    if (startDate) {
+      httpParams = httpParams.set('startDate', startDate);
+    }
+    if (endDate) {
+      httpParams = httpParams.set('endDate', endDate);
+    }
     if (categoryId !== undefined && categoryId !== null) {
-      params = params.set('categoryId', categoryId.toString());
+      httpParams = httpParams.set('categoryId', categoryId.toString());
     }
     if (difficultyId !== undefined && difficultyId !== null) {
-      params = params.set('difficultyId', difficultyId.toString());
+      httpParams = httpParams.set('difficultyId', difficultyId.toString());
     }
-    if (isCompleted !== undefined && isCompleted !== null) {
-      params = params.set('completed', isCompleted.toString());
-    }
-    if (isGroupTask !== undefined && isGroupTask !== null) {
-      params = params.set('isGroupTask', isGroupTask.toString());
-    }
-
-    return this.http.get<Page<Task>>(`${this.API_URL}`, {
-      params,
+    return this.http.get<Page<ActivityItemDetails>>(`${this.API_URL}`, {
+      params: httpParams,
       withCredentials: true,
     });
   }
@@ -62,21 +62,23 @@ export class IndividualTaskService {
     request: EditTaskRequest,
   ): Observable<EditTaskResponse> {
     return this.http.put<EditTaskResponse>(
-      `${environment.apiUrl}/tasks/${taskId}`,
-      request,
-      { withCredentials: true },
-    );
-  }
-  createTask(request: EditTaskRequest): Observable<CreateTaskResponse> {
-    return this.http.post<EditTaskResponse>(
-      `${environment.apiUrl}/tasks`,
+      `${this.TASK_API_URL}/${taskId}`,
       request,
       { withCredentials: true },
     );
   }
 
-  deleteTask(taskId: string) {
-    return this.http.delete(`${environment.apiUrl}/tasks/${taskId}`, {
+
+  createTask(request: EditTaskRequest): Observable<CreateTaskResponse> {
+    return this.http.post<CreateTaskResponse>(
+      `${this.TASK_API_URL}`,
+      request,
+      { withCredentials: true },
+    );
+  }
+
+  deleteTask(taskId: string): Observable<any> {
+    return this.http.delete(`${this.TASK_API_URL}/${taskId}`, {
       withCredentials: true,
     });
   }
