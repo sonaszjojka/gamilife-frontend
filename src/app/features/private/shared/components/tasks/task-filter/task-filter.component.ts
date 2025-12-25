@@ -1,9 +1,9 @@
-import {Component, inject, input, Input, WritableSignal} from '@angular/core';
+import { Component, inject, Input, WritableSignal } from '@angular/core';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { Router } from '@angular/router';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import {ActivityListView} from '../../../../../shared/models/task-models/activity-list-view.model';
+import { ActivityListView } from '../../../../../shared/models/task-models/activity-list-view.model';
 
 @Component({
   selector: 'app-task-filter',
@@ -21,12 +21,10 @@ export class TaskFilterComponent {
 
   @Input() difficultyId?: WritableSignal<number | null>;
   @Input() categoryId?: WritableSignal<number | null>;
-  @Input() listView?:WritableSignal<ActivityListView>;
-  @Input() isAlive?:WritableSignal<boolean>;
-
+  @Input() listView?: WritableSignal<ActivityListView>;
+  @Input() isAlive?: WritableSignal<boolean>;
 
   router = inject(Router);
-
 
   activitiesSelected(): void {
     this.listView?.set(ActivityListView.Activities);
@@ -35,8 +33,12 @@ export class TaskFilterComponent {
     this.isAlive?.set(true);
   }
 
-  categorySelected(category: number, viewType: 'Activities' | 'Tasks' | 'Habits'): void {
-    if (viewType === 'Activities') this.listView?.set(ActivityListView.Activities);
+  categorySelected(
+    category: number,
+    viewType: 'Activities' | 'Tasks' | 'Habits',
+  ): void {
+    if (viewType === 'Activities')
+      this.listView?.set(ActivityListView.Activities);
     if (viewType === 'Tasks') this.listView?.set(ActivityListView.Tasks);
     if (viewType === 'Habits') this.listView?.set(ActivityListView.Habits);
 
@@ -45,8 +47,12 @@ export class TaskFilterComponent {
     this.isAlive?.set(true);
   }
 
-  difficultySelected(difficulty: number, viewType: 'Activities' | 'Tasks' | 'Habits'): void {
-    if (viewType === 'Activities') this.listView?.set(ActivityListView.Activities);
+  difficultySelected(
+    difficulty: number,
+    viewType: 'Activities' | 'Tasks' | 'Habits',
+  ): void {
+    if (viewType === 'Activities')
+      this.listView?.set(ActivityListView.Activities);
     if (viewType === 'Tasks') this.listView?.set(ActivityListView.Tasks);
     if (viewType === 'Habits') this.listView?.set(ActivityListView.Habits);
     this.difficultyId?.set(difficulty);

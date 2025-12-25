@@ -4,7 +4,7 @@
       <span nz-icon nzType="left"></span>
     </button>
 
-    <h1>{{ activeViewDate | date: 'MMMM yyyy' }}</h1>
+    <h1>{{ activeViewDate | date: "MMMM yyyy" }}</h1>
 
     <button nz-button (click)="changeMonth(1)">
       <span nz-icon nzType="right"></span>
@@ -13,12 +13,16 @@
 
   <nz-calendar
     [(ngModel)]="activeViewDate"
-    (nzSelectChange)="onDateSelect($event)">
+    (nzSelectChange)="onDateSelect($event)"
+  >
     <ul *nzDateCell="let date" class="events">
       @for (activity of this.taskCalendarList; track activity.id) {
         @if (isSameDay(activity.deadlineDate, date)) {
           <li>
-            <span class="event-badge" [style.backgroundColor]="activityColors[activity.type]"></span>
+            <span
+              class="event-badge"
+              [style.backgroundColor]="activityColors[activity.type]"
+            ></span>
             {{ activity.title }}
           </li>
         }

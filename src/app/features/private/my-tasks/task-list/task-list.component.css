@@ -23,7 +23,8 @@ h1 {
   padding: 1rem;
   margin: 2rem;
 }
-.task-create, .habit-create {
+.task-create,
+.habit-create {
   height: 44px;
   border-radius: 12px;
   font-weight: 600;
@@ -33,12 +34,17 @@ h1 {
   margin: 1rem;
 }
 
-.task-create { background-color: #2196f3; }
-.habit-create { background-color: #9c27b0; }
+.task-create {
+  background-color: #2196f3;
+}
+.habit-create {
+  background-color: #9c27b0;
+}
 
-.task-create:hover, .habit-create:hover {
+.task-create:hover,
+.habit-create:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   filter: brightness(1.1);
   color: white;
 }

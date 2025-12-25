@@ -1,9 +1,9 @@
 export interface HabitRequest {
   title?: string;
-  cycleLength?:number;
+  cycleLength?: number;
   categoryId?: number;
   difficultyId?: number;
   description?: string;
-  iterationCompleted?:boolean;
-  resurrect?:boolean;
+  iterationCompleted?: boolean;
+  resurrect?: boolean;
 }

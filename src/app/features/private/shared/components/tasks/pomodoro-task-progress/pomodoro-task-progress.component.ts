@@ -1,4 +1,4 @@
-import {Component, input, Input} from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 
@@ -24,8 +24,8 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
   ],
 })
 export class PomodoroTaskProgressComponent {
-  cyclesRequired = input<number>(1)
-  cyclesCompleted= input<number>(0)
+  cyclesRequired = input<number>(1);
+  cyclesCompleted = input<number>(0);
   get percentage(): number {
     if (!this.cyclesRequired || !this.cyclesCompleted) {
       return 0;

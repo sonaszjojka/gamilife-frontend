@@ -1,22 +1,22 @@
 <div class="task-panel">
   <h1>
-    @if (activityListType()==ActivityListView.Habits) {
-     My Habits
-    }
-    @else
-    {
-      @if (activityListType()==ActivityListView.Activities)
-      {
+    @if (activityListType() === ActivityListView.Habits) {
+      My Habits
+    } @else {
+      @if (activityListType() === ActivityListView.Activities) {
         My Activities
-      } @else
-      {
+      } @else {
         My Tasks
       }
     }
 
     <div class="creation-panel">
-      <button class="task-create" nz-button (click)="onTaskCreation()">Create New Task</button>
-      <button class="habit-create" nz-button (click)="onHabitCreation()">Create New Habit</button>
+      <button class="task-create" nz-button (click)="onTaskCreation()">
+        Create New Task
+      </button>
+      <button class="habit-create" nz-button (click)="onHabitCreation()">
+        Create New Habit
+      </button>
     </div>
   </h1>
 
@@ -30,12 +30,12 @@
 
     <div class="task-list">
       @if (!loading && activities.length === 0) {
-        @if (activityListType() == ActivityListView.Habits) {
+        @if (activityListType() === ActivityListView.Habits) {
           <div class="empty-state">
             <h3>You have no habits yet!</h3>
           </div>
         } @else {
-          @if (activityListType() == ActivityListView.Activities) {
+          @if (activityListType() === ActivityListView.Activities) {
             <div class="empty-state">
               <h3>You have no activities yet!</h3>
             </div>
@@ -45,8 +45,6 @@
             </div>
           }
         }
-
-
       }
 
       @if (!loading && activities.length > 0) {
@@ -69,7 +67,6 @@
       }
     </div>
     @if (editionMode() || creationMode()) {
-
       <app-task-form
         [activity]="selectedActivity()"
         [editionMode]="editionMode"
@@ -77,16 +74,14 @@
         [viewMode]="viewMode()"
         (activityFormSubmitted)="onTaskSubmit()"
         (activityDeleted)="onTaskDelete()"
-        [type] ="formType()"
+        [type]="formType()"
       >
       </app-task-form>
-    }
-    @else {
+    } @else {
       <app-task-calendar
         #calendarComponent
         (deadlineSelected)="endDate.set($event)"
         (deadlineSelected)="startDate.set($event)"
-
       >
       </app-task-calendar>
     }

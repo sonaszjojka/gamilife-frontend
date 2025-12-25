@@ -1,12 +1,15 @@
-import {Component, inject, input, Input, OnChanges, OnInit, output, signal} from '@angular/core';
+import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import {ActivityItemDetails, ActivityTypeColors} from '../../../../../shared/models/task-models/activity.model';
-import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
-import {DatePipe} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {
+  ActivityItemDetails,
+  ActivityTypeColors,
+} from '../../../../../shared/models/task-models/activity.model';
+import { UserTaskApiService } from '../../../../../shared/services/tasks/user-task-api.service';
+import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-calendar',
@@ -22,31 +25,35 @@ import {FormsModule} from '@angular/forms';
   standalone: true,
   styleUrl: './task-calendar.component.css',
 })
-export class TaskCalendarComponent implements  OnInit {
+export class TaskCalendarComponent implements OnInit {
   activeViewDate: Date = new Date();
- taskCalendarList:ActivityItemDetails[]=[] ;
- deadlineSelected= output<string|null>();
- currentlySelectedDate=signal<Date|null>(null);
- private taskService = inject(UserTaskApiService)
+  taskCalendarList: ActivityItemDetails[] = [];
+  deadlineSelected = output<string | null>();
+  currentlySelectedDate = signal<Date | null>(null);
+  private taskService = inject(UserTaskApiService);
 
-ngOnInit() {
-  this.loadActivities();
+  ngOnInit() {
+    this.loadActivities();
+  }
 
-}
-
-loadActivities() {
-  this.taskService.getAllActivities(0,
-    null,
-    null,
-    (this.getFirstDayOfMonth(this.activeViewDate)) .toISOString().slice(0,10),
-    (this.getLastDayOfMonth(this.activeViewDate)).toISOString().slice(0,10),
-    null,
-    null).subscribe({
-      next:(response)=> {this.taskCalendarList=response.content},
-      error:(err)=>console.error(err)
-    }
-  )
-}
+  loadActivities() {
+    this.taskService
+      .getAllActivities(
+        0,
+        null,
+        null,
+        this.getFirstDayOfMonth(this.activeViewDate).toISOString().slice(0, 10),
+        this.getLastDayOfMonth(this.activeViewDate).toISOString().slice(0, 10),
+        null,
+        null,
+      )
+      .subscribe({
+        next: (response) => {
+          this.taskCalendarList = response.content;
+        },
+        error: (err) => console.error(err),
+      });
+  }
 
   isSameDay(activityDeadline: string | Date, calendarDate: Date): boolean {
     const activityDate = new Date(activityDeadline);
@@ -58,15 +65,15 @@ loadActivities() {
   }
 
   onDateSelect(calendarDate: Date) {
-   if (calendarDate.toISOString()==this.currentlySelectedDate()?.toISOString())
-   {
-     this.deadlineSelected.emit(null)
-     this.currentlySelectedDate.set(null)
-   }
-   else {
-     this.currentlySelectedDate.set(calendarDate)
-     this.deadlineSelected.emit(calendarDate.toISOString().slice(0, 10))
-   }
+    if (
+      calendarDate.toISOString() == this.currentlySelectedDate()?.toISOString()
+    ) {
+      this.deadlineSelected.emit(null);
+      this.currentlySelectedDate.set(null);
+    } else {
+      this.currentlySelectedDate.set(calendarDate);
+      this.deadlineSelected.emit(calendarDate.toISOString().slice(0, 10));
+    }
   }
 
   changeMonth(direction: number) {

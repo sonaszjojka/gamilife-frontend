@@ -7,7 +7,7 @@ import {
   GroupTask,
 } from '../../models/group/group-task.model';
 import { Observable } from 'rxjs';
-import {Page} from '../../models/util/page.model';
+import { Page } from '../../models/util/page.model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,23 +1,34 @@
-import {Component, HostListener, inject, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {UserTaskApiService,} from '../../../shared/services/tasks/user-task-api.service';
-import {TaskItemComponent} from '../../shared/components/tasks/task-item/task-item.component';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray,} from '@angular/cdk/drag-drop';
-import {PomodoroSessionFormModal} from '../../shared/components/tasks/pomodoro-form-modal/pomodoro-session-form-modal';
-import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {
-  PomodoroSessionAcceptTaskModalComponent
-} from '../../shared/components/tasks/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
-import {PomodoroApiService} from '../../../shared/services/tasks/pomodoro-api.service';
-import {TaskRequest} from '../../../shared/models/task-models/task-request';
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
+import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
 import {
-  PomodoroSessionBreakModalComponent
-} from '../../shared/components/tasks/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
-import {ActivityItemDetails, ActivityType} from '../../../shared/models/task-models/activity.model';
-import {Page} from '../../../shared/models/util/page.model';
-import {PomodoroRequest} from '../../../shared/models/task-models/pomodoro-request';
-import {HabitRequest} from '../../../shared/models/task-models/habit-request.model';
-import {HabitApiService} from '../../../shared/services/tasks/habit-api.service';
+  CdkDrag,
+  CdkDragDrop,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import { PomodoroSessionFormModal } from '../../shared/components/tasks/pomodoro-form-modal/pomodoro-session-form-modal';
+import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
+import { PomodoroSessionAcceptTaskModalComponent } from '../../shared/components/tasks/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
+import { PomodoroApiService } from '../../../shared/services/tasks/pomodoro-api.service';
+import { TaskRequest } from '../../../shared/models/task-models/task-request';
+import { PomodoroSessionBreakModalComponent } from '../../shared/components/tasks/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
+import {
+  ActivityItemDetails,
+  ActivityType,
+} from '../../../shared/models/task-models/activity.model';
+import { Page } from '../../../shared/models/util/page.model';
+import { PomodoroRequest } from '../../../shared/models/task-models/pomodoro-request';
+import { HabitRequest } from '../../../shared/models/task-models/habit-request.model';
+import { HabitApiService } from '../../../shared/services/tasks/habit-api.service';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -66,7 +77,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   currentNonPomodoroPage = 0;
   totalNonPomodoroPages = 0;
 
-
   taskService = inject(UserTaskApiService);
   pomodoroService = inject(PomodoroApiService);
   habitService = inject(HabitApiService);
@@ -81,15 +91,15 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      (this.currentPomodoroPage + 1 < this.totalPomodoroPages)
+      this.currentPomodoroPage + 1 < this.totalPomodoroPages
     ) {
       this.loadMorePomodoroActivities();
     }
-     if (
+    if (
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      (this.currentNonPomodoroPage + 1 < this.totalNonPomodoroPages)
+      this.currentNonPomodoroPage + 1 < this.totalNonPomodoroPages
     ) {
       this.loadMoreNonPomodoroActivities();
     }
@@ -97,7 +107,13 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.pomodoroService
-      .getPomodoroActivities(this.currentPomodoroPage, this.pageSize, null, true, true)
+      .getPomodoroActivities(
+        this.currentPomodoroPage,
+        this.pageSize,
+        null,
+        true,
+        true,
+      )
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersPomodoroActivities = response.content;
@@ -111,42 +127,41 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.pomodoroService.getPomodoroActivities(
-      this.currentNonPomodoroPage,
-      this.pageSize,
-      null,
-      true,
-      false,
-    ).subscribe({
-      next: (response: Page<ActivityItemDetails>) => {
-        this.usersNotPomodoroTasks = response.content;
-        this.totalNonPomodoroPages = response.totalPages;
-        this.currentNonPomodoroPage = response.number;
-        this.loading = false;
-        console.log(response)
-      },
-      error: (error) => {
-        console.error('Error loading tasks:', error);
-        this.loading = false;
-      },
-    }
-    )
-  }
-
-  loadMorePomodoroActivities(): void {
-
-    if ( this.loadingMore) return;
-    this.loadingMore = true;
-    const nextPage = this.currentPomodoroPage + 1;
     this.pomodoroService
-      .getPomodoroActivities(nextPage,
+      .getPomodoroActivities(
+        this.currentNonPomodoroPage,
         this.pageSize,
         null,
         true,
-        true)
+        false,
+      )
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
-          this.usersPomodoroActivities = [...this.usersPomodoroActivities, ...response.content];
+          this.usersNotPomodoroTasks = response.content;
+          this.totalNonPomodoroPages = response.totalPages;
+          this.currentNonPomodoroPage = response.number;
+          this.loading = false;
+          console.log(response);
+        },
+        error: (error) => {
+          console.error('Error loading tasks:', error);
+          this.loading = false;
+        },
+      });
+  }
+
+  loadMorePomodoroActivities(): void {
+    if (this.loadingMore) return;
+    this.loadingMore = true;
+    const nextPage = this.currentPomodoroPage + 1;
+    this.pomodoroService
+      .getPomodoroActivities(nextPage, this.pageSize, null, true, true)
+      .subscribe({
+        next: (response: Page<ActivityItemDetails>) => {
+          this.usersPomodoroActivities = [
+            ...this.usersPomodoroActivities,
+            ...response.content,
+          ];
           this.totalPomodoroPages = response.totalPages;
           this.currentPomodoroPage = response.number;
           this.loadingMore = false;
@@ -159,19 +174,18 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   }
 
   loadMoreNonPomodoroActivities(): void {
-
-    if ( this.loadingMore) return;
+    if (this.loadingMore) return;
     this.loadingMore = true;
     const nextPage = this.currentNonPomodoroPage + 1;
     this.pomodoroService
-      .getPomodoroActivities(nextPage, this.pageSize,
-        null,
-        true,
-        false)
+      .getPomodoroActivities(nextPage, this.pageSize, null, true, false)
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
-         this.usersNotPomodoroTasks=[...this.usersNotPomodoroTasks,...response.content];
-         this.totalNonPomodoroPages = response.totalPages;
+          this.usersNotPomodoroTasks = [
+            ...this.usersNotPomodoroTasks,
+            ...response.content,
+          ];
+          this.totalNonPomodoroPages = response.totalPages;
           this.currentNonPomodoroPage = response.number;
           this.loadingMore = false;
         },
@@ -181,7 +195,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         },
       });
   }
-
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(
@@ -298,10 +311,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         this.currentSessionPomodoroTasks[0].pomodoro!.cyclesRequired,
     };
     this.pomodoroService
-      .editPomodoro(
-        this.currentSessionPomodoroTasks[0].pomodoro!.id!,
-        request,
-      )
+      .editPomodoro(this.currentSessionPomodoroTasks[0].pomodoro!.id!, request)
       .subscribe();
 
     if (
@@ -314,10 +324,8 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     }
   }
 
-  //todo co to jest!!!!
   removeFromPanel(activity: ActivityItemDetails) {
-    if (activity.type==ActivityType.TASK)
-    {
+    if (activity.type == ActivityType.TASK) {
       const request: TaskRequest = {
         title: activity.title,
         description: activity.description,
@@ -328,19 +336,19 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       };
 
       this.taskService.editTask(activity.id, request).subscribe();
-    }
-    else if (activity.type==ActivityType.HABIT){
-
-      let request:HabitRequest={
+    } else if (activity.type == ActivityType.HABIT) {
+      const request: HabitRequest = {
         title: activity.title,
         description: activity.description,
         difficultyId: activity.difficultyId,
         categoryId: activity.categoryId,
-        cycleLength:activity.cycleLength!,
-        iterationCompleted:true
-      }
-      this.habitService.editHabit(activity.id,request).subscribe({
-        next: () => {
+        cycleLength: activity.cycleLength!,
+        iterationCompleted: true,
+      };
+      this.habitService.editHabit(activity.id, request).subscribe({
+        next: (response) => {
+          activity.longestStreak = response.longestStreak;
+          activity.currentStreak = response.currentStreak;
         },
         error: (error) => {
           console.error('Error updating habit:', error);
@@ -378,7 +386,9 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         this.pomodoroSessionFormModal.showModal();
       } else {
         this.currentSessionPomodoroTasks.push(
-          this.usersPomodoroActivities.find((a) => a.id == activity.id) as ActivityItemDetails,
+          this.usersPomodoroActivities.find(
+            (a) => a.id == activity.id,
+          ) as ActivityItemDetails,
         );
         this.usersPomodoroActivities = this.usersPomodoroActivities.filter(
           (a) => a.id != activity.id,
@@ -388,17 +398,23 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   }
   moveModalPomodoroToSession(activity: ActivityItemDetails) {
     if (
-      this.usersNotPomodoroTasks.find((a) => a.id == activity.id) as ActivityItemDetails
+      this.usersNotPomodoroTasks.find(
+        (a) => a.id == activity.id,
+      ) as ActivityItemDetails
     ) {
       this.currentSessionPomodoroTasks.push(
-        this.usersNotPomodoroTasks.find((a) => a.id == activity.id) as ActivityItemDetails,
+        this.usersNotPomodoroTasks.find(
+          (a) => a.id == activity.id,
+        ) as ActivityItemDetails,
       );
       this.usersNotPomodoroTasks = this.usersNotPomodoroTasks.filter(
         (a) => a.id != activity.id,
       );
     } else {
       this.currentSessionPomodoroTasks.push(
-        this.usersPomodoroActivities.find((a) => a.id == activity.id) as ActivityItemDetails,
+        this.usersPomodoroActivities.find(
+          (a) => a.id == activity.id,
+        ) as ActivityItemDetails,
       );
       this.usersPomodoroActivities = this.usersPomodoroActivities.filter(
         (a) => a.id != activity.id,

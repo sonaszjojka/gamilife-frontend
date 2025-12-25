@@ -1,19 +1,29 @@
-import {Component, EventEmitter, inject, input, Input, OnInit, Output, signal, ViewChild,} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {NzCardModule} from 'ng-zorro-antd/card';
-import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
-import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
-import {HabitApiService} from '../../../../../shared/services/tasks/habit-api.service';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  input,
+  Input,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { UserTaskApiService } from '../../../../../shared/services/tasks/user-task-api.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { TaskRequest } from '../../../../../shared/models/task-models/task-request';
+import { PomodoroTaskProgressComponent } from '../pomodoro-task-progress/pomodoro-task-progress.component';
+import { HabitApiService } from '../../../../../shared/services/tasks/habit-api.service';
 import {
   ActivityItemDetails,
   ActivityStatus,
-  ActivityType, HabitStatus
+  ActivityType,
+  HabitStatus,
 } from '../../../../../shared/models/task-models/activity.model';
-import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
+import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
 
 @Component({
   selector: 'app-task-item',
@@ -31,17 +41,18 @@ import {HabitRequest} from '../../../../../shared/models/task-models/habit-reque
   styleUrl: './task-item.component.css',
 })
 export class TaskItemComponent implements OnInit {
-
   protected readonly ActivityType = ActivityType;
   protected readonly ActivityStatus = ActivityStatus;
   protected readonly HabitStatus = HabitStatus;
-
 
   @Input() activity!: ActivityItemDetails;
   isCompleted = signal(false);
 
   @Output() taskUpdated = new EventEmitter<string>();
-  @Output() editTask = new EventEmitter<{activity:ActivityItemDetails,viewMode:boolean}>();
+  @Output() editTask = new EventEmitter<{
+    activity: ActivityItemDetails;
+    viewMode: boolean;
+  }>();
 
   isInSession = input<boolean>(false);
   inPomodoroList = input<boolean>(false);
@@ -52,10 +63,12 @@ export class TaskItemComponent implements OnInit {
   habitService = inject(HabitApiService);
 
   ngOnInit(): void {
-    this.isCompleted.set(this.activity.status != ActivityStatus.DEADLINE_MISSED);
+    this.isCompleted.set(
+      this.activity.status != ActivityStatus.DEADLINE_MISSED,
+    );
   }
 
-  completeTask(event:MouseEvent): void {
+  completeTask(event: MouseEvent): void {
     event.stopPropagation();
     this.isCompleted.set(true);
     const request: TaskRequest = {
@@ -80,20 +93,18 @@ export class TaskItemComponent implements OnInit {
     });
   }
 
-
-  completeHabitCycle(event:MouseEvent): void {
-    event.stopPropagation()
+  completeHabitCycle(event: MouseEvent): void {
+    event.stopPropagation();
     if (this.activity.type == ActivityType.HABIT) {
-
       const request: HabitRequest = {
         iterationCompleted: true,
-      }
+      };
       this.habitService.editHabit(this.activity.id, request).subscribe({
         next: (response) => {
-          this.activity.deadlineDate=response.deadlineDate;
-          this.activity.currentStreak=response.currentStreak;
-          this.activity.longestStreak=response.longestStreak
-          this.activity.canBeWorkedOn=response.workable;
+          this.activity.deadlineDate = response.deadlineDate;
+          this.activity.currentStreak = response.currentStreak;
+          this.activity.longestStreak = response.longestStreak;
+          this.activity.canBeWorkedOn = response.workable;
           this.taskUpdated.emit(this.activity.id);
         },
         error: (error) => {
@@ -102,37 +113,35 @@ export class TaskItemComponent implements OnInit {
       });
     }
   }
-  onTaskEdit(event:MouseEvent) {
-    event.stopPropagation()
-    this.editTask.emit({activity:this.activity,viewMode:false});
+  onTaskEdit(event: MouseEvent) {
+    event.stopPropagation();
+    this.editTask.emit({ activity: this.activity, viewMode: false });
   }
-  onTaskView(event:MouseEvent)
-  {
-    event.stopPropagation()
-    this.editTask.emit({activity:this.activity,viewMode:true})
+  onTaskView(event: MouseEvent) {
+    event.stopPropagation();
+    this.editTask.emit({ activity: this.activity, viewMode: true });
   }
 
-    addTaskToPomodoroSession() {
-      this.moveToCurrentSession.emit(this.activity);
-    }
+  addTaskToPomodoroSession() {
+    this.moveToCurrentSession.emit(this.activity);
+  }
 
-    removeTaskFromPomodoroSession() {
-      this.removeFromCurrentSession.emit(this.activity);
-    }
+  removeTaskFromPomodoroSession() {
+    this.removeFromCurrentSession.emit(this.activity);
+  }
 
   restoreHabit($event: MouseEvent) {
     $event.stopPropagation();
     const request: HabitRequest = {
-      resurrect:true
-    }
-    this.habitService.editHabit(this.activity.id,request).subscribe({
+      resurrect: true,
+    };
+    this.habitService.editHabit(this.activity.id, request).subscribe({
       next: (response) => {
-        this.activity.habitStatus=HabitStatus.ALIVE;
-        this.activity.deadlineDate=response.deadlineDate;
-        this.activity.canBeWorkedOn=response.workable;
+        this.activity.habitStatus = HabitStatus.ALIVE;
+        this.activity.deadlineDate = response.deadlineDate;
+        this.activity.canBeWorkedOn = response.workable;
         this.taskUpdated.emit(this.activity.id);
-      }
-    })
+      },
+    });
   }
-
 }
