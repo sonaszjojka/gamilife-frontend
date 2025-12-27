@@ -1,7 +1,6 @@
 .task-card {
-  max-width: 600px;
   margin: 60px auto;
-  width: 100%;
+  max-width: 70%;
   box-shadow: var(--box-shadow-md);
   border-radius: var(--border-radius-xl);
   overflow: hidden;

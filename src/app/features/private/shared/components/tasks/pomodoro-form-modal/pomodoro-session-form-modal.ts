@@ -3,7 +3,7 @@ import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { PomodoroFormComponent } from '../pomodoro-form/pomodoro-form.component';
-import { PomodoroApiService } from '../../../../../shared/services/tasks/pomodoro-api.service';
+import { UserPomodoroApiService } from '../../../../../shared/services/tasks/user-pomodoro-api.service';
 import { PomodoroRequest } from '../../../../../shared/models/task-models/pomodoro-request';
 import {
   ActivityItemDetails,
@@ -41,7 +41,7 @@ export class PomodoroSessionFormModal {
   creationMode = signal<boolean>(false);
   title = '';
 
-  private pomodoroApi = inject(PomodoroApiService);
+  private pomodoroApi = inject(UserPomodoroApiService);
   private notificationService = inject(NotificationService);
   pomodoroRequest?: PomodoroRequest;
   isVisible = false;
@@ -83,7 +83,8 @@ export class PomodoroSessionFormModal {
             `Pomodoro created successfully for: ${this.activity.title}`,
           );
         },
-        error: () => {
+        error: (err) => {
+          console.log(err);
           this.notificationService.error(
             `There was an error creating Pomodoro for: ${this.activity.title}`,
           );
@@ -106,7 +107,8 @@ export class PomodoroSessionFormModal {
               `Pomodoro updated successfully for: ${this.activity.title}`,
             );
           },
-          error: () => {
+          error: (err) => {
+            console.log(err);
             this.notificationService.error(
               `There was an error updating Pomodoro for: ${this.activity.title}`,
             );

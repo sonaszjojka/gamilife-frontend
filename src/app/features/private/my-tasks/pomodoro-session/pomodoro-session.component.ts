@@ -18,7 +18,7 @@ import {
 import { PomodoroSessionFormModal } from '../../shared/components/tasks/pomodoro-form-modal/pomodoro-session-form-modal';
 import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
 import { PomodoroSessionAcceptTaskModalComponent } from '../../shared/components/tasks/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
-import { PomodoroApiService } from '../../../shared/services/tasks/pomodoro-api.service';
+import { UserPomodoroApiService } from '../../../shared/services/tasks/user-pomodoro-api.service';
 import { TaskRequest } from '../../../shared/models/task-models/task-request';
 import { PomodoroSessionBreakModalComponent } from '../../shared/components/tasks/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
 import {
@@ -28,7 +28,9 @@ import {
 import { Page } from '../../../shared/models/util/page.model';
 import { PomodoroRequest } from '../../../shared/models/task-models/pomodoro-request';
 import { HabitRequest } from '../../../shared/models/task-models/habit-request.model';
-import { HabitApiService } from '../../../shared/services/tasks/habit-api.service';
+import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
+import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -77,9 +79,11 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   currentNonPomodoroPage = 0;
   totalNonPomodoroPages = 0;
 
-  taskService = inject(UserTaskApiService);
-  pomodoroService = inject(PomodoroApiService);
-  habitService = inject(HabitApiService);
+  private readonly taskService = inject(UserTaskApiService);
+  private readonly pomodoroService = inject(UserPomodoroApiService);
+  private readonly habitService = inject(UserHabitApiService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly activitiesService = inject(UserActivitiesApiService);
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -106,10 +110,14 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pomodoroService
-      .getPomodoroActivities(
+    this.activitiesService
+      .getAllActivities(
         this.currentPomodoroPage,
         this.pageSize,
+        null,
+        null,
+        null,
+        null,
         null,
         true,
         true,
@@ -121,16 +129,23 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentPomodoroPage = response.number;
           this.loading = false;
         },
-        error: (error) => {
-          console.error('Error loading tasks:', error);
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            'Could not load users pomodoro activities',
+          );
           this.loading = false;
         },
       });
 
-    this.pomodoroService
-      .getPomodoroActivities(
-        this.currentNonPomodoroPage,
+    this.activitiesService
+      .getAllActivities(
+        this.currentPomodoroPage,
         this.pageSize,
+        null,
+        null,
+        null,
+        null,
         null,
         true,
         false,
@@ -141,10 +156,12 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.totalNonPomodoroPages = response.totalPages;
           this.currentNonPomodoroPage = response.number;
           this.loading = false;
-          console.log(response);
         },
-        error: (error) => {
-          console.error('Error loading tasks:', error);
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            'Could not load users not pomodoro activities',
+          );
           this.loading = false;
         },
       });
@@ -154,8 +171,18 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     if (this.loadingMore) return;
     this.loadingMore = true;
     const nextPage = this.currentPomodoroPage + 1;
-    this.pomodoroService
-      .getPomodoroActivities(nextPage, this.pageSize, null, true, true)
+    this.activitiesService
+      .getAllActivities(
+        nextPage,
+        this.pageSize,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true,
+        true,
+      )
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersPomodoroActivities = [
@@ -166,8 +193,11 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentPomodoroPage = response.number;
           this.loadingMore = false;
         },
-        error: (error) => {
-          console.error('Error loading tasks:', error);
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            'Could not load users pomodoro activities',
+          );
           this.loadingMore = false;
         },
       });
@@ -177,8 +207,18 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     if (this.loadingMore) return;
     this.loadingMore = true;
     const nextPage = this.currentNonPomodoroPage + 1;
-    this.pomodoroService
-      .getPomodoroActivities(nextPage, this.pageSize, null, true, false)
+    this.activitiesService
+      .getAllActivities(
+        nextPage,
+        this.pageSize,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true,
+        false,
+      )
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersNotPomodoroTasks = [
@@ -189,8 +229,11 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentNonPomodoroPage = response.number;
           this.loadingMore = false;
         },
-        error: (error) => {
-          console.error('Error loading tasks:', error);
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            'Could not load users not pomodoro activities',
+          );
           this.loadingMore = false;
         },
       });
@@ -312,7 +355,19 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     };
     this.pomodoroService
       .editPomodoro(this.currentSessionPomodoroTasks[0].pomodoro!.id!, request)
-      .subscribe();
+      .subscribe({
+        next: () => {
+          this.notificationService.success(
+            'Successfully updated completed cycles',
+          );
+        },
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            'An error occurred during updating completed cycles',
+          );
+        },
+      });
 
     if (
       this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted ==
@@ -333,9 +388,18 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         categoryId: activity.categoryId,
         deadlineDate: activity.deadlineDate,
         deadlineTime: activity.deadlineTime,
+        completed: true,
       };
 
-      this.taskService.editTask(activity.id, request).subscribe();
+      this.taskService.editTask(activity.id, request).subscribe({
+        next: () => {
+          this.notificationService.success('Successfully finished task');
+        },
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error('Error occurred while finishing task');
+        },
+      });
     } else if (activity.type == ActivityType.HABIT) {
       const request: HabitRequest = {
         title: activity.title,
@@ -349,9 +413,13 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         next: (response) => {
           activity.longestStreak = response.longestStreak;
           activity.currentStreak = response.currentStreak;
+          this.notificationService.success('Successfully finished habit cycle');
         },
-        error: (error) => {
-          console.error('Error updating habit:', error);
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            'Error occurred while finishing habit cycle',
+          );
         },
       });
     }

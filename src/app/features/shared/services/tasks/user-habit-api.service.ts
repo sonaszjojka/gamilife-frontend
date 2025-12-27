@@ -10,7 +10,7 @@ import { ActivityItemDetails } from '../../models/task-models/activity.model';
 @Injectable({
   providedIn: 'root',
 })
-export class HabitApiService {
+export class UserHabitApiService {
   private API_URL = `${environment.apiUrl}/habits`;
   private http = inject(HttpClient);
 

@@ -12,46 +12,9 @@ import { ActivityItemDetails } from '../../models/task-models/activity.model';
   providedIn: 'root',
 })
 export class UserTaskApiService {
-  private API_URL = `${environment.apiUrl}/activities`;
-  private TASK_API_URL = `${environment.apiUrl}/tasks`;
+  private API_URL = `${environment.apiUrl}/tasks`;
 
   private http = inject(HttpClient);
-
-  getAllActivities(
-    page: number,
-    size: number | null,
-    title: string | null,
-    startDate: string | null,
-    endDate: string | null,
-    categoryId: number | null,
-    difficultyId: number | null,
-  ): Observable<Page<ActivityItemDetails>> {
-    let httpParams = new HttpParams();
-
-    httpParams = httpParams.set('page', page.toString());
-    if (size !== null) {
-      httpParams = httpParams.set('size', size.toString());
-    }
-    if (title) {
-      httpParams = httpParams.set('title', title);
-    }
-    if (startDate) {
-      httpParams = httpParams.set('startDate', startDate);
-    }
-    if (endDate) {
-      httpParams = httpParams.set('endDate', endDate);
-    }
-    if (categoryId !== undefined && categoryId !== null) {
-      httpParams = httpParams.set('categoryId', categoryId.toString());
-    }
-    if (difficultyId !== undefined && difficultyId !== null) {
-      httpParams = httpParams.set('difficultyId', difficultyId.toString());
-    }
-    return this.http.get<Page<ActivityItemDetails>>(`${this.API_URL}`, {
-      params: httpParams,
-      withCredentials: true,
-    });
-  }
 
   getTasks(
     page: number,
@@ -77,7 +40,7 @@ export class UserTaskApiService {
       httpParams = httpParams.set('difficultyId', difficultyId.toString());
     }
 
-    return this.http.get<Page<ActivityItemDetails>>(`${this.TASK_API_URL}`, {
+    return this.http.get<Page<ActivityItemDetails>>(`${this.API_URL}`, {
       params: httpParams,
       withCredentials: true,
     });
@@ -85,20 +48,20 @@ export class UserTaskApiService {
 
   editTask(taskId: string, request: TaskRequest): Observable<EditTaskResponse> {
     return this.http.patch<EditTaskResponse>(
-      `${this.TASK_API_URL}/${taskId}`,
+      `${this.API_URL}/${taskId}`,
       request,
       { withCredentials: true },
     );
   }
 
   createTask(request: TaskRequest): Observable<CreateTaskResponse> {
-    return this.http.post<CreateTaskResponse>(`${this.TASK_API_URL}`, request, {
+    return this.http.post<CreateTaskResponse>(`${this.API_URL}`, request, {
       withCredentials: true,
     });
   }
 
   deleteTask(taskId: string): Observable<void> {
-    return this.http.delete<void>(`${this.TASK_API_URL}/${taskId}`, {
+    return this.http.delete<void>(`${this.API_URL}/${taskId}`, {
       withCredentials: true,
     });
   }

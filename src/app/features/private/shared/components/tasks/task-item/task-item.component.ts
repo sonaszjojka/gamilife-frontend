@@ -16,7 +16,7 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TaskRequest } from '../../../../../shared/models/task-models/task-request';
 import { PomodoroTaskProgressComponent } from '../pomodoro-task-progress/pomodoro-task-progress.component';
-import { HabitApiService } from '../../../../../shared/services/tasks/habit-api.service';
+import { UserHabitApiService } from '../../../../../shared/services/tasks/user-habit-api.service';
 import {
   ActivityItemDetails,
   ActivityStatus,
@@ -62,14 +62,13 @@ export class TaskItemComponent implements OnInit {
   @Output() removeFromCurrentSession = new EventEmitter<ActivityItemDetails>();
 
   taskService = inject(UserTaskApiService);
-  habitService = inject(HabitApiService);
+  habitService = inject(UserHabitApiService);
   notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.isCompleted.set(
       this.activity.status != ActivityStatus.DEADLINE_MISSED,
     );
-    console.log(this.activity);
   }
 
   completeTask(event: MouseEvent): void {
@@ -93,7 +92,8 @@ export class TaskItemComponent implements OnInit {
           `You have successfully completed the task: ${this.activity.title}`,
         );
       },
-      error: () => {
+      error: (err) => {
+        console.log(err);
         this.notificationService.error(
           `There was an error completing the task: ${this.activity.title}`,
         );
@@ -119,7 +119,8 @@ export class TaskItemComponent implements OnInit {
             `You have successfully completed a cycle for the habit: ${this.activity.title}`,
           );
         },
-        error: () => {
+        error: (err) => {
+          console.log(err);
           this.notificationService.error(
             `There was an error completing a cycle for the habit: ${this.activity.title}`,
           );
@@ -159,7 +160,8 @@ export class TaskItemComponent implements OnInit {
           `You have successfully restored the habit: ${this.activity.title}`,
         );
       },
-      error: () => {
+      error: (err) => {
+        console.log(err);
         this.notificationService.error(
           `There was an error restoring the habit: ${this.activity.title}`,
         );

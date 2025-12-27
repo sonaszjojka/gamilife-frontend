@@ -7,9 +7,10 @@ import {
   ActivityItemDetails,
   ActivityTypeColors,
 } from '../../../../../shared/models/task-models/activity.model';
-import { UserTaskApiService } from '../../../../../shared/services/tasks/user-task-api.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserActivitiesApiService } from '../../../../../shared/services/tasks/user-activities-api.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-calendar',
@@ -30,14 +31,14 @@ export class TaskCalendarComponent implements OnInit {
   taskCalendarList: ActivityItemDetails[] = [];
   deadlineSelected = output<string | null>();
   currentlySelectedDate = signal<Date | null>(null);
-  private taskService = inject(UserTaskApiService);
-
+  private readonly activityService = inject(UserActivitiesApiService);
+  private readonly notificationService = inject(NotificationService);
   ngOnInit() {
     this.loadActivities();
   }
 
   loadActivities() {
-    this.taskService
+    this.activityService
       .getAllActivities(
         0,
         null,
@@ -46,12 +47,19 @@ export class TaskCalendarComponent implements OnInit {
         this.getLastDayOfMonth(this.activeViewDate).toISOString().slice(0, 10),
         null,
         null,
+        null,
+        null,
       )
       .subscribe({
         next: (response) => {
           this.taskCalendarList = response.content;
         },
-        error: (err) => console.error(err),
+        error: (err) => {
+          this.notificationService.error(
+            'Could not load activities into calendar',
+          );
+          console.error(err);
+        },
       });
   }
 

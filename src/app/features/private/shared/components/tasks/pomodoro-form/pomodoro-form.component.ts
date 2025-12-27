@@ -23,6 +23,7 @@ import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { PomodoroRequest } from '../../../../../shared/models/task-models/pomodoro-request';
 import { ActivityItemDetails } from '../../../../../shared/models/task-models/activity.model';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-pomodoro-form',
@@ -46,6 +47,7 @@ export class PomodoroFormComponent implements OnInit {
   @Output() formChanged = new EventEmitter<PomodoroRequest>();
 
   private formBuilder = inject(NonNullableFormBuilder);
+  private notificationService = inject(NotificationService);
 
   validPomodoroForm = this.formBuilder.group({
     cyclesRequired: this.formBuilder.control<number | null>(null, [
@@ -55,15 +57,23 @@ export class PomodoroFormComponent implements OnInit {
   });
 
   ngOnInit() {
-    if (this.activity().pomodoro != undefined) {
+    this.validPomodoroForm.valueChanges.subscribe(
+      (value) => {
+        if (this.validPomodoroForm.valid) {
+          this.formChanged.emit(value as PomodoroRequest);
+        }
+      },
+      (error) => {
+        console.log(error);
+        this.notificationService.error(
+          'Error occurred changing required cycles',
+        );
+      },
+    );
+    if (this.activity().pomodoro) {
       this.validPomodoroForm.patchValue({
         cyclesRequired: this.activity().pomodoro?.cyclesRequired,
       });
     }
-    this.validPomodoroForm.valueChanges.subscribe((value) => {
-      if (this.validPomodoroForm.valid) {
-        this.formChanged.emit(value as PomodoroRequest);
-      }
-    });
   }
 }

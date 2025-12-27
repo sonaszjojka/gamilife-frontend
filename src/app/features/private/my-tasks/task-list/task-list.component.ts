@@ -24,7 +24,9 @@ import {
   HabitStatus,
 } from '../../../shared/models/task-models/activity.model';
 import { ActivityListView } from '../../../shared/models/task-models/activity-list-view.model';
-import { HabitApiService } from '../../../shared/services/tasks/habit-api.service';
+import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
+import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-task-list',
@@ -68,8 +70,11 @@ export class TaskListComponent implements OnInit {
   currentPage = 0;
   pageSize = 5;
   totalPages = 0;
-  private taskService = inject(UserTaskApiService);
-  private habitService = inject(HabitApiService);
+
+  private readonly taskService = inject(UserTaskApiService);
+  private readonly habitService = inject(UserHabitApiService);
+  private readonly activityService = inject(UserActivitiesApiService);
+  private readonly notificationService = inject(NotificationService);
 
   @ViewChild('calendarComponent')
   calendarComponent?: TaskCalendarComponent;
@@ -112,8 +117,7 @@ export class TaskListComponent implements OnInit {
   load(): void {
     this.loading = true;
     if (this.activityListType() === ActivityListView.Activities) {
-      console.log('Loading activities with filters:');
-      this.taskService
+      this.activityService
         .getAllActivities(
           this.currentPage,
           this.pageSize,
@@ -122,6 +126,8 @@ export class TaskListComponent implements OnInit {
           this.endDate(),
           this.categoryId(),
           this.difficultyId(),
+          null,
+          null,
         )
         .subscribe({
           next: (response: Page<ActivityItemDetails>) => {
@@ -132,6 +138,7 @@ export class TaskListComponent implements OnInit {
             this.loading = false;
           },
           error: (error) => {
+            this.notificationService.error('Error loading activities');
             console.error('Error loading activities:', error);
             this.loading = false;
           },
@@ -154,6 +161,7 @@ export class TaskListComponent implements OnInit {
             this.loading = false;
           },
           error: (error) => {
+            this.notificationService.error('Error loading habits');
             console.error('Error loading habits:', error);
             this.loading = false;
           },
@@ -176,6 +184,7 @@ export class TaskListComponent implements OnInit {
             this.loading = false;
           },
           error: (error) => {
+            this.notificationService.error('Error loading tasks');
             console.error('Error loading tasks:', error);
             this.loading = false;
           },
@@ -188,7 +197,7 @@ export class TaskListComponent implements OnInit {
     this.loadingMore = true;
     const nextPage = this.currentPage + 1;
     if (this.activityListType() === ActivityListView.Activities) {
-      this.taskService
+      this.activityService
         .getAllActivities(
           nextPage,
           this.pageSize,
@@ -197,6 +206,8 @@ export class TaskListComponent implements OnInit {
           this.endDate(),
           this.categoryId(),
           this.difficultyId(),
+          null,
+          null,
         )
         .subscribe({
           next: (response: Page<ActivityItemDetails>) => {
@@ -206,7 +217,8 @@ export class TaskListComponent implements OnInit {
             this.loadingMore = false;
           },
           error: (error) => {
-            console.error('Error loading more tasks:', error);
+            this.notificationService.error('Error loading more activities');
+            console.error('Error loading more activities:', error);
             this.loadingMore = false;
           },
         });
@@ -227,6 +239,7 @@ export class TaskListComponent implements OnInit {
             this.loadingMore = false;
           },
           error: (error) => {
+            this.notificationService.error('Error loading more habits');
             console.error('Error loading more habits:', error);
             this.loadingMore = false;
           },
@@ -248,6 +261,7 @@ export class TaskListComponent implements OnInit {
             this.loadingMore = false;
           },
           error: (error) => {
+            this.notificationService.error('Error loading more tasks');
             console.error('Error loading more tasks:', error);
             this.loadingMore = false;
           },

@@ -27,7 +27,7 @@ import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { HabitApiService } from '../../../../../shared/services/tasks/habit-api.service';
+import { UserHabitApiService } from '../../../../../shared/services/tasks/user-habit-api.service';
 import {
   ActivityItemDetails,
   ActivityType,
@@ -71,7 +71,7 @@ export class TaskFormComponent implements OnChanges {
 
   private formBuilder = inject(NonNullableFormBuilder);
   private taskApi = inject(UserTaskApiService);
-  private habitApi = inject(HabitApiService);
+  private habitApi = inject(UserHabitApiService);
   private notificationService = inject(NotificationService);
   protected readonly ActivityType = ActivityType;
 
@@ -219,7 +219,8 @@ export class TaskFormComponent implements OnChanges {
             this.activityFormSubmitted.emit();
             this.notificationService.success('Task created successfully!');
           },
-          error: () => {
+          error: (err) => {
+            console.log(err);
             this.notificationService.error('Error creating task.');
             this.activityFormSubmitted.emit();
           },
@@ -235,7 +236,8 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Task edited successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: () => {
+          error: (err) => {
+            console.log(err);
             this.notificationService.error('Error editing task.');
             this.activityFormSubmitted.emit();
           },
@@ -256,7 +258,8 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Habit created successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: () => {
+          error: (err) => {
+            console.log(err);
             this.notificationService.error('Error creating habit.');
           },
         });
@@ -266,7 +269,8 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Habit edited successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: () => {
+          error: (err) => {
+            console.log(err);
             this.notificationService.error('Error editing habit.');
           },
         });
@@ -282,7 +286,8 @@ export class TaskFormComponent implements OnChanges {
           this.validActivityForm.reset();
           this.activityDeleted.emit();
         },
-        error: () => {
+        error: (err) => {
+          console.log(err);
           this.notificationService.error('Error deleting task.');
           this.activityFormSubmitted.emit();
         },
@@ -293,7 +298,8 @@ export class TaskFormComponent implements OnChanges {
           this.notificationService.success('Habit deleted successfully!');
           this.activityFormSubmitted.emit();
         },
-        error: () => {
+        error: (err) => {
+          console.log(err);
           this.notificationService.error('Error deleting habit.');
         },
       });
