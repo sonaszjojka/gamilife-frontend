@@ -29,7 +29,6 @@
   display: inline-block;
   width: 6px;
   height: 6px;
-  background-color: #005678;
   border-radius: 50%;
   margin-right: 4px;
 }
@@ -45,5 +44,23 @@
 
 .calendar-panel {
   width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.button-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
   background-color: #757575;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 10px;
+}
+
+.button-panel h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+  border-radius: 10px;
 }

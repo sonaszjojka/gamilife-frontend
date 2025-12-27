@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -6,7 +13,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
@@ -21,6 +30,9 @@ import { MembersListPeakComponent } from '../members-list-peak/members-list-peak
 import { RankingListPeakComponent } from '../ranking-list-peak/ranking-list-peak.component';
 import { GroupRequestsListPeakComponent } from '../group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.component';
+import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
+import { GroupChatComponent } from '../group-chat/group-chat/group-chat.component';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-preview-group',
@@ -33,41 +45,60 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
     NzListModule,
     NzButtonModule,
     NzModalModule,
+    NzFloatButtonModule,
     GroupInfoCardComponent,
     GroupActionsComponent,
     MembersListPeakComponent,
     RankingListPeakComponent,
     GroupRequestsListPeakComponent,
+    GroupTasksListComponent,
     EditGroupFormComponent,
+    GroupChatComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
 })
-export class PreviewGroupComponent implements OnInit {
+export class PreviewGroupComponent implements OnInit, OnDestroy {
   mode = signal<GroupPreviewMode>(GroupPreviewMode.PUBLIC);
   protected group = signal<Group | undefined>(undefined);
   protected groupId = signal<string | undefined>(undefined);
   protected loading = signal<boolean>(true);
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
+
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
 
+  private destroy$ = new Subject<void>();
   private readonly groupApi = inject(GroupApiService);
   private readonly requestsApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly modal = inject(NzModalService);
+  private readonly notification = inject(NotificationService);
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('groupId');
-    if (!id) return;
+  @ViewChild(GroupChatComponent)
+  groupChat!: GroupChatComponent;
 
-    this.groupId.set(id);
-    this.loadGroup();
-    this.loadGroupRequests();
+  ngOnInit(): void {
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const id = params['groupId'];
+      if (!id) return;
+
+      this.groupId.set(id);
+      this.group.set(undefined);
+      this.membersList.set([]);
+      this.requestsList.set([]);
+      this.loadGroup();
+      this.loadGroupRequests();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadGroup(): void {
@@ -90,7 +121,7 @@ export class PreviewGroupComponent implements OnInit {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error(err);
+          this.notification.handleApiError(err, 'Failed to load group');
           this.loading.set(false);
         },
       });
@@ -108,7 +139,10 @@ export class PreviewGroupComponent implements OnInit {
           this.requestsList.set(result.content);
         },
         error: (err) => {
-          console.error('Error loading group requests:', err);
+          this.notification.handleApiError(
+            err,
+            'Failed to load group requests',
+          );
           this.requestsList.set([]);
         },
       });
@@ -123,8 +157,6 @@ export class PreviewGroupComponent implements OnInit {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
       this.router.navigate([`app/groups/${groupId}/members`]);
-    } else {
-      console.error('Group ID not found in route');
     }
   }
 
@@ -132,8 +164,6 @@ export class PreviewGroupComponent implements OnInit {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
       this.router.navigate([`app/groups/${groupId}/requests`]);
-    } else {
-      console.error('Group ID not found in route');
     }
   }
 
@@ -141,14 +171,18 @@ export class PreviewGroupComponent implements OnInit {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
       this.router.navigate([`app/groups/${groupId}/ranking`]);
-    } else {
-      console.error('Group ID not found in route');
     }
   }
 
   protected openEditModal(): void {
     if (this.editGroupForm) {
       this.editGroupForm.open();
+    }
+  }
+
+  protected openChat(): void {
+    if (this.groupChat) {
+      this.groupChat.open();
     }
   }
 
@@ -173,11 +207,20 @@ export class PreviewGroupComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.notification.success('Group deleted successfully');
           this.router.navigate(['app/groups']);
         },
-        error: (err) => {
-          console.error('Failed to delete group:', err);
-        },
       });
+  }
+
+  protected canAccessChat(): boolean {
+    return (
+      this.mode() === GroupPreviewMode.ADMIN ||
+      this.mode() === GroupPreviewMode.MEMBER
+    );
+  }
+
+  protected getLoggedUserGroupMemberId(): string | undefined {
+    return this.group()?.loggedUserMembershipDto?.groupMemberId;
   }
 }

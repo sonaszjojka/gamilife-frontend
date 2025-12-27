@@ -2,19 +2,21 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { InputSearchComponent } from '../../../shared/components/input-search/input-search.component';
+import { CommunityInputSearchComponent } from '../../../shared/components/community-input-search/community-input-search.component';
 import { CommonModule } from '@angular/common';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { GroupFilterParams } from '../../../../shared/models/group/group-filter-params.model';
+import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+
 @Component({
   selector: 'app-community-page',
   imports: [
     NzInputModule,
     NzIconModule,
-    InputSearchComponent,
+    CommunityInputSearchComponent,
     CommonModule,
     PaginationMoreComponent,
     NzGridModule,
@@ -26,6 +28,8 @@ import { GroupListComponent } from '../../../shared/components/group-list/group-
 })
 export class CommunityPageComponent implements OnInit {
   private groupApiService = inject(GroupApiService);
+  private notification = inject(NotificationService);
+
   readonly value = signal('');
   groups = signal<Group[]>([]);
   totalPages = signal<number>(0);
@@ -53,7 +57,9 @@ export class CommunityPageComponent implements OnInit {
           this.currentPage.set(page);
         }, timeout);
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        this.notification.handleApiError(err, 'Failed to load groups');
+      },
     });
   }
 

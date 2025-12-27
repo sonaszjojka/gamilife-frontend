@@ -1,0 +1,89 @@
+.filter-panel {
+  padding: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.group-header {
+  list-style: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.group-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.filter-options {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  user-select: none;
+}
+
+.filter-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background-color: white;
+  border: 1px solid #999;
+}
+
+.filter-checkbox-container input:checked ~ .checkmark {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.filter-checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.filter-checkbox-container .checkmark:after {
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 10px 0;
+}

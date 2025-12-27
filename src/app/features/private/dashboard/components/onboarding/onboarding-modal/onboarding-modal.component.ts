@@ -13,6 +13,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { UserApiService } from '../../../../../shared/services/user-api/user-api.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-onboarding-modal',
@@ -35,6 +36,7 @@ export class OnboardingModalComponent implements AfterViewInit {
   @ViewChild(NzCarouselComponent) carousel!: NzCarouselComponent;
 
   private userApiService = inject(UserApiService);
+  private notification = inject(NotificationService);
 
   currentSlide = 0;
   isLoading = false;
@@ -110,22 +112,26 @@ export class OnboardingModalComponent implements AfterViewInit {
 
   completeOnboarding(): void {
     if (!this.userId) {
-      console.error('User ID is missing');
+      this.notification.error('User ID is missing. Please try again.');
       return;
     }
 
-    console.log('Completing onboarding for user:', this.userId);
     this.isLoading = true;
 
     this.userApiService.completeOnboarding(this.userId).subscribe({
-      next: (response) => {
-        console.log('Onboarding completed successfully:', response);
+      next: () => {
         this.isLoading = false;
+        this.notification.success(
+          'Welcome aboard! Your journey begins now! 🎉',
+        );
         this.completed.emit();
       },
       error: (error) => {
-        console.error('Error completing onboarding:', error);
         this.isLoading = false;
+        this.notification.handleApiError(
+          error,
+          'Failed to complete onboarding. Please try again.',
+        );
       },
     });
   }

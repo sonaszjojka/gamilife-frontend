@@ -92,8 +92,7 @@ export class SendGroupInvitationFormComponent {
           this.users.set(response.content);
           this.searching.set(false);
         },
-        error: (err) => {
-          console.error('Failed to search users:', err);
+        error: () => {
           this.searching.set(false);
         },
       });
@@ -122,7 +121,6 @@ export class SendGroupInvitationFormComponent {
         },
         error: (err) => {
           this.sending.set(false);
-          console.error('Failed to send invitation:', err);
           if (err.status === 409) {
             this.errorMessage.set('User already invited or is a member');
           } else if (err.status === 404) {

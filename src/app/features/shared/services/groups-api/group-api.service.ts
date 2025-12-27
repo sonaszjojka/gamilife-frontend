@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
-import { GroupFilterParams } from '../../models/group/group-filter-params.model';
+import { GroupFilterParams } from '../../models/group/group.model';
 import { GetGroupsResult } from '../../models/group/groups.model';
 import {
   CreateGroupDto,

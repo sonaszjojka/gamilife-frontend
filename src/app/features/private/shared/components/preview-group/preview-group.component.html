@@ -2,6 +2,26 @@
   <nz-spin [nzSpinning]="loading()" nzSize="large">
     <div class="two-column-layout">
       <div class="left-column">
+        <div
+          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
+          class="admin-actions-bar"
+        >
+          <button
+            nz-button
+            nzType="default"
+            nzSize="large"
+            (click)="openEditModal()"
+          >
+            <span nz-icon nzType="edit"></span>
+            Edit Group
+          </button>
+
+          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
+            <span nz-icon nzType="delete"></span>
+            Delete Group
+          </button>
+        </div>
+
         <app-group-info-card *ngIf="group()" [group]="group()!">
           <app-group-actions
             [group]="group()!"
@@ -58,37 +78,14 @@
             mode() === GroupPreviewMode.ADMIN)
         "
       >
-        <div
-          *ngIf="group() && mode() === GroupPreviewMode.ADMIN"
-          class="admin-actions-bar"
+        <app-group-task-list
+          [mode]="mode()"
+          [groupMembersList]="membersList()"
+          [group]="group()!"
+          [groupId]="groupId()!"
+          (refreshGroup)="onActionComplete()"
         >
-          <button
-            nz-button
-            nzType="default"
-            nzSize="large"
-            (click)="openEditModal()"
-          >
-            <span nz-icon nzType="edit"></span>
-            Edit Group
-          </button>
-
-          <button nz-button nzDanger nzSize="large" (click)="confirmDelete()">
-            <span nz-icon nzType="delete"></span>
-            Delete Group
-          </button>
-        </div>
-
-        <nz-card class="main-content-card">
-          <div class="placeholder-content">
-            <span
-              nz-icon
-              nzType="inbox"
-              nzTheme="outline"
-              class="placeholder-icon"
-            ></span>
-            <p>Main content area - 2/3 width</p>
-          </div>
-        </nz-card>
+        </app-group-task-list>
       </div>
     </div>
 
@@ -102,9 +99,27 @@
   </nz-spin>
 
   <app-edit-group-form
-    *ngIf="group()"
     [group]="group()!"
     [members]="membersList()"
     (groupUpdated)="onActionComplete()"
   ></app-edit-group-form>
+
+  <nz-float-button
+    *ngIf="group() && canAccessChat() && getLoggedUserGroupMemberId()"
+    nzIcon="message"
+    nzType="primary"
+    nzTooltip="Open Group Chat"
+    (click)="openChat()"
+    [nzShape]="'circle'"
+    [style.width.px]="50"
+    [style.height.px]="50"
+    [style.bottom.px]="mode() === GroupPreviewMode.ADMIN ? 24 : 220"
+  ></nz-float-button>
+
+  <app-group-chat
+    *ngIf="group() && canAccessChat() && getLoggedUserGroupMemberId()"
+    [groupId]="groupId()!"
+    [groupMemberId]="getLoggedUserGroupMemberId()!"
+    [mode]="mode()"
+  ></app-group-chat>
 </div>

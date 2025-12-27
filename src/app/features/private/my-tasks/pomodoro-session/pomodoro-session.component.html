@@ -4,9 +4,9 @@
       <h2>Your Tasks</h2>
     </div>
 
-    @for (task of usersNotPomodoroTasks; track task.taskId) {
+    @for (activity of usersNotPomodoroTasks; track activity.id) {
       <app-task-item
-        [task]="task"
+        [activity]="activity"
         [inPomodoroList]="true"
         (moveToCurrentSession)="moveTaskToCurrentSession($event)"
       ></app-task-item>
@@ -41,9 +41,9 @@
         Start Session
       </button>
     }
-    @for (task of currentSessionPomodoroTasks; track task.taskId) {
+    @for (activity of currentSessionPomodoroTasks; track activity.id) {
       <app-task-item
-        [task]="task"
+        [activity]="activity"
         [inPomodoroList]="true"
         [isInSession]="true"
         (removeFromCurrentSession)="removeFromCurrentSession($event)"
@@ -57,9 +57,9 @@
       <h2>Your Pomodoro Tasks</h2>
     </div>
 
-    @for (task of usersPomodoroTasks; track task.taskId) {
+    @for (activity of usersPomodoroActivities; track activity.id) {
       <app-task-item
-        [task]="task"
+        [activity]="activity"
         [inPomodoroList]="true"
         [isInSession]="false"
         (moveToCurrentSession)="moveTaskToCurrentSession($event)"

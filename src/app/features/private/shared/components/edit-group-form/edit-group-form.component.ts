@@ -24,6 +24,7 @@ import {
   Group,
 } from '../../../../shared/models/group/group.model';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-edit-group-form',
@@ -42,6 +43,7 @@ import { GroupMember } from '../../../../shared/models/group/group-member.model'
 export class EditGroupFormComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   protected groupApiService = inject(GroupApiService);
+  private notification = inject(NotificationService);
 
   group = input.required<Group>();
   members = input<GroupMember[]>([]);
@@ -95,7 +97,9 @@ export class EditGroupFormComponent implements OnInit {
   private loadGroupTypes(): void {
     this.groupApiService.getGroupTypes().subscribe({
       next: (types) => this.groupTypes.set(types),
-      error: (err) => console.error('Failed to load group types:', err),
+      error: (err) => {
+        this.notification.handleApiError(err, 'Failed to load group types');
+      },
     });
   }
 
@@ -122,16 +126,18 @@ export class EditGroupFormComponent implements OnInit {
         .editGroup(this.group().groupId!, editGroupDto)
         .subscribe({
           next: () => {
+            this.notification.success('Group updated successfully');
             this.isVisible.set(false);
             this.isLoading.set(false);
             this.groupUpdated.emit();
           },
           error: (err) => {
-            console.error('Failed to update group:', err);
+            this.notification.handleApiError(err, 'Failed to update group');
             this.isLoading.set(false);
           },
         });
     } else {
+      this.notification.showValidationError();
       Object.values(this.validateForm.controls).forEach((control) => {
         control.markAsDirty();
         control.updateValueAndValidity();

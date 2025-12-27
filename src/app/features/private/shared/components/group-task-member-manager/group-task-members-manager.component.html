@@ -1,0 +1,58 @@
+<nz-modal
+  [nzTitle]="getTitle()"
+  [nzVisible]="isVisible()"
+  nzCancelText="Done"
+  (nzOnCancel)="onClose()"
+  [nzOkText]="null"
+>
+  <ng-container *nzModalContent>
+    <div class="assignedMembers">
+      <nz-list
+        [nzDataSource]="assignedMembers()"
+        [nzRenderItem]="assignedMember"
+        nzBordered
+      >
+        <ng-template #assignedMember let-assignedMember>
+          <nz-list-item>
+            <nz-list-item-meta [nzTitle]="assignedMember.username">
+              @if (assignedMember.isMarkedDone) {
+                <nz-icon nzType="check-circle" style="color: green"></nz-icon>
+              }
+              <nz-icon></nz-icon>
+            </nz-list-item-meta>
+            <button
+              nz-button
+              nzType="default"
+              nzDanger
+              (click)="removeMemberFromTask(assignedMember.groupMemberId)"
+            >
+              Remove
+            </button>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+    </div>
+
+    <div class="unAssignedMembers">
+      <nz-list
+        [nzDataSource]="notAssignedMembers()"
+        [nzRenderItem]="notAssignedMember"
+        nzBordered
+      >
+        <ng-template #notAssignedMember let-notAssignedMember>
+          <nz-list-item>
+            <nz-list-item-meta [nzTitle]="notAssignedMember.username">
+            </nz-list-item-meta>
+            <button
+              nz-button
+              nzType="primary"
+              (click)="addMemberToTask(notAssignedMember.groupMemberId)"
+            >
+              Add
+            </button>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+    </div>
+  </ng-container>
+</nz-modal>

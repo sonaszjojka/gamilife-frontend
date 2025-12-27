@@ -10,6 +10,7 @@ import { take } from 'rxjs/operators';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { FullRankingComponent } from '../full-ranking/full-ranking.component';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-ranking-page',
@@ -33,6 +34,7 @@ export class GroupRankingPageComponent implements OnInit {
   private readonly groupApi = inject(GroupApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
 
   ngOnInit(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
@@ -57,7 +59,7 @@ export class GroupRankingPageComponent implements OnInit {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error('Error loading group data:', err);
+          this.notification.handleApiError(err, 'Failed to load group ranking');
           this.loading.set(false);
         },
       });

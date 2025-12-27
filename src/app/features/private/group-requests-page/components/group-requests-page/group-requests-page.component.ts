@@ -9,6 +9,7 @@ import { GroupRequestsListComponent } from '../group-requests-list/group-request
 import { take } from 'rxjs/operators';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-group-requests-page',
@@ -72,6 +73,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 export class GroupRequestsPageComponent implements OnInit {
   private readonly groupRequestApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly notification = inject(NotificationService);
 
   groupId = signal<string>('');
   groupName = signal<string>('');
@@ -98,7 +100,10 @@ export class GroupRequestsPageComponent implements OnInit {
           this.loading.set(false);
         },
         error: (err) => {
-          console.error('Failed to load requests:', err);
+          this.notification.handleApiError(
+            err,
+            'Failed to load group requests',
+          );
           this.loading.set(false);
         },
       });

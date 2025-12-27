@@ -1,6 +1,6 @@
 <nav class="navbar">
   <div class="logo">
-    <img src="/logo_gl.png" alt="GamiLife Logo" />
+    <img src="assets/logo_gl.png" alt="GamiLife Logo" />
   </div>
 
   @if (!isLoggedIn()) {
@@ -17,19 +17,47 @@
       nzControl
     >
     </nz-switch>
-    <ng-template #checkedTemplate
-      ><nz-icon nzType="moon" nzTheme="outline"
-    /></ng-template>
-    <ng-template #unCheckedTemplate
-      ><nz-icon nzType="sun" nzTheme="outline"
-    /></ng-template>
+    <ng-template #checkedTemplate>
+      <nz-icon nzType="moon" nzTheme="outline" />
+    </ng-template>
+    <ng-template #unCheckedTemplate>
+      <nz-icon nzType="sun" nzTheme="outline" />
+    </ng-template>
   } @else {
     <ul nz-menu nzMode="horizontal" class="nav-menu" [nzSelectable]="false">
       <li nz-menu-item routerLink="/app/dashboard">Home</li>
       <li nz-menu-item routerLink="/app/my-groups">My Groups</li>
       <li nz-menu-item routerLink="/app/community">Community</li>
       <li nz-menu-item routerLink="/app/tasks">Tasks</li>
+      <li nz-menu-item routerLink="/app/store">Store</li>
     </ul>
+    <div class="navbar-actions">
+      <div class="stats-item level-display">
+        <nz-icon nzType="trophy" nzTheme="outline" class="stats-icon"></nz-icon>
+        <div class="stats-content">
+          <span class="stats-label">Level {{ userLevel() }}</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="experiencePercentage()"
+            ></div>
+          </div>
+          <span class="stats-value"
+            >{{ userExperience() }}/{{ requiredExperience() }} XP</span
+          >
+        </div>
+      </div>
+
+      <div class="stats-item money-display">
+        <nz-icon nzType="dollar" nzTheme="outline" class="stats-icon"></nz-icon>
+        <div class="stats-content">
+          <span class="stats-label">Balance</span>
+          <span class="stats-value">{{ userMoney() | number }}</span>
+        </div>
+      </div>
+
+      <app-notification-dropdown></app-notification-dropdown>
+      <app-user-account-button></app-user-account-button>
+    </div>
   }
-  <app-user-account-button></app-user-account-button>
 </nav>

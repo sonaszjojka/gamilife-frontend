@@ -1,10 +1,11 @@
 h3 {
   text-align: center;
-  color: var(--bg-primary);
+  color: black;
 }
+
 h1 {
   text-align: center;
-  color: var(--bg-primary);
+  color: black;
   display: flex;
   flex-direction: column;
 }
@@ -13,14 +14,40 @@ h1 {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: url("/background_guest_page.png") center center / cover no-repeat;
-}
-h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
 }
 
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 2rem;
+}
+.task-create,
+.habit-create {
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: none;
+  color: white;
+  margin: 1rem;
+}
+
+.task-create {
+  background-color: #2196f3;
+}
+.habit-create {
+  background-color: #9c27b0;
+}
+
+.task-create:hover,
+.habit-create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  filter: brightness(1.1);
+  color: white;
+}
 .task-layout {
   display: flex;
   align-items: flex-start;
@@ -28,12 +55,18 @@ h1 {
   width: 100%;
   padding: 0 2rem;
 }
+
 .task-list {
   width: 40%;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 10px;
+  border-color: #757575;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  min-height: 80vh;
 }
 
 .task-group {
@@ -48,10 +81,12 @@ h1 {
   margin-bottom: 1rem;
   font-size: 2rem;
 }
+
 .filter-panel {
   width: 20%;
   flex-shrink: 0;
 }
+
 app-task-form {
   flex-shrink: 0;
 }
