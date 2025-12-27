@@ -24,7 +24,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { GroupTaskComponent } from '../group-task/group-task.component';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
-import { Page } from '../../../../shared/services/tasks/individual-task.service';
+import { Page } from '../../../../shared/models/util/page.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 
 @Component({

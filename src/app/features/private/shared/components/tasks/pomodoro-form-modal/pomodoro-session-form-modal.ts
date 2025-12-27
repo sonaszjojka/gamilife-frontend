@@ -1,19 +1,14 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  signal,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { PomodoroFormComponent } from '../pomodoro-form/pomodoro-form.component';
-import { Task } from '../../../../../shared/models/task-models/task.model';
-import { PomodoroTaskService } from '../../../../../shared/services/tasks/pomodoro-task.service';
-import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
-import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import { UserPomodoroApiService } from '../../../../../shared/services/tasks/user-pomodoro-api.service';
+import { PomodoroRequest } from '../../../../../shared/models/task-models/pomodoro-request';
+import {
+  ActivityItemDetails,
+  ActivityType,
+} from '../../../../../shared/models/task-models/activity.model';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
@@ -30,9 +25,9 @@ import { NotificationService } from '../../../../../shared/services/notification
       <ng-container *nzModalContent>
         <app-pomodoro-form
           (formChanged)="onPomodoroFormChange($event)"
-          (editFormChanged)="onPomodoroEditFormChange($event)"
           [pomodoroEdition]="editionMode"
           [pomodoroCreation]="creationMode"
+          [activity]="activity"
         >
         </app-pomodoro-form>
       </ng-container>
@@ -40,20 +35,19 @@ import { NotificationService } from '../../../../../shared/services/notification
   `,
 })
 export class PomodoroSessionFormModal {
-  @Input() task!: Task;
-  @Output() moveToCurrentSession = new EventEmitter<Task>();
+  activity!: ActivityItemDetails;
+  @Output() moveToCurrentSession = new EventEmitter<ActivityItemDetails>();
   editionMode = signal<boolean>(false);
   creationMode = signal<boolean>(false);
   title = '';
 
-  pomodoroService = inject(PomodoroTaskService);
-  notificationService = inject(NotificationService);
-  pomodoroRequest?: CreatePomodoroRequest;
-  pomodoroEditRequest?: EditPomodoroRequest;
+  private pomodoroApi = inject(UserPomodoroApiService);
+  private notificationService = inject(NotificationService);
+  pomodoroRequest?: PomodoroRequest;
   isVisible = false;
 
   showModal(): void {
-    if (this.task.pomodoro?.pomodoroId) {
+    if (this.activity.pomodoro?.id) {
       this.editionMode.set(true);
       this.creationMode.set(false);
       this.title = 'Edit Pomodoro Task';
@@ -68,49 +62,56 @@ export class PomodoroSessionFormModal {
 
   handleOk(): void {
     if (this.creationMode() && this.pomodoroRequest) {
-      this.pomodoroService
-        .createPomodoro(this.task.taskId, this.pomodoroRequest)
-        .subscribe({
-          next: (response) => {
-            this.task.pomodoro = {
-              pomodoroId: response.pomodoroId,
-              workCyclesNeeded: response.workCyclesNeeded,
-              workCyclesCompleted: response.workCyclesCompleted,
-              createdAt: response.createdAt,
-            };
+      if (this.activity.type == ActivityType.TASK) {
+        this.pomodoroRequest.taskId = this.activity.id;
+        this.pomodoroRequest.habitId = undefined;
+      } else {
+        this.pomodoroRequest.habitId = this.activity.id;
+        this.pomodoroRequest.taskId = undefined;
+      }
+      this.pomodoroApi.createPomodoro(this.pomodoroRequest).subscribe({
+        next: (response) => {
+          this.activity.pomodoro = {
+            id: response.id,
+            cyclesRequired: response.cyclesRequired,
+            cyclesCompleted: response.cyclesCompleted,
+          };
 
-            this.moveToCurrentSession.emit(this.task);
-            this.notificationService.handleApiSuccess(
-              'POST',
-              'Pomodoro task created successfully',
-            );
-            this.isVisible = false;
-          },
-          error: (error) => {
-            this.notificationService.handleApiError(error);
-          },
-        });
+          this.moveToCurrentSession.emit(this.activity);
+          this.isVisible = false;
+          this.notificationService.success(
+            `Pomodoro created successfully for: ${this.activity.title}`,
+          );
+        },
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error(
+            `There was an error creating Pomodoro for: ${this.activity.title}`,
+          );
+        },
+      });
     } else if (
       this.editionMode() &&
-      this.pomodoroEditRequest != null &&
-      this.task.pomodoro?.pomodoroId
+      this.pomodoroRequest != null &&
+      this.activity.pomodoro?.id
     ) {
-      this.pomodoroService
-        .editPomodoro(this.task.pomodoro.pomodoroId, this.pomodoroEditRequest)
+      this.pomodoroApi
+        .editPomodoro(this.activity.pomodoro!.id, this.pomodoroRequest)
         .subscribe({
           next: (response) => {
-            this.task.pomodoro!.workCyclesNeeded = response.workCyclesNeeded;
-            this.task.pomodoro!.workCyclesCompleted =
-              response.workCyclesCompleted;
-            this.moveToCurrentSession.emit(this.task);
-            this.notificationService.handleApiSuccess(
-              'PUT',
-              'Pomodoro task updated successfully',
-            );
+            this.activity.pomodoro!.cyclesRequired = response.cyclesRequired;
+            this.activity.pomodoro!.cyclesCompleted = response.cyclesCompleted;
+            this.moveToCurrentSession.emit(this.activity);
             this.isVisible = false;
+            this.notificationService.success(
+              `Pomodoro updated successfully for: ${this.activity.title}`,
+            );
           },
-          error: (error) => {
-            this.notificationService.handleApiError(error);
+          error: (err) => {
+            console.log(err);
+            this.notificationService.error(
+              `There was an error updating Pomodoro for: ${this.activity.title}`,
+            );
           },
         });
     }
@@ -120,11 +121,7 @@ export class PomodoroSessionFormModal {
     this.isVisible = false;
   }
 
-  onPomodoroFormChange(pomodoroRequest: CreatePomodoroRequest) {
+  onPomodoroFormChange(pomodoroRequest: PomodoroRequest) {
     this.pomodoroRequest = pomodoroRequest;
-  }
-
-  onPomodoroEditFormChange(pomodoroRequest: EditPomodoroRequest) {
-    this.pomodoroEditRequest = pomodoroRequest;
   }
 }

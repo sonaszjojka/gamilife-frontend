@@ -1,6 +1,5 @@
 export interface CreatePomodoroResponse {
-  pomodoroId: string;
-  workCyclesNeeded: number;
-  workCyclesCompleted: number;
-  createdAt: string;
+  id: string;
+  cyclesRequired: number;
+  cyclesCompleted: number;
 }

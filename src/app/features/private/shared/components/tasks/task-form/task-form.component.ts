@@ -1,12 +1,13 @@
 import {
   Component,
+  EventEmitter,
   inject,
   Input,
-  effect,
-  WritableSignal,
+  input,
+  OnChanges,
   Output,
-  EventEmitter,
-  signal,
+  ViewChild,
+  WritableSignal,
 } from '@angular/core';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import {
@@ -21,22 +22,19 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzAutosizeDirective, NzInputDirective } from 'ng-zorro-antd/input';
-import { Task } from '../../../../../shared/models/task-models/task.model';
-import { IndividualTaskService } from '../../../../../shared/services/tasks/individual-task.service';
+import { UserTaskApiService } from '../../../../../shared/services/tasks/user-task-api.service';
 import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
-import { EditTaskRequest } from '../../../../../shared/models/task-models/edit-task-request';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { PomodoroFormComponent } from '../pomodoro-form/pomodoro-form.component';
-import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
-import { PomodoroTaskService } from '../../../../../shared/services/tasks/pomodoro-task.service';
-import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
-import { CreateHabitRequest } from '../../../../../shared/models/task-models/create-habit-request';
-import { EditHabitRequest } from '../../../../../shared/models/task-models/edit-habit-request';
-import { HabitFormComponent } from '../habit-form/habit-form.component';
-import { HabitTaskService } from '../../../../../shared/services/tasks/habit-task.service';
-import { daysAsDuration } from '../../../../../../shared/util/DateFormatterUtil';
+import { UserHabitApiService } from '../../../../../shared/services/tasks/user-habit-api.service';
+import {
+  ActivityItemDetails,
+  ActivityType,
+} from '../../../../../shared/models/task-models/activity.model';
+import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
+import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
+import { PomodoroSessionFormModal } from '../pomodoro-form-modal/pomodoro-session-form-modal';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
@@ -54,60 +52,45 @@ import { NotificationService } from '../../../../../shared/services/notification
     NzDatePickerComponent,
     NzTimePickerComponent,
     NzIconDirective,
-    PomodoroFormComponent,
     NzAutosizeDirective,
-    HabitFormComponent,
+    NzInputNumberComponent,
+    PomodoroSessionFormModal,
   ],
   templateUrl: './task-form.component.html',
   standalone: true,
   styleUrl: './task-form.component.css',
 })
-export class TaskFormComponent {
-  pomodoroCreation = signal<boolean>(false);
-  pomodoroEdition = signal<boolean>(false);
-  habitCreation = signal<boolean>(false);
-  habitEdition = signal<boolean>(false);
-  @Input() task!: WritableSignal<Task | null>;
+export class TaskFormComponent implements OnChanges {
+  viewMode = input<boolean>(false);
+  type = input.required<ActivityType>();
+  activity = input<ActivityItemDetails>();
   @Input() creationMode?: WritableSignal<boolean | null>;
   @Input() editionMode?: WritableSignal<boolean | null>;
-  @Output() taskFormSubmitted = new EventEmitter<void>();
-  @Output() taskDeleted = new EventEmitter<void>();
-  pomodoroRequest?: CreatePomodoroRequest;
-  pomodoroEditRequest?: EditPomodoroRequest;
-  habitRequest?: CreateHabitRequest;
-  habitEditRequest?: EditHabitRequest;
-
-  habitCreateDurationDays?: number;
-  habitEditDurationDays?: number;
+  @Output() activityFormSubmitted = new EventEmitter<void>();
+  @Output() activityDeleted = new EventEmitter<void>();
 
   private formBuilder = inject(NonNullableFormBuilder);
-  private taskService = inject(IndividualTaskService);
-  private pomodoroService = inject(PomodoroTaskService);
-  private habitService = inject(HabitTaskService);
+  private taskApi = inject(UserTaskApiService);
+  private habitApi = inject(UserHabitApiService);
   private notificationService = inject(NotificationService);
+  protected readonly ActivityType = ActivityType;
 
-  validTaskForm = this.formBuilder.group({
+  @ViewChild(PomodoroSessionFormModal)
+  protected pomodoroModal = new PomodoroSessionFormModal();
+
+  validActivityForm = this.formBuilder.group({
     title: this.formBuilder.control('', [
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(300),
     ]),
-    startTimeDate: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
-    startTimeHour: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
-    endTimeDate: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
-    endTimeHour: this.formBuilder.control<Date | null>(null, [
-      Validators.required,
-    ]),
+
+    deadlineDate: this.formBuilder.control<Date | undefined>(undefined, []),
+    deadlineHour: this.formBuilder.control<Date | undefined>(undefined, []),
     categoryId: this.formBuilder.control<number>(0, [Validators.required]),
     difficultyId: this.formBuilder.control<number>(0, [Validators.required]),
-    completedAt: this.formBuilder.control(''),
     description: this.formBuilder.control('', [Validators.required]),
+    cycleLength: this.formBuilder.control<number>(0),
   });
 
   categories = [
@@ -121,274 +104,210 @@ export class TaskFormComponent {
     { difficultyId: 2, difficultyName: 'Medium' },
     { difficultyId: 3, difficultyName: 'Hard' },
   ];
+  ngOnChanges() {
+    const activity = this.activity?.();
+    const isEditing = this.editionMode?.();
+    const isCreating = this.creationMode?.();
 
-  constructor() {
-    effect(() => {
-      const task = this.task?.();
-      const isEditing = this.editionMode?.();
-      const isCreating = this.creationMode?.();
+    if (activity?.type == ActivityType.HABIT && isEditing) {
+      this.validActivityForm.patchValue({
+        title: activity.title || '',
+        categoryId: activity.categoryId,
+        difficultyId: activity.difficultyId,
+        description: activity.description || '',
+        cycleLength: activity.cycleLength,
+      });
+    } else if (activity?.type == ActivityType.TASK && isEditing) {
+      const endDate = activity.deadlineDate
+        ? new Date(activity.deadlineDate)
+        : undefined;
+      let endHour: Date | undefined = undefined;
 
-      if (task && isEditing) {
-        const startDate = task.startTime ? new Date(task.startTime) : null;
-        const endDate = task.endTime ? new Date(task.endTime) : null;
-        this.validTaskForm.patchValue({
-          title: task.title || '',
-          startTimeDate: startDate,
-          startTimeHour: startDate,
-          endTimeDate: endDate,
-          endTimeHour: endDate,
-          categoryId: task.categoryId,
-          difficultyId: task.difficultyId,
-          completedAt: task.completedAt || '',
-          description: task.description || '',
-        });
-      } else if (isCreating) {
-        this.validTaskForm.reset();
+      if (activity.deadlineTime) {
+        const [hours, minutes, seconds] = activity.deadlineTime
+          .split(':')
+          .map(Number);
+        endHour = new Date();
+        endHour.setHours(hours, minutes, seconds || 0, 0);
       }
-    });
+
+      this.validActivityForm.patchValue({
+        title: activity.title || '',
+        deadlineDate: endDate,
+        deadlineHour: endHour,
+        categoryId: activity.categoryId,
+        difficultyId: activity.difficultyId,
+        description: activity.description || '',
+      });
+    } else if (isCreating) {
+      this.validActivityForm.reset();
+    }
+    if (this.viewMode()) {
+      this.validActivityForm.disable();
+    } else {
+      this.validActivityForm.enable();
+    }
   }
 
   onClose() {
     this.editionMode?.set(false);
     this.creationMode?.set(false);
-    this.validTaskForm.reset();
+    this.validActivityForm.reset();
   }
 
   onSubmit() {
-    if (this.validTaskForm.invalid) {
-      Object.values(this.validTaskForm.controls).forEach((control) => {
+    if (this.validActivityForm.invalid) {
+      Object.values(this.validActivityForm.controls).forEach((control) => {
         control.markAsTouched();
       });
-      this.notificationService.showValidationError();
+      return;
+    }
+    if (
+      this.type() == ActivityType.TASK &&
+      this.validActivityForm.value.deadlineDate == undefined
+    ) {
+      Object.values(this.validActivityForm.controls).forEach((control) => {
+        control.markAsTouched();
+      });
       return;
     }
 
-    const formValue = this.validTaskForm.getRawValue();
-    let mergedStartTime = '';
-    const startTimeDate = formValue.startTimeDate;
-    const startTimeHour = formValue.startTimeHour;
-
-    startTimeDate!.setHours(
-      startTimeHour!.getHours() + 1,
-      startTimeHour!.getMinutes(),
-      startTimeHour!.getSeconds(),
-    );
-    mergedStartTime = startTimeDate!.toISOString();
-
-    let mergedEndTime = '';
-    const endTimeDate = formValue.endTimeDate;
-    const endTimeHour = formValue.endTimeHour;
-
-    endTimeDate!.setHours(
-      endTimeHour!.getHours() + 1,
-      endTimeHour!.getMinutes(),
-      endTimeHour!.getSeconds(),
-    );
-    mergedEndTime = endTimeDate!.toISOString();
-
-    const request: EditTaskRequest = {
-      title: formValue.title,
-      startTime: mergedStartTime,
-      endTime: mergedEndTime,
-      categoryId: formValue.categoryId,
-      difficultyId: formValue.difficultyId,
-      completedAt: formValue.completedAt,
-      description: formValue.description,
-    };
-
-    if (this.creationMode?.()) {
-      this.taskService.createTask(request).subscribe({
-        next: () => {
-          this.validTaskForm.reset();
-          this.notificationService.handleApiSuccess(
-            'POST',
-            'Task created successfully',
-          );
-          this.taskFormSubmitted.emit();
-        },
-        error: (error) => {
-          this.notificationService.handleApiError(error);
-          this.taskFormSubmitted.emit();
-        },
+    if (
+      this.type() == ActivityType.HABIT &&
+      (this.validActivityForm.value.cycleLength == undefined ||
+        this.validActivityForm.value.cycleLength <= 0)
+    ) {
+      Object.values(this.validActivityForm.controls).forEach((control) => {
+        control.markAsTouched();
       });
-    } else if (this.editionMode?.()) {
-      const task = this.task?.();
-      if (task == null) {
-        return;
+      return;
+    }
+
+    const formValue = this.validActivityForm.getRawValue();
+
+    if (this.type() == ActivityType.TASK) {
+      let request;
+      if (formValue.deadlineHour != undefined) {
+        const date = formValue.deadlineHour;
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const deadlineTime = `${hours}:${minutes}:00`;
+
+        request = {
+          title: formValue.title,
+          deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
+          deadlineTime: deadlineTime,
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          description: formValue.description,
+        };
+      } else {
+        request = {
+          title: formValue.title,
+          deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
+          deadlineTime: null,
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          description: formValue.description,
+        };
       }
-      if (this.pomodoroRequest && this.pomodoroCreation()) {
-        this.pomodoroService
-          .createPomodoro(task.taskId, this.pomodoroRequest)
-          .subscribe({
-            next: (response) => {
-              task.pomodoro = {
-                pomodoroId: response.pomodoroId,
-                workCyclesNeeded: response.workCyclesNeeded,
-                workCyclesCompleted: response.workCyclesCompleted,
-                createdAt: response.createdAt,
-              };
-              this.notificationService.handleApiSuccess(
-                'POST',
-                'Pomodoro added successfully',
-              );
-            },
-            error: (error) => {
-              this.notificationService.handleApiError(error);
-            },
-          });
-      } else if (this.pomodoroEditRequest && this.pomodoroEdition()) {
-        if (task.pomodoro && task.pomodoro.pomodoroId) {
-          this.pomodoroService
-            .editPomodoro(task.pomodoro.pomodoroId, this.pomodoroEditRequest)
-            .subscribe({
-              next: (response) => {
-                if (task.pomodoro) {
-                  task.pomodoro.workCyclesNeeded = response.workCyclesNeeded;
-                  task.pomodoro.workCyclesCompleted =
-                    response.workCyclesCompleted;
-                  task.pomodoro.createdAt = response.createdAt;
-                }
-                this.notificationService.handleApiSuccess(
-                  'PUT',
-                  'Pomodoro updated successfully',
-                );
-              },
-              error: (error) => {
-                this.notificationService.handleApiError(error);
-              },
-            });
+
+      if (this.creationMode?.()) {
+        this.taskApi.createTask(request).subscribe({
+          next: () => {
+            this.validActivityForm.reset();
+            this.activityFormSubmitted.emit();
+            this.notificationService.success('Task created successfully!');
+          },
+          error: (err) => {
+            console.log(err);
+            this.notificationService.error('Error creating task.');
+            this.activityFormSubmitted.emit();
+          },
+        });
+      } else if (this.editionMode?.()) {
+        const activity = this.activity?.();
+        if (activity == null) {
+          return;
         }
+        this.taskApi.editTask(this.activity()!.id, request).subscribe({
+          next: () => {
+            this.validActivityForm.reset();
+            this.notificationService.success('Task edited successfully!');
+            this.activityFormSubmitted.emit();
+          },
+          error: (err) => {
+            console.log(err);
+            this.notificationService.error('Error editing task.');
+            this.activityFormSubmitted.emit();
+          },
+        });
       }
+    } else if (this.type() == ActivityType.HABIT) {
+      const request: HabitRequest = {
+        title: formValue.title,
+        cycleLength: formValue.cycleLength,
+        categoryId: formValue.categoryId,
+        difficultyId: formValue.difficultyId,
+        description: formValue.description,
+      };
 
-      if (this.habitRequest && this.habitCreation()) {
-        this.habitRequest.cycleLength = daysAsDuration(
-          this.habitCreateDurationDays!,
-        );
-
-        this.habitService
-          .createHabitTask(task.taskId, this.habitRequest)
-          .subscribe({
-            next: (response) => {
-              task.taskHabit = {
-                habitId: response.habitId,
-                cycleLength: response.cycleLength,
-                currentStreak: response.currentStreak,
-                longestStreak: response.longestStreak,
-                acceptedDate: response.acceptedDate,
-              };
-              this.notificationService.handleApiSuccess(
-                'POST',
-                'Habit added successfully',
-              );
-              //ToDo decide if we need to set task.endTime from here or use already existing one
-            },
-            error: (error) => {
-              this.notificationService.handleApiError(error);
-            },
-          });
-      } else if (this.habitEditRequest && this.habitEdition()) {
-        this.habitEditRequest.cycleLength = daysAsDuration(
-          this.habitEditDurationDays!,
-        );
-        if (task.taskHabit && task.taskHabit.habitId) {
-          this.habitService
-            .editHabitTask(
-              task.taskHabit.habitId,
-              task.taskId,
-              this.habitEditRequest,
-            )
-            .subscribe({
-              next: (response) => {
-                if (task.taskHabit) {
-                  task.taskHabit.cycleLength = response.cycleLength;
-                  task.taskHabit.currentStreak = response.currentStreak;
-                  task.taskHabit.longestStreak = response.longestStreak;
-                  task.taskHabit.acceptedDate = response.acceptedDate;
-                }
-                this.notificationService.handleApiSuccess(
-                  'PUT',
-                  'Habit updated successfully',
-                );
-              },
-              error: (error) => {
-                this.notificationService.handleApiError(error);
-              },
-            });
-        }
+      if (this.creationMode!()) {
+        this.habitApi.createHabit(request).subscribe({
+          next: () => {
+            this.notificationService.success('Habit created successfully!');
+            this.activityFormSubmitted.emit();
+          },
+          error: (err) => {
+            console.log(err);
+            this.notificationService.error('Error creating habit.');
+          },
+        });
+      } else {
+        this.habitApi.editHabit(this.activity()!.id, request).subscribe({
+          next: () => {
+            this.notificationService.success('Habit edited successfully!');
+            this.activityFormSubmitted.emit();
+          },
+          error: (err) => {
+            console.log(err);
+            this.notificationService.error('Error editing habit.');
+          },
+        });
       }
-
-      this.taskService.editTask(task.taskId, request).subscribe({
-        next: () => {
-          this.validTaskForm.reset();
-          this.notificationService.handleApiSuccess(
-            'PUT',
-            'Task updated successfully',
-          );
-          this.taskFormSubmitted.emit();
-        },
-        error: (error) => {
-          this.notificationService.handleApiError(error);
-          this.taskFormSubmitted.emit();
-        },
-      });
     }
   }
 
   onDelete() {
-    this.taskService.deleteTask(this.task()!.taskId).subscribe({
-      next: () => {
-        this.validTaskForm.reset();
-        this.notificationService.handleApiSuccess(
-          'DELETE',
-          'Task deleted successfully',
-        );
-        this.taskDeleted.emit();
-      },
-      error: (error) => {
-        this.notificationService.handleApiError(error);
-        this.taskFormSubmitted.emit();
-      },
-    });
+    if (this.activity()?.type == ActivityType.TASK) {
+      this.taskApi.deleteTask(this.activity()!.id).subscribe({
+        next: () => {
+          this.notificationService.success('Task deleted successfully!');
+          this.validActivityForm.reset();
+          this.activityDeleted.emit();
+        },
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error('Error deleting task.');
+          this.activityFormSubmitted.emit();
+        },
+      });
+    } else {
+      this.habitApi.deleteHabit(this.activity()!.id).subscribe({
+        next: () => {
+          this.notificationService.success('Habit deleted successfully!');
+          this.activityFormSubmitted.emit();
+        },
+        error: (err) => {
+          console.log(err);
+          this.notificationService.error('Error deleting habit.');
+        },
+      });
+    }
   }
 
   onPomodoroCreation() {
-    this.pomodoroCreation.update((value) => !value);
-  }
-
-  onPomodoroEdition() {
-    this.pomodoroEdition.update((value) => !value);
-  }
-
-  onPomodoroFormChange(pomodoroRequest: CreatePomodoroRequest) {
-    if (pomodoroRequest != null) this.pomodoroRequest = pomodoroRequest;
-  }
-
-  onPomodoroEditFormChange(pomodoroEditRequest: EditPomodoroRequest) {
-    if (pomodoroEditRequest != null)
-      this.pomodoroEditRequest = pomodoroEditRequest;
-  }
-
-  onHabitCreation() {
-    this.habitCreation.update((value) => !value);
-    this.habitRequest = {
-      cycleLength: '',
-      currentStreak: 0,
-      longestStreak: 0,
-      acceptedDate: null,
-    };
-  }
-
-  onHabitEdition() {
-    this.habitEdition.update((value) => !value);
-  }
-
-  onHabitFormChange(habitCreateDurationInDays: number) {
-    if (habitCreateDurationInDays != null)
-      this.habitCreateDurationDays = habitCreateDurationInDays;
-  }
-
-  onHabitEditFormChange(habitEditDurationInDays: number) {
-    if (habitEditDurationInDays != null)
-      this.habitEditDurationDays = habitEditDurationInDays;
+    this.pomodoroModal.activity = this.activity()!;
+    this.pomodoroModal.showModal();
   }
 }

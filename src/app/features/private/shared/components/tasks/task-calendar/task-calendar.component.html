@@ -1,16 +1,29 @@
 <div class="calendar-panel">
   <div class="button-panel">
-    <button nz-button><nz-icon nzType="arrow-left"></nz-icon></button>
-    <h1 *nzDateCell="let month">{{ month.getMonth() }}</h1>
-    <button nz-button><nz-icon nzType="arrow-right"></nz-icon></button>
+    <button nz-button (click)="changeMonth(-1)">
+      <span nz-icon nzType="left"></span>
+    </button>
+
+    <h1>{{ activeViewDate | date: "MMMM yyyy" }}</h1>
+
+    <button nz-button (click)="changeMonth(1)">
+      <span nz-icon nzType="right"></span>
+    </button>
   </div>
-  <nz-calendar>
+
+  <nz-calendar
+    [(ngModel)]="activeViewDate"
+    (nzSelectChange)="onDateSelect($event)"
+  >
     <ul *nzDateCell="let date" class="events">
-      @for (task of this.taskCalendarList; track task.taskId) {
-        @if (isSameDay(task.endTime, date)) {
+      @for (activity of this.taskCalendarList; track activity.id) {
+        @if (isSameDay(activity.deadlineDate, date)) {
           <li>
-            <span class="event-badge"></span>
-            {{ task.title }}
+            <span
+              class="event-badge"
+              [style.backgroundColor]="activityColors[activity.type]"
+            ></span>
+            {{ activity.title }}
           </li>
         }
       }

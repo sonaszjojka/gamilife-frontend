@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   OnInit,
   Output,
@@ -20,8 +21,9 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { CreatePomodoroRequest } from '../../../../../shared/models/task-models/create-pomodoro-request';
-import { EditPomodoroRequest } from '../../../../../shared/models/task-models/edit-pomodoro-request';
+import { PomodoroRequest } from '../../../../../shared/models/task-models/pomodoro-request';
+import { ActivityItemDetails } from '../../../../../shared/models/task-models/activity.model';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-pomodoro-form',
@@ -39,33 +41,39 @@ import { EditPomodoroRequest } from '../../../../../shared/models/task-models/ed
   styleUrl: './pomodoro-form.component.css',
 })
 export class PomodoroFormComponent implements OnInit {
+  activity = input.required<ActivityItemDetails>();
   @Input() pomodoroCreation!: WritableSignal<boolean>;
   @Input() pomodoroEdition!: WritableSignal<boolean>;
-  @Output() formChanged = new EventEmitter<CreatePomodoroRequest>();
-  @Output() editFormChanged = new EventEmitter<EditPomodoroRequest>();
+  @Output() formChanged = new EventEmitter<PomodoroRequest>();
 
   private formBuilder = inject(NonNullableFormBuilder);
+  private notificationService = inject(NotificationService);
 
   validPomodoroForm = this.formBuilder.group({
-    workCyclesNeeded: this.formBuilder.control<number | null>(null, [
+    cyclesRequired: this.formBuilder.control<number | null>(null, [
       Validators.required,
       Validators.min(1),
-    ]),
-    workCyclesCompleted: this.formBuilder.control<number | null>(null, [
-      Validators.required,
-      Validators.min(0),
     ]),
   });
 
   ngOnInit() {
-    this.validPomodoroForm.valueChanges.subscribe((value) => {
-      if (this.validPomodoroForm.valid) {
-        if (this.pomodoroCreation()) {
-          this.formChanged.emit(value as CreatePomodoroRequest);
-        } else if (this.pomodoroEdition()) {
-          this.editFormChanged.emit(value as EditPomodoroRequest);
+    this.validPomodoroForm.valueChanges.subscribe(
+      (value) => {
+        if (this.validPomodoroForm.valid) {
+          this.formChanged.emit(value as PomodoroRequest);
         }
-      }
-    });
+      },
+      (error) => {
+        console.log(error);
+        this.notificationService.error(
+          'Error occurred changing required cycles',
+        );
+      },
+    );
+    if (this.activity().pomodoro) {
+      this.validPomodoroForm.patchValue({
+        cyclesRequired: this.activity().pomodoro?.cyclesRequired,
+      });
+    }
   }
 }

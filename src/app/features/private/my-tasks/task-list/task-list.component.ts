@@ -1,17 +1,31 @@
-import { formatDate } from '@angular/common';
-import { Component, HostListener, signal, effect, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
+import {
+  Component,
+  effect,
+  HostListener,
+  inject,
+  OnInit,
+  output,
+  signal,
+  untracked,
+  ViewChild,
+} from '@angular/core';
 import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
 import { TaskFilterComponent } from '../../shared/components/tasks/task-filter/task-filter.component';
-import {
-  IndividualTaskService,
-  Page,
-} from '../../../shared/services/tasks/individual-task.service';
-
-import { Task } from '../../../shared/models/task-models/task.model';
 import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TaskCalendarComponent } from '../../shared/components/tasks/task-calendar/task-calendar.component';
+import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
+import { Page } from '../../../shared/models/util/page.model';
+import {
+  ActivityItemDetails,
+  ActivityStatus,
+  ActivityType,
+  HabitStatus,
+} from '../../../shared/models/task-models/activity.model';
+import { ActivityListView } from '../../../shared/models/task-models/activity-list-view.model';
+import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
+import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 
 @Component({
@@ -28,36 +42,61 @@ import { NotificationService } from '../../../shared/services/notification-servi
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
 })
-export class TaskListComponent {
-  tasks: Task[] = [];
-  groupedTasks: Record<string, Task[]> = {};
-
+export class TaskListComponent implements OnInit {
+  activities: ActivityItemDetails[] = [];
+  groupedTasks: Record<string, ActivityItemDetails[]> = {};
   loading = false;
   loadingMore = false;
+
+  protected readonly ActivityListView = ActivityListView;
+
   editionMode = signal<boolean | null>(false);
   creationMode = signal<boolean | null>(false);
+  viewMode = signal<boolean>(true);
+
+  title = signal<string | null>(null);
+  startDate = signal<string | null>(null);
+  endDate = signal<string | null>(null);
   categoryId = signal<number | null>(null);
   difficultyId = signal<number | null>(null);
-  isCompleted = signal<boolean | null>(false);
-  isGroupTask = signal<boolean | null>(null);
-  selectedTask = signal<Task | null>(null);
+
+  activityListType = signal<ActivityListView>(ActivityListView.Activities);
+  isAlive = signal<boolean>(true);
+
+  refreshCalendar = output<void>();
+  selectedActivity = signal<ActivityItemDetails | undefined>(undefined);
+  formType = signal<ActivityType>(ActivityType.TASK);
 
   currentPage = 0;
-  pageSize = 4;
+  pageSize = 5;
   totalPages = 0;
-  hasMore = true;
 
-  private changeFilterEffect = effect(() => {
+  private readonly taskService = inject(UserTaskApiService);
+  private readonly habitService = inject(UserHabitApiService);
+  private readonly activityService = inject(UserActivitiesApiService);
+  private readonly notificationService = inject(NotificationService);
+
+  @ViewChild('calendarComponent')
+  calendarComponent?: TaskCalendarComponent;
+
+  ngOnInit() {
+    this.currentPage = 0;
+    this.load();
+  }
+
+  private filterEffect = effect(() => {
+    this.title();
+    this.startDate();
+    this.endDate();
     this.categoryId();
     this.difficultyId();
-    this.isCompleted();
-    this.isGroupTask();
-
-    this.currentPage = 0;
-    this.loadTasks();
+    this.isAlive();
+    this.activityListType();
+    untracked(() => {
+      this.currentPage = 0;
+      this.load();
+    });
   });
-  private taskService = inject(IndividualTaskService);
-  private notificationService = inject(NotificationService);
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -69,83 +108,177 @@ export class TaskListComponent {
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      this.hasMore
+      this.currentPage + 1 < this.totalPages
     ) {
-      this.loadMoreTasks();
+      this.loadMore();
     }
   }
 
-  loadTasks(): void {
+  load(): void {
     this.loading = true;
-    this.taskService
-      .getUserTasks(
-        this.currentPage,
-        this.pageSize,
-        this.categoryId(),
-        this.difficultyId(),
-        this.isCompleted(),
-        this.isGroupTask(),
-      )
-      .subscribe({
-        next: (response: Page<Task>) => {
-          this.tasks = response.content;
-          this.groupTasksByDate();
-          this.totalPages = response.totalPages;
-          this.currentPage = response.number;
-          this.hasMore = !response.last;
-          this.loading = false;
-        },
-        error: (error) => {
-          this.loading = false;
-          this.notificationService.handleApiError(
-            error,
-            'Failed to load tasks',
-          );
-        },
-      });
+    if (this.activityListType() === ActivityListView.Activities) {
+      this.activityService
+        .getAllActivities(
+          this.currentPage,
+          this.pageSize,
+          this.title(),
+          this.startDate(),
+          this.endDate(),
+          this.categoryId(),
+          this.difficultyId(),
+          null,
+          null,
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = response.content;
+            this.groupActivitiesByDate();
+            this.totalPages = response.totalPages;
+            this.currentPage = response.number;
+            this.loading = false;
+          },
+          error: (error) => {
+            this.notificationService.error('Error loading activities');
+            console.error('Error loading activities:', error);
+            this.loading = false;
+          },
+        });
+    } else if (this.activityListType() === ActivityListView.Habits) {
+      this.habitService
+        .getHabits(
+          this.currentPage,
+          this.pageSize,
+          this.isAlive(),
+          this.categoryId(),
+          this.difficultyId(),
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = response.content;
+            this.groupActivitiesByDate();
+            this.totalPages = response.totalPages;
+            this.currentPage = response.number;
+            this.loading = false;
+          },
+          error: (error) => {
+            this.notificationService.error('Error loading habits');
+            console.error('Error loading habits:', error);
+            this.loading = false;
+          },
+        });
+    } else if (this.activityListType() === ActivityListView.Tasks) {
+      this.taskService
+        .getTasks(
+          this.currentPage,
+          this.pageSize,
+          !this.isAlive(),
+          this.categoryId(),
+          this.difficultyId(),
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = response.content;
+            this.groupActivitiesByDate();
+            this.totalPages = response.totalPages;
+            this.currentPage = response.number;
+            this.loading = false;
+          },
+          error: (error) => {
+            this.notificationService.error('Error loading tasks');
+            console.error('Error loading tasks:', error);
+            this.loading = false;
+          },
+        });
+    }
   }
 
-  loadMoreTasks(): void {
-    if (!this.hasMore || this.loadingMore) return;
-
+  loadMore(): void {
+    if (this.loadingMore) return;
     this.loadingMore = true;
     const nextPage = this.currentPage + 1;
-
-    this.taskService
-      .getUserTasks(
-        nextPage,
-        this.pageSize,
-        this.categoryId(),
-        this.difficultyId(),
-        this.isCompleted(),
-        this.isGroupTask(),
-      )
-      .subscribe({
-        next: (response: Page<Task>) => {
-          this.tasks = [...this.tasks, ...response.content];
-          this.groupTasksByDate();
-          this.currentPage = response.number;
-          this.hasMore = !response.last;
-          this.loadingMore = false;
-        },
-        error: (error) => {
-          this.loadingMore = false;
-          this.notificationService.handleApiError(
-            error,
-            'Failed to load more tasks',
-          );
-        },
-      });
+    if (this.activityListType() === ActivityListView.Activities) {
+      this.activityService
+        .getAllActivities(
+          nextPage,
+          this.pageSize,
+          this.title(),
+          this.startDate(),
+          this.endDate(),
+          this.categoryId(),
+          this.difficultyId(),
+          null,
+          null,
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = [...this.activities, ...response.content];
+            this.groupActivitiesByDate();
+            this.currentPage = response.number;
+            this.loadingMore = false;
+          },
+          error: (error) => {
+            this.notificationService.error('Error loading more activities');
+            console.error('Error loading more activities:', error);
+            this.loadingMore = false;
+          },
+        });
+    } else if (this.activityListType() === ActivityListView.Habits) {
+      this.habitService
+        .getHabits(
+          nextPage,
+          this.pageSize,
+          this.isAlive(),
+          this.categoryId(),
+          this.difficultyId(),
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = [...this.activities, ...response.content];
+            this.groupActivitiesByDate();
+            this.currentPage = response.number;
+            this.loadingMore = false;
+          },
+          error: (error) => {
+            this.notificationService.error('Error loading more habits');
+            console.error('Error loading more habits:', error);
+            this.loadingMore = false;
+          },
+        });
+    } else if (this.activityListType() === ActivityListView.Tasks) {
+      this.taskService
+        .getTasks(
+          nextPage,
+          this.pageSize,
+          !this.isAlive(),
+          this.categoryId(),
+          this.difficultyId(),
+        )
+        .subscribe({
+          next: (response: Page<ActivityItemDetails>) => {
+            this.activities = [...this.activities, ...response.content];
+            this.groupActivitiesByDate();
+            this.currentPage = response.number;
+            this.loadingMore = false;
+          },
+          error: (error) => {
+            this.notificationService.error('Error loading more tasks');
+            console.error('Error loading more tasks:', error);
+            this.loadingMore = false;
+          },
+        });
+    }
   }
 
-  private groupTasksByDate(): void {
-    const grouped: Record<string, Task[]> = {};
+  private groupActivitiesByDate(): void {
+    const grouped: Record<string, ActivityItemDetails[]> = {};
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
 
-    this.tasks.forEach((task) => {
-      const date = task.endTime ? new Date(task.endTime) : null;
+    this.activities.forEach((activity) => {
+      const date = activity.deadlineDate
+        ? new Date(activity.deadlineDate)
+        : null;
       if (!date) return;
 
       let label: string;
@@ -154,9 +287,9 @@ export class TaskListComponent {
       else label = formatDate(date, 'd MMMM yyyy', 'en-US');
 
       if (!grouped[label]) grouped[label] = [];
-      grouped[label].push(task);
+      grouped[label].push(activity);
     });
-
+    this.refreshCalendar.emit();
     this.groupedTasks = grouped;
   }
 
@@ -172,54 +305,96 @@ export class TaskListComponent {
     return Object.keys(this.groupedTasks);
   }
 
-  onTaskUpdated(taskId: string): void {
-    const changedTask = this.tasks.find((t) => t.taskId == taskId)!;
-    const isTaskNoneActive: boolean =
-      changedTask.completedAt != null ||
-      new Date(changedTask.endTime!) < new Date(Date.now());
+  onActivityUpdated(activityId: string): void {
+    const changedActivity = this.activities.find((t) => t.id === activityId);
+    if (!changedActivity) return;
+
+    const matchesCategory =
+      this.categoryId() === null ||
+      changedActivity.categoryId === this.categoryId();
+    const matchesDifficulty =
+      this.difficultyId() === null ||
+      changedActivity.difficultyId === this.difficultyId();
+    const matchesDate =
+      this.endDate() === null ||
+      changedActivity.deadlineDate === this.endDate();
+
+    let matchesAliveStatus = true;
+
+    if (this.activityListType() === ActivityListView.Tasks) {
+      const isActuallyAlive =
+        changedActivity.status !== ActivityStatus.COMPLETED;
+      matchesAliveStatus = isActuallyAlive === this.isAlive();
+    } else if (this.activityListType() === ActivityListView.Habits) {
+      matchesAliveStatus =
+        (changedActivity.habitStatus === HabitStatus.ALIVE) === this.isAlive();
+    } else if (this.activityListType() === ActivityListView.Activities) {
+      if (this.isAlive()) {
+        matchesAliveStatus =
+          changedActivity.status !== ActivityStatus.COMPLETED;
+      }
+    }
 
     if (
-      (changedTask.categoryId != this.categoryId() &&
-        this.categoryId() != null) ||
-      (changedTask.difficultyId != this.difficultyId() &&
-        this.difficultyId() != null) ||
-      (changedTask.isGroupTask != this.isGroupTask() &&
-        this.isGroupTask() != null) ||
-      (isTaskNoneActive != this.isCompleted() && this.isCompleted() != null)
+      !matchesCategory ||
+      !matchesDifficulty ||
+      !matchesDate ||
+      !matchesAliveStatus
     ) {
-      this.tasks = this.tasks.filter((t) => t.taskId != taskId);
-      this.groupTasksByDate();
+      this.activities = this.activities.filter((t) => t.id !== activityId);
     }
+    this.calendarComponent?.loadActivities();
+    this.groupActivitiesByDate();
   }
 
-  onTaskEdit(selectedTask: Task): void {
-    this.selectedTask.set(selectedTask);
+  onActivityEdit(event: {
+    activity: ActivityItemDetails;
+    viewMode: boolean;
+  }): void {
+    this.selectedActivity.set(event.activity);
+    this.viewMode.set(event.viewMode);
+    this.formType.set(event.activity.type);
     this.editionMode.set(true);
     this.creationMode.set(false);
   }
 
   onTaskCreation(): void {
-    this.selectedTask.set(null);
+    this.selectedActivity.set(undefined);
+    this.viewMode.set(false);
+    this.formType.set(ActivityType.TASK);
+    this.creationMode.set(true);
+    this.editionMode.set(false);
+  }
+
+  onHabitCreation(): void {
+    this.selectedActivity.set(undefined);
+    this.viewMode.set(false);
+    this.formType.set(ActivityType.HABIT);
     this.creationMode.set(true);
     this.editionMode.set(false);
   }
 
   onTaskSubmit(): void {
-    this.isCompleted.set(false);
-    this.isGroupTask.set(null);
+    this.title.set(null);
+    this.startDate.set(null);
+    this.endDate.set(null);
     this.categoryId.set(null);
     this.difficultyId.set(null);
     this.currentPage = 0;
-    this.loadTasks();
+    this.load();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedTask.set(null);
+    this.selectedActivity.set(undefined);
+    this.activityListType.set(ActivityListView.Activities);
   }
+
   onTaskDelete(): void {
-    this.tasks = this.tasks.filter((t) => t != this.selectedTask());
-    this.groupTasksByDate();
+    this.activities = this.activities.filter(
+      (t) => t != this.selectedActivity(),
+    );
+    this.groupActivitiesByDate();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedTask.set(null);
+    this.selectedActivity.set(undefined);
   }
 }
