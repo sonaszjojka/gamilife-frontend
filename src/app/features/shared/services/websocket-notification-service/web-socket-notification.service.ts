@@ -3,6 +3,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from '../../../../../environments/environment';
+import SockJS from 'sockjs-client';
 
 interface NotificationTypeEnum {
   id: number;
@@ -84,7 +85,7 @@ export class WebSocketNotificationService implements OnDestroy {
     const wsUrl = environment.wsUrl;
 
     this.client = new Client({
-      brokerURL: wsUrl,
+      webSocketFactory: () => new SockJS(wsUrl),
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
