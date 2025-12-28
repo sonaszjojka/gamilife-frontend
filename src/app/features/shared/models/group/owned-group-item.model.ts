@@ -7,3 +7,8 @@ export interface OwnedGroupItemModel
   isUsedUp: string,
   groupItem:GroupItemModel
 }
+
+export interface OwnedGroupItemResponseModel
+{
+  isUsedUp: string
+}
