@@ -9,6 +9,7 @@ import {
 } from '../../../../shared/services/oauth2/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { StorageService } from '../../../../../shared/services/auth/storage.service';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -22,6 +23,7 @@ export class OAuthCallbackComponent implements OnInit {
   private router = inject(Router);
   private oauth2Service = inject(OAuth2Service);
   private authService = inject(AuthService);
+  private storageService = inject(StorageService);
   error: string | null = null;
 
   ngOnInit(): void {
@@ -60,11 +62,8 @@ export class OAuthCallbackComponent implements OnInit {
           });
         } else {
           const res = response as AfterLoginResponse;
-          localStorage.setItem(
-            'isTutorialCompleted',
-            String(res.isTutorialCompleted),
-          );
-          localStorage.setItem('userId', res.userId);
+          this.storageService.setIsTutorialCompleted(res.isTutorialCompleted);
+          this.storageService.setUserId(res.userId);
           this.authService.userId.set(res.userId);
           this.authService.username.set(res.username);
           this.authService.loggedIn.set(true);

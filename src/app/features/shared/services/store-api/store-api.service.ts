@@ -11,6 +11,7 @@ import {
 } from '../../models/store/store.model';
 import { Observable } from 'rxjs';
 import { Page } from '../../models/util/page.model';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ import { Page } from '../../models/util/page.model';
 export class StoreApiService {
   private API_URL = `${environment.apiUrl}`;
   private http = inject(HttpClient);
+  private storageService = inject(StorageService);
 
   public getFilteredItems(
     filters: StoreFiltersModel,
@@ -54,7 +56,7 @@ export class StoreApiService {
   }
 
   public purchaseItem(itemId: string): Observable<PurchaseStoreItemResult> {
-    const userId = localStorage.getItem('userId');
+    const userId = this.storageService.getUserId();
     const request = {
       itemId: itemId,
     };

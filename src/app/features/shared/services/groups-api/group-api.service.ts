@@ -10,6 +10,7 @@ import {
   Group,
 } from '../../models/group/group.model';
 import { GroupType } from '../../models/group/group-type.model';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ import { GroupType } from '../../models/group/group-type.model';
 export class GroupApiService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private storageService = inject(StorageService);
 
   getGroups(params: GroupFilterParams): Observable<GetGroupsResult> {
     return this.http.get<GetGroupsResult>(`${this.apiUrl}/groups`, {
@@ -28,7 +30,7 @@ export class GroupApiService {
   getAllGroupsByUserIdWhereUserIsMember(
     params: GroupFilterParams,
   ): Observable<GetGroupsResult> {
-    const userId = localStorage.getItem('userId');
+    const userId = this.storageService.getUserId();
 
     return this.http.get<GetGroupsResult>(
       `${this.apiUrl}/users/${userId}/groups`,

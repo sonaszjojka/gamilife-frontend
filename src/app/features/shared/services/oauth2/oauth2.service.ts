@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../shared/services/auth/auth.service';
 import { WebSocketNotificationService } from '../websocket-notification-service/web-socket-notification.service';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 
 export interface OAuthCodeRequest {
   code: string;
@@ -38,9 +39,10 @@ export interface OAuth2LinkResponse {
 })
 export class OAuth2Service {
   private http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/oauth2`;
   private authService = inject(AuthService);
   private notificationService = inject(WebSocketNotificationService);
+  private storage = inject(StorageService);
+  private readonly apiUrl = `${environment.apiUrl}/oauth2`;
 
   private generateCodeVerifier(): string {
     const array = new Uint8Array(32);
@@ -66,7 +68,7 @@ export class OAuth2Service {
     const codeVerifier = this.generateCodeVerifier();
     const codeChallenge = await this.generateCodeChallenge(codeVerifier);
 
-    sessionStorage.setItem('oauth2_code_verifier', codeVerifier);
+    this.storage.setOAuth2CodeVerifier(codeVerifier);
 
     const params = new URLSearchParams({
       client_id: environment.googleClientId,
@@ -85,7 +87,7 @@ export class OAuth2Service {
   handleGoogleCode(
     code: string,
   ): Observable<AfterLoginResponse | OAuth2LinkResponse> {
-    const codeVerifier = sessionStorage.getItem('oauth2_code_verifier');
+    const codeVerifier = this.storage.getOAuth2CodeVerifier();
 
     if (!codeVerifier) {
       throw new Error('Code verifier not found');
@@ -128,7 +130,7 @@ export class OAuth2Service {
   }
 
   clearOAuthData(): void {
-    sessionStorage.removeItem('oauth2_code_verifier');
+    this.storage.removeOAuth2CodeVerifier();
   }
 
   private updateAuthServiceState(response: AfterLoginResponse): void {
@@ -138,12 +140,9 @@ export class OAuth2Service {
     this.authService.isTutorialCompleted.set(response.isTutorialCompleted);
     this.authService.money.set(response.money);
 
-    localStorage.setItem('userId', response.userId);
-    localStorage.setItem('username', response.username);
-    localStorage.setItem(
-      'isTutorialCompleted',
-      String(response.isTutorialCompleted),
-    );
-    localStorage.setItem('money', String(response.money));
+    this.storage.setUserId(response.userId);
+    this.storage.setUsername(response.username);
+    this.storage.setIsTutorialCompleted(response.isTutorialCompleted);
+    this.storage.setMoney(response.money);
   }
 }

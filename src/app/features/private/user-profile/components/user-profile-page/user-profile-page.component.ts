@@ -95,6 +95,6 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private getCurrentUserId(): string | null {
-    return localStorage.getItem('userId');
+    return this.authService.userId();
   }
 }
