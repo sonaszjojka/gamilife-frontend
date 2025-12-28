@@ -129,8 +129,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentPomodoroPage = response.number;
           this.loading = false;
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             'Could not load users pomodoro activities',
           );
@@ -157,8 +156,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentNonPomodoroPage = response.number;
           this.loading = false;
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             'Could not load users not pomodoro activities',
           );
@@ -193,8 +191,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentPomodoroPage = response.number;
           this.loadingMore = false;
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             'Could not load users pomodoro activities',
           );
@@ -229,8 +226,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
           this.currentNonPomodoroPage = response.number;
           this.loadingMore = false;
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             'Could not load users not pomodoro activities',
           );
@@ -361,8 +357,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
             'Successfully updated completed cycles',
           );
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             'An error occurred during updating completed cycles',
           );
@@ -395,8 +390,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         next: () => {
           this.notificationService.success('Successfully finished task');
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error('Error occurred while finishing task');
         },
       });

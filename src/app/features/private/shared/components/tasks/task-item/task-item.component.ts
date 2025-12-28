@@ -92,8 +92,7 @@ export class TaskItemComponent implements OnInit {
           `You have successfully completed the task: ${this.activity.title}`,
         );
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.notificationService.error(
           `There was an error completing the task: ${this.activity.title}`,
         );
@@ -119,8 +118,7 @@ export class TaskItemComponent implements OnInit {
             `You have successfully completed a cycle for the habit: ${this.activity.title}`,
           );
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             `There was an error completing a cycle for the habit: ${this.activity.title}`,
           );
@@ -160,8 +158,7 @@ export class TaskItemComponent implements OnInit {
           `You have successfully restored the habit: ${this.activity.title}`,
         );
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.notificationService.error(
           `There was an error restoring the habit: ${this.activity.title}`,
         );

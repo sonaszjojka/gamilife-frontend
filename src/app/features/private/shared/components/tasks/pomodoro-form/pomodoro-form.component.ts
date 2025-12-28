@@ -63,8 +63,7 @@ export class PomodoroFormComponent implements OnInit {
           this.formChanged.emit(value as PomodoroRequest);
         }
       },
-      (error) => {
-        console.log(error);
+      () => {
         this.notificationService.error(
           'Error occurred changing required cycles',
         );

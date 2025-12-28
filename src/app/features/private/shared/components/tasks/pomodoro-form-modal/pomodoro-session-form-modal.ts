@@ -83,8 +83,7 @@ export class PomodoroSessionFormModal {
             `Pomodoro created successfully for: ${this.activity.title}`,
           );
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error(
             `There was an error creating Pomodoro for: ${this.activity.title}`,
           );
@@ -107,8 +106,7 @@ export class PomodoroSessionFormModal {
               `Pomodoro updated successfully for: ${this.activity.title}`,
             );
           },
-          error: (err) => {
-            console.log(err);
+          error: () => {
             this.notificationService.error(
               `There was an error updating Pomodoro for: ${this.activity.title}`,
             );

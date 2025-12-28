@@ -219,8 +219,7 @@ export class TaskFormComponent implements OnChanges {
             this.activityFormSubmitted.emit();
             this.notificationService.success('Task created successfully!');
           },
-          error: (err) => {
-            console.log(err);
+          error: () => {
             this.notificationService.error('Error creating task.');
             this.activityFormSubmitted.emit();
           },
@@ -236,8 +235,7 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Task edited successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: (err) => {
-            console.log(err);
+          error: () => {
             this.notificationService.error('Error editing task.');
             this.activityFormSubmitted.emit();
           },
@@ -258,8 +256,7 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Habit created successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: (err) => {
-            console.log(err);
+          error: () => {
             this.notificationService.error('Error creating habit.');
           },
         });
@@ -269,8 +266,7 @@ export class TaskFormComponent implements OnChanges {
             this.notificationService.success('Habit edited successfully!');
             this.activityFormSubmitted.emit();
           },
-          error: (err) => {
-            console.log(err);
+          error: () => {
             this.notificationService.error('Error editing habit.');
           },
         });
@@ -286,8 +282,7 @@ export class TaskFormComponent implements OnChanges {
           this.validActivityForm.reset();
           this.activityDeleted.emit();
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error('Error deleting task.');
           this.activityFormSubmitted.emit();
         },
@@ -298,8 +293,7 @@ export class TaskFormComponent implements OnChanges {
           this.notificationService.success('Habit deleted successfully!');
           this.activityFormSubmitted.emit();
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           this.notificationService.error('Error deleting habit.');
         },
       });
