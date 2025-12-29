@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import {Component, DestroyRef, inject, input, output} from '@angular/core';
 import {
   EditGroupTaskDto,
   GroupTask,
@@ -22,6 +22,7 @@ import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-form',
@@ -48,6 +49,7 @@ export class GroupTaskFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
   private notification = inject(NotificationService);
+  private destroyRef =inject(DestroyRef)
 
   task = input<GroupTask | null>(null);
   groupId = input.required<string>();
@@ -123,7 +125,9 @@ export class GroupTaskFormComponent {
         reward: formValue.reward,
       };
 
-      this.groupTaskApi.postGroupTask(this.groupId(), request).subscribe({
+      this.groupTaskApi.postGroupTask(this.groupId(), request)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: () => {
           this.notification.success('Task created successfully');
           this.formSubmitted.emit();
@@ -195,6 +199,7 @@ export class GroupTaskFormComponent {
           this.task()!.groupTaskId,
           editGroupTaskRequest,
         )
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.notification.success('Task updated successfully');

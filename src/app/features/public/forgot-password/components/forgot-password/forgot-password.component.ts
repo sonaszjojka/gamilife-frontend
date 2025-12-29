@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, DestroyRef, inject, signal} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import {
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-forgot-password',
@@ -35,6 +36,7 @@ export class ForgotPasswordComponent {
   errorMessage = signal<string | null>(null);
   private http = inject(HttpClient);
   private fb = inject(NonNullableFormBuilder);
+  private destroyRef =inject(DestroyRef)
 
   validateForm = this.fb.group({
     email: this.fb.control('', [Validators.email, Validators.required]),
@@ -64,7 +66,9 @@ export class ForgotPasswordComponent {
       const url = `${environment.apiUrl}/auth/forgot-password`;
       const formData = this.validateForm.value;
 
-      this.http.post(url, formData, { withCredentials: true }).subscribe({
+      this.http.post(url, formData, { withCredentials: true })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: () => {
           this.sending.set(false);
           this.sentSuccessfully.set(true);

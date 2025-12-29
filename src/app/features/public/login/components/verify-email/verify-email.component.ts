@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, DestroyRef, inject, signal} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-verify-email',
@@ -22,6 +23,7 @@ export class VerifyEmailComponent {
   resentFailure = signal(false);
   private http = inject(HttpClient);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef)
 
   open(email: string): void {
     this.email.set(email);
@@ -44,7 +46,9 @@ export class VerifyEmailComponent {
     this.resentSuccessfully.set(false);
     const url = `${environment.apiUrl}/auth/email-verifications/resend`;
 
-    this.http.post(url, {}, { withCredentials: true }).subscribe({
+    this.http.post(url, {}, { withCredentials: true })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: () => {
         this.resending.set(false);
         this.resentSuccessfully.set(true);

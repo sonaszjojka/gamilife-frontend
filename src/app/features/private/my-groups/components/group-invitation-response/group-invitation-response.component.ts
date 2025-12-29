@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -10,6 +10,7 @@ import { GroupInvitationApiService } from '../../../../shared/services/group-inv
 import { InvitationStatus } from '../../../../shared/models/group/group-invitation.model';
 import { take } from 'rxjs/operators';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 type PageStatus = 'loading' | 'ready' | 'accepted' | 'rejected' | 'error';
 
@@ -32,6 +33,7 @@ export class GroupInvitationResponseComponent implements OnInit {
   private invitationApi = inject(GroupInvitationApiService);
   private route = inject(ActivatedRoute);
   private notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
 
   status = signal<PageStatus>('loading');
   processing = signal(false);
@@ -70,7 +72,7 @@ export class GroupInvitationResponseComponent implements OnInit {
         invitationStatusId: InvitationStatus.ACCEPTED,
         token: this.token(),
       })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.processing.set(false);
@@ -110,7 +112,7 @@ export class GroupInvitationResponseComponent implements OnInit {
         invitationStatusId: InvitationStatus.REJECTED,
         token: this.token(),
       })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.processing.set(false);

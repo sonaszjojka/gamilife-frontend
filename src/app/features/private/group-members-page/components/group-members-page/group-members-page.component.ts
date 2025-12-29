@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, signal, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -11,6 +11,7 @@ import { SendGroupInvitationFormComponent } from '../send-group-invitation-form/
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-members-page',
@@ -86,7 +87,7 @@ export class GroupMembersPageComponent implements OnInit {
   private readonly groupApi = inject(GroupApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly notification = inject(NotificationService);
-
+  private readonly destroyRef = inject(DestroyRef);
   @ViewChild(SendGroupInvitationFormComponent)
   invitationForm!: SendGroupInvitationFormComponent;
 
@@ -110,7 +111,7 @@ export class GroupMembersPageComponent implements OnInit {
 
     this.groupApi
       .getGroupById(this.groupId(), true)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (group) => {
           this.groupName.set(group.groupName);

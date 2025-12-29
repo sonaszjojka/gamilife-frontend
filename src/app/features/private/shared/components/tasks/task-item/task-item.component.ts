@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DestroyRef,
   EventEmitter,
   inject,
   input,
@@ -25,6 +25,7 @@ import {
 } from '../../../../../shared/models/task-models/activity.model';
 import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-item',
@@ -47,6 +48,7 @@ export class TaskItemComponent implements OnInit {
   protected readonly ActivityStatus = ActivityStatus;
   protected readonly HabitStatus = HabitStatus;
 
+
   @Input() activity!: ActivityItemDetails;
   isCompleted = signal(false);
 
@@ -61,9 +63,10 @@ export class TaskItemComponent implements OnInit {
   @Output() moveToCurrentSession = new EventEmitter<ActivityItemDetails>();
   @Output() removeFromCurrentSession = new EventEmitter<ActivityItemDetails>();
 
-  taskService = inject(UserTaskApiService);
-  habitService = inject(UserHabitApiService);
-  notificationService = inject(NotificationService);
+ private taskService = inject(UserTaskApiService);
+ private habitService = inject(UserHabitApiService);
+ private notificationService = inject(NotificationService);
+ private destroyRef = inject(DestroyRef)
 
   ngOnInit(): void {
     this.isCompleted.set(
@@ -83,7 +86,9 @@ export class TaskItemComponent implements OnInit {
       completed: true,
       description: this.activity.description,
     };
-    this.taskService.editTask(this.activity.id, request).subscribe({
+    this.taskService.editTask(this.activity.id, request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (response) => {
         this.activity.completedAt = response.completedAt;
         this.activity.status = ActivityStatus.COMPLETED;
@@ -107,7 +112,9 @@ export class TaskItemComponent implements OnInit {
       const request: HabitRequest = {
         iterationCompleted: true,
       };
-      this.habitService.editHabit(this.activity.id, request).subscribe({
+      this.habitService.editHabit(this.activity.id, request)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (response) => {
           this.activity.deadlineDate = response.deadlineDate;
           this.activity.currentStreak = response.currentStreak;
@@ -148,7 +155,9 @@ export class TaskItemComponent implements OnInit {
     const request: HabitRequest = {
       resurrect: true,
     };
-    this.habitService.editHabit(this.activity.id, request).subscribe({
+    this.habitService.editHabit(this.activity.id, request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (response) => {
         this.activity.habitStatus = HabitStatus.ALIVE;
         this.activity.deadlineDate = response.deadlineDate;

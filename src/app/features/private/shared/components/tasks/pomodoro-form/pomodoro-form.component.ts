@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DestroyRef,
   EventEmitter,
   inject,
   input,
@@ -24,6 +24,7 @@ import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { PomodoroRequest } from '../../../../../shared/models/task-models/pomodoro-request';
 import { ActivityItemDetails } from '../../../../../shared/models/task-models/activity.model';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pomodoro-form',
@@ -48,6 +49,7 @@ export class PomodoroFormComponent implements OnInit {
 
   private formBuilder = inject(NonNullableFormBuilder);
   private notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
 
   validPomodoroForm = this.formBuilder.group({
     cyclesRequired: this.formBuilder.control<number | null>(null, [
@@ -57,7 +59,9 @@ export class PomodoroFormComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.validPomodoroForm.valueChanges.subscribe(
+    this.validPomodoroForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(
       (value) => {
         if (this.validPomodoroForm.valid) {
           this.formChanged.emit(value as PomodoroRequest);

@@ -1,4 +1,4 @@
-import { Component, inject, signal, output, input } from '@angular/core';
+import {Component, inject, signal, output, input, DestroyRef} from '@angular/core';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -13,6 +13,7 @@ import { GroupMemberApiService } from '../../../../shared/services/group-member-
 import { EditGroupMemberDto } from '../../../../shared/models/group/group-member.model';
 import { take } from 'rxjs/operators';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-group-member-form',
@@ -30,6 +31,7 @@ export class EditGroupMemberFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private groupMemberApi = inject(GroupMemberApiService);
   private notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
 
   groupId = input.required<string>();
   member = input<GroupMember | null>(null);
@@ -69,7 +71,7 @@ export class EditGroupMemberFormComponent {
 
       this.groupMemberApi
         .editGroupMember(this.groupId(), this.member()!.groupMemberId, editDto)
-        .pipe(take(1))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.notification.success('Member updated successfully');

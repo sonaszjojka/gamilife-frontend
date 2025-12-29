@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -10,6 +10,7 @@ import { take } from 'rxjs/operators';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-requests-page',
@@ -74,6 +75,7 @@ export class GroupRequestsPageComponent implements OnInit {
   private readonly groupRequestApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
 
   groupId = signal<string>('');
   groupName = signal<string>('');
@@ -93,7 +95,7 @@ export class GroupRequestsPageComponent implements OnInit {
 
     this.groupRequestApi
       .getPendingGroupRequests(this.groupId(), 0, 100)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.requests.set(result.content || []);

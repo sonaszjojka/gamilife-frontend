@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {Component, OnInit, inject, DestroyRef} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -10,6 +10,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { StorageService } from '../../../../../shared/services/auth/storage.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -24,10 +25,13 @@ export class OAuthCallbackComponent implements OnInit {
   private oauth2Service = inject(OAuth2Service);
   private authService = inject(AuthService);
   private storageService = inject(StorageService);
+  private destroyRef = inject(DestroyRef);
   error: string | null = null;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
       const code = params['code'];
       const error = params['error'];
 
@@ -46,7 +50,9 @@ export class OAuthCallbackComponent implements OnInit {
   }
 
   private handleCallback(code: string): void {
-    this.oauth2Service.handleGoogleCode(code).subscribe({
+    this.oauth2Service.handleGoogleCode(code)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (response) => {
         this.oauth2Service.clearOAuthData();
 

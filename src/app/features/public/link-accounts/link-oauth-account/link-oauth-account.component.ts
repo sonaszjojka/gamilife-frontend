@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, DestroyRef, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -16,6 +16,7 @@ import {
   LinkOAuthAccountRequest,
 } from '../../../shared/services/oauth2/oauth2.service';
 import { Router } from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-link-oauth-account',
@@ -47,6 +48,7 @@ export class LinkOAuthAccountComponent {
   private oauth2Service = inject(OAuth2Service);
   private fb = inject(NonNullableFormBuilder);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef)
 
   validateForm = this.fb.group({
     password: this.fb.control('', [Validators.required]),
@@ -86,7 +88,9 @@ export class LinkOAuthAccountComponent {
         password: this.validateForm.value.password,
       };
 
-      this.oauth2Service.linkOAuthAccount(linkRequest).subscribe({
+      this.oauth2Service.linkOAuthAccount(linkRequest)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (response) => {
           this.linking.set(false);
           this.close();

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -10,6 +10,7 @@ import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-community-page',
@@ -29,6 +30,7 @@ import { NotificationService } from '../../../../shared/services/notification-se
 export class CommunityPageComponent implements OnInit {
   private groupApiService = inject(GroupApiService);
   private notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   readonly value = signal('');
   groups = signal<Group[]>([]);
@@ -49,7 +51,9 @@ export class CommunityPageComponent implements OnInit {
       groupType: this.groupTypeId() ?? undefined,
     };
 
-    this.groupApiService.getGroups(params).subscribe({
+    this.groupApiService.getGroups(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (response) => {
         setTimeout(() => {
           this.groups.set(response.content);

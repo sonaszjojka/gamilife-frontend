@@ -4,7 +4,7 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  inject,
+  inject, DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -30,6 +30,7 @@ import { environment } from '../../../../../../environments/environment';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -65,6 +66,7 @@ export class ProfileSettingsTabComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private userApi = inject(UserApiService);
   protected authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef)
 
   ngOnInit(): void {
     this.initForm();
@@ -100,7 +102,9 @@ export class ProfileSettingsTabComponent implements OnInit {
         isProfilePublic: formValue.isProfilePublic,
       };
 
-      this.userApi.updateUser(this.userDetails.id, request).subscribe({
+      this.userApi.updateUser(this.userDetails.id, request)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (response) => {
           this.saving = false;
           this.settingsForm.markAsPristine();
@@ -150,6 +154,7 @@ export class ProfileSettingsTabComponent implements OnInit {
         { email: this.userDetails.email },
         { withCredentials: true },
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.sendingResetEmail = false;

@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DestroyRef,
   HostListener,
   inject,
   OnDestroy,
@@ -31,6 +31,7 @@ import { HabitRequest } from '../../../shared/models/task-models/habit-request.m
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -84,6 +85,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   private readonly habitService = inject(UserHabitApiService);
   private readonly notificationService = inject(NotificationService);
   private readonly activitiesService = inject(UserActivitiesApiService);
+  private destroyRef = inject(DestroyRef)
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -122,6 +124,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         true,
         true,
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersPomodoroActivities = response.content;
@@ -149,6 +152,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         true,
         false,
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersNotPomodoroTasks = response.content;
@@ -181,6 +185,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         true,
         true,
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersPomodoroActivities = [
@@ -216,6 +221,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         true,
         false,
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: Page<ActivityItemDetails>) => {
           this.usersNotPomodoroTasks = [
@@ -351,6 +357,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     };
     this.pomodoroService
       .editPomodoro(this.currentSessionPomodoroTasks[0].pomodoro!.id!, request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notificationService.success(
@@ -386,7 +393,9 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         completed: true,
       };
 
-      this.taskService.editTask(activity.id, request).subscribe({
+      this.taskService.editTask(activity.id, request)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: () => {
           this.notificationService.success('Successfully finished task');
         },
@@ -403,7 +412,9 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         cycleLength: activity.cycleLength!,
         iterationCompleted: true,
       };
-      this.habitService.editHabit(activity.id, request).subscribe({
+      this.habitService.editHabit(activity.id, request)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (response) => {
           activity.longestStreak = response.longestStreak;
           activity.currentStreak = response.currentStreak;

@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import {Component, DestroyRef, inject, input, output, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -11,6 +11,7 @@ import { take } from 'rxjs/operators';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-requests-list',
@@ -40,6 +41,7 @@ export class GroupRequestsListComponent {
   private readonly groupRequestApi = inject(GroupRequestApiService);
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
+  private destroyRef=inject(DestroyRef)
 
   paginatedRequests = () => {
     const requests = this.requests();
@@ -82,7 +84,7 @@ export class GroupRequestsListComponent {
   private approveRequest(request: GroupRequest): void {
     this.groupRequestApi
       .approveGroupRequest(this.groupId(), request.groupRequestId)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success(
@@ -100,7 +102,7 @@ export class GroupRequestsListComponent {
   private rejectRequest(request: GroupRequest): void {
     this.groupRequestApi
       .rejectGroupRequest(this.groupId(), request.groupRequestId)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success(

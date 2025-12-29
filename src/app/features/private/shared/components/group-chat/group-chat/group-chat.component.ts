@@ -4,7 +4,7 @@ import {
   input,
   OnInit,
   OnDestroy,
-  signal,
+  signal, DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -33,6 +33,7 @@ import {
   GetChatMessagesParams,
 } from '../../../../../shared/models/chat-messages/chat-message.model';
 import { GroupPreviewMode } from '../../../../../shared/models/group/group-preview-mode';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-chat',
@@ -76,6 +77,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   private readonly chatMessageApi = inject(ChatMessageApiService);
   private readonly notification = inject(NotificationService);
   private readonly fb = inject(FormBuilder);
+  private destroyRef =inject(DestroyRef);
 
   ngOnInit(): void {
     this.initForm();
@@ -121,7 +123,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
     this.chatMessageApi
       .getChatMessages(this.groupId(), this.groupMemberId(), params)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.messages.set(result.content);
@@ -164,7 +166,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         content: formValue.content,
         isImportant: formValue.isImportant || false,
       })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success('Message sent successfully');
