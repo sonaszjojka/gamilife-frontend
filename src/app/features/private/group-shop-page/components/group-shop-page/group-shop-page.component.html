@@ -20,7 +20,7 @@
               [item]="item"
               [viewMode]="viewMode()"
               [group]="this.group()"
-              [groupShop]="this.groupShop()"
+              [shop]="this.groupShop()"
             > </app-group-item>
           }
           </div>
@@ -44,6 +44,5 @@
 
 <app-group-item-form
   (formSubmitted)="onFormSubmitted($event)"
-  [groupId]="group().groupId"
-  [shopId]="groupShop().id"
+  [groupId]="this.group().groupId"
 ></app-group-item-form>
