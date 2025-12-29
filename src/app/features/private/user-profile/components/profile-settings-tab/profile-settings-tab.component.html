@@ -1,5 +1,15 @@
 <div class="settings-container">
   <nz-card [nzTitle]="'Profile Settings'" [nzBordered]="true">
+    <nz-alert
+      *ngIf="!userDetails.lastName || !userDetails.dateOfBirth"
+      nzType="warning"
+      nzMessage="Update Required"
+      nzDescription="To update your data, please complete all required fields that were not provided previously."
+      nzShowIcon
+      style="margin-bottom: 16px"
+    >
+    </nz-alert>
+
     <form nz-form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
       <nz-form-item>
         <nz-form-label [nzSpan]="6" nzRequired nzFor="firstNameInput"
