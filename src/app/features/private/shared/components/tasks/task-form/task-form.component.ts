@@ -88,12 +88,12 @@ export class TaskFormComponent implements OnChanges {
       Validators.maxLength(300),
     ]),
 
-    deadlineDate: this.formBuilder.control<Date | undefined>(undefined, []),
+    deadlineDate: this.formBuilder.control<Date | undefined>(undefined, [Validators.required]),
     deadlineHour: this.formBuilder.control<Date | undefined>(undefined, []),
-    categoryId: this.formBuilder.control<number>(0, [Validators.required]),
-    difficultyId: this.formBuilder.control<number>(0, [Validators.required]),
-    description: this.formBuilder.control(''),
-    cycleLength: this.formBuilder.control<number>(0),
+    categoryId: this.formBuilder.control<number|undefined>(undefined, [Validators.required]),
+    difficultyId: this.formBuilder.control<number|undefined>(undefined, [Validators.required]),
+    description: this.formBuilder.control<string|null>(null),
+    cycleLength: this.formBuilder.control<number>(0,[Validators.required]),
   });
 
   categories = [
@@ -117,7 +117,7 @@ export class TaskFormComponent implements OnChanges {
         title: activity.title || '',
         categoryId: activity.categoryId,
         difficultyId: activity.difficultyId,
-        description: activity.description || '',
+        description: activity.description || null,
         cycleLength: activity.cycleLength,
       });
     } else if (activity?.type == ActivityType.TASK && isEditing) {
@@ -140,7 +140,7 @@ export class TaskFormComponent implements OnChanges {
         deadlineHour: endHour,
         categoryId: activity.categoryId,
         difficultyId: activity.difficultyId,
-        description: activity.description || '',
+        description: activity.description || null,
       });
     } else if (isCreating) {
       this.validActivityForm.reset();
@@ -161,7 +161,8 @@ export class TaskFormComponent implements OnChanges {
   onSubmit() {
     if (this.validActivityForm.invalid) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
-        control.markAsTouched();
+        control.markAsDirty();
+        control.updateValueAndValidity();
       });
       return;
     }
@@ -170,7 +171,8 @@ export class TaskFormComponent implements OnChanges {
       this.validActivityForm.value.deadlineDate == undefined
     ) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
-        control.markAsTouched();
+        control.markAsDirty();
+        control.updateValueAndValidity();
       });
       return;
     }
@@ -181,7 +183,8 @@ export class TaskFormComponent implements OnChanges {
         this.validActivityForm.value.cycleLength <= 0)
     ) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
-        control.markAsTouched();
+        control.markAsDirty();
+        control.updateValueAndValidity();
       });
       return;
     }
