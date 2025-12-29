@@ -78,8 +78,8 @@ export class GroupShopPageComponent implements OnInit {
 
   }
 
-  onTaskCreation(){
-
+  onItemCreation(){
+      this.itemFormComponent.openForm()
   }
 
   onFormSubmitted($event: void) {
