@@ -1,0 +1,48 @@
+
+<div class="group-shop-page">
+
+      @if (loading)
+      {
+        <nz-spin>
+        </nz-spin>
+      }
+      @else {
+        @if (groupItems.length ==0 )
+        {
+          <h2>There are no items currently in shop</h2>
+        }
+        @else {
+          <div class="group-shop-item-list">
+
+          @for (item of groupItems; track item.id)
+          {
+            <app-group-item
+              [item]="item"
+              [viewMode]="viewMode()"
+              [group]="this.group()"
+              [shop]="this.groupShop()"
+            > </app-group-item>
+          }
+          </div>
+        }
+
+      }
+
+
+
+
+    </div>
+
+
+  <app-pagination-more
+
+    [maxPageIndex]="totalPages()"
+    (pageChange)="onPageChange($event)">
+
+  </app-pagination-more>
+
+
+<app-group-item-form
+  (formSubmitted)="onFormSubmitted($event)"
+  [groupId]="this.group().groupId"
+></app-group-item-form>
