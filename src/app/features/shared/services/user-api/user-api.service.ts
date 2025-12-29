@@ -12,6 +12,7 @@ import {
   EditUserResult,
   PagedResponse,
 } from '../../models/user-profile/user-profile.models';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ import {
 export class UserApiService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private storageService = inject(StorageService);
 
   getUsers(params: UserFilterParams): Observable<PagedResponse<User>> {
     let httpParams = new HttpParams()
@@ -46,7 +48,7 @@ export class UserApiService {
   }
 
   getLoggedUser(): Observable<UserDetails> {
-    const userId = localStorage.getItem('userId');
+    const userId = this.storageService.getUserId();
     return this.http.get<UserDetails>(`${this.apiUrl}/users/${userId}`, {
       withCredentials: true,
     });

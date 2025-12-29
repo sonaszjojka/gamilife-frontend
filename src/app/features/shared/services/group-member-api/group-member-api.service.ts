@@ -6,12 +6,14 @@ import {
   CreateGroupMemberInOpenGroupResult,
   EditGroupMemberDto,
 } from '../../models/group/group-member.model';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupMemberApiService {
   private http = inject(HttpClient);
+  private storageService = inject(StorageService);
   private apiUrl = environment.apiUrl;
 
   leaveGroup(groupId: string, groupMemberId: string): Observable<void> {
@@ -50,7 +52,7 @@ export class GroupMemberApiService {
 
   joinGroup(groupId: string) {
     const params = {
-      userId: localStorage.getItem('userId'),
+      userId: this.storageService.getUserId(),
     };
 
     return this.http.post<CreateGroupMemberInOpenGroupResult>(

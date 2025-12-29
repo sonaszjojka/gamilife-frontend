@@ -11,6 +11,7 @@ import {
   throwError,
 } from 'rxjs';
 import { WebSocketNotificationService } from '../../../features/shared/services/websocket-notification-service/web-socket-notification.service';
+import { StorageService } from './storage.service';
 
 export interface LoginCredentials {
   email: string;
@@ -40,51 +41,41 @@ export class AuthService {
   private router = inject(Router);
   private http = inject(HttpClient);
   private notificationService = inject(WebSocketNotificationService);
+  private storage = inject<StorageService>(StorageService);
   private refreshSubject = new Subject<boolean>();
-  refreshSubject$ = this.refreshSubject.asObservable();
 
+  refreshSubject$ = this.refreshSubject.asObservable();
   refreshInProgress = false;
 
-  loggedIn = signal<boolean>(!!localStorage.getItem('userId'));
-  username = signal<string | null>(localStorage.getItem('username') ?? null);
-  userId = signal<string | null>(localStorage.getItem('userId') ?? null);
-  isTutorialCompleted = signal<boolean>(
-    localStorage.getItem('isTutorialCompleted') === 'true',
-  );
-  money = signal<number>(Number(localStorage.getItem('money')) || 0);
-  level = signal<number>(Number(localStorage.getItem('level')) || 1);
-  experience = signal<number>(Number(localStorage.getItem('experience')) || 0);
+  loggedIn = signal<boolean>(!!this.storage.getUserId());
+  username = signal<string | null>(this.storage.getUsername());
+  userId = signal<string | null>(this.storage.getUserId());
+  isTutorialCompleted = signal<boolean>(this.storage.getIsTutorialCompleted());
+  money = signal<number>(this.storage.getMoney());
+  level = signal<number>(this.storage.getLevel());
+  experience = signal<number>(this.storage.getExperience());
   requiredExperienceForNextLevel = signal<number | null>(
-    localStorage.getItem('requiredExperienceForNextLevel')
-      ? Number(localStorage.getItem('requiredExperienceForNextLevel'))
-      : null,
+    this.storage.getRequiredExperienceForNextLevel(),
   );
 
   constructor() {
-    this.initializeFromLocalStorage();
+    this.initializeFromStorage();
     this.initializeWebSocketOnStartup();
   }
 
-  private initializeFromLocalStorage(): void {
-    const userId = localStorage.getItem('userId');
-    const username = localStorage.getItem('username');
-    const isTutorialCompleted =
-      localStorage.getItem('isTutorialCompleted') === 'true';
-    const money = Number(localStorage.getItem('money')) || 0;
-    const level = Number(localStorage.getItem('level')) || 1;
-    const experience = Number(localStorage.getItem('experience')) || 0;
-    const requiredExp = localStorage.getItem('requiredExperienceForNextLevel');
+  private initializeFromStorage(): void {
+    const userId = this.storage.getUserId();
 
     if (userId) {
       this.userId.set(userId);
-      this.username.set(username);
+      this.username.set(this.storage.getUsername());
       this.loggedIn.set(true);
-      this.isTutorialCompleted.set(isTutorialCompleted);
-      this.money.set(money);
-      this.level.set(level);
-      this.experience.set(experience);
+      this.isTutorialCompleted.set(this.storage.getIsTutorialCompleted());
+      this.money.set(this.storage.getMoney());
+      this.level.set(this.storage.getLevel());
+      this.experience.set(this.storage.getExperience());
       this.requiredExperienceForNextLevel.set(
-        requiredExp ? Number(requiredExp) : null,
+        this.storage.getRequiredExperienceForNextLevel(),
       );
     }
   }
@@ -134,13 +125,7 @@ export class AuthService {
     this.notificationService.disconnect();
     this.notificationService.clearAllNotifications();
 
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
-    localStorage.removeItem('isTutorialCompleted');
-    localStorage.removeItem('money');
-    localStorage.removeItem('level');
-    localStorage.removeItem('experience');
-    localStorage.removeItem('requiredExperienceForNextLevel');
+    this.storage.clearAuthData();
 
     this.userId.set(null);
     this.username.set(null);
@@ -207,25 +192,22 @@ export class AuthService {
       data.requiredExperienceForNextLevel,
     );
 
-    localStorage.setItem('level', String(data.level));
-    localStorage.setItem('experience', String(data.experience));
-    localStorage.setItem('money', String(data.money));
-    if (data.requiredExperienceForNextLevel !== null) {
-      localStorage.setItem(
-        'requiredExperienceForNextLevel',
-        String(data.requiredExperienceForNextLevel),
-      );
-    }
+    this.storage.setLevel(data.level);
+    this.storage.setExperience(data.experience);
+    this.storage.setMoney(data.money);
+    this.storage.setRequiredExperienceForNextLevel(
+      data.requiredExperienceForNextLevel,
+    );
   }
 
   completeUserOnboarding(): void {
     this.isTutorialCompleted.set(true);
-    localStorage.setItem('isTutorialCompleted', 'true');
+    this.storage.setIsTutorialCompleted(true);
   }
 
   updateMoney(amount: number): void {
     this.money.set(amount);
-    localStorage.setItem('money', String(amount));
+    this.storage.setMoney(amount);
   }
 
   adjustMoney(delta: number): void {
@@ -280,9 +262,9 @@ export class AuthService {
     isTutorialCompleted: boolean,
     money: number,
   ) {
-    localStorage.setItem('userId', userId);
-    localStorage.setItem('username', username);
-    localStorage.setItem('isTutorialCompleted', String(isTutorialCompleted));
-    localStorage.setItem('money', String(money));
+    this.storage.setUserId(userId);
+    this.storage.setUsername(username);
+    this.storage.setIsTutorialCompleted(isTutorialCompleted);
+    this.storage.setMoney(money);
   }
 }

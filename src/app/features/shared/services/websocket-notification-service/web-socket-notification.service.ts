@@ -3,6 +3,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from '../../../../../environments/environment';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 
 interface NotificationTypeEnum {
   id: number;
@@ -28,14 +29,13 @@ export interface NotificationDto {
   read?: boolean;
 }
 
-const NOTIFICATIONS_STORAGE_KEY = 'user_notifications';
-
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketNotificationService implements OnDestroy {
   private client: Client | null = null;
   private nzNotification = inject(NzNotificationService);
+  private storage = inject(StorageService);
 
   private connectedSubject = new BehaviorSubject<boolean>(false);
   public connected$: Observable<boolean> = this.connectedSubject.asObservable();
@@ -55,7 +55,7 @@ export class WebSocketNotificationService implements OnDestroy {
   }
 
   private loadNotificationsFromStorage(): NotificationDto[] {
-    const data = localStorage.getItem(NOTIFICATIONS_STORAGE_KEY);
+    const data = this.storage.getNotifications();
     if (data) {
       const notifications: NotificationDto[] = JSON.parse(data);
       this.updateUnreadCount(notifications);
@@ -65,10 +65,7 @@ export class WebSocketNotificationService implements OnDestroy {
   }
 
   private saveNotificationsToStorage(notifications: NotificationDto[]): void {
-    localStorage.setItem(
-      NOTIFICATIONS_STORAGE_KEY,
-      JSON.stringify(notifications),
-    );
+    this.storage.setNotifications(JSON.stringify(notifications));
   }
 
   private updateUnreadCount(notifications: NotificationDto[]): void {
@@ -227,7 +224,7 @@ export class WebSocketNotificationService implements OnDestroy {
 
   clearAllNotifications(): void {
     this.notificationsSubject.next([]);
-    localStorage.removeItem(NOTIFICATIONS_STORAGE_KEY);
+    this.storage.removeNotifications();
     this.unreadCountSubject.next(0);
   }
 
