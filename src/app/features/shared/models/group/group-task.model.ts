@@ -13,12 +13,12 @@ export interface GroupTask {
 export interface TaskDto {
   id: string;
   title: string;
-  startTime: string;
-  endTime: string;
+  deadlineDate: string;
+  deadlineTime?: string | null;
   category: Category;
   difficulty: Difficulty;
   completedAt: string | null;
-  description: string;
+  description?: string | null;
 }
 
 export interface Category {
@@ -32,19 +32,19 @@ export interface Difficulty {
 }
 
 export interface EditGroupTaskDto {
-  title: string;
-  description: string;
-  startTime: string;
-  endTime: string;
-  categoryId: number;
-  difficultyId: number;
-  completedAt: string | null;
-  reward: number;
-  isAccepted: boolean | null;
-  declineMessage: string | null;
+  title?: string;
+  description?: string | null;
+  deadlineDate?: string;
+  deadlineTime?: string | null;
+  categoryId?: number;
+  difficultyId?: number;
+  completedAt?: string | null;
+  reward?: number;
+  isAccepted?: boolean | null;
+  declineMessage?: string | null;
 }
 
-export interface GetGroupTaskRequest {
+export interface GetGroupTasksParams {
   size: number;
   page: number;
   isAccepted: boolean;
