@@ -61,15 +61,14 @@ export class GroupTaskFormComponent {
       Validators.minLength(3),
       Validators.maxLength(200),
     ]),
-    description: this.fb.control<string>('', {
-      validators: [Validators.required, Validators.maxLength(200)],
+    description: this.fb.control<string|null>(null, {
+      validators: [ Validators.maxLength(200)],
     }),
-    startTime: this.fb.control<Date | null>(null, [Validators.required]),
     endDate: this.fb.control<Date | null>(null, [Validators.required]),
-    endTime: this.fb.control<Date | null>(null, [Validators.required]),
+    endTime: this.fb.control<Date | null>(null,[]),
 
-    categoryId: this.fb.control<number>(1, [Validators.required]),
-    difficultyId: this.fb.control<number>(1, [Validators.required]),
+    categoryId: this.fb.control<number | null>(null, [Validators.required]),
+    difficultyId: this.fb.control<number|null>(null, [Validators.required]),
     reward: this.fb.control<number>(1, [
       Validators.required,
       Validators.min(1),
@@ -92,38 +91,74 @@ export class GroupTaskFormComponent {
   openForm(): void {
     const task = this.task();
     if (task != null) {
-      this.validateForm.patchValue({
-        title: task.taskDto.title,
-        description: task.taskDto!.description!,
-        startTime: new Date(task.taskDto.startTime),
-        endDate: new Date(task.taskDto.endTime),
-        endTime: new Date(task.taskDto.endTime),
-        categoryId: task.taskDto.category.id,
-        difficultyId: task.taskDto.difficulty.id,
-        reward: task.reward,
-      });
+
+      if (task.taskDto.deadlineTime != null) {
+        let endHour: Date;
+        const [hours, minutes, seconds] = task.taskDto.deadlineTime
+          .split(':')
+          .map(Number);
+        endHour = new Date();
+        endHour.setHours(hours, minutes, seconds || 0, 0);
+
+        this.validateForm.patchValue({
+          title: task.taskDto.title,
+          description: task.taskDto!.description,
+          endDate: new Date(task.taskDto.deadlineDate),
+          endTime: endHour,
+          categoryId: task.taskDto.category.id,
+          difficultyId: task.taskDto.difficulty.id,
+          reward: task.reward,
+        });
+      } else {
+        this.validateForm.patchValue({
+          title: task.taskDto.title,
+          description: task.taskDto!.description,
+          endDate: new Date(task.taskDto.deadlineDate),
+          categoryId: task.taskDto.category.id,
+          difficultyId: task.taskDto.difficulty.id,
+          reward: task.reward,
+        });
+      }
+
     }
     this.isVisible = true;
   }
 
   handleCreate(): void {
     if (this.validateForm.valid) {
+      let request;
       const formValue = this.validateForm.getRawValue();
-      formValue.endDate!.setHours(
-        formValue.endTime!.getHours() + 1,
-        formValue.endTime!.getMinutes(),
-        0,
-        0,
-      );
-      const request = {
+      if (formValue.endTime!==null){
+
+
+
+      const date = formValue.endTime!;
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const deadlineTime = `${hours}:${minutes}:00`;
+
+       request = {
         title: formValue.title,
         description: formValue.description,
-        startTime: formValue.startTime,
-        endTime: formValue.endDate,
+        deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
+        deadlineTime: deadlineTime,
         categoryId: formValue.categoryId,
         difficultyId: formValue.difficultyId,
         reward: formValue.reward,
       };
+      }
+      else
+      {
+         request = {
+          title: formValue.title,
+          description: formValue.description,
+          deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
+          deadlineTime: null,
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          reward: formValue.reward,
+        };
+      }
 
       this.groupTaskApi.postGroupTask(this.groupId(), request)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -172,19 +207,18 @@ export class GroupTaskFormComponent {
 
   handleEdit(): void {
     if (this.validateForm.valid) {
+      let editGroupTaskRequest : EditGroupTaskDto;
       const formValue = this.validateForm.getRawValue();
-      formValue.endDate!.setHours(
-        formValue.endTime!.getHours() + 1,
-        formValue.endTime!.getMinutes(),
-        0,
-        0,
-      );
-
-      const editGroupTaskRequest: EditGroupTaskDto = {
+      if (formValue.endTime!==null){
+      const date = formValue.endTime;
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const deadlineTime = `${hours}:${minutes}:00`;
+       editGroupTaskRequest = {
         title: formValue.title,
         description: formValue.description,
-        startTime: formValue.startTime!.toISOString(),
-        endTime: formValue.endDate!.toISOString(),
+        deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
+        deadlineTime: deadlineTime,
         categoryId: formValue.categoryId!,
         difficultyId: formValue.difficultyId!,
         completedAt: null,
@@ -192,6 +226,22 @@ export class GroupTaskFormComponent {
         reward: formValue.reward,
         declineMessage: null,
       };
+      }
+      else
+      {
+         editGroupTaskRequest = {
+          title: formValue.title,
+          description: formValue.description,
+          deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
+          deadlineTime: null,
+          categoryId: formValue.categoryId!,
+          difficultyId: formValue.difficultyId!,
+          completedAt: null,
+          isAccepted: null,
+          reward: formValue.reward,
+          declineMessage: null,
+        };
+      }
 
       this.groupTaskApi
         .editGroupTask(
@@ -211,4 +261,6 @@ export class GroupTaskFormComponent {
         });
     }
   }
+
+
 }

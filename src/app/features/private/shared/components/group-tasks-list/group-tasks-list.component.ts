@@ -11,7 +11,7 @@ import { GroupTaskFormComponent } from '../group-task-from/group-task-form.compo
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { GroupTaskApiService } from '../../../../shared/services/group-task-api/group-task-api.service';
 import {
-  GetGroupTaskRequest,
+  GetGroupTasksParams,
   GroupTask,
 } from '../../../../shared/models/group/group-task.model';
 import { Group } from '../../../../shared/models/group/group.model';
@@ -57,7 +57,7 @@ export class GroupTasksListComponent implements OnInit {
   protected loading = signal<boolean>(true);
   protected hasMore = signal<boolean>(true);
   protected tasksList = signal<GroupTask[]>([]);
-  protected tasksRequestParams: GetGroupTaskRequest = {
+  protected tasksRequestParams: GetGroupTasksParams = {
     isAccepted: false,
     isDeclined: false,
     page: 0,

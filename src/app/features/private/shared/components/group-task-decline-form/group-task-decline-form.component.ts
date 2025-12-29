@@ -83,8 +83,8 @@ export class GroupTaskDeclineFormComponent {
       const editGroupTaskRequest: EditGroupTaskDto = {
         title: this.task().taskDto.title,
         description: this.task().taskDto.description,
-        startTime: this.task().taskDto.startTime,
-        endTime: this.task().taskDto.endTime,
+        deadlineDate: this.task().taskDto.deadlineDate,
+        deadlineTime: this.task().taskDto.deadlineTime,
         categoryId: this.task().taskDto.category.id,
         difficultyId: this.task().taskDto.difficulty.id,
         completedAt: null,
