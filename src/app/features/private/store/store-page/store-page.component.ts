@@ -57,9 +57,8 @@ export class StorePageComponent implements OnInit {
         this.totalPages.set(response.totalPages - 1);
         this.currentPage.set(page);
       },
-      error: (error) => {
-        this.notificationService.handleApiError(
-          error,
+      error: () => {
+        this.notificationService.error(
           'Failed to load store items',
         );
       },
