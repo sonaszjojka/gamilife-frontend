@@ -13,26 +13,26 @@ export class GroupItemApiService {
   private apiUrl = environment.apiUrl;
 
 
-  createGroupItem(request: GroupItemRequestModel):Observable<GroupItemResponseModel> {
+  createGroupItem(groupId: string, shopId:string,request: GroupItemRequestModel):Observable<GroupItemResponseModel> {
     return this.http.post<GroupItemResponseModel>(
-      `${this.apiUrl}/groups/{groupId}/shop/{shopId}/items`,
+      `${this.apiUrl}/groups/${groupId}/shop/${shopId}/items`,
       request,
       { withCredentials: true },
     );
 
 
   }
-  editGroupItem(request:GroupItemRequestModel,itemId:string):Observable<GroupItemResponseModel> {
+  editGroupItem(groupId: string, shopId:string,request:GroupItemRequestModel,itemId:string):Observable<GroupItemResponseModel> {
     return this.http.put<GroupItemResponseModel>(
-      `${this.apiUrl}/groups/{groupId}/shop/{shopId}/items/${itemId}`,
+      `${this.apiUrl}/groups/${groupId}/shop/${shopId}/items/${itemId}`,
       request,
       { withCredentials: true },
     );
   }
 
-  deleteGroupItem(itemId:string):Observable<void> {
+  deleteGroupItem(groupId: string, shopId:string,itemId:string):Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}/groups/{groupId}/shop/{shopId}/items/${itemId}`,
+      `${this.apiUrl}/groups/${groupId}/shop/${shopId}/items/${itemId}`,
       { withCredentials: true },
     );
   }
