@@ -19,7 +19,7 @@ export class HealthService {
   readonly healthStatus = signal<HealthStatus>({ status: 'DOWN' });
 
   checkHealth(): Observable<HealthStatus> {
-    return this.http.get<HealthStatus>('/api/health').pipe(
+    return this.http.get<HealthStatus>('/actuator/health/').pipe(
       map((response) => {
         const status: HealthStatus = {
           status: 'UP',
