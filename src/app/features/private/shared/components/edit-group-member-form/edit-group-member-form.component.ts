@@ -40,10 +40,6 @@ export class EditGroupMemberFormComponent {
       Validators.required,
       Validators.min(0),
     ]),
-    totalEarnedMoney: this.fb.control<number>(0, [
-      Validators.required,
-      Validators.min(0),
-    ]),
   });
 
   isVisible = signal(false);
@@ -52,7 +48,6 @@ export class EditGroupMemberFormComponent {
   open(member: GroupMember): void {
     this.validateForm.patchValue({
       groupMoney: member.groupMoney ?? 0,
-      totalEarnedMoney: member.totalEarnedMoney ?? 0,
     });
     this.isVisible.set(true);
   }
@@ -64,7 +59,6 @@ export class EditGroupMemberFormComponent {
 
       const editDto: EditGroupMemberDto = {
         groupMoney: Number(formValue.groupMoney),
-        totalEarnedMoney: Number(formValue.totalEarnedMoney),
       };
 
       this.groupMemberApi

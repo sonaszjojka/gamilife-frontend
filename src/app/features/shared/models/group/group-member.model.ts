@@ -25,5 +25,4 @@ export interface GroupMember {
 
 export interface EditGroupMemberDto {
   groupMoney: number;
-  totalEarnedMoney: number;
 }
