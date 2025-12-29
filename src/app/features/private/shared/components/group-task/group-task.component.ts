@@ -69,7 +69,6 @@ export class GroupTaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
-    this.formatedEndDate = formatDateTime(this.task().taskDto.endTime);
     this.formatedAcceptedDate = formatDateTime(this.task().acceptedDate);
   }
 
@@ -185,8 +184,8 @@ export class GroupTaskComponent implements OnInit {
     const request: EditGroupTaskDto = {
       title: this.task().taskDto.title,
       description: this.task().taskDto.description,
-      startTime: this.task().taskDto.startTime,
-      endTime: this.task().taskDto.endTime,
+      deadlineDate: this.task().taskDto.deadlineDate,
+      deadlineTime: this.task().taskDto.deadlineTime,
       categoryId: this.task().taskDto.category.id,
       difficultyId: this.task().taskDto.difficulty.id,
       completedAt: this.task().taskDto.completedAt,
