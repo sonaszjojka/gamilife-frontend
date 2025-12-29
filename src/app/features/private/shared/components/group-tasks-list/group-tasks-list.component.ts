@@ -53,9 +53,10 @@ export class GroupTasksListComponent implements OnInit {
 
   refreshGroup = output<void>();
 
+  protected currentPage = signal<number>(0);
+  protected totalPages = signal<number>(1);
   protected loadingMore = signal<boolean>(false);
   protected loading = signal<boolean>(true);
-  protected hasMore = signal<boolean>(true);
   protected tasksList = signal<GroupTask[]>([]);
   protected tasksRequestParams: GetGroupTasksParams = {
     isAccepted: false,
@@ -86,6 +87,8 @@ export class GroupTasksListComponent implements OnInit {
       .subscribe({
         next: (tasks) => {
           this.tasksList.set(tasks.content);
+          this.currentPage.set(tasks.number);
+          this.totalPages.set(tasks.totalPages);
           this.loading.set(false);
         },
         error: (err) => {
@@ -97,7 +100,7 @@ export class GroupTasksListComponent implements OnInit {
   }
 
   loadMoreTasks(): void {
-    if (!this.hasMore() || this.loadingMore()) return;
+    if ((this.currentPage()+1>=this.totalPages()) || this.loadingMore()) return;
     this.loadingMore.set(true);
     const nexPage = this.tasksRequestParams.page + 1;
 
@@ -116,7 +119,6 @@ export class GroupTasksListComponent implements OnInit {
           ...response.content,
         ]);
         this.tasksRequestParams.page = response.number;
-        this.hasMore.set(!response.last);
         this.loadingMore.set(false);
       },
       error: (error) => {
@@ -133,20 +135,18 @@ export class GroupTasksListComponent implements OnInit {
     const isNearEnd =
       target.scrollTop + target.clientHeight >= target.scrollHeight - threshold;
 
-    if (isNearEnd && !this.loading() && !this.loadingMore() && this.hasMore()) {
+    if (isNearEnd && !this.loading() && !this.loadingMore() && (this.currentPage()+1<this.totalPages())) {
       this.loadMoreTasks();
     }
   }
 
   public onTaskListUpdate() {
     this.tasksRequestParams.page = 0;
-    this.hasMore.set(true);
     this.loadGroupTasks();
   }
 
   public onGroupRefresh() {
     this.tasksRequestParams.page = 0;
-    this.hasMore.set(true);
     this.loadGroupTasks();
     this.refreshGroup.emit();
   }
