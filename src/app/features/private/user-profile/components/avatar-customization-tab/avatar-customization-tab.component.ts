@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -12,6 +12,7 @@ import { ProfileViewMode } from '../../../../shared/models/user-profile/profile-
 import { ItemSlotFilterComponent } from '../item-slot-filter/item-slot-filter.component';
 import { InventoryItemComponent } from '../inventory-item/inventory-item.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-avatar-customization-tab',
@@ -50,6 +51,7 @@ export class AvatarCustomizationTabComponent implements OnInit {
 
   protected inventoryService = inject(UserInventoryService);
   private readonly notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
 
   ngOnInit(): void {
     this.loadItems();
@@ -63,6 +65,7 @@ export class AvatarCustomizationTabComponent implements OnInit {
         page: this.currentPage,
         size: this.pageSize,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.items = result.content;

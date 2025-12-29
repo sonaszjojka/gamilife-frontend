@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DestroyRef,
   inject,
   input,
   OnInit,
@@ -26,6 +26,7 @@ import { GroupTaskComponent } from '../group-task/group-task.component';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { Page } from '../../../../shared/models/util/page.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-list',
@@ -66,6 +67,7 @@ export class GroupTasksListComponent implements OnInit {
   private readonly groupTaskApi = inject(GroupTaskApiService);
   private readonly notification = inject(NotificationService);
   protected readonly GroupPreviewMode = GroupPreviewMode;
+  private destroyRef = inject(DestroyRef)
 
   @ViewChild(GroupTaskFormComponent)
   groupTaskForm!: GroupTaskFormComponent;
@@ -80,6 +82,7 @@ export class GroupTasksListComponent implements OnInit {
 
     this.groupTaskApi
       .getGroupTasks(groupId, this.tasksRequestParams)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (tasks) => {
           this.tasksList.set(tasks.content);
@@ -104,7 +107,9 @@ export class GroupTasksListComponent implements OnInit {
       isAccepted: this.tasksRequestParams.isAccepted,
       isDeclined: this.tasksRequestParams.isDeclined,
     };
-    this.groupTaskApi.getGroupTasks(this.groupId(), nexPageParams).subscribe({
+    this.groupTaskApi.getGroupTasks(this.groupId(), nexPageParams)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (response: Page<GroupTask>) => {
         this.tasksList.update((currentTasks) => [
           ...currentTasks,

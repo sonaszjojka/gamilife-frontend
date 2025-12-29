@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
 import { AchievementDto } from '../../../../shared/models/user-profile/user-profile.models';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -8,6 +8,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { UserAchievementsApiService } from '../../../../shared/services/user-achievements-api/user-achievements-api.service';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-achievements-tab',
@@ -30,6 +31,7 @@ export class AchievementsTabComponent implements OnInit {
 
   protected achievementsService = inject(UserAchievementsApiService);
   private readonly notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
 
   ngOnInit(): void {
     this.loadAchievements();
@@ -37,7 +39,9 @@ export class AchievementsTabComponent implements OnInit {
 
   loadAchievements(): void {
     this.loading = true;
-    this.achievementsService.getUserAchievements(this.userId).subscribe({
+    this.achievementsService.getUserAchievements(this.userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (result) => {
         this.achievements = result.achievements;
         this.loading = false;

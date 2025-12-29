@@ -4,7 +4,7 @@ import {
   OnInit,
   OnDestroy,
   signal,
-  ViewChild,
+  ViewChild, DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -33,6 +33,7 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
 import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
 import { GroupChatComponent } from '../group-chat/group-chat/group-chat.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-preview-group',
@@ -75,6 +76,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild(EditGroupFormComponent)
   editGroupForm!: EditGroupFormComponent;
@@ -106,7 +108,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
 
     this.groupApi
       .getGroupById(this.groupId()!, true)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (group) => {
           this.group.set(group);
@@ -133,7 +135,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
 
     this.requestsApi
       .getPendingGroupRequests(groupId, 0, 5)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.requestsList.set(result.content);
@@ -204,7 +206,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
 
     this.groupApi
       .deleteGroup(groupId)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success('Group deleted successfully');

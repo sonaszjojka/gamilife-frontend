@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DestroyRef,
   EventEmitter,
   inject,
   Input,
@@ -36,6 +36,7 @@ import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
 import { PomodoroSessionFormModal } from '../pomodoro-form-modal/pomodoro-session-form-modal';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-form',
@@ -73,7 +74,9 @@ export class TaskFormComponent implements OnChanges {
   private taskApi = inject(UserTaskApiService);
   private habitApi = inject(UserHabitApiService);
   private notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef)
   protected readonly ActivityType = ActivityType;
+
 
   @ViewChild(PomodoroSessionFormModal)
   protected pomodoroModal = new PomodoroSessionFormModal();
@@ -89,7 +92,7 @@ export class TaskFormComponent implements OnChanges {
     deadlineHour: this.formBuilder.control<Date | undefined>(undefined, []),
     categoryId: this.formBuilder.control<number>(0, [Validators.required]),
     difficultyId: this.formBuilder.control<number>(0, [Validators.required]),
-    description: this.formBuilder.control('', [Validators.required]),
+    description: this.formBuilder.control(''),
     cycleLength: this.formBuilder.control<number>(0),
   });
 
@@ -213,7 +216,9 @@ export class TaskFormComponent implements OnChanges {
       }
 
       if (this.creationMode?.()) {
-        this.taskApi.createTask(request).subscribe({
+        this.taskApi.createTask(request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
           next: () => {
             this.validActivityForm.reset();
             this.activityFormSubmitted.emit();
@@ -229,7 +234,9 @@ export class TaskFormComponent implements OnChanges {
         if (activity == null) {
           return;
         }
-        this.taskApi.editTask(this.activity()!.id, request).subscribe({
+        this.taskApi.editTask(this.activity()!.id, request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
           next: () => {
             this.validActivityForm.reset();
             this.notificationService.success('Task edited successfully!');
@@ -251,7 +258,9 @@ export class TaskFormComponent implements OnChanges {
       };
 
       if (this.creationMode!()) {
-        this.habitApi.createHabit(request).subscribe({
+        this.habitApi.createHabit(request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
           next: () => {
             this.notificationService.success('Habit created successfully!');
             this.activityFormSubmitted.emit();
@@ -261,7 +270,9 @@ export class TaskFormComponent implements OnChanges {
           },
         });
       } else {
-        this.habitApi.editHabit(this.activity()!.id, request).subscribe({
+        this.habitApi.editHabit(this.activity()!.id, request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
           next: () => {
             this.notificationService.success('Habit edited successfully!');
             this.activityFormSubmitted.emit();
@@ -276,7 +287,9 @@ export class TaskFormComponent implements OnChanges {
 
   onDelete() {
     if (this.activity()?.type == ActivityType.TASK) {
-      this.taskApi.deleteTask(this.activity()!.id).subscribe({
+      this.taskApi.deleteTask(this.activity()!.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: () => {
           this.notificationService.success('Task deleted successfully!');
           this.validActivityForm.reset();
@@ -288,7 +301,9 @@ export class TaskFormComponent implements OnChanges {
         },
       });
     } else {
-      this.habitApi.deleteHabit(this.activity()!.id).subscribe({
+      this.habitApi.deleteHabit(this.activity()!.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: () => {
           this.notificationService.success('Habit deleted successfully!');
           this.activityFormSubmitted.emit();

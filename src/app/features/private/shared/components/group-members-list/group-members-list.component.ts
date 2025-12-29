@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DestroyRef,
   inject,
   input,
   output,
@@ -18,6 +18,7 @@ import { GroupMemberApiService } from '../../../../shared/services/group-member-
 import { EditGroupMemberFormComponent } from '../edit-group-member-form/edit-group-member-form.component';
 import { take } from 'rxjs/operators';
 import { PaginationMoreComponent } from '../pagination-more/pagination-more.component';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-members-list',
@@ -53,6 +54,7 @@ export class GroupMembersListComponent {
   private readonly groupMemberApi = inject(GroupMemberApiService);
   private readonly modal = inject(NzModalService);
   private readonly router = inject(Router);
+  private destroyRef = inject(DestroyRef)
 
   paginatedMembers = () => {
     const members = this.members();
@@ -93,7 +95,7 @@ export class GroupMembersListComponent {
   private removeMember(member: GroupMember): void {
     this.groupMemberApi
       .removeGroupMember(this.groupId(), member.groupMemberId)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.currentPage.set(1);

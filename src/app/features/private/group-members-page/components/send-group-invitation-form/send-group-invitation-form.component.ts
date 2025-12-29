@@ -1,4 +1,4 @@
-import { Component, inject, signal, input, output } from '@angular/core';
+import {Component, inject, signal, input, output, DestroyRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged, take } from 'rxjs';
 import { User } from '../../../../shared/models/group/user.model';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-send-group-invitation-form',
@@ -28,6 +29,7 @@ import { UserApiService } from '../../../../shared/services/user-api/user-api.se
     NzEmptyModule,
     NzSpinModule,
     ReactiveFormsModule,
+
   ],
   templateUrl: './send-group-invitation-form.component.html',
   styleUrl: './send-group-invitation-form.component.css',
@@ -39,6 +41,7 @@ export class SendGroupInvitationFormComponent {
   private userApi = inject(UserApiService);
   private invitationApi = inject(GroupInvitationApiService);
   private fb = inject(NonNullableFormBuilder);
+  private destroyRef = inject(DestroyRef);
 
   isVisible = signal(false);
   searching = signal(false);
@@ -86,7 +89,7 @@ export class SendGroupInvitationFormComponent {
     this.searching.set(true);
     this.userApi
       .getUsers({ username, page: 0, size: 5 })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.users.set(response.content);
@@ -112,7 +115,7 @@ export class SendGroupInvitationFormComponent {
 
     this.invitationApi
       .createInvitation(this.groupId(), { userId: user.id })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.sending.set(false);

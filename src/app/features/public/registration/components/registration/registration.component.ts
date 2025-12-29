@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import {Component, DestroyRef, inject, signal, ViewChild} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -20,6 +20,7 @@ import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-registration',
   standalone: true,
@@ -44,6 +45,7 @@ export class RegistrationComponent {
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);
+  private destroyRef = inject(DestroyRef)
   isSubmitting = signal(false);
   isPasswordVisible = signal(false);
   private password = signal<string>('');
@@ -84,7 +86,9 @@ export class RegistrationComponent {
       const formData = this.validateForm.value;
       const url = `${environment.apiUrl}/auth/register`;
 
-      this.http.post(url, formData).subscribe({
+      this.http.post(url, formData)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: () => {
           this.isSubmitting.update(() => false);
           this.router.navigate(['/login']);

@@ -1,6 +1,6 @@
 import {
   Component,
-  computed,
+  computed, DestroyRef,
   inject,
   input,
   output,
@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-actions',
@@ -71,6 +72,7 @@ export class GroupActionsComponent {
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
   private router = inject(Router);
+  private destroyRef=inject(DestroyRef)
 
   protected buttonText = computed(() => {
     const g = this.group();
@@ -175,7 +177,7 @@ export class GroupActionsComponent {
     if (group.groupType.title === 'Open') {
       this.memberApi
         .joinGroup(group.groupId)
-        .pipe(take(1))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.notification.success('Successfully joined the group!');
@@ -190,7 +192,7 @@ export class GroupActionsComponent {
     } else {
       this.requestsApi
         .sendRequest(group.groupId)
-        .pipe(take(1))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.notification.success('Join request sent successfully');
@@ -215,7 +217,7 @@ export class GroupActionsComponent {
 
     this.groupMemberApi
       .leaveGroup(group.groupId, group.loggedUserMembershipDto.groupMemberId)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success('Successfully left the group');
