@@ -51,8 +51,7 @@ export class StoreItemComponent {
         );
       },
       error: (error) => {
-        this.notificationService.handleApiError(
-          error,
+        this.notificationService.error(
           'Could not purchase item',
         );
       },

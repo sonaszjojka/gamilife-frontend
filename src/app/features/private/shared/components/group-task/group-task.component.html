@@ -31,7 +31,14 @@
         <nz-icon nzType="calendar" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Deadline</div>
-          <div class="info-value">{{ formatedEndDate }}</div>
+          <div class="info-value">
+
+            {{ task().taskDto.deadlineDate }} -
+            @if (task().taskDto.deadlineTime !== null) {
+              {{ task().taskDto.deadlineTime }}
+          }
+
+          </div>
         </div>
       </div>
 
