@@ -2,6 +2,8 @@ import {
   ApplicationConfig,
   provideZoneChangeDetection,
   importProvidersFrom,
+  provideAppInitializer,
+  inject,
 } from '@angular/core';
 import {
   provideRouter,
@@ -15,10 +17,16 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+  withXsrfConfiguration,
+} from '@angular/common/http';
 import { authInterceptor } from './shared/auth.interceptor';
 import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
 import { timeZoneInterceptor } from './shared/time-zone.interceptor';
+import { HealthService } from './shared/services/health.service';
+import { lastValueFrom } from 'rxjs';
 
 registerLocaleData(en);
 
@@ -46,7 +54,17 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor, timeZoneInterceptor])),
+    provideHttpClient(
+      withInterceptors([authInterceptor, timeZoneInterceptor]),
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'X-XSRF-TOKEN',
+      }),
+    ),
+    provideAppInitializer(() => {
+      const healthService = inject(HealthService);
+      return lastValueFrom(healthService.checkHealth());
+    }),
     { provide: NZ_CONFIG, useValue: ngZorroConfig },
   ],
 };

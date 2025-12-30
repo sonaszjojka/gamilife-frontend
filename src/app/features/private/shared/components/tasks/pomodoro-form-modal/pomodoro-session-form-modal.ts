@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Output,
+  signal,
+} from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -10,6 +17,7 @@ import {
   ActivityType,
 } from '../../../../../shared/models/task-models/activity.model';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pomdoro-form-modal',
@@ -43,6 +51,7 @@ export class PomodoroSessionFormModal {
 
   private pomodoroApi = inject(UserPomodoroApiService);
   private notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
   pomodoroRequest?: PomodoroRequest;
   isVisible = false;
 
@@ -69,26 +78,29 @@ export class PomodoroSessionFormModal {
         this.pomodoroRequest.habitId = this.activity.id;
         this.pomodoroRequest.taskId = undefined;
       }
-      this.pomodoroApi.createPomodoro(this.pomodoroRequest).subscribe({
-        next: (response) => {
-          this.activity.pomodoro = {
-            id: response.id,
-            cyclesRequired: response.cyclesRequired,
-            cyclesCompleted: response.cyclesCompleted,
-          };
+      this.pomodoroApi
+        .createPomodoro(this.pomodoroRequest)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (response) => {
+            this.activity.pomodoro = {
+              id: response.id,
+              cyclesRequired: response.cyclesRequired,
+              cyclesCompleted: response.cyclesCompleted,
+            };
 
-          this.moveToCurrentSession.emit(this.activity);
-          this.isVisible = false;
-          this.notificationService.success(
-            `Pomodoro created successfully for: ${this.activity.title}`,
-          );
-        },
-        error: () => {
-          this.notificationService.error(
-            `There was an error creating Pomodoro for: ${this.activity.title}`,
-          );
-        },
-      });
+            this.moveToCurrentSession.emit(this.activity);
+            this.isVisible = false;
+            this.notificationService.success(
+              `Pomodoro created successfully for: ${this.activity.title}`,
+            );
+          },
+          error: () => {
+            this.notificationService.error(
+              `There was an error creating Pomodoro for: ${this.activity.title}`,
+            );
+          },
+        });
     } else if (
       this.editionMode() &&
       this.pomodoroRequest != null &&
@@ -96,6 +108,7 @@ export class PomodoroSessionFormModal {
     ) {
       this.pomodoroApi
         .editPomodoro(this.activity.pomodoro!.id, this.pomodoroRequest)
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
             this.activity.pomodoro!.cyclesRequired = response.cyclesRequired;

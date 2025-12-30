@@ -6,6 +6,7 @@ import {
   output,
   input,
   effect,
+  DestroyRef,
 } from '@angular/core';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -25,6 +26,7 @@ import {
 } from '../../../../shared/models/group/group.model';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-group-form',
@@ -44,6 +46,7 @@ export class EditGroupFormComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   protected groupApiService = inject(GroupApiService);
   private notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   group = input.required<Group>();
   members = input<GroupMember[]>([]);
@@ -95,12 +98,15 @@ export class EditGroupFormComponent implements OnInit {
   }
 
   private loadGroupTypes(): void {
-    this.groupApiService.getGroupTypes().subscribe({
-      next: (types) => this.groupTypes.set(types),
-      error: (err) => {
-        this.notification.handleApiError(err, 'Failed to load group types');
-      },
-    });
+    this.groupApiService
+      .getGroupTypes()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (types) => this.groupTypes.set(types),
+        error: (err) => {
+          this.notification.handleApiError(err, 'Failed to load group types');
+        },
+      });
   }
 
   open(): void {
@@ -124,6 +130,7 @@ export class EditGroupFormComponent implements OnInit {
 
       this.groupApiService
         .editGroup(this.group().groupId!, editGroupDto)
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.notification.success('Group updated successfully');

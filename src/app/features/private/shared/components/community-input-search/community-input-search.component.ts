@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   inject,
   OnInit,
@@ -15,6 +16,7 @@ import { GroupApiService } from '../../../../shared/services/groups-api/group-ap
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-community-input-search',
@@ -102,6 +104,7 @@ export class CommunityInputSearchComponent implements OnInit {
   readonly value = signal('');
 
   protected groupApiService = inject(GroupApiService);
+  private destroyRef = inject(DestroyRef);
 
   @Output() inputChange = new EventEmitter<string>();
   @Output() groupTypeChange = new EventEmitter<string | null>();
@@ -127,9 +130,12 @@ export class CommunityInputSearchComponent implements OnInit {
   }
 
   private loadGroupTypes(): void {
-    this.groupApiService.getGroupTypes().subscribe({
-      next: (types) => this.groupTypes.set(types),
-    });
+    this.groupApiService
+      .getGroupTypes()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (types) => this.groupTypes.set(types),
+      });
   }
 
   resetFilters(): void {

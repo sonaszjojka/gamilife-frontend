@@ -37,25 +37,3 @@ export function formatDateTime(dateString: string, locale?: string): string {
 /**
  * Converts Java Duration string to number of days
  */
-export function durationToDays(duration: string | null | undefined): number {
-  if (!duration) return 0;
-
-  if (duration.includes('D')) {
-    const match = duration.match(/P(\d+)D/);
-    return match ? parseInt(match[1]) : 0;
-  }
-
-  if (duration.includes('H')) {
-    const match = duration.match(/PT(\d+)H/);
-    return match ? Math.floor(parseInt(match[1]) / 24) : 0;
-  }
-
-  return 0;
-}
-
-/**
- * Converts number of days to Java Duration string
- */
-export function daysAsDuration(days: number): string {
-  return `P${days}D`;
-}

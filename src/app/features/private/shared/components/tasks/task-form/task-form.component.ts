@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   inject,
   Input,
@@ -36,6 +37,7 @@ import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
 import { PomodoroSessionFormModal } from '../pomodoro-form-modal/pomodoro-session-form-modal';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-form',
@@ -73,6 +75,7 @@ export class TaskFormComponent implements OnChanges {
   private taskApi = inject(UserTaskApiService);
   private habitApi = inject(UserHabitApiService);
   private notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
   protected readonly ActivityType = ActivityType;
 
   @ViewChild(PomodoroSessionFormModal)
@@ -85,12 +88,18 @@ export class TaskFormComponent implements OnChanges {
       Validators.maxLength(300),
     ]),
 
-    deadlineDate: this.formBuilder.control<Date | undefined>(undefined, []),
+    deadlineDate: this.formBuilder.control<Date | undefined>(undefined, [
+      Validators.required,
+    ]),
     deadlineHour: this.formBuilder.control<Date | undefined>(undefined, []),
-    categoryId: this.formBuilder.control<number>(0, [Validators.required]),
-    difficultyId: this.formBuilder.control<number>(0, [Validators.required]),
-    description: this.formBuilder.control('', [Validators.required]),
-    cycleLength: this.formBuilder.control<number>(0),
+    categoryId: this.formBuilder.control<number | undefined>(undefined, [
+      Validators.required,
+    ]),
+    difficultyId: this.formBuilder.control<number | undefined>(undefined, [
+      Validators.required,
+    ]),
+    description: this.formBuilder.control<string | null>(null),
+    cycleLength: this.formBuilder.control<number>(0, [Validators.required]),
   });
 
   categories = [
@@ -114,7 +123,7 @@ export class TaskFormComponent implements OnChanges {
         title: activity.title || '',
         categoryId: activity.categoryId,
         difficultyId: activity.difficultyId,
-        description: activity.description || '',
+        description: activity.description || null,
         cycleLength: activity.cycleLength,
       });
     } else if (activity?.type == ActivityType.TASK && isEditing) {
@@ -137,7 +146,7 @@ export class TaskFormComponent implements OnChanges {
         deadlineHour: endHour,
         categoryId: activity.categoryId,
         difficultyId: activity.difficultyId,
-        description: activity.description || '',
+        description: activity.description || null,
       });
     } else if (isCreating) {
       this.validActivityForm.reset();
@@ -158,7 +167,8 @@ export class TaskFormComponent implements OnChanges {
   onSubmit() {
     if (this.validActivityForm.invalid) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
-        control.markAsTouched();
+        control.markAsDirty();
+        control.updateValueAndValidity();
       });
       return;
     }
@@ -167,7 +177,8 @@ export class TaskFormComponent implements OnChanges {
       this.validActivityForm.value.deadlineDate == undefined
     ) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
-        control.markAsTouched();
+        control.markAsDirty();
+        control.updateValueAndValidity();
       });
       return;
     }
@@ -178,7 +189,8 @@ export class TaskFormComponent implements OnChanges {
         this.validActivityForm.value.cycleLength <= 0)
     ) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
-        control.markAsTouched();
+        control.markAsDirty();
+        control.updateValueAndValidity();
       });
       return;
     }
@@ -213,33 +225,39 @@ export class TaskFormComponent implements OnChanges {
       }
 
       if (this.creationMode?.()) {
-        this.taskApi.createTask(request).subscribe({
-          next: () => {
-            this.validActivityForm.reset();
-            this.activityFormSubmitted.emit();
-            this.notificationService.success('Task created successfully!');
-          },
-          error: () => {
-            this.notificationService.error('Error creating task.');
-            this.activityFormSubmitted.emit();
-          },
-        });
+        this.taskApi
+          .createTask(request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.validActivityForm.reset();
+              this.activityFormSubmitted.emit();
+              this.notificationService.success('Task created successfully!');
+            },
+            error: () => {
+              this.notificationService.error('Error creating task.');
+              this.activityFormSubmitted.emit();
+            },
+          });
       } else if (this.editionMode?.()) {
         const activity = this.activity?.();
         if (activity == null) {
           return;
         }
-        this.taskApi.editTask(this.activity()!.id, request).subscribe({
-          next: () => {
-            this.validActivityForm.reset();
-            this.notificationService.success('Task edited successfully!');
-            this.activityFormSubmitted.emit();
-          },
-          error: () => {
-            this.notificationService.error('Error editing task.');
-            this.activityFormSubmitted.emit();
-          },
-        });
+        this.taskApi
+          .editTask(this.activity()!.id, request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.validActivityForm.reset();
+              this.notificationService.success('Task edited successfully!');
+              this.activityFormSubmitted.emit();
+            },
+            error: () => {
+              this.notificationService.error('Error editing task.');
+              this.activityFormSubmitted.emit();
+            },
+          });
       }
     } else if (this.type() == ActivityType.HABIT) {
       const request: HabitRequest = {
@@ -251,52 +269,64 @@ export class TaskFormComponent implements OnChanges {
       };
 
       if (this.creationMode!()) {
-        this.habitApi.createHabit(request).subscribe({
-          next: () => {
-            this.notificationService.success('Habit created successfully!');
-            this.activityFormSubmitted.emit();
-          },
-          error: () => {
-            this.notificationService.error('Error creating habit.');
-          },
-        });
+        this.habitApi
+          .createHabit(request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.notificationService.success('Habit created successfully!');
+              this.activityFormSubmitted.emit();
+            },
+            error: () => {
+              this.notificationService.error('Error creating habit.');
+            },
+          });
       } else {
-        this.habitApi.editHabit(this.activity()!.id, request).subscribe({
-          next: () => {
-            this.notificationService.success('Habit edited successfully!');
-            this.activityFormSubmitted.emit();
-          },
-          error: () => {
-            this.notificationService.error('Error editing habit.');
-          },
-        });
+        this.habitApi
+          .editHabit(this.activity()!.id, request)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.notificationService.success('Habit edited successfully!');
+              this.activityFormSubmitted.emit();
+            },
+            error: () => {
+              this.notificationService.error('Error editing habit.');
+            },
+          });
       }
     }
   }
 
   onDelete() {
     if (this.activity()?.type == ActivityType.TASK) {
-      this.taskApi.deleteTask(this.activity()!.id).subscribe({
-        next: () => {
-          this.notificationService.success('Task deleted successfully!');
-          this.validActivityForm.reset();
-          this.activityDeleted.emit();
-        },
-        error: () => {
-          this.notificationService.error('Error deleting task.');
-          this.activityFormSubmitted.emit();
-        },
-      });
+      this.taskApi
+        .deleteTask(this.activity()!.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Task deleted successfully!');
+            this.validActivityForm.reset();
+            this.activityDeleted.emit();
+          },
+          error: () => {
+            this.notificationService.error('Error deleting task.');
+            this.activityFormSubmitted.emit();
+          },
+        });
     } else {
-      this.habitApi.deleteHabit(this.activity()!.id).subscribe({
-        next: () => {
-          this.notificationService.success('Habit deleted successfully!');
-          this.activityFormSubmitted.emit();
-        },
-        error: () => {
-          this.notificationService.error('Error deleting habit.');
-        },
-      });
+      this.habitApi
+        .deleteHabit(this.activity()!.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Habit deleted successfully!');
+            this.activityFormSubmitted.emit();
+          },
+          error: () => {
+            this.notificationService.error('Error deleting habit.');
+          },
+        });
     }
   }
 

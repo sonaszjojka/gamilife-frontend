@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
@@ -20,6 +21,7 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { GroupTaskMemberModel } from '../../../../shared/models/group/group-task-member.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-members-manager',
@@ -46,6 +48,7 @@ export class GroupTaskMembersManagerComponent implements OnInit {
 
   private readonly groupTaskMemberApi = inject(GroupTaskMemberApiService);
   private readonly notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   changed = output<void>();
 
@@ -55,6 +58,7 @@ export class GroupTaskMembersManagerComponent implements OnInit {
     };
     this.groupTaskMemberApi
       .assignMemberToTask(this.groupId(), this.task().groupTaskId, request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           const assignedMember: GroupTaskMemberModel = {
@@ -99,6 +103,7 @@ export class GroupTaskMembersManagerComponent implements OnInit {
         this.task().groupTaskId,
         taskMemberId,
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.assignedMembers.set(

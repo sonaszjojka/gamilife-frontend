@@ -59,7 +59,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label nzRequired nzFor="description">Description</nz-form-label>
+      <nz-form-label nzFor="description">Description</nz-form-label>
       <nz-form-control nzErrorTip="Please provide valid Description">
         <textarea
           nz-input
@@ -74,7 +74,7 @@
 
     @if (this.type() === ActivityType.TASK) {
       <nz-form-item>
-        <nz-form-label>End Time</nz-form-label>
+        <nz-form-label nzRequired>Deadline</nz-form-label>
         <nz-form-control nzErrorTip="Please provide valid End Time">
           <nz-date-picker
             nzId="deadlineDate"
@@ -93,7 +93,7 @@
       </nz-form-item>
     } @else {
       <nz-form-item>
-        <nz-form-label> Habit Cycle Length</nz-form-label>
+        <nz-form-label nzRequired> Habit Cycle Length</nz-form-label>
         <nz-form-control nzErrorTip="Provide valid number of cycle lenght days">
           <nz-input-number
             formControlName="cycleLength"

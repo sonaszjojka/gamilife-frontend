@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -11,6 +18,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserActivitiesApiService } from '../../../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-calendar',
@@ -33,6 +41,7 @@ export class TaskCalendarComponent implements OnInit {
   currentlySelectedDate = signal<Date | null>(null);
   private readonly activityService = inject(UserActivitiesApiService);
   private readonly notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
   ngOnInit() {
     this.loadActivities();
   }
@@ -50,6 +59,7 @@ export class TaskCalendarComponent implements OnInit {
         null,
         null,
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.taskCalendarList = response.content;
