@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -10,6 +10,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { StorageService } from '../../../../../shared/services/auth/storage.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -24,81 +25,87 @@ export class OAuthCallbackComponent implements OnInit {
   private oauth2Service = inject(OAuth2Service);
   private authService = inject(AuthService);
   private storageService = inject(StorageService);
+  private destroyRef = inject(DestroyRef);
   error: string | null = null;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      const code = params['code'];
-      const error = params['error'];
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        const code = params['code'];
+        const error = params['error'];
 
-      if (error) {
-        this.error = 'Authentication failed. Please try again.';
-        setTimeout(() => this.router.navigate(['/login']), 3000);
-        return;
-      }
-      if (code) {
-        this.handleCallback(code);
-      } else {
-        this.error = 'No authorization code received.';
-        setTimeout(() => this.router.navigate(['/login']), 3000);
-      }
-    });
+        if (error) {
+          this.error = 'Authentication failed. Please try again.';
+          setTimeout(() => this.router.navigate(['/login']), 3000);
+          return;
+        }
+        if (code) {
+          this.handleCallback(code);
+        } else {
+          this.error = 'No authorization code received.';
+          setTimeout(() => this.router.navigate(['/login']), 3000);
+        }
+      });
   }
 
   private handleCallback(code: string): void {
-    this.oauth2Service.handleGoogleCode(code).subscribe({
-      next: (response) => {
-        this.oauth2Service.clearOAuthData();
+    this.oauth2Service
+      .handleGoogleCode(code)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.oauth2Service.clearOAuthData();
 
-        if ('providerName' in response) {
-          const linkResponse = response as OAuth2LinkResponse;
-          this.router.navigateByUrl('/login', {
-            state: {
-              linkAccount: true,
-              provider: linkResponse.providerName,
-              providerId: linkResponse.providerId,
-              userId: linkResponse.userId,
-            },
-          });
-        } else {
-          const res = response as AfterLoginResponse;
-          this.storageService.setIsTutorialCompleted(res.isTutorialCompleted);
-          this.storageService.setUserId(res.userId);
-          this.authService.userId.set(res.userId);
-          this.authService.username.set(res.username);
-          this.authService.loggedIn.set(true);
-          this.authService.isTutorialCompleted.set(res.isTutorialCompleted);
-
-          this.router.navigate(['/app/dashboard']);
-        }
-      },
-      error: (err: HttpErrorResponse) => {
-        if (err.status === 409) {
-          const conflictData = err.error;
-
-          const providerName =
-            conflictData?.providerName || conflictData?.provider || 'google';
-          const providerId =
-            conflictData?.providerId || conflictData?.provider_id;
-          const userId = conflictData?.userId || conflictData?.user_id;
-
-          if (providerId && userId) {
+          if ('providerName' in response) {
+            const linkResponse = response as OAuth2LinkResponse;
             this.router.navigateByUrl('/login', {
               state: {
                 linkAccount: true,
-                provider: providerName,
-                providerId: providerId,
-                userId: userId,
+                provider: linkResponse.providerName,
+                providerId: linkResponse.providerId,
+                userId: linkResponse.userId,
               },
             });
-            return;
-          }
-        }
+          } else {
+            const res = response as AfterLoginResponse;
+            this.storageService.setIsTutorialCompleted(res.isTutorialCompleted);
+            this.storageService.setUserId(res.userId);
+            this.authService.userId.set(res.userId);
+            this.authService.username.set(res.username);
+            this.authService.loggedIn.set(true);
+            this.authService.isTutorialCompleted.set(res.isTutorialCompleted);
 
-        this.oauth2Service.clearOAuthData();
-        this.error = 'Authentication failed. Please try again.';
-        setTimeout(() => this.router.navigate(['/login']), 3000);
-      },
-    });
+            this.router.navigate(['/app/dashboard']);
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 409) {
+            const conflictData = err.error;
+
+            const providerName =
+              conflictData?.providerName || conflictData?.provider || 'google';
+            const providerId =
+              conflictData?.providerId || conflictData?.provider_id;
+            const userId = conflictData?.userId || conflictData?.user_id;
+
+            if (providerId && userId) {
+              this.router.navigateByUrl('/login', {
+                state: {
+                  linkAccount: true,
+                  provider: providerName,
+                  providerId: providerId,
+                  userId: userId,
+                },
+              });
+              return;
+            }
+          }
+
+          this.oauth2Service.clearOAuthData();
+          this.error = 'Authentication failed. Please try again.';
+          setTimeout(() => this.router.navigate(['/login']), 3000);
+        },
+      });
   }
 }

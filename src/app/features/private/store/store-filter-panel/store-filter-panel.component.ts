@@ -1,10 +1,18 @@
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 import {
   ItemSlotDto,
   RarityDto,
 } from '../../../shared/models/store/store.model';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 interface SelectableItemSlotDto extends ItemSlotDto {
   selected?: boolean;
 }
@@ -26,7 +34,8 @@ export class StoreFilterPanelComponent implements OnInit {
   public itemSlotChange = output<number[] | undefined>();
   public itemRarityChange = output<number[] | undefined>();
 
-  storeApi = inject(StoreApiService);
+  private storeApi = inject(StoreApiService);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.loadItemSlots();
@@ -34,27 +43,33 @@ export class StoreFilterPanelComponent implements OnInit {
   }
 
   private loadItemSlots(): void {
-    this.storeApi.getItemSlots().subscribe({
-      next: (slots) => {
-        const selectableSlots = slots.itemSlots.map((slot) => ({
-          ...slot,
-          selected: false,
-        }));
-        this.itemSlots.set(selectableSlots);
-      },
-    });
+    this.storeApi
+      .getItemSlots()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (slots) => {
+          const selectableSlots = slots.itemSlots.map((slot) => ({
+            ...slot,
+            selected: false,
+          }));
+          this.itemSlots.set(selectableSlots);
+        },
+      });
   }
 
   private loadItemRarities(): void {
-    this.storeApi.getRarities().subscribe({
-      next: (rarities) => {
-        const selectableRarities = rarities.itemRarities.map((rarity) => ({
-          ...rarity,
-          selected: false,
-        }));
-        this.rarities.set(selectableRarities);
-      },
-    });
+    this.storeApi
+      .getRarities()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (rarities) => {
+          const selectableRarities = rarities.itemRarities.map((rarity) => ({
+            ...rarity,
+            selected: false,
+          }));
+          this.rarities.set(selectableRarities);
+        },
+      });
   }
 
   public onItemSlotChange(): void {

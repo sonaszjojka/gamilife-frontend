@@ -1,4 +1,11 @@
-import { Component, inject, signal, input, output } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  input,
+  output,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -9,10 +16,11 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, take } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { User } from '../../../../shared/models/group/user.model';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-send-group-invitation-form',
@@ -39,6 +47,7 @@ export class SendGroupInvitationFormComponent {
   private userApi = inject(UserApiService);
   private invitationApi = inject(GroupInvitationApiService);
   private fb = inject(NonNullableFormBuilder);
+  private destroyRef = inject(DestroyRef);
 
   isVisible = signal(false);
   searching = signal(false);
@@ -86,7 +95,7 @@ export class SendGroupInvitationFormComponent {
     this.searching.set(true);
     this.userApi
       .getUsers({ username, page: 0, size: 5 })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.users.set(response.content);
@@ -112,7 +121,7 @@ export class SendGroupInvitationFormComponent {
 
     this.invitationApi
       .createInvitation(this.groupId(), { userId: user.id })
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.sending.set(false);

@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  DestroyRef,
+} from '@angular/core';
 import { UserDetails } from '../../../../shared/models/user-profile/user-profile.models';
 import { ProfileViewMode } from '../../../../shared/models/user-profile/profile-view-mode.enum';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +18,7 @@ import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { Subject, takeUntil } from 'rxjs';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-profile-page',
@@ -37,6 +44,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
   protected userApiService = inject(UserApiService);
   protected authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   public ProfileViewMode = ProfileViewMode;
 
@@ -58,20 +66,23 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.userDetails = undefined;
 
-    this.userApiService.getUserById(userId).subscribe({
-      next: (response) => {
-        this.userDetails = response;
-        this.determineViewMode(userId);
-        this.loading = false;
-      },
-      error: (error) => {
-        this.loading = false;
-        this.notificationService.handleApiError(
-          error,
-          'Failed to load user profile',
-        );
-      },
-    });
+    this.userApiService
+      .getUserById(userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.userDetails = response;
+          this.determineViewMode(userId);
+          this.loading = false;
+        },
+        error: (error) => {
+          this.loading = false;
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load user profile',
+          );
+        },
+      });
   }
 
   determineViewMode(profileUserId: string): void {

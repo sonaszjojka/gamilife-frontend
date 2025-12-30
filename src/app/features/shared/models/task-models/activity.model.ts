@@ -2,7 +2,7 @@ export interface ActivityItemDetails {
   id: string;
   type: ActivityType;
   title: string;
-  description: string;
+  description?: string | undefined;
   userId: string;
   categoryId: number;
   categoryName: string;

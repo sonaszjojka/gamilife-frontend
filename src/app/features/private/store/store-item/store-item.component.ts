@@ -1,4 +1,4 @@
-import { Component, inject, input, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, input, ViewChild } from '@angular/core';
 import { StoreItemDto } from '../../../shared/models/store/store.model';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -11,6 +11,7 @@ import {
 import { StoreItemDetailsComponent } from '../store-item-details/store-item-details.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-store-item',
@@ -34,25 +35,26 @@ export class StoreItemComponent {
   private readonly storeApi = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
   private modal = inject(NzModalService);
+  private destroyRef = inject(DestroyRef);
 
   get borderColor() {
     return RARITY_COLORS[this.item().rarity.id as RarityEnum];
   }
 
   onPurchase() {
-    this.storeApi.purchaseItem(this.item().id).subscribe({
-      next: () => {
-        this.notificationService.success(
-          `Successfully purchased ${this.item().name}!`,
-        );
-      },
-      error: (error) => {
-        this.notificationService.handleApiError(
-          error,
-          'Could not purchase item',
-        );
-      },
-    });
+    this.storeApi
+      .purchaseItem(this.item().id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.success(
+            `Successfully purchased ${this.item().name}!`,
+          );
+        },
+        error: () => {
+          this.notificationService.error('Could not purchase item');
+        },
+      });
   }
 
   protected confirmPurchase(): void {

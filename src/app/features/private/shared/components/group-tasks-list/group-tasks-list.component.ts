@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
@@ -11,7 +12,7 @@ import { GroupTaskFormComponent } from '../group-task-from/group-task-form.compo
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { GroupTaskApiService } from '../../../../shared/services/group-task-api/group-task-api.service';
 import {
-  GetGroupTaskRequest,
+  GetGroupTasksParams,
   GroupTask,
 } from '../../../../shared/models/group/group-task.model';
 import { Group } from '../../../../shared/models/group/group.model';
@@ -26,6 +27,7 @@ import { GroupTaskComponent } from '../group-task/group-task.component';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { Page } from '../../../../shared/models/util/page.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-list',
@@ -52,11 +54,12 @@ export class GroupTasksListComponent implements OnInit {
 
   refreshGroup = output<void>();
 
+  protected currentPage = signal<number>(0);
+  protected totalPages = signal<number>(1);
   protected loadingMore = signal<boolean>(false);
   protected loading = signal<boolean>(true);
-  protected hasMore = signal<boolean>(true);
   protected tasksList = signal<GroupTask[]>([]);
-  protected tasksRequestParams: GetGroupTaskRequest = {
+  protected tasksRequestParams: GetGroupTasksParams = {
     isAccepted: false,
     isDeclined: false,
     page: 0,
@@ -66,6 +69,7 @@ export class GroupTasksListComponent implements OnInit {
   private readonly groupTaskApi = inject(GroupTaskApiService);
   private readonly notification = inject(NotificationService);
   protected readonly GroupPreviewMode = GroupPreviewMode;
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild(GroupTaskFormComponent)
   groupTaskForm!: GroupTaskFormComponent;
@@ -80,9 +84,12 @@ export class GroupTasksListComponent implements OnInit {
 
     this.groupTaskApi
       .getGroupTasks(groupId, this.tasksRequestParams)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (tasks) => {
           this.tasksList.set(tasks.content);
+          this.currentPage.set(tasks.number);
+          this.totalPages.set(tasks.totalPages);
           this.loading.set(false);
         },
         error: (err) => {
@@ -94,7 +101,8 @@ export class GroupTasksListComponent implements OnInit {
   }
 
   loadMoreTasks(): void {
-    if (!this.hasMore() || this.loadingMore()) return;
+    if (this.currentPage() + 1 >= this.totalPages() || this.loadingMore())
+      return;
     this.loadingMore.set(true);
     const nexPage = this.tasksRequestParams.page + 1;
 
@@ -104,21 +112,23 @@ export class GroupTasksListComponent implements OnInit {
       isAccepted: this.tasksRequestParams.isAccepted,
       isDeclined: this.tasksRequestParams.isDeclined,
     };
-    this.groupTaskApi.getGroupTasks(this.groupId(), nexPageParams).subscribe({
-      next: (response: Page<GroupTask>) => {
-        this.tasksList.update((currentTasks) => [
-          ...currentTasks,
-          ...response.content,
-        ]);
-        this.tasksRequestParams.page = response.number;
-        this.hasMore.set(!response.last);
-        this.loadingMore.set(false);
-      },
-      error: (error) => {
-        this.notification.handleApiError(error, 'Failed to load more tasks');
-        this.loadingMore.set(false);
-      },
-    });
+    this.groupTaskApi
+      .getGroupTasks(this.groupId(), nexPageParams)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: Page<GroupTask>) => {
+          this.tasksList.update((currentTasks) => [
+            ...currentTasks,
+            ...response.content,
+          ]);
+          this.tasksRequestParams.page = response.number;
+          this.loadingMore.set(false);
+        },
+        error: (error) => {
+          this.notification.handleApiError(error, 'Failed to load more tasks');
+          this.loadingMore.set(false);
+        },
+      });
   }
 
   onListScroll(event: Event): void {
@@ -128,20 +138,23 @@ export class GroupTasksListComponent implements OnInit {
     const isNearEnd =
       target.scrollTop + target.clientHeight >= target.scrollHeight - threshold;
 
-    if (isNearEnd && !this.loading() && !this.loadingMore() && this.hasMore()) {
+    if (
+      isNearEnd &&
+      !this.loading() &&
+      !this.loadingMore() &&
+      this.currentPage() + 1 < this.totalPages()
+    ) {
       this.loadMoreTasks();
     }
   }
 
   public onTaskListUpdate() {
     this.tasksRequestParams.page = 0;
-    this.hasMore.set(true);
     this.loadGroupTasks();
   }
 
   public onGroupRefresh() {
     this.tasksRequestParams.page = 0;
-    this.hasMore.set(true);
     this.loadGroupTasks();
     this.refreshGroup.emit();
   }

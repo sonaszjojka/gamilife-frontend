@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import {
@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import { WebSocketNotificationService } from '../../../features/shared/services/websocket-notification-service/web-socket-notification.service';
 import { StorageService } from './storage.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface LoginCredentials {
   email: string;
@@ -43,6 +44,7 @@ export class AuthService {
   private notificationService = inject(WebSocketNotificationService);
   private storage = inject<StorageService>(StorageService);
   private refreshSubject = new Subject<boolean>();
+  private destroyRef = inject(DestroyRef);
 
   refreshSubject$ = this.refreshSubject.asObservable();
   refreshInProgress = false;
@@ -115,6 +117,7 @@ export class AuthService {
   logout() {
     this.http
       .post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.logoutLocal(),
         error: () => this.logoutLocal(),
@@ -174,6 +177,7 @@ export class AuthService {
         `${environment.apiUrl}/gamification-users/${userId}`,
         { withCredentials: true },
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
           this.updateGamificationData(data);

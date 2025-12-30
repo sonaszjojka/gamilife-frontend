@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, DestroyRef, inject, input, output } from '@angular/core';
 import {
   EditGroupTaskDto,
   GroupTask,
@@ -19,6 +19,7 @@ import {
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-decline-form',
@@ -41,6 +42,7 @@ export class GroupTaskDeclineFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
   private notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   task = input.required<GroupTask>();
   groupId = input.required<string>();
@@ -81,8 +83,8 @@ export class GroupTaskDeclineFormComponent {
       const editGroupTaskRequest: EditGroupTaskDto = {
         title: this.task().taskDto.title,
         description: this.task().taskDto.description,
-        startTime: this.task().taskDto.startTime,
-        endTime: this.task().taskDto.endTime,
+        deadlineDate: this.task().taskDto.deadlineDate,
+        deadlineTime: this.task().taskDto.deadlineTime,
         categoryId: this.task().taskDto.category.id,
         difficultyId: this.task().taskDto.difficulty.id,
         completedAt: null,
@@ -96,6 +98,7 @@ export class GroupTaskDeclineFormComponent {
           this.task()!.groupTaskId,
           editGroupTaskRequest,
         )
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.notification.success('Task declined successfully');

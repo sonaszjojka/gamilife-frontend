@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
@@ -8,6 +8,7 @@ import { UserInventoryItemDto } from '../../../../shared/models/user-profile/use
 import { UserInventoryService } from '../../../../shared/services/user-inventory-api/user-inventory-api.service';
 import { ItemSlotEnum } from '../../../../shared/models/gamification/item-slot.enum';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-badges-tab',
@@ -34,6 +35,7 @@ export class BadgesTabComponent implements OnInit {
 
   protected inventoryService = inject(UserInventoryService);
   private readonly notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.loadBadges();
@@ -47,6 +49,7 @@ export class BadgesTabComponent implements OnInit {
         page: this.currentPage,
         size: this.pageSize,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.badges = result.content;

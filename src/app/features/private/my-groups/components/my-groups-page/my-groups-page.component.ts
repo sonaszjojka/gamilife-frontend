@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -11,6 +18,7 @@ import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { AddGroupFormComponent } from '../add-group-form/add-group-form.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-my-groups-page',
@@ -31,6 +39,7 @@ import { AddGroupFormComponent } from '../add-group-form/add-group-form.componen
 })
 export class MyGroupsPageComponent implements OnInit {
   private groupApiService = inject(GroupApiService);
+  private destroyRef = inject(DestroyRef);
 
   groups = signal<Group[]>([]);
   totalPages = signal<number>(0);
@@ -54,6 +63,7 @@ export class MyGroupsPageComponent implements OnInit {
 
     this.groupApiService
       .getAllGroupsByUserIdWhereUserIsMember(params)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           setTimeout(() => {

@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
@@ -29,6 +30,7 @@ import { formatDateTime } from '../../../../../shared/util/DateFormatterUtil';
 import { GroupTaskDeclineFormComponent } from '../group-task-decline-form/group-task-decline-form.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task',
@@ -64,10 +66,10 @@ export class GroupTaskComponent implements OnInit {
   private readonly groupTaskMemberApi = inject(GroupTaskMemberApiService);
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
-    this.formatedEndDate = formatDateTime(this.task().taskDto.endTime);
     this.formatedAcceptedDate = formatDateTime(this.task().acceptedDate);
   }
 
@@ -87,6 +89,7 @@ export class GroupTaskComponent implements OnInit {
   protected deleteTask(): void {
     this.groupTaskApi
       .deleteGroupTask(this.group().groupId, this.task().groupTaskId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success('Task deleted successfully');
@@ -114,6 +117,7 @@ export class GroupTaskComponent implements OnInit {
           this.userIsParticipant()!.groupTaskMemberId,
           request,
         )
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
             this.notification.success('Task marked as complete');
@@ -151,6 +155,7 @@ export class GroupTaskComponent implements OnInit {
           this.userIsParticipant()!.groupTaskMemberId,
           request,
         )
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
             this.notification.success('Task completion removed');
@@ -180,8 +185,8 @@ export class GroupTaskComponent implements OnInit {
     const request: EditGroupTaskDto = {
       title: this.task().taskDto.title,
       description: this.task().taskDto.description,
-      startTime: this.task().taskDto.startTime,
-      endTime: this.task().taskDto.endTime,
+      deadlineDate: this.task().taskDto.deadlineDate,
+      deadlineTime: this.task().taskDto.deadlineTime,
       categoryId: this.task().taskDto.category.id,
       difficultyId: this.task().taskDto.difficulty.id,
       completedAt: this.task().taskDto.completedAt,
@@ -191,6 +196,7 @@ export class GroupTaskComponent implements OnInit {
     };
     this.groupTaskApi
       .editGroupTask(this.group().groupId, this.task().groupTaskId, request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notification.success('Task accepted and rewards distributed');

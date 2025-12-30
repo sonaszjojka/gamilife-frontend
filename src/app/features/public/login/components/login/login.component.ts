@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -18,6 +25,7 @@ import { ForgotPasswordComponent } from '../../../forgot-password/components/for
 import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -51,6 +59,7 @@ export class LoginComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private authService = inject(AuthService);
   private oauth2Service = inject(OAuth2Service);
+  private destroyRef = inject(DestroyRef);
 
   isPasswordVisible = signal(false);
   isLoading = signal(false);
@@ -114,26 +123,29 @@ export class LoginComponent implements OnInit {
     password: string;
   }) {
     this.isLoading.set(true);
-    this.authService.login(credentials).subscribe({
-      next: (res) => {
-        this.isLoading.set(false);
-        if (!res.isEmailVerified) {
-          this.verificationModal.open(res.email);
-        } else {
-          this.router.navigate(['/app/dashboard']);
-        }
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        if (err.status === 401) {
-          this.validateForm.controls['password'].setErrors({
-            apiError: 'Invalid credentials',
-          });
-        } else {
-          this.validateForm.setErrors({ apiError: 'Something went wrong' });
-        }
-      },
-    });
+    this.authService
+      .login(credentials)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.isLoading.set(false);
+          if (!res.isEmailVerified) {
+            this.verificationModal.open(res.email);
+          } else {
+            this.router.navigate(['/app/dashboard']);
+          }
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          if (err.status === 401) {
+            this.validateForm.controls['password'].setErrors({
+              apiError: 'Invalid credentials',
+            });
+          } else {
+            this.validateForm.setErrors({ apiError: 'Something went wrong' });
+          }
+        },
+      });
   }
 
   goToRegister() {
