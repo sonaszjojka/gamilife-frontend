@@ -1,5 +1,6 @@
 import {
-  Component, DestroyRef,
+  Component,
+  DestroyRef,
   inject,
   input,
   output,
@@ -16,9 +17,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberFormComponent } from '../edit-group-member-form/edit-group-member-form.component';
-import { take } from 'rxjs/operators';
 import { PaginationMoreComponent } from '../pagination-more/pagination-more.component';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-members-list',
@@ -54,7 +54,7 @@ export class GroupMembersListComponent {
   private readonly groupMemberApi = inject(GroupMemberApiService);
   private readonly modal = inject(NzModalService);
   private readonly router = inject(Router);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   paginatedMembers = () => {
     const members = this.members();

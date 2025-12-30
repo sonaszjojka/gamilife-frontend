@@ -1,5 +1,6 @@
 import {
-  Component, DestroyRef,
+  Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
@@ -26,7 +27,7 @@ import { GroupTaskComponent } from '../group-task/group-task.component';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { Page } from '../../../../shared/models/util/page.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-list',
@@ -68,7 +69,7 @@ export class GroupTasksListComponent implements OnInit {
   private readonly groupTaskApi = inject(GroupTaskApiService);
   private readonly notification = inject(NotificationService);
   protected readonly GroupPreviewMode = GroupPreviewMode;
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild(GroupTaskFormComponent)
   groupTaskForm!: GroupTaskFormComponent;
@@ -100,7 +101,8 @@ export class GroupTasksListComponent implements OnInit {
   }
 
   loadMoreTasks(): void {
-    if ((this.currentPage()+1>=this.totalPages()) || this.loadingMore()) return;
+    if (this.currentPage() + 1 >= this.totalPages() || this.loadingMore())
+      return;
     this.loadingMore.set(true);
     const nexPage = this.tasksRequestParams.page + 1;
 
@@ -110,22 +112,23 @@ export class GroupTasksListComponent implements OnInit {
       isAccepted: this.tasksRequestParams.isAccepted,
       isDeclined: this.tasksRequestParams.isDeclined,
     };
-    this.groupTaskApi.getGroupTasks(this.groupId(), nexPageParams)
+    this.groupTaskApi
+      .getGroupTasks(this.groupId(), nexPageParams)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: (response: Page<GroupTask>) => {
-        this.tasksList.update((currentTasks) => [
-          ...currentTasks,
-          ...response.content,
-        ]);
-        this.tasksRequestParams.page = response.number;
-        this.loadingMore.set(false);
-      },
-      error: (error) => {
-        this.notification.handleApiError(error, 'Failed to load more tasks');
-        this.loadingMore.set(false);
-      },
-    });
+        next: (response: Page<GroupTask>) => {
+          this.tasksList.update((currentTasks) => [
+            ...currentTasks,
+            ...response.content,
+          ]);
+          this.tasksRequestParams.page = response.number;
+          this.loadingMore.set(false);
+        },
+        error: (error) => {
+          this.notification.handleApiError(error, 'Failed to load more tasks');
+          this.loadingMore.set(false);
+        },
+      });
   }
 
   onListScroll(event: Event): void {
@@ -135,7 +138,12 @@ export class GroupTasksListComponent implements OnInit {
     const isNearEnd =
       target.scrollTop + target.clientHeight >= target.scrollHeight - threshold;
 
-    if (isNearEnd && !this.loading() && !this.loadingMore() && (this.currentPage()+1<this.totalPages())) {
+    if (
+      isNearEnd &&
+      !this.loading() &&
+      !this.loadingMore() &&
+      this.currentPage() + 1 < this.totalPages()
+    ) {
       this.loadMoreTasks();
     }
   }

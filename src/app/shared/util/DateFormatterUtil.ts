@@ -37,4 +37,3 @@ export function formatDateTime(dateString: string, locale?: string): string {
 /**
  * Converts Java Duration string to number of days
  */
-

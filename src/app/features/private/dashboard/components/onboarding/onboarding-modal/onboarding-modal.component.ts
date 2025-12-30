@@ -5,7 +5,8 @@ import {
   EventEmitter,
   inject,
   ViewChild,
-  AfterViewInit, DestroyRef,
+  AfterViewInit,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCarouselComponent, NzCarouselModule } from 'ng-zorro-antd/carousel';
@@ -14,7 +15,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { UserApiService } from '../../../../../shared/services/user-api/user-api.service';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-onboarding-modal',
@@ -120,24 +121,25 @@ export class OnboardingModalComponent implements AfterViewInit {
 
     this.isLoading = true;
 
-    this.userApiService.completeOnboarding(this.userId)
+    this.userApiService
+      .completeOnboarding(this.userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.notification.success(
-          'Welcome aboard! Your journey begins now! 🎉',
-        );
-        this.completed.emit();
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.notification.handleApiError(
-          error,
-          'Failed to complete onboarding. Please try again.',
-        );
-      },
-    });
+        next: () => {
+          this.isLoading = false;
+          this.notification.success(
+            'Welcome aboard! Your journey begins now! 🎉',
+          );
+          this.completed.emit();
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.notification.handleApiError(
+            error,
+            'Failed to complete onboarding. Please try again.',
+          );
+        },
+      });
   }
 
   handleButtonClick(): void {

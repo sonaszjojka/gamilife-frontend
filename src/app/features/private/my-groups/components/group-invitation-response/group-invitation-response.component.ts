@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -8,9 +8,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
 import { InvitationStatus } from '../../../../shared/models/group/group-invitation.model';
-import { take } from 'rxjs/operators';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type PageStatus = 'loading' | 'ready' | 'accepted' | 'rejected' | 'error';
 
@@ -33,7 +32,7 @@ export class GroupInvitationResponseComponent implements OnInit {
   private invitationApi = inject(GroupInvitationApiService);
   private route = inject(ActivatedRoute);
   private notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   status = signal<PageStatus>('loading');
   processing = signal(false);

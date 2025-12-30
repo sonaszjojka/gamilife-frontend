@@ -4,7 +4,8 @@ import {
   OnInit,
   OnDestroy,
   signal,
-  ViewChild, DestroyRef,
+  ViewChild,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -16,7 +17,6 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
@@ -33,7 +33,7 @@ import { EditGroupFormComponent } from '../edit-group-form/edit-group-form.compo
 import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.component';
 import { GroupChatComponent } from '../group-chat/group-chat/group-chat.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-preview-group',

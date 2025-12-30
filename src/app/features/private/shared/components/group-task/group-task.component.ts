@@ -1,5 +1,6 @@
 import {
-  Component, DestroyRef,
+  Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
@@ -29,7 +30,7 @@ import { formatDateTime } from '../../../../../shared/util/DateFormatterUtil';
 import { GroupTaskDeclineFormComponent } from '../group-task-decline-form/group-task-decline-form.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task',
@@ -65,7 +66,7 @@ export class GroupTaskComponent implements OnInit {
   private readonly groupTaskMemberApi = inject(GroupTaskMemberApiService);
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.checkUserIsParticipant();

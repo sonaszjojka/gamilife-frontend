@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, input, output} from '@angular/core';
+import { Component, DestroyRef, inject, input, output } from '@angular/core';
 import {
   EditGroupTaskDto,
   GroupTask,
@@ -19,7 +19,7 @@ import {
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-decline-form',

@@ -1,6 +1,7 @@
 import { CommonModule, formatDate } from '@angular/common';
 import {
-  Component, DestroyRef,
+  Component,
+  DestroyRef,
   effect,
   HostListener,
   inject,
@@ -27,7 +28,7 @@ import { ActivityListView } from '../../../shared/models/task-models/activity-li
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-list',
@@ -76,7 +77,7 @@ export class TaskListComponent implements OnInit {
   private readonly habitService = inject(UserHabitApiService);
   private readonly activityService = inject(UserActivitiesApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild('calendarComponent')
   calendarComponent?: TaskCalendarComponent;

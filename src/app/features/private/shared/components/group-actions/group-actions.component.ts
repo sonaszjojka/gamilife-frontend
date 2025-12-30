@@ -1,6 +1,7 @@
 import {
   Component,
-  computed, DestroyRef,
+  computed,
+  DestroyRef,
   inject,
   input,
   output,
@@ -12,13 +13,12 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
-import { take } from 'rxjs/operators';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { Router } from '@angular/router';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-actions',
@@ -72,7 +72,7 @@ export class GroupActionsComponent {
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
   private router = inject(Router);
-  private destroyRef=inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   protected buttonText = computed(() => {
     const g = this.group();

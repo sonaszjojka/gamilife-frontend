@@ -1,4 +1,11 @@
-import {Component, inject, signal, OnInit, output, DestroyRef} from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  output,
+  DestroyRef,
+} from '@angular/core';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -12,7 +19,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-group-form',
@@ -32,7 +39,7 @@ export class AddGroupFormComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   protected groupApiService = inject(GroupApiService);
   private notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
   groupCreated = output<void>();
 
   protected validateForm = this.fb.group({
@@ -63,14 +70,15 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   private loadGroupTypes(): void {
-    this.groupApiService.getGroupTypes()
+    this.groupApiService
+      .getGroupTypes()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: (types) => this.groupTypes.set(types),
-      error: (err) => {
-        this.notification.handleApiError(err, 'Failed to load group types');
-      },
-    });
+        next: (types) => this.groupTypes.set(types),
+        error: (err) => {
+          this.notification.handleApiError(err, 'Failed to load group types');
+        },
+      });
   }
 
   open(): void {
@@ -82,21 +90,22 @@ export class AddGroupFormComponent implements OnInit {
       this.isLoading.set(true);
       const formValue = this.validateForm.getRawValue();
 
-      this.groupApiService.createGroup(formValue)
+      this.groupApiService
+        .createGroup(formValue)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: () => {
-          this.notification.success('Group created successfully');
-          this.isVisible.set(false);
-          this.validateForm.reset();
-          this.isLoading.set(false);
-          this.groupCreated.emit();
-        },
-        error: (err) => {
-          this.notification.handleApiError(err, 'Failed to create group');
-          this.isLoading.set(false);
-        },
-      });
+          next: () => {
+            this.notification.success('Group created successfully');
+            this.isVisible.set(false);
+            this.validateForm.reset();
+            this.isLoading.set(false);
+            this.groupCreated.emit();
+          },
+          error: (err) => {
+            this.notification.handleApiError(err, 'Failed to create group');
+            this.isLoading.set(false);
+          },
+        });
     } else {
       this.notification.showValidationError();
       Object.values(this.validateForm.controls).forEach((control) => {

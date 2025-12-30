@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -6,11 +6,10 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
 import { GroupRequest } from '../../../../shared/models/group/group-request.model';
 import { GroupRequestsListComponent } from '../group-requests-list/group-requests-list.component';
-import { take } from 'rxjs/operators';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-requests-page',
@@ -75,7 +74,7 @@ export class GroupRequestsPageComponent implements OnInit {
   private readonly groupRequestApi = inject(GroupRequestApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   groupId = signal<string>('');
   groupName = signal<string>('');

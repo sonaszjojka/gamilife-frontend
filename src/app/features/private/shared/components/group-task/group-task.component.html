@@ -32,12 +32,11 @@
         <div class="info-content">
           <div class="info-label">Deadline</div>
           <div class="info-value">
-
-            {{ task().taskDto.deadlineDate }} -
+            {{ task().taskDto.deadlineDate }}
             @if (task().taskDto.deadlineTime !== null) {
+              -
               {{ task().taskDto.deadlineTime }}
-          }
-
+            }
           </div>
         </div>
       </div>

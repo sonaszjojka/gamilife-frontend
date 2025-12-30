@@ -1,5 +1,6 @@
 import {
-  Component, DestroyRef,
+  Component,
+  DestroyRef,
   HostListener,
   inject,
   OnDestroy,
@@ -31,7 +32,7 @@ import { HabitRequest } from '../../../shared/models/task-models/habit-request.m
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pomodoro-session',
@@ -85,7 +86,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   private readonly habitService = inject(UserHabitApiService);
   private readonly notificationService = inject(NotificationService);
   private readonly activitiesService = inject(UserActivitiesApiService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -393,16 +394,19 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         completed: true,
       };
 
-      this.taskService.editTask(activity.id, request)
+      this.taskService
+        .editTask(activity.id, request)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: () => {
-          this.notificationService.success('Successfully finished task');
-        },
-        error: () => {
-          this.notificationService.error('Error occurred while finishing task');
-        },
-      });
+          next: () => {
+            this.notificationService.success('Successfully finished task');
+          },
+          error: () => {
+            this.notificationService.error(
+              'Error occurred while finishing task',
+            );
+          },
+        });
     } else if (activity.type == ActivityType.HABIT) {
       const request: HabitRequest = {
         title: activity.title,
@@ -412,21 +416,24 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         cycleLength: activity.cycleLength!,
         iterationCompleted: true,
       };
-      this.habitService.editHabit(activity.id, request)
+      this.habitService
+        .editHabit(activity.id, request)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: (response) => {
-          activity.longestStreak = response.longestStreak;
-          activity.currentStreak = response.currentStreak;
-          this.notificationService.success('Successfully finished habit cycle');
-        },
-        error: (err) => {
-          console.log(err);
-          this.notificationService.error(
-            'Error occurred while finishing habit cycle',
-          );
-        },
-      });
+          next: (response) => {
+            activity.longestStreak = response.longestStreak;
+            activity.currentStreak = response.currentStreak;
+            this.notificationService.success(
+              'Successfully finished habit cycle',
+            );
+          },
+          error: (err) => {
+            console.log(err);
+            this.notificationService.error(
+              'Error occurred while finishing habit cycle',
+            );
+          },
+        });
     }
     this.currentSessionPomodoroTasks = this.currentSessionPomodoroTasks.filter(
       (t) => t.id != activity.id,

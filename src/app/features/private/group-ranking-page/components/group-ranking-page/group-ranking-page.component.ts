@@ -1,17 +1,16 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { take } from 'rxjs/operators';
 
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { FullRankingComponent } from '../full-ranking/full-ranking.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-ranking-page',
@@ -37,7 +36,7 @@ export class GroupRankingPageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly notification = inject(NotificationService);
 
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');

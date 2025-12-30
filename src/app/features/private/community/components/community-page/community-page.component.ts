@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -10,7 +10,7 @@ import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-community-page',
@@ -51,20 +51,21 @@ export class CommunityPageComponent implements OnInit {
       groupType: this.groupTypeId() ?? undefined,
     };
 
-    this.groupApiService.getGroups(params)
+    this.groupApiService
+      .getGroups(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: (response) => {
-        setTimeout(() => {
-          this.groups.set(response.content);
-          this.totalPages.set(response.totalPages - 1);
-          this.currentPage.set(page);
-        }, timeout);
-      },
-      error: (err) => {
-        this.notification.handleApiError(err, 'Failed to load groups');
-      },
-    });
+        next: (response) => {
+          setTimeout(() => {
+            this.groups.set(response.content);
+            this.totalPages.set(response.totalPages - 1);
+            this.currentPage.set(page);
+          }, timeout);
+        },
+        error: (err) => {
+          this.notification.handleApiError(err, 'Failed to load groups');
+        },
+      });
   }
 
   onPageChange(page: number) {

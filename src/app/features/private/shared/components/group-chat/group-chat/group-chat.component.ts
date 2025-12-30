@@ -4,7 +4,8 @@ import {
   input,
   OnInit,
   OnDestroy,
-  signal, DestroyRef,
+  signal,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -24,7 +25,6 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { ChatMessageApiService } from '../../../../../shared/services/chat-messages-api/chat-messages-api.service';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
@@ -33,7 +33,7 @@ import {
   GetChatMessagesParams,
 } from '../../../../../shared/models/chat-messages/chat-message.model';
 import { GroupPreviewMode } from '../../../../../shared/models/group/group-preview-mode';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-chat',
@@ -77,7 +77,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   private readonly chatMessageApi = inject(ChatMessageApiService);
   private readonly notification = inject(NotificationService);
   private readonly fb = inject(FormBuilder);
-  private destroyRef =inject(DestroyRef);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.initForm();

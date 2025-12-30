@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { UserDetails } from '../../../../shared/models/group/user.model';
 import { ProfileViewMode } from '../../../../shared/models/user-profile/profile-view-mode.enum';
 import { UserInventoryItemDto } from '../../../../shared/models/user-profile/user-profile.models';
@@ -16,7 +16,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-profile-sidebar',
@@ -54,7 +54,7 @@ export class UserProfileSidebarComponent implements OnInit {
 
   protected inventoryService = inject(UserInventoryService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.calculateLevel();

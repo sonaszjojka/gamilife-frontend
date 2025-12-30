@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, signal} from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -16,7 +16,7 @@ import {
   LinkOAuthAccountRequest,
 } from '../../../shared/services/oauth2/oauth2.service';
 import { Router } from '@angular/router';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-link-oauth-account',
@@ -48,7 +48,7 @@ export class LinkOAuthAccountComponent {
   private oauth2Service = inject(OAuth2Service);
   private fb = inject(NonNullableFormBuilder);
   private router = inject(Router);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   validateForm = this.fb.group({
     password: this.fb.control('', [Validators.required]),
@@ -88,37 +88,38 @@ export class LinkOAuthAccountComponent {
         password: this.validateForm.value.password,
       };
 
-      this.oauth2Service.linkOAuthAccount(linkRequest)
+      this.oauth2Service
+        .linkOAuthAccount(linkRequest)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: (response) => {
-          this.linking.set(false);
-          this.close();
+          next: (response) => {
+            this.linking.set(false);
+            this.close();
 
-          this.oauth2Service.clearOAuthData();
+            this.oauth2Service.clearOAuthData();
 
-          if (!response.isEmailVerified) {
-            this.router.navigateByUrl('/login', {
-              state: {
-                showEmailVerification: true,
-                email: response.email,
-              },
-            });
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
-        },
-        error: (err) => {
-          this.linking.set(false);
-          if (err.status === 401) {
-            this.errorMessage.set('Invalid password. Please try again.');
-          } else if (err.status === 409) {
-            this.errorMessage.set('This account is already linked.');
-          } else {
-            this.errorMessage.set('Something went wrong. Please try again.');
-          }
-        },
-      });
+            if (!response.isEmailVerified) {
+              this.router.navigateByUrl('/login', {
+                state: {
+                  showEmailVerification: true,
+                  email: response.email,
+                },
+              });
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          error: (err) => {
+            this.linking.set(false);
+            if (err.status === 401) {
+              this.errorMessage.set('Invalid password. Please try again.');
+            } else if (err.status === 409) {
+              this.errorMessage.set('This account is already linked.');
+            } else {
+              this.errorMessage.set('Something went wrong. Please try again.');
+            }
+          },
+        });
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {

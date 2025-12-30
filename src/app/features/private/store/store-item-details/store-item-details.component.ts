@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, input, signal} from '@angular/core';
+import { Component, DestroyRef, inject, input, signal } from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -11,7 +11,7 @@ import {
 } from '../../../shared/models/gamification/rarity.enum';
 import { NgOptimizedImage, NgStyle } from '@angular/common';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-store-item-details',
@@ -36,7 +36,7 @@ export class StoreItemDetailsComponent {
 
   private readonly storeService = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   handleOk(): void {
     this.loading.set(true);
@@ -54,22 +54,23 @@ export class StoreItemDetailsComponent {
 
   show() {
     this.isVisible.set(true);
-    this.storeService.getItemDetails(this.itemId())
+    this.storeService
+      .getItemDetails(this.itemId())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: (content) => {
-        this.itemDetails = content;
-        this.rarity = this.itemDetails.rarity.id as RarityEnum;
-        this.loading.set(false);
-      },
-      error: (error) => {
-        this.loading.set(false);
-        this.isVisible.set(false);
-        this.notificationService.handleApiError(
-          error,
-          'Failed to load item details',
-        );
-      },
-    });
+        next: (content) => {
+          this.itemDetails = content;
+          this.rarity = this.itemDetails.rarity.id as RarityEnum;
+          this.loading.set(false);
+        },
+        error: (error) => {
+          this.loading.set(false);
+          this.isVisible.set(false);
+          this.notificationService.handleApiError(
+            error,
+            'Failed to load item details',
+          );
+        },
+      });
   }
 }

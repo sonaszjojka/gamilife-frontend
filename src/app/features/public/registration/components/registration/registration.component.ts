@@ -1,4 +1,10 @@
-import {Component, DestroyRef, inject, signal, ViewChild} from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -20,7 +26,7 @@ import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-registration',
   standalone: true,
@@ -45,7 +51,7 @@ export class RegistrationComponent {
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
   isSubmitting = signal(false);
   isPasswordVisible = signal(false);
   private password = signal<string>('');
@@ -86,25 +92,26 @@ export class RegistrationComponent {
       const formData = this.validateForm.value;
       const url = `${environment.apiUrl}/auth/register`;
 
-      this.http.post(url, formData)
+      this.http
+        .post(url, formData)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: () => {
-          this.isSubmitting.update(() => false);
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          this.isSubmitting.update(() => false);
-          if (err.status === 400 || err.status === 409) {
-            const detailMessage = err.error?.detail || 'Something went wrong';
-            this.validateForm.setErrors({
-              apiError: detailMessage,
-            });
-          } else {
-            this.validateForm.setErrors({ apiError: 'Something went wrong' });
-          }
-        },
-      });
+          next: () => {
+            this.isSubmitting.update(() => false);
+            this.router.navigate(['/login']);
+          },
+          error: (err) => {
+            this.isSubmitting.update(() => false);
+            if (err.status === 400 || err.status === 409) {
+              const detailMessage = err.error?.detail || 'Something went wrong';
+              this.validateForm.setErrors({
+                apiError: detailMessage,
+              });
+            } else {
+              this.validateForm.setErrors({ apiError: 'Something went wrong' });
+            }
+          },
+        });
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {

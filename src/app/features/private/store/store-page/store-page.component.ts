@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 import {
   StoreFiltersModel,
@@ -9,7 +9,7 @@ import { PaginationMoreComponent } from '../../shared/components/pagination-more
 import { StoreItemListComponent } from '../store-item-list/store-item-list.component';
 import { StoreFilterPanelComponent } from '../store-filter-panel/store-filter-panel.component';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-store-page',
@@ -34,7 +34,7 @@ export class StorePageComponent implements OnInit {
 
   private readonly storeApi = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.loadItems(0);
@@ -49,20 +49,19 @@ export class StorePageComponent implements OnInit {
       rarity: this.rarity(),
     };
 
-    this.storeApi.getFilteredItems(params)
+    this.storeApi
+      .getFilteredItems(params)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: (response) => {
-        this.items.set(response.content);
-        this.totalPages.set(response.totalPages - 1);
-        this.currentPage.set(page);
-      },
-      error: () => {
-        this.notificationService.error(
-          'Failed to load store items',
-        );
-      },
-    });
+        next: (response) => {
+          this.items.set(response.content);
+          this.totalPages.set(response.totalPages - 1);
+          this.currentPage.set(page);
+        },
+        error: () => {
+          this.notificationService.error('Failed to load store items');
+        },
+      });
   }
 
   onPageChange(page: number) {

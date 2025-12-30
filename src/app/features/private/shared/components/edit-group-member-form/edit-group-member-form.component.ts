@@ -1,4 +1,11 @@
-import {Component, inject, signal, output, input, DestroyRef} from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  output,
+  input,
+  DestroyRef,
+} from '@angular/core';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -11,9 +18,8 @@ import { CommonModule } from '@angular/common';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberDto } from '../../../../shared/models/group/group-member.model';
-import { take } from 'rxjs/operators';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-group-member-form',
@@ -31,7 +37,7 @@ export class EditGroupMemberFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private groupMemberApi = inject(GroupMemberApiService);
   private notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   groupId = input.required<string>();
   member = input<GroupMember | null>(null);

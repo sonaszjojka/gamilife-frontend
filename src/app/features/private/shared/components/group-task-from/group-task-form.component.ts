@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, input, output} from '@angular/core';
+import { Component, DestroyRef, inject, input, output } from '@angular/core';
 import {
   EditGroupTaskDto,
   GroupTask,
@@ -22,7 +22,7 @@ import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-group-task-form',
@@ -49,7 +49,7 @@ export class GroupTaskFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private groupTaskApi = inject(GroupTaskApiService);
   private notification = inject(NotificationService);
-  private destroyRef =inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   task = input<GroupTask | null>(null);
   groupId = input.required<string>();
@@ -61,14 +61,14 @@ export class GroupTaskFormComponent {
       Validators.minLength(3),
       Validators.maxLength(200),
     ]),
-    description: this.fb.control<string|null>(null, {
-      validators: [ Validators.maxLength(200)],
+    description: this.fb.control<string | null>(null, {
+      validators: [Validators.maxLength(200)],
     }),
     endDate: this.fb.control<Date | null>(null, [Validators.required]),
-    endTime: this.fb.control<Date | null>(null,[]),
+    endTime: this.fb.control<Date | null>(null, []),
 
     categoryId: this.fb.control<number | null>(null, [Validators.required]),
-    difficultyId: this.fb.control<number|null>(null, [Validators.required]),
+    difficultyId: this.fb.control<number | null>(null, [Validators.required]),
     reward: this.fb.control<number>(1, [
       Validators.required,
       Validators.min(1),
@@ -91,13 +91,11 @@ export class GroupTaskFormComponent {
   openForm(): void {
     const task = this.task();
     if (task != null) {
-
       if (task.taskDto.deadlineTime != null) {
-        let endHour: Date;
+        const endHour = new Date();
         const [hours, minutes, seconds] = task.taskDto.deadlineTime
           .split(':')
           .map(Number);
-        endHour = new Date();
         endHour.setHours(hours, minutes, seconds || 0, 0);
 
         this.validateForm.patchValue({
@@ -119,7 +117,6 @@ export class GroupTaskFormComponent {
           reward: task.reward,
         });
       }
-
     }
     this.isVisible = true;
   }
@@ -128,28 +125,23 @@ export class GroupTaskFormComponent {
     if (this.validateForm.valid) {
       let request;
       const formValue = this.validateForm.getRawValue();
-      if (formValue.endTime!==null){
+      if (formValue.endTime !== null) {
+        const date = formValue.endTime!;
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const deadlineTime = `${hours}:${minutes}:00`;
 
-
-
-      const date = formValue.endTime!;
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const deadlineTime = `${hours}:${minutes}:00`;
-
-       request = {
-        title: formValue.title,
-        description: formValue.description,
-        deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
-        deadlineTime: deadlineTime,
-        categoryId: formValue.categoryId,
-        difficultyId: formValue.difficultyId,
-        reward: formValue.reward,
-      };
-      }
-      else
-      {
-         request = {
+        request = {
+          title: formValue.title,
+          description: formValue.description,
+          deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
+          deadlineTime: deadlineTime,
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          reward: formValue.reward,
+        };
+      } else {
+        request = {
           title: formValue.title,
           description: formValue.description,
           deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
@@ -160,17 +152,18 @@ export class GroupTaskFormComponent {
         };
       }
 
-      this.groupTaskApi.postGroupTask(this.groupId(), request)
+      this.groupTaskApi
+        .postGroupTask(this.groupId(), request)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: () => {
-          this.notification.success('Task created successfully');
-          this.formSubmitted.emit();
-        },
-        error: (error) => {
-          this.notification.handleApiError(error, 'Failed to create task');
-        },
-      });
+          next: () => {
+            this.notification.success('Task created successfully');
+            this.formSubmitted.emit();
+          },
+          error: (error) => {
+            this.notification.handleApiError(error, 'Failed to create task');
+          },
+        });
     }
   }
 
@@ -207,29 +200,27 @@ export class GroupTaskFormComponent {
 
   handleEdit(): void {
     if (this.validateForm.valid) {
-      let editGroupTaskRequest : EditGroupTaskDto;
+      let editGroupTaskRequest: EditGroupTaskDto;
       const formValue = this.validateForm.getRawValue();
-      if (formValue.endTime!==null){
-      const date = formValue.endTime;
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const deadlineTime = `${hours}:${minutes}:00`;
-       editGroupTaskRequest = {
-        title: formValue.title,
-        description: formValue.description,
-        deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
-        deadlineTime: deadlineTime,
-        categoryId: formValue.categoryId!,
-        difficultyId: formValue.difficultyId!,
-        completedAt: null,
-        isAccepted: null,
-        reward: formValue.reward,
-        declineMessage: null,
-      };
-      }
-      else
-      {
-         editGroupTaskRequest = {
+      if (formValue.endTime !== null) {
+        const date = formValue.endTime;
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const deadlineTime = `${hours}:${minutes}:00`;
+        editGroupTaskRequest = {
+          title: formValue.title,
+          description: formValue.description,
+          deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
+          deadlineTime: deadlineTime,
+          categoryId: formValue.categoryId!,
+          difficultyId: formValue.difficultyId!,
+          completedAt: null,
+          isAccepted: null,
+          reward: formValue.reward,
+          declineMessage: null,
+        };
+      } else {
+        editGroupTaskRequest = {
           title: formValue.title,
           description: formValue.description,
           deadlineDate: formValue.endDate!.toISOString().slice(0, 10),
@@ -261,6 +252,4 @@ export class GroupTaskFormComponent {
         });
     }
   }
-
-
 }

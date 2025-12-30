@@ -4,7 +4,8 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  inject, DestroyRef,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -30,7 +31,7 @@ import { environment } from '../../../../../../environments/environment';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -66,7 +67,7 @@ export class ProfileSettingsTabComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private userApi = inject(UserApiService);
   protected authService = inject(AuthService);
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.initForm();
@@ -102,33 +103,34 @@ export class ProfileSettingsTabComponent implements OnInit {
         isProfilePublic: formValue.isProfilePublic,
       };
 
-      this.userApi.updateUser(this.userDetails.id, request)
+      this.userApi
+        .updateUser(this.userDetails.id, request)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-        next: (response) => {
-          this.saving = false;
-          this.settingsForm.markAsPristine();
-          this.notificationService.success('Profile updated successfully!');
+          next: (response) => {
+            this.saving = false;
+            this.settingsForm.markAsPristine();
+            this.notificationService.success('Profile updated successfully!');
 
-          const updatedUser: UserDetails = {
-            ...this.userDetails,
-            firstName: response.firstName,
-            lastName: response.lastName,
-            username: response.username,
-            dateOfBirth: response.dateOfBirth,
-            sendBudgetReports: response.sendBudgetReports,
-            isProfilePublic: response.isProfilePublic,
-          };
-          this.settingsUpdated.emit(updatedUser);
-        },
-        error: (error) => {
-          this.saving = false;
-          this.notificationService.handleApiError(
-            error,
-            'Failed to update profile',
-          );
-        },
-      });
+            const updatedUser: UserDetails = {
+              ...this.userDetails,
+              firstName: response.firstName,
+              lastName: response.lastName,
+              username: response.username,
+              dateOfBirth: response.dateOfBirth,
+              sendBudgetReports: response.sendBudgetReports,
+              isProfilePublic: response.isProfilePublic,
+            };
+            this.settingsUpdated.emit(updatedUser);
+          },
+          error: (error) => {
+            this.saving = false;
+            this.notificationService.handleApiError(
+              error,
+              'Failed to update profile',
+            );
+          },
+        });
     }
   }
 

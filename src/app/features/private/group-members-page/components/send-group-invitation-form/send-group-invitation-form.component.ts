@@ -1,4 +1,11 @@
-import {Component, inject, signal, input, output, DestroyRef} from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  input,
+  output,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -9,11 +16,11 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, take } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { User } from '../../../../shared/models/group/user.model';
 import { GroupInvitationApiService } from '../../../../shared/services/group-invitation-api/group-invitation-api.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-send-group-invitation-form',
@@ -29,7 +36,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     NzEmptyModule,
     NzSpinModule,
     ReactiveFormsModule,
-
   ],
   templateUrl: './send-group-invitation-form.component.html',
   styleUrl: './send-group-invitation-form.component.css',
