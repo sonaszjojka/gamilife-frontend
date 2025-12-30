@@ -23,7 +23,7 @@ export class HealthService {
       map((response) => {
         const status: HealthStatus = {
           status: 'UP',
-          timestamp: response.timestamp,
+          timestamp: response?.timestamp,
         };
         this.healthStatus.set(status);
         return status;
