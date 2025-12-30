@@ -23,6 +23,7 @@ import {
   withXsrfConfiguration,
 } from '@angular/common/http';
 import { authInterceptor } from './shared/auth.interceptor';
+import { csrfInterceptor } from './shared/csrf.interceptor';
 import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
 import { timeZoneInterceptor } from './shared/time-zone.interceptor';
 import { HealthService } from './shared/services/health.service';
@@ -55,7 +56,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
     provideHttpClient(
-      withInterceptors([authInterceptor, timeZoneInterceptor]),
+      withInterceptors([authInterceptor, csrfInterceptor, timeZoneInterceptor]),
       withXsrfConfiguration({
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN',
