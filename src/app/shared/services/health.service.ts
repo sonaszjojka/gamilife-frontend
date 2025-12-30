@@ -28,7 +28,8 @@ export class HealthService {
         this.healthStatus.set(status);
         return status;
       }),
-      catchError(() => {
+      catchError((e) => {
+        console.error('Health check failed', e);
         const status: HealthStatus = { status: 'DOWN' };
         this.notificationService.error(
           'Server is unavailable. Try again later.',
