@@ -1,32 +1,21 @@
-import {
-  Component,
-  DestroyRef,
-  EventEmitter,
-  inject,
-  input,
-  Input,
-  OnInit,
-  Output,
-  signal,
-} from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { UserTaskApiService } from '../../../../../shared/services/tasks/user-task-api.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { TaskRequest } from '../../../../../shared/models/task-models/task-request';
-import { PomodoroTaskProgressComponent } from '../pomodoro-task-progress/pomodoro-task-progress.component';
-import { UserHabitApiService } from '../../../../../shared/services/tasks/user-habit-api.service';
+import {Component, DestroyRef, EventEmitter, inject, input, Input, OnInit, Output, signal,} from '@angular/core';
+import {CommonModule, DatePipe} from '@angular/common';
+import {NzCardModule} from 'ng-zorro-antd/card';
+import {UserTaskApiService} from '../../../../../shared/services/tasks/user-task-api.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {TaskRequest} from '../../../../../shared/models/task-models/task-request';
+import {PomodoroTaskProgressComponent} from '../pomodoro-task-progress/pomodoro-task-progress.component';
+import {UserHabitApiService} from '../../../../../shared/services/tasks/user-habit-api.service';
 import {
   ActivityItemDetails,
   ActivityStatus,
   ActivityType,
-  HabitStatus,
 } from '../../../../../shared/models/task-models/activity.model';
-import { HabitRequest } from '../../../../../shared/models/task-models/habit-request.model';
-import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {HabitRequest} from '../../../../../shared/models/task-models/habit-request.model';
+import {NotificationService} from '../../../../../shared/services/notification-service/notification.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-item',
@@ -47,7 +36,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class TaskItemComponent implements OnInit {
   protected readonly ActivityType = ActivityType;
   protected readonly ActivityStatus = ActivityStatus;
-  protected readonly HabitStatus = HabitStatus;
 
   @Input() activity!: ActivityItemDetails;
   isCompleted = signal(false);
@@ -70,7 +58,7 @@ export class TaskItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.isCompleted.set(
-      this.activity.status != ActivityStatus.DEADLINE_MISSED,
+      this.activity.status == ActivityStatus.COMPLETED
     );
   }
 
@@ -152,6 +140,25 @@ export class TaskItemComponent implements OnInit {
     this.removeFromCurrentSession.emit(this.activity);
   }
 
+  restoreTask($event:MouseEvent)
+  {
+    $event.stopPropagation();
+    const request:TaskRequest = {
+        completed:false
+      };
+    this.taskService.editTask(this.activity.id,request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next:()=>
+        {
+          this.activity.completedAt=undefined
+          this.activity.status=ActivityStatus.INCOMPLETE
+          this.taskUpdated.emit(this.activity.id)
+        }
+      })
+
+  }
+
   restoreHabit($event: MouseEvent) {
     $event.stopPropagation();
     const request: HabitRequest = {
@@ -162,7 +169,7 @@ export class TaskItemComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.activity.habitStatus = HabitStatus.ALIVE;
+          this.activity.status = ActivityStatus.ALIVE;
           this.activity.deadlineDate = response.deadlineDate;
           this.activity.canBeWorkedOn = response.workable;
           this.taskUpdated.emit(this.activity.id);

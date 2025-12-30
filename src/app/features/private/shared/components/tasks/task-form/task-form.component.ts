@@ -99,7 +99,11 @@ export class TaskFormComponent implements OnChanges {
       Validators.required,
     ]),
     description: this.formBuilder.control<string | null>(null),
-    cycleLength: this.formBuilder.control<number>(0, [Validators.required]),
+    cycleLength: this.formBuilder.control<number>(0,
+
+      [Validators.required]
+
+    ),
   });
 
   categories = [
@@ -117,6 +121,17 @@ export class TaskFormComponent implements OnChanges {
     const activity = this.activity?.();
     const isEditing = this.editionMode?.();
     const isCreating = this.creationMode?.();
+    const currentType = this.type();
+    const deadlineControl = this.validActivityForm.controls.deadlineDate;
+    const cycleControl = this.validActivityForm.controls.cycleLength;
+
+    if (currentType === ActivityType.HABIT) {
+      deadlineControl.clearValidators();
+      cycleControl.setValidators([Validators.required, Validators.min(1)]);
+    } else {
+      deadlineControl.setValidators([Validators.required]);
+      cycleControl.clearValidators();
+    }
 
     if (activity?.type == ActivityType.HABIT && isEditing) {
       this.validActivityForm.patchValue({

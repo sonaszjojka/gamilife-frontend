@@ -11,7 +11,6 @@ export interface ActivityItemDetails {
   deadlineDate: string;
   deadlineTime: string;
   status?: ActivityStatus | undefined;
-  habitStatus?: HabitStatus | undefined;
   pomodoro?: Pomodoro | undefined;
   cycleLength?: number | undefined;
   currentStreak?: number | undefined;
@@ -36,10 +35,8 @@ export enum ActivityStatus {
   DEADLINE_TODAY = 'DEADLINE_TODAY',
   DEADLINE_MISSED = 'DEADLINE_MISSED',
   COMPLETED = 'COMPLETED',
-}
-export enum HabitStatus {
-  ALIVE = 'ALIVE',
   DEAD = 'DEAD',
+
 }
 
 export interface Pomodoro {

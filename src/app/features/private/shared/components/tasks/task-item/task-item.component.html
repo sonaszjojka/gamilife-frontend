@@ -141,8 +141,15 @@
               <nz-icon nzType="check-circle"></nz-icon>
             </button>
           }
-        } @else {
-          @if (activity.habitStatus === HabitStatus.DEAD) {
+          @else {
+            <button nz-button nzShape="circle" (click)="restoreTask($event)">
+              <nz-icon nzType="reload"></nz-icon>
+            </button>
+          }
+        }
+        @else
+        {
+          @if (activity.status === ActivityStatus.DEAD) {
             <button nz-button nzShape="circle" (click)="restoreHabit($event)">
               <nz-icon nzType="reload"></nz-icon>
             </button>

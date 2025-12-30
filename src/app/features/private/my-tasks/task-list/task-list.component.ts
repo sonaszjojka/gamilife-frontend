@@ -22,7 +22,6 @@ import {
   ActivityItemDetails,
   ActivityStatus,
   ActivityType,
-  HabitStatus,
 } from '../../../shared/models/task-models/activity.model';
 import { ActivityListView } from '../../../shared/models/task-models/activity-list-view.model';
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
@@ -336,7 +335,7 @@ export class TaskListComponent implements OnInit {
       matchesAliveStatus = isActuallyAlive === this.isAlive();
     } else if (this.activityListType() === ActivityListView.Habits) {
       matchesAliveStatus =
-        (changedActivity.habitStatus === HabitStatus.ALIVE) === this.isAlive();
+        (changedActivity.status === ActivityStatus.ALIVE) === this.isAlive();
     } else if (this.activityListType() === ActivityListView.Activities) {
       if (this.isAlive()) {
         matchesAliveStatus =
