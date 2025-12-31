@@ -1,5 +1,8 @@
 <div class="preview-container">
   <nz-spin [nzSpinning]="loading()" nzSize="large">
+
+    @if (!showShop())
+    {
     <div class="two-column-layout">
       <div class="left-column">
         <div
@@ -96,7 +99,6 @@
         <p>The group with the given ID does not exist or has been deleted.</p>
       </div>
     </nz-card>
-  </nz-spin>
 
   <app-edit-group-form
     [group]="group()!"
@@ -116,10 +118,44 @@
     [style.bottom.px]="mode() === GroupPreviewMode.ADMIN ? 24 : 220"
   ></nz-float-button>
 
+
+  @if (group()&& mode()!==GroupPreviewMode.PUBLIC) {
+  <nz-float-button
+  nzIcon="shopping-cart"
+  nzType="primary"
+  nzTooltip = "Go to Group Shop"
+  (click)="goToShop()"
+  [nzShape]="'circle'"
+  [style.width.px]="50"
+  [style.height.px]="50"
+  [style.bottom.px]="mode() === GroupPreviewMode.ADMIN ? 24 : 220"
+  >
+  </nz-float-button>
+    }
+
+
   <app-group-chat
     *ngIf="group() && canAccessChat() && getLoggedUserGroupMemberId()"
     [groupId]="groupId()!"
     [groupMemberId]="getLoggedUserGroupMemberId()!"
     [mode]="mode()"
   ></app-group-chat>
+
+    }
+  <div *ngIf="showShop() && group()" class="shop-view">
+    <div class="shop-header">
+      <button nz-button nzType="default" nzSize="large" (click)="closeShop()">
+        <span nz-icon nzType="arrow-left"></span>
+        Back to Group
+      </button>
+    </div>
+    <app-group-shop-page
+      [group]="group()!"
+      [viewMode]="mode()"
+      (deactivated)="closeShop()"
+    ></app-group-shop-page>
+  </div>
+  </nz-spin>
 </div>
+
+
