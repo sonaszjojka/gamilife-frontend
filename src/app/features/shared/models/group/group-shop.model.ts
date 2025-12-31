@@ -1,3 +1,5 @@
+import {GroupItemModel} from './group-item.model';
+import {Page} from '../util/page.model';
 
 
 export interface GroupShopModel
@@ -7,6 +9,7 @@ export interface GroupShopModel
   description?:string
   groupId:string,
   isActive:boolean
+  page:Page<GroupItemModel>
 
 }
 
