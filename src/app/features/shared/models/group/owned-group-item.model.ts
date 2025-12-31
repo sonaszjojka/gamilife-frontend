@@ -19,3 +19,10 @@ export interface OwnedGroupItemRequestModel
   isUsedUp?:boolean,
   groupItemId?:string
 }
+
+export interface OwnedGroupItemRequestModel
+{
+  memberId?:string,
+  isUsedUp?:boolean,
+  groupItemId?:string
+}
