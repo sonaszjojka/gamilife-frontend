@@ -5,7 +5,7 @@
 @else {
     @if (shop.isActive===false) {
         <div class="disabled-shop-view">
-            <h1>{{shop?.name}} is disabled</h1>
+            <h1>{{shop.name}} is disabled</h1>
 
             @if (viewMode() == GroupPreviewMode.ADMIN)
             {
@@ -21,9 +21,9 @@
                 <div class="shop-header-content">
                     <h1 class="shop-title">
                         <span nz-icon nzType="shop" nzTheme="outline" class="shop-title-icon"></span>
-                        {{shop?.name}}
+                        {{shop.name}}
                     </h1>
-                    @if (shop?.description) {
+                    @if (shop.description) {
                         <p class="shop-description">{{shop.description}}</p>
                     }
                 </div>
@@ -86,6 +86,17 @@
                         (click)="onItemCreation()"
                 ></nz-float-button>
             }
+
+            @if (viewMode() === GroupPreviewMode.ADMIN) {
+                <nz-float-button
+                        class="add-item-button"
+                        nzType="primary"
+                        nzShape="circle"
+                        nzSize="large"
+                        nzIcon="skin"
+                        (click)="showInventory()"
+                ></nz-float-button>
+            }
         </div>
     }
 
@@ -100,6 +111,12 @@
             [shop]="shop"
             [groupId]="group().groupId"
     ></app-group-shop-form>
+
+    <app-group-member-inventory
+    [group]="group()"
+    [memberId]="group().loggedUserMembershipDto!.groupMemberId"
+    >
+    </app-group-member-inventory>
 }
 
 
