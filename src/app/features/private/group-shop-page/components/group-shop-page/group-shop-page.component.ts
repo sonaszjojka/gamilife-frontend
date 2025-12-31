@@ -15,6 +15,12 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {GroupShopFormComponent} from '../group-shop-form/group-shop-form.component';
 import {NzModalService} from "ng-zorro-antd/modal";
+import {
+  GroupMemberInventoryComponent
+} from '../../../shared/components/group-member-inventory/group-member-inventory.component';
+import {
+  GroupMemberInventoryItemComponent
+} from '../../../shared/components/group-member-inventory-item/group-member-inventory-item.component';
 
 
 @Component({
@@ -30,7 +36,8 @@ import {NzModalService} from "ng-zorro-antd/modal";
     NzFloatButtonComponent,
     NzButtonComponent,
     NzIconDirective,
-    GroupShopFormComponent
+    GroupShopFormComponent,
+    GroupMemberInventoryComponent
   ]
 })
 
@@ -55,6 +62,9 @@ export class GroupShopPageComponent implements OnInit {
 
   @ViewChild(GroupShopFormComponent)
   shopFormComponent!:GroupShopFormComponent
+
+  @ViewChild(GroupMemberInventoryComponent)
+  userInventory!: GroupMemberInventoryComponent
 
   private readonly modal = inject(NzModalService);
 
@@ -157,5 +167,10 @@ ngOnInit() {
 
   onShopChanged($event: void) {
     this.load(this.currentPage()+1);
+  }
+
+  showInventory()
+  {
+    this.userInventory.show()
   }
 }

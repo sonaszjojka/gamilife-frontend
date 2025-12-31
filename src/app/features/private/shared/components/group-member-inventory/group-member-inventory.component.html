@@ -1,0 +1,60 @@
+<nz-drawer
+  [nzVisible]="visible()"
+  nzPlacement="right"
+  [nzTitle]="drawerTitle"
+  [nzWidth]="500"
+  (nzOnClose)="close()"
+>
+  <ng-template #drawerTitle>
+    <div class="drawer-header">
+      <span nz-icon nzType="skin" nzTheme="outline"></span>
+      <span>Owned Items</span>
+    </div>
+  </ng-template>
+
+  <ng-container *nzDrawerContent>
+    <div class="inventory-container">
+      <div class="filter-section">
+        <button
+          nz-button
+          (click)="toggleUsedUpItems()"
+        >
+          <span nz-icon nzType="flag" nzTheme="outline"></span>
+          {{ isUsedUp() ? "Show Used Up Items" : "Show Active Items" }}
+        </button>
+      </div>
+
+      <nz-spin [nzSpinning]="loading()" class="items-spinner">
+        <nz-list
+          *ngIf="items().length > 0"
+          [nzDataSource]="items()"
+          [nzRenderItem]="inventoryItem"
+          class="items-list"
+        >
+          <ng-template #inventoryItem let-item>
+            <nz-list-item >
+              <app-group-member-inventory-item
+                [item]="item"
+                ></app-group-member-inventory-item>
+
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+
+        <nz-empty
+          *ngIf="items().length === 0 && !loading()"
+          nzNotFoundContent="No items yet"
+        ></nz-empty>
+      </nz-spin>
+
+      <div class="pagination-section" >
+        <nz-pagination
+          [nzPageIndex]="currentPage()"
+          [nzTotal]="totalPages()"
+          (nzPageIndexChange)="onPageChange($event)"
+          nzShowSizeChanger
+        ></nz-pagination>
+      </div>
+    </div>
+  </ng-container>
+</nz-drawer>
