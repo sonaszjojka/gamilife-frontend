@@ -1,0 +1,41 @@
+<nz-modal
+  [nzTitle]="getTitle()"
+  [nzVisible]="isVisible"
+  nzOkText="Save"
+  nzCancelText="Cancel"
+  (nzOnOk)="handleSubmit()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="name">Group Name</nz-form-label>
+        <nz-form-control nzErrorTip="Please input the group name!">
+          <input
+            nz-input
+            id="name"
+            formControlName="name"
+            placeholder="Enter item name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="description">Description</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please input a valid group shop description!"
+        >
+          <input
+            nz-input
+            id="description"
+            formControlName="description"
+            placeholder="Enter group shop description"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <button nz-button (click)="onChangedStatus()">
+    Pipa
+    <nz-icon nzType="delete"></nz-icon>
+  </button>
+</nz-modal>
