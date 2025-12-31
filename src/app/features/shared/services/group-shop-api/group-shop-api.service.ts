@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
-import {GroupShopRequestModel, GroupShopResponseModel} from '../../models/group/group-shop.model';
+import {GroupShopModel, GroupShopRequestModel, GroupShopResponseModel} from '../../models/group/group-shop.model';
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -14,18 +14,32 @@ export class GroupShopApiService {
   private apiUrl = environment.apiUrl;
 
 
-  changeGroupShopStatus(groupId: string, shopId: string, isOpen: boolean) {
-    return this.http.put(
-      `${this.apiUrl}/groups/${groupId}/shop/${shopId}/status`,
-      { isOpen },
+  changeGroupShopStatus(groupId: string, request: GroupShopRequestModel):Observable<GroupShopResponseModel> {
+    return this.http.patch <GroupShopResponseModel>(
+        `${this.apiUrl}/groups/${groupId}/shop`,
+       request ,
       { withCredentials: true },
     );
   }
-  editGroupShop(groupId: string, shopId: string, request:GroupShopRequestModel):Observable<GroupShopResponseModel> {
+  editGroupShop(groupId: string,  request:GroupShopRequestModel):Observable<GroupShopResponseModel> {
     return this.http.put<GroupShopResponseModel>(
-      `${this.apiUrl}/groups/${groupId}/shop/${shopId}`,
-      { request },
+      `${this.apiUrl}/groups/${groupId}/shop`,
+       request ,
       { withCredentials: true },
+    );
+  }
+
+  getGroupShopItems(groupId:string, page:number, size:number):Observable<GroupShopModel> {
+    let httpParams = new HttpParams()
+
+    httpParams = httpParams.set('page', page.toString());
+    httpParams = httpParams.set('size', size.toString());
+    return this.http.get<GroupShopModel>(
+      `${this.apiUrl}/groups/${groupId}/shop`,
+      {
+        params: httpParams,
+        withCredentials: true
+      },
     );
   }
 
