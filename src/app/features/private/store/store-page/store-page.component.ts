@@ -37,10 +37,11 @@ export class StorePageComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.loadItems(0);
+    this.loadItems(1);
   }
 
   loadItems(page: number) {
+    page--;
     const params: StoreFiltersModel = {
       page: page,
       size: 12,
@@ -55,7 +56,7 @@ export class StorePageComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.items.set(response.content);
-          this.totalPages.set(response.totalPages - 1);
+          this.totalPages.set(response.totalPages);
           this.currentPage.set(page);
         },
         error: () => {

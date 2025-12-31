@@ -1,49 +1,104 @@
+@if (this.loading())
+{
+    <nz-spin></nz-spin>
+}
+@else {
+    @if (shop.isActive===false) {
+        <div class="disabled-shop-view">
+            <h1>{{shop?.name}} is disabled</h1>
 
-<div class="group-shop-page">
+            @if (viewMode() == GroupPreviewMode.ADMIN)
+            {
+                <button nz-button nzType="primary" (click)="restoreShop()">
+                    Restore Shop
+                </button>
+            }
+        </div>
+    }
+    @else {
+        <div class="group-shop-container">
+            <div class="shop-header-section">
+                <div class="shop-header-content">
+                    <h1 class="shop-title">
+                        <span nz-icon nzType="shop" nzTheme="outline" class="shop-title-icon"></span>
+                        {{shop?.name}}
+                    </h1>
+                    @if (shop?.description) {
+                        <p class="shop-description">{{shop.description}}</p>
+                    }
+                </div>
 
-      @if (loading)
-      {
-        <nz-spin>
-        </nz-spin>
-      }
-      @else {
-        @if (groupItems.length ==0 )
-        {
-          <h2>There are no items currently in shop</h2>
-        }
-        @else {
-          <div class="group-shop-item-list">
+                @if (viewMode() === GroupPreviewMode.ADMIN) {
+                    <button nz-button (click)="onGroupShopEdit()">
+                        <span nz-icon nzType="edit"></span>
+                    </button>
 
-          @for (item of groupItems; track item.id)
-          {
-            <app-group-item
-              [item]="item"
-              [viewMode]="viewMode()"
-              [group]="this.group()"
-              [groupShop]="this.groupShop()"
-            > </app-group-item>
-          }
-          </div>
-        }
+                    <button nz-button (click)="onShopDeactivation()">
+                        <span nz-icon nzType="poweroff"></span>
+                    </button>
+                }
+            </div>
 
-      }
+            <div class="shop-content-body">
+                @if (loading()) {
+                    <div class="loading-container">
+                        <nz-spin nzSize="large"></nz-spin>
+                    </div>
+                }
+                @else {
+                    @if (groupItems.length === 0) {
+                        <div class="empty-state">
+                            <span nz-icon nzType="shopping" nzTheme="outline" class="empty-state-icon"></span>
+                            <h2>No Items Available</h2>
+                            <p>There are no items currently in the shop. Check back later!</p>
+                        </div>
+                    }
+                    @else {
+                        <div class="shop-items-container">
+                            @for (item of groupItems; track item.id) {
+                                <app-group-item
+                                        [item]="item"
+                                        [viewMode]="viewMode()"
+                                        [group]="group()"
+                                        [groupShop]="this.shop"
+                                ></app-group-item>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="shop-pagination">
+                <app-pagination-more
+                        [maxPageIndex]="totalPages()"
+                        (pageChange)="onPageChange($event)"
+                ></app-pagination-more>
+            </div>
+
+            @if (viewMode() === GroupPreviewMode.ADMIN) {
+                <nz-float-button
+                        class="add-item-button"
+                        nzType="primary"
+                        nzShape="circle"
+                        nzSize="large"
+                        nzIcon="plus"
+                        (click)="onItemCreation()"
+                ></nz-float-button>
+            }
+        </div>
+    }
 
 
+    <app-group-item-form
+            (formSubmitted)="onFormSubmitted($event)"
+            [groupId]="group().groupId"
+    ></app-group-item-form>
+
+    <app-group-shop-form
+            (formSubmitted)="onFormSubmitted($event)"
+            [shop]="shop"
+            [groupId]="group().groupId"
+    ></app-group-shop-form>
+}
 
 
-    </div>
-
-
-  <app-pagination-more
-
-    [maxPageIndex]="totalPages()"
-    (pageChange)="onPageChange($event)">
-
-  </app-pagination-more>
-
-
-<app-group-item-form
-  (formSubmitted)="onFormSubmitted($event)"
-  [groupId]="group().groupId"
-  [shopId]="groupShop().id"
-></app-group-item-form>
