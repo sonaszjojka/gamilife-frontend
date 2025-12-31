@@ -12,3 +12,10 @@ export interface OwnedGroupItemResponseModel
 {
   isUsedUp: string
 }
+
+export interface OwnedGroupItemRequestModel
+{
+  memberId?:string,
+  isUsedUp?:boolean,
+  groupItemId?:string
+}
