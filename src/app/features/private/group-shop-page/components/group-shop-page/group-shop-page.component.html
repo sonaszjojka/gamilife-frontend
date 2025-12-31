@@ -33,7 +33,7 @@
                         <span nz-icon nzType="edit"></span>
                     </button>
 
-                    <button nz-button (click)="onShopDeactivation()">
+                    <button nz-button nzDanger (click)="onShopDeactivation()">
                         <span nz-icon nzType="poweroff"></span>
                     </button>
                 }
@@ -61,6 +61,7 @@
                                         [viewMode]="viewMode()"
                                         [group]="group()"
                                         [groupShop]="this.shop"
+                                        (listChanged)="onShopChanged()"
                                 ></app-group-item>
                             }
                         </div>
@@ -90,12 +91,12 @@
 
 
     <app-group-item-form
-            (formSubmitted)="onFormSubmitted($event)"
+            (formSubmitted)="onShopChanged($event)"
             [groupId]="group().groupId"
     ></app-group-item-form>
 
     <app-group-shop-form
-            (formSubmitted)="onFormSubmitted($event)"
+            (formSubmitted)="onShopChanged($event)"
             [shop]="shop"
             [groupId]="group().groupId"
     ></app-group-shop-form>

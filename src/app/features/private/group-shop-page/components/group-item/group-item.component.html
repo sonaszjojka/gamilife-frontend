@@ -1,16 +1,70 @@
-<!doctype html>
+<nz-card
+  [nzHoverable]="true"
+  class="item-card"
+  [class.inactive-card]="!item().isActive">
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Title</title>
-  </head>
-  <body></body>
-</html>
+  @if(viewMode()===GroupPreviewMode.ADMIN && !item().isActive) {
+    <div class="status-badge">
+      <nz-tag [nzColor]="'red'">Inactive</nz-tag>
+    </div>
+  }
+
+  <div class="card-body">
+    <h3 class="item-title" [title]="item().name">
+      {{ item().name }}
+    </h3>
+  </div>
+
+  <div class="card-footer">
+    <div class="price-tag">
+      <span nz-icon nzType="gold" nzTheme="twotone" [nzTwotoneColor]="'#faad14'"></span>
+      <span class="price-value">{{ item().price }} {{this.group().groupCurrencySymbol}}</span>
+    </div>
+
+    <div class="actions">
+      @if (viewMode()===GroupPreviewMode.ADMIN) {
+        <button
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          (click)="onEdit()">
+          <span nz-icon nzType="edit"></span>
+        </button>
+
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          nzShape="circle"
+          (click)="onDelete()">
+          <span nz-icon nzType="delete"></span>
+        </button>
+
+        <button
+          nz-button
+          nzType="primary"
+          class="buy-button"
+          [disabled]="!item().isActive"
+          (click)="onPurchase()">
+          Purchase
+        </button>
+      }
+      @else {
+        <button
+          nz-button
+          nzType="primary"
+          class="buy-button"
+          [disabled]="!item().isActive"
+          (click)="onPurchase()">
+          Purchase
+        </button>
+      }
+    </div>
+  </div>
+</nz-card>
 
 <app-group-item-form
-  [item]="item()"
   (formSubmitted)="onFormSubmitted($event)"
   [groupId]="group().groupId"
-  [shopId]="groupShop().id"
+  [item]="item()"
 ></app-group-item-form>

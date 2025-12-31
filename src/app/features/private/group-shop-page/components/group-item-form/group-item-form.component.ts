@@ -40,7 +40,6 @@ export class GroupItemFormComponent {
   private fb = inject(NonNullableFormBuilder);
   item = input<GroupItemModel | null>(null);
   groupId = input.required<string>();
-  shopId = input.required<string>();
   isVisible = false;
 
   private readonly  groupItemApi=inject(GroupItemApiService)
@@ -83,7 +82,7 @@ export class GroupItemFormComponent {
 
       };
 
-      this.groupItemApi.createGroupItem(this.groupId(),this.shopId(), createRequest).subscribe({
+      this.groupItemApi.createGroupItem(this.groupId(), createRequest).subscribe({
         next: () => {
           this.notification.success('Item created successfully');
           this.formSubmitted.emit();
@@ -138,7 +137,6 @@ export class GroupItemFormComponent {
       this.groupItemApi
         .editGroupItem(
           this.groupId(),
-          this.shopId(),
           editRequest,
           this.item()!.id
         )

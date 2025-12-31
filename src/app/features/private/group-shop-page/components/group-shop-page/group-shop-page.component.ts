@@ -155,16 +155,7 @@ ngOnInit() {
     });
   }
 
-  onFormSubmitted($event: void) {
-
-    this.load(this.currentPage());
+  onShopChanged($event: void) {
+    this.load(this.currentPage()+1);
   }
-
-
-
-
-
-
-
-
 }

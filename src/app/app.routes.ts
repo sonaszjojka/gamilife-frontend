@@ -155,6 +155,13 @@ export const routes: Routes = [
             './features/private/user-profile/components/user-profile-page/user-profile-page.component'
           ).then((m) => m.UserProfilePageComponent),
       },
+      {
+        path: 'groups/:groupId/shop',
+        loadComponent: () =>
+          import(
+            './features/private/group-shop-page/components/group-shop-page/group-shop-page.component'
+            ).then((m) => m.GroupShopPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
