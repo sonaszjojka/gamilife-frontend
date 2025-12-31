@@ -99,10 +99,10 @@ export class TaskFormComponent implements OnChanges {
       Validators.required,
     ]),
     description: this.formBuilder.control<string | null>(null),
-    cycleLength: this.formBuilder.control<number>(0,
+    cycleLength: this.formBuilder.control<number>(
+      0,
 
-      [Validators.required]
-
+      [Validators.required],
     ),
   });
 
