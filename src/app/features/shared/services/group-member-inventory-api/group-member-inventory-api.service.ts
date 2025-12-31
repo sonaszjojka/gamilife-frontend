@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
 import {Observable} from 'rxjs';
-import {OwnedGroupItemResponseModel} from '../../models/group/owned-group-item.model';
+import {OwnedGroupItemRequestModel, OwnedGroupItemResponseModel} from '../../models/group/owned-group-item.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +35,22 @@ export class GroupMemberInventoryApiService {
 
   }
 
-  useMemberItem(groupId: string, memberId: string, itemId: string, isUsedUp: boolean):Observable<OwnedGroupItemResponseModel> {
+  useMemberItem(groupId: string, memberId: string, itemId: string, request: OwnedGroupItemRequestModel):Observable<OwnedGroupItemResponseModel> {
    return this.http.put<OwnedGroupItemResponseModel>(
       `${this.apiUrl}/groups/${groupId}/members/${memberId}/inventory/items/${itemId}/use`,
-      { isUsedUp },
+        request ,
       { withCredentials: true },
     );
+  }
+
+  purchaseGroupItem(groupId:string,memberId:string, request: OwnedGroupItemRequestModel):Observable<OwnedGroupItemResponseModel>
+  {
+    return this.http.post<OwnedGroupItemResponseModel>(
+      `${this.apiUrl}/groups/${groupId}/members/${memberId}/inventory`,
+      request,
+      {withCredentials:true}
+    )
+
   }
 
 }
