@@ -36,7 +36,6 @@ export enum ActivityStatus {
   DEADLINE_MISSED = 'DEADLINE_MISSED',
   COMPLETED = 'COMPLETED',
   DEAD = 'DEAD',
-
 }
 
 export interface Pomodoro {
