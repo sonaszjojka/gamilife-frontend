@@ -4,24 +4,18 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from '../../../../../environments/environment';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
-
-interface NotificationTypeEnum {
-  id: number;
-  name: string;
-}
+import { NotificationType } from '../../models/notification/notification-type.enum';
 
 interface NotificationDtoFromBackend {
   id: string;
-  notificationType: NotificationTypeEnum;
-  title: string;
-  message: string;
+  notificationType: string;
   timestamp: string;
   data?: Record<string, unknown>;
 }
 
 export interface NotificationDto {
   id: string;
-  notificationType: string;
+  notificationType: NotificationType;
   title: string;
   message: string;
   timestamp: string;
@@ -142,19 +136,111 @@ export class WebSocketNotificationService implements OnDestroy {
   private convertNotification(
     backendDto: NotificationDtoFromBackend,
   ): NotificationDto {
+    const typeKey =
+      backendDto.notificationType as keyof typeof NotificationType;
     const notificationType =
-      typeof backendDto.notificationType === 'string'
-        ? backendDto.notificationType
-        : backendDto.notificationType.name || 'OTHER';
+      NotificationType[typeKey] || NotificationType.OTHER;
+
+    const { title, message } = this.getNotificationContent(
+      notificationType,
+      backendDto.data,
+    );
 
     return {
       id: backendDto.id,
       notificationType: notificationType,
-      title: backendDto.title,
-      message: backendDto.message,
+      title: title,
+      message: message,
       timestamp: backendDto.timestamp,
       data: backendDto.data,
     };
+  }
+
+  private getNotificationContent(
+    type: NotificationType,
+    data?: Record<string, unknown>,
+  ): { title: string; message: string } {
+    switch (type) {
+      case NotificationType.ACHIEVEMENT_UNLOCKED: {
+        return {
+          title: 'Achievement Unlocked!',
+          message: `Congratulations! You unlocked: ${data?.['achievementName'] || ''}`,
+        };
+      }
+      case NotificationType.ITEM_ACQUIRED: {
+        const itemNames = data?.['itemNames'] as string[];
+        let itemsList = 'a new item';
+
+        if (itemNames && itemNames.length > 0) {
+          if (itemNames.length === 1) {
+            itemsList = itemNames[0];
+          } else {
+            itemsList = `${itemNames[0]} and ${itemNames.length - 1} more`;
+          }
+        }
+
+        return {
+          title: 'Item Acquired',
+          message: `You received: ${itemsList}`,
+        };
+      }
+      case NotificationType.LEVEL_UP:
+        return {
+          title: 'Level Up!',
+          message: `Congratulations! You reached level ${data?.['level'] || ''}`,
+        };
+      case NotificationType.GROUP_INVITATION:
+        return {
+          title: 'Group Invitation',
+          message: `You have been invited to join ${data?.['groupName'] || 'a group'}`,
+        };
+      case NotificationType.GROUP_ITEM_USED:
+        return {
+          title: 'Group Item Used',
+          message: `${data?.['username'] || 'Someone'} used ${data?.['itemName'] || 'an item'}`,
+        };
+      case NotificationType.NEW_GROUP_MEMBER:
+        return {
+          title: 'New Group Member',
+          message: `${data?.['username'] || 'A new member'} joined ${data?.['groupName'] || 'the group'}`,
+        };
+      case NotificationType.GROUP_MEMBER_LEFT:
+        return {
+          title: 'Member Left Group',
+          message: `${data?.['username'] || 'A member'} left ${data?.['groupName'] || 'the group'}`,
+        };
+      case NotificationType.NEW_GROUP_MESSAGE:
+        return {
+          title: 'New Group Message',
+          message: `New message in ${data?.['groupName'] || 'group chat'}`,
+        };
+      case NotificationType.GROUP_TASK_ASSIGNED:
+        return {
+          title: 'Group Task Assigned',
+          message: `You have a new task: ${data?.['taskName'] || 'Untitled task'}`,
+        };
+      case NotificationType.GROUP_TASK_COMPLETED:
+        return {
+          title: 'Group Task Completed',
+          message: `Task ${data?.['taskName'] || ''} has been finished`,
+        };
+      case NotificationType.GROUP_REQUEST_STATUS_UPDATED:
+        return {
+          title: 'Group Request Updated',
+          message: `Your request to ${data?.['groupName'] || 'group'} was ${(data?.['accepted'] as boolean) ? 'accepted' : 'declined'}`,
+        };
+      case NotificationType.NEW_GROUP_REQUEST:
+        return {
+          title: 'New Group Request',
+          message: `${data?.['username'] || 'Someone'} wants to join ${data?.['groupName'] || 'your group'}`,
+        };
+      case NotificationType.OTHER:
+      default:
+        return {
+          title: 'Notification',
+          message: 'You have a new update',
+        };
+    }
   }
 
   private displayNotification(notification: NotificationDto): void {
@@ -165,17 +251,18 @@ export class WebSocketNotificationService implements OnDestroy {
     };
 
     switch (notification.notificationType) {
-      case 'TASK_COMPLETED':
-      case 'LEVEL_UP':
-      case 'ITEM_ACQUIRED':
+      case NotificationType.GROUP_TASK_COMPLETED:
+      case NotificationType.LEVEL_UP:
+      case NotificationType.ITEM_ACQUIRED:
+      case NotificationType.ACHIEVEMENT_UNLOCKED:
         this.nzNotification.success(
           notification.title,
           notification.message,
           notificationConfig,
         );
         break;
-      case 'GROUP_INVITATION':
-      case 'OTHER':
+      case NotificationType.GROUP_INVITATION:
+      case NotificationType.OTHER:
       default:
         this.nzNotification.info(
           notification.title,

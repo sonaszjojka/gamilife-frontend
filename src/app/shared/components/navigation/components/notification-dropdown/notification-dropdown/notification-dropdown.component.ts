@@ -13,6 +13,7 @@ import {
 } from '../../../../../../features/shared/services/websocket-notification-service/web-socket-notification.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { NotificationType } from '../../../../../../features/shared/models/notification/notification-type.enum';
 
 @Component({
   selector: 'app-notification-dropdown',
@@ -51,11 +52,11 @@ export class NotificationDropdownComponent {
     this.notificationService.markAsRead(notification.id);
 
     if (
-      notification.notificationType === 'GROUP_INVITATION' &&
+      notification.notificationType === NotificationType.GROUP_INVITATION &&
       notification.data &&
-      notification.data['invitation-link']
+      notification.data['invitationLink']
     ) {
-      const link = notification.data['invitation-link'] as string;
+      const link = notification.data['invitationLink'] as string;
 
       if (link.startsWith('/')) {
         this.router.navigateByUrl(link);
@@ -84,45 +85,54 @@ export class NotificationDropdownComponent {
     return !notification.read;
   }
 
-  getNotificationIcon(type: string): string {
+  getNotificationIcon(type: NotificationType): string {
     switch (type) {
-      case 'SUCCESS':
-        return 'check-circle';
-      case 'ERROR':
-        return 'close-circle';
-      case 'WARNING':
-      case 'TASK_REMINDER':
-        return 'exclamation-circle';
-      case 'ACHIEVEMENT_UNLOCKED':
+      case NotificationType.ACHIEVEMENT_UNLOCKED:
         return 'trophy';
-      case 'LEVEL_UP':
-        return 'arrow-up';
-      case 'GROUP_INVITATION':
-        return 'team';
-      case 'NEW_MESSAGE':
+      case NotificationType.ITEM_ACQUIRED:
+      case NotificationType.GROUP_ITEM_USED:
+        return 'gift';
+      case NotificationType.LEVEL_UP:
+        return 'up-circle';
+      case NotificationType.GROUP_INVITATION:
+      case NotificationType.NEW_GROUP_MEMBER:
+      case NotificationType.NEW_GROUP_REQUEST:
+        return 'contacts';
+      case NotificationType.GROUP_MEMBER_LEFT:
+        return 'minus-circle';
+      case NotificationType.NEW_GROUP_MESSAGE:
         return 'message';
-      case 'TASK_OVERDUE':
-        return 'clock-circle';
+      case NotificationType.GROUP_TASK_ASSIGNED:
+        return 'schedule';
+      case NotificationType.GROUP_TASK_COMPLETED:
+        return 'check-circle';
+      case NotificationType.GROUP_REQUEST_STATUS_UPDATED:
+        return 'info-circle';
+      case NotificationType.OTHER:
       default:
         return 'bell';
     }
   }
 
-  getNotificationIconColor(type: string): string {
+  getNotificationIconColor(type: NotificationType): string {
     switch (type) {
-      case 'SUCCESS':
-      case 'ACHIEVEMENT_UNLOCKED':
-      case 'LEVEL_UP':
+      case NotificationType.ACHIEVEMENT_UNLOCKED:
+      case NotificationType.LEVEL_UP:
+      case NotificationType.GROUP_TASK_COMPLETED:
         return '#52c41a';
-      case 'ERROR':
-      case 'TASK_OVERDUE':
-        return '#ff4d4f';
-      case 'WARNING':
-      case 'TASK_REMINDER':
+      case NotificationType.ITEM_ACQUIRED:
         return '#faad14';
-      case 'INFO':
-      case 'GROUP_INVITATION':
-      case 'NEW_MESSAGE':
+      case NotificationType.GROUP_ITEM_USED:
+        return '#722ed1';
+      case NotificationType.GROUP_MEMBER_LEFT:
+        return '#ff4d4f';
+      case NotificationType.NEW_GROUP_MESSAGE:
+      case NotificationType.GROUP_INVITATION:
+      case NotificationType.NEW_GROUP_MEMBER:
+      case NotificationType.NEW_GROUP_REQUEST:
+      case NotificationType.GROUP_TASK_ASSIGNED:
+      case NotificationType.GROUP_REQUEST_STATUS_UPDATED:
+      case NotificationType.OTHER:
       default:
         return '#1890ff';
     }
