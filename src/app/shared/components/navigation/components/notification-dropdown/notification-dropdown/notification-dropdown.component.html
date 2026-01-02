@@ -20,94 +20,99 @@
 
   <nz-dropdown-menu #notificationMenu="nzDropdownMenu">
     <div class="notification-dropdown" nz-menu>
-      <div class="notification-header">
-        <h3>Notifications</h3>
-        <div class="notification-actions">
-          @if ((unreadCount$ | async)! > 0) {
-            <button
-              nz-button
-              nzType="link"
-              nzSize="small"
-              (click)="markAllAsRead()"
-            >
-              Mark all as read
-            </button>
-          }
-          @if ((notifications$ | async)!.length > 0) {
-            <button
-              nz-button
-              nzType="link"
-              nzSize="small"
-              nzDanger
-              (click)="clearAll()"
-            >
-              Clear all
-            </button>
+      @if (notifications$ | async; as notifications) {
+        <div class="notification-header">
+          <h3>Notifications</h3>
+          <div class="notification-actions">
+            @if ((unreadCount$ | async)! > 0) {
+              <button
+                nz-button
+                nzType="link"
+                nzSize="small"
+                (click)="markAllAsRead()"
+              >
+                Mark all as read
+              </button>
+            }
+            @if (notifications.length > 0) {
+              <button
+                nz-button
+                nzType="link"
+                nzSize="small"
+                nzDanger
+                (click)="clearAll()"
+              >
+                Clear all
+              </button>
+            }
+          </div>
+        </div>
+
+        <nz-divider class="notification-divider"></nz-divider>
+
+        <div class="notification-list-container">
+          @if (notifications.length === 0) {
+            <nz-empty
+              nzNotFoundContent="No notifications"
+              [nzNotFoundImage]="'simple'"
+              class="notification-empty"
+            ></nz-empty>
+          } @else {
+            <nz-list nzSize="small">
+              @for (notification of notifications; track notification.id) {
+                <nz-list-item
+                  class="notification-item"
+                  [class.unread]="isUnread(notification)"
+                  (click)="handleNotificationClick(notification)"
+                >
+                  <nz-list-item-meta>
+                    <nz-list-item-meta-avatar>
+                      <nz-icon
+                        [nzType]="
+                          getNotificationIcon(notification.notificationType)
+                        "
+                        nzTheme="fill"
+                        [style.color]="
+                          getNotificationIconColor(
+                            notification.notificationType
+                          )
+                        "
+                        class="notification-type-icon"
+                      ></nz-icon>
+                    </nz-list-item-meta-avatar>
+                    <nz-list-item-meta-title>
+                      <div class="notification-title">
+                        {{ notification.title }}
+                      </div>
+                    </nz-list-item-meta-title>
+                    <nz-list-item-meta-description>
+                      <div class="notification-message">
+                        {{ notification.message }}
+                      </div>
+                      <div class="notification-timestamp">
+                        {{ formatTimestamp(notification.timestamp) }}
+                      </div>
+                    </nz-list-item-meta-description>
+                  </nz-list-item-meta>
+                  <ul nz-list-item-actions>
+                    <nz-list-item-action>
+                      <button
+                        nz-button
+                        nzType="text"
+                        nzSize="small"
+                        nzDanger
+                        (click)="clearNotification(notification, $event)"
+                      >
+                        <nz-icon nzType="close" nzTheme="outline"></nz-icon>
+                      </button>
+                    </nz-list-item-action>
+                  </ul>
+                </nz-list-item>
+              }
+            </nz-list>
           }
         </div>
-      </div>
-
-      <nz-divider class="notification-divider"></nz-divider>
-
-      <div class="notification-list-container">
-        @if ((notifications$ | async)!.length === 0) {
-          <nz-empty
-            nzNotFoundContent="No notifications"
-            [nzNotFoundImage]="'simple'"
-            class="notification-empty"
-          ></nz-empty>
-        } @else {
-          <nz-list [nzDataSource]="(notifications$ | async)!" nzSize="small">
-            <nz-list-item
-              *ngFor="let notification of notifications$ | async"
-              class="notification-item"
-              [class.unread]="isUnread(notification)"
-              (click)="handleNotificationClick(notification)"
-            >
-              <nz-list-item-meta>
-                <nz-list-item-meta-avatar>
-                  <nz-icon
-                    [nzType]="
-                      getNotificationIcon(notification.notificationType)
-                    "
-                    nzTheme="fill"
-                    [style.color]="
-                      getNotificationIconColor(notification.notificationType)
-                    "
-                    class="notification-type-icon"
-                  ></nz-icon>
-                </nz-list-item-meta-avatar>
-                <nz-list-item-meta-title>
-                  <div class="notification-title">
-                    {{ notification.title }}
-                  </div>
-                </nz-list-item-meta-title>
-                <nz-list-item-meta-description>
-                  <div class="notification-message">
-                    {{ notification.message }}
-                  </div>
-                  <div class="notification-timestamp">
-                    {{ formatTimestamp(notification.timestamp) }}
-                  </div>
-                </nz-list-item-meta-description>
-              </nz-list-item-meta>
-              <ul nz-list-item-actions>
-                <nz-list-item-action>
-                  <button
-                    nz-button
-                    nzType="text"
-                    nzSize="small"
-                    nzDanger
-                    (click)="clearNotification(notification, $event)"
-                  >
-                    <nz-icon nzType="close" nzTheme="outline"></nz-icon>
-                  </button>
-                </nz-list-item-action>
-              </ul>
-            </nz-list-item>
-          </nz-list>
-        }
-      </div>
+      }
 
       @if ((connected$ | async) === false) {
         <div class="notification-disconnected">
