@@ -51,19 +51,79 @@ export class NotificationDropdownComponent {
   handleNotificationClick(notification: NotificationDto): void {
     this.notificationService.markAsRead(notification.id);
 
-    if (
-      notification.notificationType === NotificationType.GROUP_INVITATION &&
-      notification.data &&
-      notification.data['invitationLink']
-    ) {
-      const link = notification.data['invitationLink'] as string;
+    switch (notification.notificationType) {
+      case NotificationType.GROUP_INVITATION:
+        this.handleGroupInvitation(notification.data);
+        break;
+      case NotificationType.ACHIEVEMENT_UNLOCKED:
+      case NotificationType.ITEM_ACQUIRED:
+      case NotificationType.LEVEL_UP:
+        this.handleRedirectToProfile();
+        break;
+      case NotificationType.NEW_GROUP_REQUEST:
+        this.handleRedirectToGroupRequests(notification.data);
+        break;
+      case NotificationType.NEW_GROUP_MEMBER:
+      case NotificationType.GROUP_MEMBER_LEFT:
+      case NotificationType.NEW_GROUP_MESSAGE:
+      case NotificationType.GROUP_TASK_ASSIGNED:
+      case NotificationType.GROUP_TASK_COMPLETED:
+      case NotificationType.GROUP_REQUEST_STATUS_UPDATED:
+      case NotificationType.GROUP_ITEM_USED:
+        this.handleRedirectToGroupPage(notification.data);
+        break;
+      default:
+        break;
+    }
+  }
 
-      if (link.startsWith('/')) {
-        this.router.navigateByUrl(link);
-      } else {
-        window.location.href = link;
-      }
+  private handleGroupInvitation(
+    data: Record<string, unknown> | undefined,
+  ): void {
+    if (!data) {
+      return;
+    }
 
+    const link = data['invitationLink'] as string;
+
+    if (link.startsWith('/')) {
+      this.router.navigateByUrl(link);
+    } else {
+      window.location.href = link;
+    }
+
+    this.dropdownVisible = false;
+  }
+
+  private handleRedirectToProfile(): void {
+    this.router.navigate(['app/profile']);
+    this.dropdownVisible = false;
+  }
+
+  private handleRedirectToGroupRequests(
+    data: Record<string, unknown> | undefined,
+  ): void {
+    if (!data) {
+      return;
+    }
+
+    const groupId = data['groupId'] as string;
+    if (groupId) {
+      this.router.navigate([`app/groups/${groupId}/requests`]);
+      this.dropdownVisible = false;
+    }
+  }
+
+  private handleRedirectToGroupPage(
+    data: Record<string, unknown> | undefined,
+  ): void {
+    if (!data) {
+      return;
+    }
+
+    const groupId = data['groupId'] as string;
+    if (groupId) {
+      this.router.navigate([`app/groups/${groupId}`]);
       this.dropdownVisible = false;
     }
   }
