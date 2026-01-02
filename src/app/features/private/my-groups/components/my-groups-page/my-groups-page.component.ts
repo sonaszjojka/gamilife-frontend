@@ -19,6 +19,7 @@ import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { AddGroupFormComponent } from '../add-group-form/add-group-form.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-my-groups-page',
@@ -32,6 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     PaginationMoreComponent,
     GroupListComponent,
     AddGroupFormComponent,
+    NzEmptyModule,
   ],
   templateUrl: './my-groups-page.component.html',
   styleUrl: './my-groups-page.component.css',

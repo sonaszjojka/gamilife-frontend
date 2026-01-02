@@ -9,15 +9,24 @@
     </div>
   </div>
 
-  <div class="search-result-container">
-    <app-group-list [groups]="groups()"> </app-group-list>
-  </div>
+  @if (groups().length > 0) {
+    <div class="search-result-container">
+      <app-group-list [groups]="groups()"></app-group-list>
+    </div>
 
-  <div class="paging-div">
-    <app-pagination-more
-      [maxPageIndex]="totalPages()"
-      (pageChange)="onPageChange($event)"
+    <div class="paging-div">
+      <app-pagination-more
+        [maxPageIndex]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      >
+      </app-pagination-more>
+    </div>
+  } @else {
+    <nz-empty
+      nzNotFoundContent="No groups found"
+      [nzNotFoundImage]="'simple'"
+      style="margin: 60px 0"
     >
-    </app-pagination-more>
-  </div>
+    </nz-empty>
+  }
 </div>
