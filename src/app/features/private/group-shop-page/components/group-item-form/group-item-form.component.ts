@@ -48,8 +48,8 @@ export class GroupItemFormComponent {
   protected validateForm = this.fb.group({
     name: this.fb.control<string>('', [
       Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(200),
+      Validators.minLength(1),
+      Validators.maxLength(30),
     ]),
     price: this.fb.control<number>(1, [
       Validators.required,

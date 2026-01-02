@@ -6,7 +6,7 @@ import {GroupItemApiService} from '../../../../shared/services/group-item-api/gr
 import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
 import {Group} from '../../../../shared/models/group/group.model';
 import {GroupShopModel} from '../../../../shared/models/group/group-shop.model';
-import {NzCardComponent, NzCardMetaComponent} from "ng-zorro-antd/card";
+import {NzCardComponent} from "ng-zorro-antd/card";
 import {
   GroupMemberInventoryApiService
 } from '../../../../shared/services/group-member-inventory-api/group-member-inventory-api.service';
@@ -25,7 +25,6 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
     GroupItemFormComponent,
     NzCardComponent,
     NzIconDirective,
-    NzCardMetaComponent,
     NzTagComponent,
     NzButtonComponent
   ]

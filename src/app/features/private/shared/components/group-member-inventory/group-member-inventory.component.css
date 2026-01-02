@@ -1,9 +1,27 @@
-.drawer-header {
+::ng-deep .ant-drawer-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+::ng-deep .ant-drawer-title {
+  display: flex !important;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+::ng-deep .drawer-header {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 18px;
   font-weight: 600;
+}
+
+::ng-deep .drawer-header [nz-icon] {
+  font-size: 20px;
 }
 
 .inventory-container {
@@ -29,51 +47,6 @@
   flex: 1;
   overflow: visible;
   padding: 0 16px;
-}
-
-.items-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 8px 0;
-}
-
-
-.item-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  gap: 8px;
-}
-
-.sender-info {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.username {
-  font-weight: 700;
-  color: #1890ff;
-  font-size: 14px;
-}
-
-.timestamp {
-  font-size: 11px;
-  color: #8c8c8c;
-}
-
-.item-content {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  word-break: break-all;
-  line-height: 1.6;
-  color: #262626;
-  font-size: 14px;
-  display: block;
-  width: 100%;
 }
 
 .pagination-section {

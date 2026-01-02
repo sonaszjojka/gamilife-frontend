@@ -34,7 +34,7 @@ export class GroupMemberInventoryApiService {
 
   deleteMemberInventoryItem(groupId: string, memberId: string, itemId: string) {
     return this.http.delete(
-      `${this.apiUrl}/groups/${groupId}/members/${memberId}/inventory/items/${itemId}`,
+      `${this.apiUrl}/groups/${groupId}/members/${memberId}/inventory/${itemId}`,
       { withCredentials: true },
     );
 
@@ -42,7 +42,7 @@ export class GroupMemberInventoryApiService {
 
   useMemberItem(groupId: string, memberId: string, itemId: string, request: OwnedGroupItemRequestModel):Observable<OwnedGroupItemResponseModel> {
    return this.http.put<OwnedGroupItemResponseModel>(
-      `${this.apiUrl}/groups/${groupId}/members/${memberId}/inventory/items/${itemId}/use`,
+      `${this.apiUrl}/groups/${groupId}/members/${memberId}/inventory/${itemId}`,
         request ,
       { withCredentials: true },
     );

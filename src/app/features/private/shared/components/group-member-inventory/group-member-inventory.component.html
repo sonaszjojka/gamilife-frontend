@@ -20,7 +20,7 @@
           (click)="toggleUsedUpItems()"
         >
           <span nz-icon nzType="flag" nzTheme="outline"></span>
-          {{ isUsedUp() ? "Show Used Up Items" : "Show Active Items" }}
+          {{ isUsedUp() ? "Show Active Items"  : "Show Used Up Items" }}
         </button>
       </div>
 
@@ -35,6 +35,10 @@
             <nz-list-item >
               <app-group-member-inventory-item
                 [item]="item"
+                [groupId]="group().groupId"
+                [memberId]="group().loggedUserMembershipDto!.groupMemberId"
+                [mode]="mode()"
+                (actionPerformed)="load(currentPage()+1)"
                 ></app-group-member-inventory-item>
 
             </nz-list-item>

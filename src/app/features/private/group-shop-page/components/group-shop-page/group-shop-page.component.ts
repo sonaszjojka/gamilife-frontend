@@ -21,6 +21,7 @@ import {
 import {
   GroupMemberInventoryItemComponent
 } from '../../../shared/components/group-member-inventory-item/group-member-inventory-item.component';
+import {GroupItemApiService} from '../../../../shared/services/group-item-api/group-item-api.service';
 
 
 @Component({
@@ -50,6 +51,7 @@ export class GroupShopPageComponent implements OnInit {
   totalPages = signal<number>(0);
   currentPage = signal<number>(0);
   loading = signal<boolean>(true);
+  showActive = signal<boolean>(true)
 
   deactivated = output<void>()
   private destroyRef = inject(DestroyRef);
@@ -71,36 +73,62 @@ export class GroupShopPageComponent implements OnInit {
   shop!: GroupShopModel
   groupItems: GroupItemModel[] = [];
 
-  groupShopApi=inject(GroupShopApiService);
-  notificationService=inject(NotificationService);
+ private readonly groupShopApi=inject(GroupShopApiService);
+ private readonly notificationService=inject(NotificationService);
+ private readonly groupItemApi = inject(GroupItemApiService)
 
-ngOnInit() {
+  ngOnInit() {
     this.load(1);
 }
 
   load(page:number)
   {
-
     page--;
     this.loading.set(true);
-    this.groupShopApi.getGroupShopItems(this.group().groupId,page,12)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-      next: (response) => {
-        this.shop = response;
-        this.groupItems=this.shop.page.content;
-        this.totalPages.set(response.page.totalPages );
-        this.currentPage.set(page);
-        this.loading.set(false);
+    if (this.showActive())
+    {
+      this.groupShopApi.getGroupShopItems(this.group().groupId,page,12)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (response) => {
+            this.shop = response;
+            this.groupItems=this.shop.page.content;
+            this.totalPages.set(response.page.totalPages );
+            this.currentPage.set(response.page.number);
+            this.loading.set(false);
 
-      },
-      error: () => {
-        this.notificationService.error(
-          'Failed to load group shop items',
-        );
-        this.loading.set(false);
-      },
-    });
+          },
+          error: () => {
+            this.notificationService.error(
+              'Failed to load group shop items, try again later'
+            );
+            this.loading.set(false);
+          },
+        });
+    }
+    else
+    {
+      this.groupItemApi.getItems(this.group().groupId, page,12,this.showActive())
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(
+          {
+            next:(response)=>
+            {
+              this.groupItems= response.content;
+              this.totalPages.set(response.totalPages);
+              this.currentPage.set(response.number);
+              this.loading.set(false);
+            },
+            error:()=>
+            {
+              this.notificationService.error(
+                'Failed to load group shop items, try again later'
+              );
+              this.loading.set(false)
+            }
+          }
+        )
+    }
   }
 
   onPageChange($event: number) {
@@ -173,4 +201,11 @@ ngOnInit() {
   {
     this.userInventory.show()
   }
+
+  changeView()
+  {
+    this.showActive.set(!this.showActive());
+    this.load(1);
+  }
+
 }

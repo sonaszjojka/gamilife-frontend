@@ -15,10 +15,8 @@ import {
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
 import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
-import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {GroupShopModel, GroupShopRequestModel} from '../../../../shared/models/group/group-shop.model';
 import {GroupShopApiService} from '../../../../shared/services/group-shop-api/group-shop-api.service';
-import {NzFloatButtonComponent} from 'ng-zorro-antd/float-button';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 
@@ -34,8 +32,6 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     NzFormControlComponent,
     NzInputDirective,
     NzFormDirective,
-    NzCheckboxComponent,
-    NzFloatButtonComponent,
     NzButtonComponent,
     NzIconDirective,
   ],
