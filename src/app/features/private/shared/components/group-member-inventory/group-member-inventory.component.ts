@@ -78,7 +78,7 @@ export class GroupMemberInventoryComponent {
       .subscribe({
         next: (response) => {
           this.items.set(response.content);
-          this.currentPage.set(response.number);
+          this.currentPage.set(page);
           this.totalPages.set(response.totalPages);
           this.loading.set(false);
         },
