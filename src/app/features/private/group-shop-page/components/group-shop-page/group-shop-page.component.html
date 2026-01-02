@@ -112,12 +112,12 @@
   }
 
   <app-group-item-form
-    (formSubmitted)="onShopChanged($event)"
+    (formSubmitted)="onShopChanged()"
     [groupId]="group().groupId"
   ></app-group-item-form>
 
   <app-group-shop-form
-    (formSubmitted)="onShopChanged($event)"
+    (formSubmitted)="onShopChanged()"
     [shop]="shop"
     [groupId]="group().groupId"
   ></app-group-shop-form>

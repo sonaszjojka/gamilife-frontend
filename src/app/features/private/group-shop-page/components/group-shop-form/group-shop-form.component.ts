@@ -20,7 +20,6 @@ import {
   GroupShopRequestModel,
 } from '../../../../shared/models/group/group-shop.model';
 import { GroupShopApiService } from '../../../../shared/services/group-shop-api/group-shop-api.service';
-import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 
 @Component({
@@ -35,7 +34,6 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
     NzFormControlComponent,
     NzInputDirective,
     NzFormDirective,
-    NzButtonComponent,
     NzIconDirective,
   ],
   standalone: true,

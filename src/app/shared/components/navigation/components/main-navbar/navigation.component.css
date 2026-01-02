@@ -78,14 +78,13 @@
   align-items: center;
 }
 
-/* Stats Items - Simplified */
 .stats-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 8px 16px;
   background-color: var(--bg-hover);
-  border: 1px solid var(--border-color);
+  border: 1px solid;
   border-radius: var(--border-radius);
   min-width: fit-content;
 }
@@ -163,7 +162,6 @@
   cursor: pointer;
   color: var(--text-secondary-color);
   font-size: var(--font-size-medium);
-  font-family: var(--main-font);
   border-radius: var(--border-radius);
   border-bottom: 2px solid transparent;
   transition:

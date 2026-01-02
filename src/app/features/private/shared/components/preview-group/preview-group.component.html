@@ -108,7 +108,6 @@
         *ngIf="group() && canAccessChat() && getLoggedUserGroupMemberId()"
         nzIcon="message"
         nzType="primary"
-        nzTooltip="Open Group Chat"
         (click)="openChat()"
         [nzShape]="'circle'"
         [style.width.px]="50"
@@ -120,7 +119,6 @@
         <nz-float-button
           nzIcon="shopping-cart"
           nzType="primary"
-          nzTooltip="Go to Group Shop"
           (click)="goToShop()"
           [nzShape]="'circle'"
           [style.width.px]="50"
