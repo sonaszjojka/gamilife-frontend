@@ -15,6 +15,7 @@ import {NzEmptyComponent} from 'ng-zorro-antd/empty';
 import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
 import {GroupMemberInventoryItemComponent} from '../group-member-inventory-item/group-member-inventory-item.component';
 import {CommonModule} from '@angular/common';
+import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mode';
 
 @Component({
   selector: 'app-group-member-inventory',
@@ -35,13 +36,14 @@ import {CommonModule} from '@angular/common';
   styleUrl: 'group-member-inventory.component.css'
 })
 
-export class GroupMemberInventoryComponent implements OnInit
+export class GroupMemberInventoryComponent
 {
   visible = signal<boolean>(false);
   isUsedUp= signal<boolean>(false);
 
   group = input.required<Group>()
   memberId= input.required<string>()
+  mode = input.required<GroupPreviewMode>()
 
   currentPage = signal<number>(1);
   totalPages = signal<number>(0)
@@ -53,10 +55,6 @@ export class GroupMemberInventoryComponent implements OnInit
   private readonly notificationService = inject(NotificationService)
   private destroyRef = inject(DestroyRef)
 
-  ngOnInit()
-  {
-    this.load(1)
-  }
 
 
   close() {
@@ -66,6 +64,7 @@ export class GroupMemberInventoryComponent implements OnInit
   show()
   {
     this.visible.set(true)
+    this.load(1)
   }
 
   load(page:number)
@@ -82,7 +81,6 @@ export class GroupMemberInventoryComponent implements OnInit
             this.currentPage.set(response.number)
             this.totalPages.set(response.totalPages)
             this.loading.set(false)
-            console.log(this.items())
           },
           error:()=>{
             this.loading.set(false)

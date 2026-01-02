@@ -1,8 +1,9 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
-import {GroupItemRequestModel, GroupItemResponseModel} from '../../models/group/group-item.model';
+import {GroupItemModel, GroupItemRequestModel, GroupItemResponseModel} from '../../models/group/group-item.model';
 import {Observable} from 'rxjs';
+import {Page} from '../../models/util/page.model';
 
 @Injectable
 ({
@@ -37,4 +38,23 @@ export class GroupItemApiService {
     );
   }
 
+  getItems(groupId:string, page:number, size:number, isActive:boolean):Observable<Page<GroupItemModel>>
+  {
+   let  httpParams = new HttpParams()
+   httpParams= httpParams.set('page',page.toString())
+   httpParams= httpParams.set('size',size.toString())
+
+    if (isActive!==null)
+    {
+     httpParams= httpParams.set('isActive',isActive.toString())
+    }
+    console.log(httpParams)
+    return this.http.get<Page<GroupItemModel>>(
+      `${this.apiUrl}/groups/${groupId}/shop/items`,
+      {
+        params:httpParams,
+        withCredentials:true
+      }
+    )
+  }
 }

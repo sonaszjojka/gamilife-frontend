@@ -1,3 +1,33 @@
-<nz-card>
-  <span>{{item().groupItem.name}}</span>
+<nz-card
+class="item-card"
+[class.inactive-card]="item().usedAt!=null">
+
+@if((item().usedAt!=null)) {
+  <div class="status-badge">
+    <nz-tag [nzColor]="'red'">Used up</nz-tag>
+  </div>
+}
+  <div class="card-body">
+    <h3 class="item-title" [title]="item().groupItem.name">
+      {{ item().groupItem.name }}
+    </h3>
+    @if(item().usedAt!=null)
+    {
+    <span> {{item().usedAt}}</span>
+    }
+  </div>
+  <div class="actions">
+  @if (item().usedAt===null)
+  {
+    <button (click)="useItem()">
+      Use
+    </button>
+  }
+  @if (mode()===GroupPreviewMode.ADMIN)
+  {
+    <button (click)="deleteItem()">
+      Delete
+    </button>
+  }
+  </div>
 </nz-card>

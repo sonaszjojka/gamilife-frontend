@@ -4,13 +4,13 @@ export interface OwnedGroupItemModel
 {
   id:string,
   memberId:string,
-  isUsedUp: string,
+  usedAt: string,
   groupItem:GroupItemModel
 }
 
 export interface OwnedGroupItemResponseModel
 {
-  isUsedUp: string
+  usedAt: string
 }
 
 export interface OwnedGroupItemRequestModel
