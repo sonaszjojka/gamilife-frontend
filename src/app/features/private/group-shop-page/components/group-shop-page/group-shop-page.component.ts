@@ -52,7 +52,7 @@ export class GroupShopPageComponent implements OnInit {
   viewMode = input.required<GroupPreviewMode>();
 
   totalPages = signal<number>(0);
-  currentPage = signal<number>(0);
+  currentPage = signal<number>(1);
   loading = signal<boolean>(true);
   showActive = signal<boolean>(true);
 
@@ -83,7 +83,7 @@ export class GroupShopPageComponent implements OnInit {
   }
 
   load(page: number) {
-    page--;
+    page=page-1;
     this.loading.set(true);
     if (this.showActive()) {
       this.groupShopApi
@@ -94,7 +94,7 @@ export class GroupShopPageComponent implements OnInit {
             this.shop = response;
             this.groupItems = this.shop.page.content;
             this.totalPages.set(response.page.totalPages);
-            this.currentPage.set(response.page.number);
+            this.currentPage.set(page);
             this.loading.set(false);
           },
           error: () => {
@@ -112,7 +112,7 @@ export class GroupShopPageComponent implements OnInit {
           next: (response) => {
             this.groupItems = response.content;
             this.totalPages.set(response.totalPages);
-            this.currentPage.set(response.number);
+            this.currentPage.set(page);
             this.loading.set(false);
           },
           error: () => {
@@ -125,8 +125,8 @@ export class GroupShopPageComponent implements OnInit {
     }
   }
 
-  onPageChange($event: number) {
-    this.load($event);
+  onPageChange(page: number) {
+    this.load(page);
   }
 
   onItemCreation() {
@@ -188,7 +188,7 @@ export class GroupShopPageComponent implements OnInit {
   }
 
   onShopChanged() {
-    this.load(this.currentPage() + 1);
+    this.load(this.currentPage()+1);
   }
 
   showInventory() {

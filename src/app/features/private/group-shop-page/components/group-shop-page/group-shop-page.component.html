@@ -80,12 +80,7 @@
         }
       </div>
 
-      <div class="shop-pagination">
-        <app-pagination-more
-          [maxPageIndex]="totalPages()"
-          (pageChange)="onPageChange($event)"
-        ></app-pagination-more>
-      </div>
+
 
       @if (viewMode() === GroupPreviewMode.ADMIN) {
         <nz-float-button
@@ -110,7 +105,6 @@
       }
     </div>
   }
-
   <app-group-item-form
     (formSubmitted)="onShopChanged()"
     [groupId]="group().groupId"
@@ -129,3 +123,10 @@
   >
   </app-group-member-inventory>
 }
+
+<div class="shop-pagination">
+  <app-pagination-more
+    [maxPageIndex]="totalPages()"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination-more>
+</div>
