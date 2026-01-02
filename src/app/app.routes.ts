@@ -147,6 +147,13 @@ export const routes: Routes = [
             './features/private/user-profile/components/user-profile-page/user-profile-page.component'
           ).then((m) => m.UserProfilePageComponent),
       },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import(
+            './features/private/user-profile/components/user-profile-page/user-profile-page.component'
+          ).then((m) => m.UserProfilePageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
