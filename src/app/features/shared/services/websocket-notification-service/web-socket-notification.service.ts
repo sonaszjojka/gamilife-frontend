@@ -1,10 +1,11 @@
-import { Injectable, inject, OnDestroy } from '@angular/core';
+import { Injectable, inject, OnDestroy, Injector } from '@angular/core';
 import { Client, IMessage } from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from '../../../../../environments/environment';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
 import { NotificationType } from '../../models/notification/notification-type.enum';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 
 interface NotificationDtoFromBackend {
   id: string;
@@ -30,6 +31,7 @@ export class WebSocketNotificationService implements OnDestroy {
   private client: Client | null = null;
   private nzNotification = inject(NzNotificationService);
   private storage = inject(StorageService);
+  private injector = inject(Injector);
 
   private connectedSubject = new BehaviorSubject<boolean>(false);
   public connected$: Observable<boolean> = this.connectedSubject.asObservable();
@@ -116,6 +118,28 @@ export class WebSocketNotificationService implements OnDestroy {
         message.body,
       );
       const notification = this.convertNotification(backendNotification);
+
+      if (
+        notification.notificationType ===
+        NotificationType.GAMIFICATION_VALUES_CHANGED
+      ) {
+        if (!notification.data) {
+          return;
+        }
+
+        const authService = this.injector.get(AuthService);
+        authService.updateGamificationData({
+          userId: notification.data['userId'] as string,
+          username: notification.data['username'] as string,
+          level: notification.data['level'] as number,
+          experience: notification.data['experience'] as number,
+          money: notification.data['money'] as number,
+          requiredExperienceForNextLevel: notification.data[
+            'requiredExperienceForNextLevel'
+          ] as number | null,
+        });
+        return;
+      }
 
       const notificationWithRead: NotificationDto = {
         ...notification,

@@ -188,7 +188,7 @@ export class AuthService {
       });
   }
 
-  private updateGamificationData(data: GamificationUserData): void {
+  public updateGamificationData(data: GamificationUserData): void {
     this.level.set(data.level);
     this.experience.set(data.experience);
     this.money.set(data.money);
