@@ -34,9 +34,7 @@ import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.co
 import { GroupChatComponent } from '../group-chat/group-chat/group-chat.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {GroupShopPageComponent} from '../../../group-shop-page/components/group-shop-page/group-shop-page.component';
-import {GroupShopApiService} from '../../../../shared/services/group-shop-api/group-shop-api.service';
-import {GroupShopRequestModel} from '../../../../shared/models/group/group-shop.model';
+import { GroupShopPageComponent } from '../../../group-shop-page/components/group-shop-page/group-shop-page.component';
 
 @Component({
   selector: 'app-preview-group',

@@ -10,7 +10,9 @@
     <form nz-form nzLayout="vertical" [formGroup]="validateForm">
       <nz-form-item>
         <nz-form-label nzRequired nzFor="name">Item Name</nz-form-label>
-        <nz-form-control nzErrorTip="Please input the item name (size from 1 to 30 characters)!">
+        <nz-form-control
+          nzErrorTip="Please input the item name (size from 1 to 30 characters)!"
+        >
           <input
             nz-input
             id="name"
@@ -37,12 +39,7 @@
       <nz-form-item>
         <nz-form-label nzFor="isActive">Is Item Active</nz-form-label>
         <nz-form-control>
-          <label
-            nz-checkbox
-            formControlName="isActive"
-            id="isActive"
-          >
-          </label>
+          <nz-checkbox formControlName="isActive" id="isActive"> </nz-checkbox>
         </nz-form-control>
       </nz-form-item>
     </form>

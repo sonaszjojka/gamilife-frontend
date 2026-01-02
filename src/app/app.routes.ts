@@ -160,7 +160,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/private/group-shop-page/components/group-shop-page/group-shop-page.component'
-            ).then((m) => m.GroupShopPageComponent),
+          ).then((m) => m.GroupShopPageComponent),
       },
     ],
   },

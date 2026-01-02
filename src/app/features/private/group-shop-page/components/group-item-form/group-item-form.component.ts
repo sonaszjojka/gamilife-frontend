@@ -14,10 +14,13 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
-import {GroupItemModel, GroupItemRequestModel} from '../../../../shared/models/group/group-item.model';
-import {GroupItemApiService} from '../../../../shared/services/group-item-api/group-item-api.service';
-import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
-import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
+import {
+  GroupItemModel,
+  GroupItemRequestModel,
+} from '../../../../shared/models/group/group-item.model';
+import { GroupItemApiService } from '../../../../shared/services/group-item-api/group-item-api.service';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: 'app-group-item-form',
@@ -42,8 +45,8 @@ export class GroupItemFormComponent {
   groupId = input.required<string>();
   isVisible = false;
 
-  private readonly  groupItemApi=inject(GroupItemApiService)
-  private readonly notification=inject(NotificationService)
+  private readonly groupItemApi = inject(GroupItemApiService);
+  private readonly notification = inject(NotificationService);
 
   protected validateForm = this.fb.group({
     name: this.fb.control<string>('', [
@@ -56,9 +59,7 @@ export class GroupItemFormComponent {
       Validators.min(1),
       Validators.max(9999),
     ]),
-    isActive: this.fb.control<boolean>(false,[
-      Validators.required
-      ]),
+    isActive: this.fb.control<boolean>(false, [Validators.required]),
   });
 
   openForm(): void {
@@ -75,22 +76,23 @@ export class GroupItemFormComponent {
 
   handleCreate(): void {
     if (this.validateForm.valid) {
-      const createRequest :  GroupItemRequestModel = {
+      const createRequest: GroupItemRequestModel = {
         name: this.validateForm.value.name,
         price: this.validateForm.value.price,
         isActive: this.validateForm.value.isActive,
-
       };
 
-      this.groupItemApi.createGroupItem(this.groupId(), createRequest).subscribe({
-        next: () => {
-          this.notification.success('Item created successfully');
-          this.formSubmitted.emit();
-        },
-        error: (error) => {
-          this.notification.handleApiError(error, 'Failed to create Item');
-        },
-      });
+      this.groupItemApi
+        .createGroupItem(this.groupId(), createRequest)
+        .subscribe({
+          next: () => {
+            this.notification.success('Item created successfully');
+            this.formSubmitted.emit();
+          },
+          error: (error) => {
+            this.notification.handleApiError(error, 'Failed to create Item');
+          },
+        });
     }
   }
 
@@ -127,26 +129,24 @@ export class GroupItemFormComponent {
 
   handleEdit(): void {
     if (this.validateForm.valid) {
-      const editRequest :  GroupItemRequestModel = {
+      const editRequest: GroupItemRequestModel = {
         name: this.validateForm.value.name,
         price: this.validateForm.value.price,
         isActive: this.validateForm.value.isActive,
-
       };
 
       this.groupItemApi
-        .editGroupItem(
-          this.groupId(),
-          editRequest,
-          this.item()!.id
-        )
+        .editGroupItem(this.groupId(), editRequest, this.item()!.id)
         .subscribe({
           next: () => {
             this.notification.success('Item data updated successfully');
             this.formSubmitted.emit();
           },
           error: (error) => {
-            this.notification.handleApiError(error, 'Failed to update Item data');
+            this.notification.handleApiError(
+              error,
+              'Failed to update Item data',
+            );
           },
         });
     }
