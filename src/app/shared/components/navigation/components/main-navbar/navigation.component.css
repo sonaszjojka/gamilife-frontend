@@ -39,7 +39,7 @@
   color: var(--text-secondary-color);
 }
 
-.nav-menu>li {
+.nav-menu > li {
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -254,7 +254,7 @@
     padding-left: 0;
   }
 
-  .nav-menu>li {
+  .nav-menu > li {
     padding: 0 8px;
     font-size: var(--font-size-small);
   }
@@ -329,7 +329,7 @@
     padding: 0 2px;
   }
 
-  .nav-menu>li {
+  .nav-menu > li {
     padding: 0 4px;
     font-size: var(--font-size-xs);
   }

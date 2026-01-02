@@ -15,12 +15,9 @@
   <ng-container *nzDrawerContent>
     <div class="inventory-container">
       <div class="filter-section">
-        <button
-          nz-button
-          (click)="toggleUsedUpItems()"
-        >
+        <button nz-button (click)="toggleUsedUpItems()">
           <span nz-icon nzType="flag" nzTheme="outline"></span>
-          {{ isUsedUp() ? "Show Active Items"  : "Show Used Up Items" }}
+          {{ isUsedUp() ? "Show Active Items" : "Show Used Up Items" }}
         </button>
       </div>
 
@@ -32,15 +29,14 @@
           class="items-list"
         >
           <ng-template #inventoryItem let-item>
-            <nz-list-item >
+            <nz-list-item>
               <app-group-member-inventory-item
                 [item]="item"
                 [groupId]="group().groupId"
                 [memberId]="group().loggedUserMembershipDto!.groupMemberId"
                 [mode]="mode()"
-                (actionPerformed)="load(currentPage()+1)"
-                ></app-group-member-inventory-item>
-
+                (actionPerformed)="load(currentPage() + 1)"
+              ></app-group-member-inventory-item>
             </nz-list-item>
           </ng-template>
         </nz-list>
@@ -51,7 +47,7 @@
         ></nz-empty>
       </nz-spin>
 
-      <div class="pagination-section" >
+      <div class="pagination-section">
         <nz-pagination
           [nzPageIndex]="currentPage()"
           [nzTotal]="totalPages()"

@@ -14,11 +14,14 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
-import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
-import {GroupShopModel, GroupShopRequestModel} from '../../../../shared/models/group/group-shop.model';
-import {GroupShopApiService} from '../../../../shared/services/group-shop-api/group-shop-api.service';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import {
+  GroupShopModel,
+  GroupShopRequestModel,
+} from '../../../../shared/models/group/group-shop.model';
+import { GroupShopApiService } from '../../../../shared/services/group-shop-api/group-shop-api.service';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-group-shop-form',
@@ -38,15 +41,14 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
   standalone: true,
 })
 export class GroupShopFormComponent {
-
   formSubmitted = output<void>();
   private fb = inject(NonNullableFormBuilder);
   shop = input<GroupShopModel>();
   groupId = input.required<string>();
   isVisible = false;
 
-  private readonly  groupShopApi=inject(GroupShopApiService)
-  private readonly notification=inject(NotificationService)
+  private readonly groupShopApi = inject(GroupShopApiService);
+  private readonly notification = inject(NotificationService);
 
   protected validateForm = this.fb.group({
     name: this.fb.control<string>('', [
@@ -74,28 +76,21 @@ export class GroupShopFormComponent {
 
   handleSubmit(): void {
     if (this.validateForm.valid) {
-
-      const request :  GroupShopRequestModel = {
+      const request: GroupShopRequestModel = {
         name: this.validateForm.value.name,
         description: this.validateForm.value.description,
       };
-      console.log(request)
-      this.groupShopApi
-        .editGroupShop(
-          this.groupId(),
-          request
-        )
-        .subscribe({
-          next: () => {
-
-            this.notification.success('Shop data updated successfully');
-            this.formSubmitted.emit();
-          },
-          error: (error) => {
-            console.log(error)
-            this.notification.handleApiError(error, 'Failed to update Shop data');
-          },
-        });
+      console.log(request);
+      this.groupShopApi.editGroupShop(this.groupId(), request).subscribe({
+        next: () => {
+          this.notification.success('Shop data updated successfully');
+          this.formSubmitted.emit();
+        },
+        error: (error) => {
+          console.log(error);
+          this.notification.handleApiError(error, 'Failed to update Shop data');
+        },
+      });
       this.isVisible = false;
       this.validateForm.reset();
     } else {
@@ -111,12 +106,7 @@ export class GroupShopFormComponent {
     this.isVisible = false;
     this.validateForm.reset();
   }
-  getTitle():string{
-    return 'Edit' + this.shop()?.name
-  }
-
-
-  onChangedStatus() {
-
+  getTitle(): string {
+    return 'Edit' + this.shop()?.name;
   }
 }

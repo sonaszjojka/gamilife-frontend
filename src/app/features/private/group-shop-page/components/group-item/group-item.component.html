@@ -1,9 +1,9 @@
 <nz-card
   [nzHoverable]="true"
   class="item-card"
-  [class.inactive-card]="!item().isActive">
-
-  @if(viewMode()===GroupPreviewMode.ADMIN && !item().isActive) {
+  [class.inactive-card]="!item().isActive"
+>
+  @if (viewMode() === GroupPreviewMode.ADMIN && !item().isActive) {
     <div class="status-badge">
       <nz-tag [nzColor]="'red'">Inactive</nz-tag>
     </div>
@@ -17,17 +17,20 @@
 
   <div class="card-footer">
     <div class="price-tag">
-      <span nz-icon nzType="gold" nzTheme="twotone" [nzTwotoneColor]="'#faad14'"></span>
-      <span class="price-value">{{ item().price }} {{this.group().groupCurrencySymbol}}</span>
+      <span
+        nz-icon
+        nzType="gold"
+        nzTheme="twotone"
+        [nzTwotoneColor]="'#faad14'"
+      ></span>
+      <span class="price-value"
+        >{{ item().price }} {{ this.group().groupCurrencySymbol }}</span
+      >
     </div>
 
     <div class="actions">
-      @if (viewMode()===GroupPreviewMode.ADMIN) {
-        <button
-          nz-button
-          nzType="default"
-          nzShape="circle"
-          (click)="onEdit()">
+      @if (viewMode() === GroupPreviewMode.ADMIN) {
+        <button nz-button nzType="default" nzShape="circle" (click)="onEdit()">
           <span nz-icon nzType="edit"></span>
         </button>
 
@@ -36,7 +39,8 @@
           nzType="primary"
           nzDanger
           nzShape="circle"
-          (click)="onDelete()">
+          (click)="onDelete()"
+        >
           <span nz-icon nzType="delete"></span>
         </button>
 
@@ -45,17 +49,18 @@
           nzType="primary"
           class="buy-button"
           [disabled]="!item().isActive"
-          (click)="onPurchase()">
+          (click)="onPurchase()"
+        >
           Purchase
         </button>
-      }
-      @else {
+      } @else {
         <button
           nz-button
           nzType="primary"
           class="buy-button"
           [disabled]="!item().isActive"
-          (click)="onPurchase()">
+          (click)="onPurchase()"
+        >
           Purchase
         </button>
       }
