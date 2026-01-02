@@ -1,0 +1,99 @@
+<div class="about-page">
+  <div class="about-overlay"></div>
+
+  <div class="about-content">
+    <div class="about-hero">
+      <h1 class="about-title">About GamiLife</h1>
+      <p class="about-subtitle">
+        Transform your daily habits into an exciting journey of personal growth
+      </p>
+    </div>
+
+    <nz-card class="about-card mission-card" nzBordered="false">
+      <div class="card-content">
+        <nz-icon nzType="rocket" nzTheme="outline" class="card-icon"></nz-icon>
+        <h2 class="card-title">Our Mission</h2>
+        <p class="card-text">
+          GamiLife exists to make building better habits actually fun. Personal
+          growth shouldn’t feel like a chore, so we turn your daily routines
+          into a bit of an adventure. You get to chase goals, stay motivated,
+          and enjoy the journey along the way.
+        </p>
+      </div>
+    </nz-card>
+
+    <div class="about-cards-grid">
+      <nz-card class="about-card" nzBordered="false">
+        <div class="card-content">
+          <nz-icon nzType="star" nzTheme="outline" class="card-icon"></nz-icon>
+          <h2 class="card-title">Gamification</h2>
+          <p class="card-text">
+            Earn experience points, unlock achievements, and level up as you
+            complete your habits. Every action brings you closer to your goals
+            while keeping you entertained.
+          </p>
+        </div>
+      </nz-card>
+
+      <nz-card class="about-card" nzBordered="false">
+        <div class="card-content">
+          <nz-icon
+            nzType="calendar"
+            nzTheme="outline"
+            class="card-icon"
+          ></nz-icon>
+          <h2 class="card-title">Habit Tracking</h2>
+          <p class="card-text">
+            Build and maintain daily habits with our intuitive tracking system.
+            Visualize your progress, identify patterns, and stay consistent with
+            your routines.
+          </p>
+        </div>
+      </nz-card>
+
+      <nz-card class="about-card" nzBordered="false">
+        <div class="card-content">
+          <nz-icon nzType="fire" nzTheme="outline" class="card-icon"></nz-icon>
+          <h2 class="card-title">Stay Motivated</h2>
+          <p class="card-text">
+            Keep your streak alive, compete with yourself, and watch your
+            virtual rewards grow. Our motivation system helps you stay on track
+            even on difficult days.
+          </p>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="about-cta">
+      <h2 class="cta-title">Ready to Start Your Journey?</h2>
+      <div class="cta-actions">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          class="guest-button guest-button-primary"
+          (click)="goToRegister()"
+        >
+          <nz-icon nzType="user-add" nzTheme="outline"></nz-icon>
+          <span>Join GamiLife</span>
+        </button>
+
+        <button
+          nz-button
+          nzSize="large"
+          class="guest-button guest-button-secondary"
+          routerLink="/"
+        >
+          <nz-icon nzType="home" nzTheme="outline"></nz-icon>
+          <span>Back to Home</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="background-decoration">
+    <div class="decoration-circle decoration-circle-1"></div>
+    <div class="decoration-circle decoration-circle-2"></div>
+    <div class="decoration-circle decoration-circle-3"></div>
+  </div>
+</div>

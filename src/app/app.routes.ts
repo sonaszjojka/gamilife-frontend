@@ -13,6 +13,14 @@ export const routes: Routes = [
     canActivate: [GuestGuard],
   },
   {
+    path: 'about-us',
+    loadComponent: () =>
+      import(
+        './features/public/about-us/about-us-page/about-us-page.component'
+      ).then((m) => m.AboutUsPageComponent),
+    canActivate: [GuestGuard],
+  },
+  {
     path: 'verify-email',
     loadComponent: () =>
       import(
