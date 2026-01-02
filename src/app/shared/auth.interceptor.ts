@@ -1,16 +1,17 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, Injector } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 import { catchError, switchMap, throwError, filter, take } from 'rxjs';
 import { ErrorCode } from '../features/shared/models/error-codes/error-codes.enum';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const injector = inject(Injector);
 
   const cloned = req.clone({ withCredentials: true });
 
   return next(cloned).pipe(
     catchError((error: HttpErrorResponse) => {
+      const authService = injector.get(AuthService);
       const code = Number(error.error?.code);
       const url = req.url;
 
