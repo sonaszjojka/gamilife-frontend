@@ -84,13 +84,16 @@ export class NotificationDropdownComponent {
       return;
     }
 
-    const link = data['invitationLink'] as string;
+    const groupInvitationId = data['groupInvitationId'] as string;
+    const groupId = data['groupId'] as string;
+    const token = data['token'] as string;
 
-    if (link.startsWith('/')) {
-      this.router.navigateByUrl(link);
-    } else {
-      window.location.href = link;
+    if (!groupInvitationId || !groupId || !token) {
+      return;
     }
+
+    const invitationLink = `/app/groups/${groupId}/group-invitations/${groupInvitationId}?token=${token}`;
+    this.router.navigateByUrl(invitationLink);
 
     this.dropdownVisible = false;
   }
