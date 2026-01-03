@@ -27,6 +27,7 @@ import { CommonModule } from '@angular/common';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {VerifyEmailComponent} from '../../../login/components/verify-email/verify-email.component';
 @Component({
   selector: 'app-registration',
   standalone: true,
@@ -43,6 +44,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzDatePickerModule,
     CommonModule,
     LinkOAuthAccountComponent,
+    VerifyEmailComponent,
   ],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
@@ -58,6 +60,9 @@ export class RegistrationComponent {
   private oauth2Service = inject(OAuth2Service);
   @ViewChild(LinkOAuthAccountComponent)
   linkAccountModal!: LinkOAuthAccountComponent;
+  @ViewChild(VerifyEmailComponent)
+  verifyEmail! :VerifyEmailComponent
+
   validateForm = this.fb.group({
     firstName: this.fb.control('', [
       Validators.required,
@@ -98,7 +103,7 @@ export class RegistrationComponent {
         .subscribe({
           next: () => {
             this.isSubmitting.update(() => false);
-            this.router.navigate(['/login']);
+            this.verifyEmail.open(formData.email!)
           },
           error: (err) => {
             this.isSubmitting.update(() => false);
