@@ -1,4 +1,4 @@
-import { Component, signal, inject, computed, OnInit } from '@angular/core';
+import { Component, inject, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
@@ -41,8 +41,6 @@ export class NavigationComponent implements OnInit {
   userExperience = this.authService.experience;
   requiredExperience = this.authService.requiredExperienceForNextLevel;
 
-  isDarkTheme = signal(true);
-
   experiencePercentage = computed(() => {
     return this.authService.getExperiencePercentage();
   });
@@ -51,9 +49,5 @@ export class NavigationComponent implements OnInit {
     if (this.isLoggedIn() && this.authService.userId()) {
       this.authService.loadGamificationData();
     }
-  }
-
-  toggleTheme() {
-    this.isDarkTheme.update((prev) => !prev);
   }
 }

@@ -39,7 +39,7 @@
   color: var(--text-secondary-color);
 }
 
-.nav-menu>li {
+.nav-menu > li {
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -58,7 +58,8 @@
   display: none !important;
 }
 
-.nav-menu .ant-menu-item:hover {
+.nav-menu .ant-menu-item:hover,
+.nav-menu .ant-menu-item.active-nav-link {
   color: var(--fifth-color);
   background-color: var(--bg-hover);
   border-bottom-color: var(--fifth-color);
@@ -254,7 +255,7 @@
     padding-left: 0;
   }
 
-  .nav-menu>li {
+  .nav-menu > li {
     padding: 0 8px;
     font-size: var(--font-size-small);
   }
@@ -329,7 +330,7 @@
     padding: 0 2px;
   }
 
-  .nav-menu>li {
+  .nav-menu > li {
     padding: 0 4px;
     font-size: var(--font-size-xs);
   }
