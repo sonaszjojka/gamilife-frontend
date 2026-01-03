@@ -18,20 +18,22 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {BackButtonComponent} from '../../../shared/components/back-button/back-button-component';
 
 
 @Component({
   selector: 'app-group-members-page',
   standalone: true,
-    imports: [
-        CommonModule,
-        NzSpinModule,
-        NzCardModule,
-        NzButtonModule,
-        NzIconModule,
-        GroupMembersListComponent,
-        SendGroupInvitationFormComponent,
-    ],
+  imports: [
+    CommonModule,
+    NzSpinModule,
+    NzCardModule,
+    NzButtonModule,
+    NzIconModule,
+    GroupMembersListComponent,
+    SendGroupInvitationFormComponent,
+    BackButtonComponent,
+  ],
   templateUrl: './group-members-page.component.html',
   styles: [
     `
