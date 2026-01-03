@@ -22,7 +22,6 @@ describe('GroupCardComponent', () => {
       groupName: 'Test Group',
       adminId: 'admin1',
       groupCurrencySymbol: '$',
-      joinCode: 'ABC123',
       membersLimit: 10,
       groupType: { title: 'Open' },
       membersCount: 5,

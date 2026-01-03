@@ -3,7 +3,6 @@ import { GroupType } from './group-type.model';
 
 export interface Group {
   groupId: string;
-  joinCode: string;
   groupName: string;
   adminId: string;
   groupCurrencySymbol: string | null;
@@ -33,7 +32,6 @@ export interface EditGroupDto {
 }
 
 export interface GroupFilterParams {
-  joinCode?: string;
   groupType?: number;
   groupName?: string;
   isForLoggedUser?: boolean;
