@@ -22,14 +22,6 @@ import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-
 
         <div class="info-container">
           <div class="info-item">
-            <span nz-icon nzType="key" class="info-icon"></span>
-            <div class="info-content">
-              <span class="info-label">Join Code</span>
-              <span class="info-value">{{ group().joinCode }}</span>
-            </div>
-          </div>
-
-          <div class="info-item">
             <span nz-icon nzType="team" class="info-icon"></span>
             <div class="info-content">
               <span class="info-label">Members</span>

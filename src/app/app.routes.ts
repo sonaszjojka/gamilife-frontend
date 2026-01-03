@@ -80,24 +80,76 @@ export const routes: Routes = [
       },
       {
         path: 'tasks',
-        loadComponent: () =>
-          import(
-            './features/private/my-tasks/task-list/task-list.component'
-          ).then((m) => m.TaskListComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import(
+                './features/private/my-tasks/task-list/task-list.component'
+              ).then((m) => m.TaskListComponent),
+          },
+          {
+            path: 'pomodoro-session',
+            loadComponent: () =>
+              import(
+                './features/private/my-tasks/pomodoro-session/pomodoro-session.component'
+              ).then((m) => m.PomodoroSessionComponent),
+          },
+        ],
       },
       {
         path: 'community',
-        loadComponent: () =>
-          import(
-            './features/private/community/components/community-page/community-page.component'
-          ).then((m) => m.CommunityPageComponent),
-      },
-      {
-        path: 'groups/:groupId',
-        loadComponent: () =>
-          import(
-            './features/private/shared/components/preview-group/preview-group.component'
-          ).then((m) => m.PreviewGroupComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import(
+                './features/private/community/components/community-page/community-page.component'
+              ).then((m) => m.CommunityPageComponent),
+          },
+          {
+            path: 'groups/:groupId',
+            loadComponent: () =>
+              import(
+                './features/private/shared/components/preview-group/preview-group.component'
+              ).then((m) => m.PreviewGroupComponent),
+          },
+          {
+            path: 'groups/:groupId/members',
+            loadComponent: () =>
+              import(
+                './features/private/group-members-page/components/group-members-page/group-members-page.component'
+              ).then((m) => m.GroupMembersPageComponent),
+          },
+          {
+            path: 'groups/:groupId/requests',
+            loadComponent: () =>
+              import(
+                './features/private/group-requests-page/components/group-requests-page/group-requests-page.component'
+              ).then((m) => m.GroupRequestsPageComponent),
+          },
+          {
+            path: 'groups/:groupId/group-invitations/:groupInvitationId',
+            loadComponent: () =>
+              import(
+                './features/private/my-groups/components/group-invitation-response/group-invitation-response.component'
+              ).then((m) => m.GroupInvitationResponseComponent),
+          },
+          {
+            path: 'groups/:groupId/ranking',
+            loadComponent: () =>
+              import(
+                './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component'
+              ).then((m) => m.GroupRankingPageComponent),
+          },
+          {
+            path: 'users/:userId',
+            loadComponent: () =>
+              import(
+                './features/private/user-profile/components/user-profile-page/user-profile-page.component'
+              ).then((m) => m.UserProfilePageComponent),
+          },
+        ],
       },
       {
         path: 'my-groups',
@@ -107,53 +159,11 @@ export const routes: Routes = [
           ).then((m) => m.MyGroupsPageComponent),
       },
       {
-        path: 'tasks/pomodoro-session',
-        loadComponent: () =>
-          import(
-            './features/private/my-tasks/pomodoro-session/pomodoro-session.component'
-          ).then((m) => m.PomodoroSessionComponent),
-      },
-      {
         path: 'store',
         loadComponent: () =>
           import(
             './features/private/store/store-page/store-page.component'
           ).then((m) => m.StorePageComponent),
-      },
-      {
-        path: 'groups/:groupId/members',
-        loadComponent: () =>
-          import(
-            './features/private/group-members-page/components/group-members-page/group-members-page.component'
-          ).then((m) => m.GroupMembersPageComponent),
-      },
-      {
-        path: 'groups/:groupId/requests',
-        loadComponent: () =>
-          import(
-            './features/private/group-requests-page/components/group-requests-page/group-requests-page.component'
-          ).then((m) => m.GroupRequestsPageComponent),
-      },
-      {
-        path: 'groups/:groupId/group-invitations/:groupInvitationId',
-        loadComponent: () =>
-          import(
-            './features/private/my-groups/components/group-invitation-response/group-invitation-response.component'
-          ).then((m) => m.GroupInvitationResponseComponent),
-      },
-      {
-        path: 'groups/:groupId/ranking',
-        loadComponent: () =>
-          import(
-            './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component'
-          ).then((m) => m.GroupRankingPageComponent),
-      },
-      {
-        path: 'users/:userId',
-        loadComponent: () =>
-          import(
-            './features/private/user-profile/components/user-profile-page/user-profile-page.component'
-          ).then((m) => m.UserProfilePageComponent),
       },
       {
         path: 'profile',

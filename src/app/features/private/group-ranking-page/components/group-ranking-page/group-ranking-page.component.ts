@@ -43,7 +43,7 @@ export class GroupRankingPageComponent implements OnInit {
   ngOnInit(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (!groupId) {
-      this.router.navigate(['/app/groups']);
+      this.router.navigate(['/app/community']);
       return;
     }
 
@@ -72,9 +72,9 @@ export class GroupRankingPageComponent implements OnInit {
   protected goBack(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`/app/groups/${groupId}`]);
+      this.router.navigate([`/app/community/groups/${groupId}`]);
     } else {
-      this.router.navigate(['/app/groups']);
+      this.router.navigate(['/app/community/groups']);
     }
   }
 }

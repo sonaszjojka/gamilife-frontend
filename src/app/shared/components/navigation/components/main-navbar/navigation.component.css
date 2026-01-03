@@ -58,7 +58,8 @@
   display: none !important;
 }
 
-.nav-menu .ant-menu-item:hover {
+.nav-menu .ant-menu-item:hover,
+.nav-menu .ant-menu-item.active-nav-link {
   color: var(--fifth-color);
   background-color: var(--bg-hover);
   border-bottom-color: var(--fifth-color);

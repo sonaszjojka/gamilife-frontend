@@ -44,6 +44,6 @@ export class FullRankingComponent {
   }
 
   viewProfile(member: GroupMember): void {
-    this.router.navigate(['/app/users', member.userId]);
+    this.router.navigate(['/app/community/users', member.userId]);
   }
 }
