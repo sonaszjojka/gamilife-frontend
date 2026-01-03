@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {VerifyEmailComponent} from '../../../login/components/verify-email/verify-email.component';
+import { VerifyEmailComponent } from '../../../login/components/verify-email/verify-email.component';
 @Component({
   selector: 'app-registration',
   standalone: true,
@@ -61,7 +61,7 @@ export class RegistrationComponent {
   @ViewChild(LinkOAuthAccountComponent)
   linkAccountModal!: LinkOAuthAccountComponent;
   @ViewChild(VerifyEmailComponent)
-  verifyEmail! :VerifyEmailComponent
+  verifyEmail!: VerifyEmailComponent;
 
   validateForm = this.fb.group({
     firstName: this.fb.control('', [
@@ -103,7 +103,7 @@ export class RegistrationComponent {
         .subscribe({
           next: () => {
             this.isSubmitting.update(() => false);
-            this.verifyEmail.open(formData.email!)
+            this.verifyEmail.open(formData.email!);
           },
           error: (err) => {
             this.isSubmitting.update(() => false);
