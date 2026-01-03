@@ -1,11 +1,10 @@
-import {Component, inject} from '@angular/core';
-import {Location} from '@angular/common';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
+import { Component, inject } from '@angular/core';
+import { Location } from '@angular/common';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
 
-@Component
-({
-  selector:'app-back-button',
+@Component({
+  selector: 'app-back-button',
   standalone: true,
   template: `
     <button nz-button nzType="link" nzSize="default" (click)="onBack()">
@@ -13,20 +12,12 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     </button>
   `,
 
-  imports: [
-    NzButtonComponent,
-    NzIconDirective
-  ]
+  imports: [NzButtonComponent, NzIconDirective],
 })
+export class BackButtonComponent {
+  private navigation = inject(Location);
 
-export class BackButtonComponent
-{
-
- private navigation= inject(Location)
-
-  onBack():void
-  {
-    this.navigation.back()
+  onBack(): void {
+    this.navigation.back();
   }
-
 }

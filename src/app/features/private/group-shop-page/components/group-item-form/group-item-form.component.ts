@@ -20,7 +20,7 @@ import {
 } from '../../../../shared/models/group/group-item.model';
 import { GroupItemApiService } from '../../../../shared/services/group-item-api/group-item-api.service';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: 'app-group-item-form',
@@ -34,7 +34,7 @@ import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
     NzFormControlComponent,
     NzInputDirective,
     NzFormDirective,
-    NzCheckboxComponent,
+    NzCheckboxModule,
   ],
   standalone: true,
 })

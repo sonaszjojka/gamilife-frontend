@@ -83,7 +83,7 @@ export class GroupShopPageComponent implements OnInit {
   }
 
   load(page: number) {
-    page=page-1;
+    page = page - 1;
     this.loading.set(true);
     if (this.showActive()) {
       this.groupShopApi
@@ -188,7 +188,7 @@ export class GroupShopPageComponent implements OnInit {
   }
 
   onShopChanged() {
-    this.load(this.currentPage()+1);
+    this.load(this.currentPage() + 1);
   }
 
   showInventory() {

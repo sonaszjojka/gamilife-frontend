@@ -9,7 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
-import {DatePipe} from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-group-member-inventory-item',

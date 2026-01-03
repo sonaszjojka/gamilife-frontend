@@ -11,20 +11,20 @@ import { GroupMember } from '../../../../shared/models/group/group-member.model'
 import { FullRankingComponent } from '../full-ranking/full-ranking.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {BackButtonComponent} from "../../../shared/components/back-button/back-button-component";
+import { BackButtonComponent } from '../../../shared/components/back-button/back-button-component';
 
 @Component({
   selector: 'app-group-ranking-page',
   standalone: true,
-    imports: [
-        CommonModule,
-        NzSpinModule,
-        NzCardModule,
-        NzButtonModule,
-        NzIconModule,
-        FullRankingComponent,
-        BackButtonComponent,
-    ],
+  imports: [
+    CommonModule,
+    NzSpinModule,
+    NzCardModule,
+    NzButtonModule,
+    NzIconModule,
+    FullRankingComponent,
+    BackButtonComponent,
+  ],
   templateUrl: './group-ranking-page.component.html',
   styleUrl: './group-ranking-page.component.css',
 })

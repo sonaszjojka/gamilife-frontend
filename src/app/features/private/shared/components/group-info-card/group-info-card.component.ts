@@ -4,7 +4,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.component';
-import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mode';
+import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
 
 @Component({
   selector: 'app-group-info-card',
@@ -47,7 +47,10 @@ import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mo
               <span nz-icon nzType="dollar" class="info-icon"></span>
               <div class="info-content">
                 <span class="info-label">Currency</span>
-                <span class="info-value">{{ group().loggedUserMembershipDto?.groupMoney }} {{group().groupCurrencySymbol}}</span>
+                <span class="info-value"
+                  >{{ group().loggedUserMembershipDto?.groupMoney }}
+                  {{ group().groupCurrencySymbol }}</span
+                >
               </div>
             </div>
           }
@@ -57,8 +60,8 @@ import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mo
             <div class="info-content">
               <span class="info-label">Admin</span>
               <span class="info-value">{{
-                  group().adminUsername ?? group().adminId
-                }}</span>
+                group().adminUsername ?? group().adminId
+              }}</span>
             </div>
           </div>
         </div>
@@ -156,6 +159,6 @@ import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mo
 })
 export class GroupInfoCardComponent {
   group = input.required<Group>();
-  mode=input.required<GroupPreviewMode>()
+  mode = input.required<GroupPreviewMode>();
   protected readonly GroupPreviewMode = GroupPreviewMode;
 }

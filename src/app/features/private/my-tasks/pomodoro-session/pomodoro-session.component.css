@@ -11,8 +11,7 @@ app-back-button {
   position: relative;
   transform: scale(2) translateY(-10px);
 }
-.pomodoro-session-table
-{
+.pomodoro-session-table {
   display: flex;
   min-height: 100vh;
 }

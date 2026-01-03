@@ -33,7 +33,7 @@ import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-a
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {BackButtonComponent} from '../../shared/components/back-button/back-button-component';
+import { BackButtonComponent } from '../../shared/components/back-button/back-button-component';
 
 @Component({
   selector: 'app-pomodoro-session',

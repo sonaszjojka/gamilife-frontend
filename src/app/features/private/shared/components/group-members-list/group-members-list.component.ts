@@ -12,15 +12,15 @@ import { Router } from '@angular/router';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import {NzTooltipDirective, NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import { NzTooltipDirective, NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberFormComponent } from '../edit-group-member-form/edit-group-member-form.component';
 import { PaginationMoreComponent } from '../pagination-more/pagination-more.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {GroupMemberInventoryComponent} from '../group-member-inventory/group-member-inventory.component';
-import {GroupPreviewMode} from '../../../../shared/models/group/group-preview-mode';
+import { GroupMemberInventoryComponent } from '../group-member-inventory/group-member-inventory.component';
+import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
 
 @Component({
   selector: 'app-group-members-list',
@@ -52,7 +52,7 @@ export class GroupMembersListComponent {
   editForm!: EditGroupMemberFormComponent;
 
   @ViewChild(GroupMemberInventoryComponent)
-  memberInventory!:GroupMemberInventoryComponent
+  memberInventory!: GroupMemberInventoryComponent;
 
   selectedMember = signal<GroupMember | null>(null);
   currentPage = signal<number>(1);
@@ -115,10 +115,9 @@ export class GroupMembersListComponent {
     this.memberChanged.emit();
   }
 
-  showMemberInventory(member:GroupMember)
-  {
-    this.selectedMember.set(member)
-    this.memberInventory.show()
+  showMemberInventory(member: GroupMember) {
+    this.selectedMember.set(member);
+    this.memberInventory.show();
   }
 
   protected readonly GroupPreviewMode = GroupPreviewMode;

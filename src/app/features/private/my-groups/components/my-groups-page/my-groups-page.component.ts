@@ -56,7 +56,7 @@ export class MyGroupsPageComponent implements OnInit {
   }
 
   loadMyGroups(page: number, timeout: number) {
-    page--
+    page--;
     const params: GroupFilterParams = {
       page: page,
       size: 12,

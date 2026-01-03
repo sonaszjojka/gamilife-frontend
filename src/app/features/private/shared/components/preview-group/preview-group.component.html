@@ -23,7 +23,11 @@
             </button>
           </div>
 
-          <app-group-info-card *ngIf="group()" [group]="group()!" [mode]="mode()">
+          <app-group-info-card
+            *ngIf="group()"
+            [group]="group()!"
+            [mode]="mode()"
+          >
             <app-group-actions
               [group]="group()!"
               [mode]="mode()"

@@ -5,7 +5,6 @@ import { NzListComponent, NzListItemComponent } from 'ng-zorro-antd/list';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { GroupMemberInventoryApiService } from '../../../../shared/services/group-member-inventory-api/group-member-inventory-api.service';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
-import { Group } from '../../../../shared/models/group/group.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OwnedGroupItemModel } from '../../../../shared/models/group/owned-group-item.model';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';

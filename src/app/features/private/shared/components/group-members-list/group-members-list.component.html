@@ -68,9 +68,8 @@
           [disabled]="!isAdmin()"
           nz-tooltip
           nzTooltipTitle="Show inventory"
-          >
+        >
           <span nz-icon nzType="skin"></span>
-
         </button>
         <button
           nz-button
@@ -102,13 +101,10 @@
   (memberUpdated)="onMemberUpdated()"
 ></app-edit-group-member-form>
 
-@if (selectedMember())
-{
-<app-group-member-inventory
-  [groupId]="groupId()"
-  [memberId]="selectedMember()!.groupMemberId"
-  [mode]="GroupPreviewMode.ADMIN"
+@if (selectedMember()) {
+  <app-group-member-inventory
+    [groupId]="groupId()"
+    [memberId]="selectedMember()!.groupMemberId"
+    [mode]="GroupPreviewMode.ADMIN"
   ></app-group-member-inventory>
 }
-
-

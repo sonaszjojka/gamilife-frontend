@@ -49,8 +49,8 @@
 
       <div class="pagination-section">
         <nz-pagination
-          [nzPageIndex]="currentPage()+1"
-          [nzTotal]="totalPages()*10"
+          [nzPageIndex]="currentPage() + 1"
+          [nzTotal]="totalPages() * 10"
           (nzPageIndexChange)="onPageChange($event)"
         ></nz-pagination>
       </div>

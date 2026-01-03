@@ -20,8 +20,6 @@ import {
   GroupShopRequestModel,
 } from '../../../../shared/models/group/group-shop.model';
 import { GroupShopApiService } from '../../../../shared/services/group-shop-api/group-shop-api.service';
-import { NzIconDirective } from 'ng-zorro-antd/icon';
-
 @Component({
   selector: 'app-group-shop-form',
   templateUrl: './group-shop-form.component.html',
