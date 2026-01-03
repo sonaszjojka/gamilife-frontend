@@ -100,8 +100,13 @@ export class WebSocketNotificationService implements OnDestroy {
         this.connectedSubject.next(false);
       },
 
-      onWebSocketClose: () => {
+      onWebSocketClose: (evt) => {
         this.connectedSubject.next(false);
+        if (evt.code === 1001) {
+          console.warn(
+            'WebSocket connection closed: Server is shutting down. Reconnection will be attempted automatically.',
+          );
+        }
       },
     });
 
