@@ -71,7 +71,8 @@
           </div>
         </div>
       </div>
-      @if (activity.completedAt) {
+
+      @if (activity.status === ActivityStatus.COMPLETED) {
         <div class="info-item">
           <nz-icon nzType="calendar" class="info-icon"></nz-icon>
           <div class="info-content">

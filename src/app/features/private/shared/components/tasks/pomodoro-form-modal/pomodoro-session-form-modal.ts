@@ -59,6 +59,7 @@ export class PomodoroSessionFormModal {
     if (this.activity.pomodoro?.id) {
       this.editionMode.set(true);
       this.creationMode.set(false);
+      console.log(this.activity);
       this.title = 'Edit Pomodoro Task';
     } else {
       this.creationMode.set(true);

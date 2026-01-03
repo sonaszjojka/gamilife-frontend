@@ -4,6 +4,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Group } from '../../../../shared/models/group/group.model';
 import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.component';
+import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
 
 @Component({
   selector: 'app-group-info-card',
@@ -41,13 +42,18 @@ import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.componen
             </div>
           </div>
 
-          <div class="info-item" *ngIf="group().groupCurrencySymbol">
-            <span nz-icon nzType="dollar" class="info-icon"></span>
-            <div class="info-content">
-              <span class="info-label">Currency</span>
-              <span class="info-value">{{ group().groupCurrencySymbol }}</span>
+          @if (mode() !== GroupPreviewMode.PUBLIC) {
+            <div class="info-item">
+              <span nz-icon nzType="dollar" class="info-icon"></span>
+              <div class="info-content">
+                <span class="info-label">Currency</span>
+                <span class="info-value"
+                  >{{ group().loggedUserMembershipDto?.groupMoney }}
+                  {{ group().groupCurrencySymbol }}</span
+                >
+              </div>
             </div>
-          </div>
+          }
 
           <div class="info-item">
             <span nz-icon nzType="crown" class="info-icon"></span>
@@ -153,4 +159,6 @@ import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.componen
 })
 export class GroupInfoCardComponent {
   group = input.required<Group>();
+  mode = input.required<GroupPreviewMode>();
+  protected readonly GroupPreviewMode = GroupPreviewMode;
 }
