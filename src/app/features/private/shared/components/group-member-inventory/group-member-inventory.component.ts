@@ -37,7 +37,7 @@ export class GroupMemberInventoryComponent {
   visible = signal<boolean>(false);
   isUsedUp = signal<boolean>(false);
 
-  group = input.required<Group>();
+  groupId = input.required<string>();
   memberId = input.required<string>();
   mode = input.required<GroupPreviewMode>();
 
@@ -68,7 +68,7 @@ export class GroupMemberInventoryComponent {
 
     this.groupMemberInventoryApi
       .getMemberInventory(
-        this.group().groupId,
+        this.groupId(),
         this.memberId(),
         this.isUsedUp(),
         page,

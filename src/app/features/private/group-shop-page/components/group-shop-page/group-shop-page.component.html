@@ -80,8 +80,6 @@
         }
       </div>
 
-
-
       @if (viewMode() === GroupPreviewMode.ADMIN) {
         <nz-float-button
           class="add-item-button"
@@ -117,7 +115,7 @@
   ></app-group-shop-form>
 
   <app-group-member-inventory
-    [group]="group()"
+    [groupId]="group().groupId"
     [memberId]="group().loggedUserMembershipDto!.groupMemberId"
     [mode]="viewMode()"
   >

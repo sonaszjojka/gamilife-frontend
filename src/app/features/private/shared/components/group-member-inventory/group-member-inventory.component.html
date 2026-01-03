@@ -32,8 +32,8 @@
             <nz-list-item>
               <app-group-member-inventory-item
                 [item]="item"
-                [groupId]="group().groupId"
-                [memberId]="group().loggedUserMembershipDto!.groupMemberId"
+                [groupId]="groupId()"
+                [memberId]="memberId()"
                 [mode]="mode()"
                 (actionPerformed)="load(currentPage() + 1)"
               ></app-group-member-inventory-item>
