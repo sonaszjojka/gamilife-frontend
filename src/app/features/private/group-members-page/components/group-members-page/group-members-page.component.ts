@@ -19,18 +19,19 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+
 @Component({
   selector: 'app-group-members-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzSpinModule,
-    NzCardModule,
-    NzButtonModule,
-    NzIconModule,
-    GroupMembersListComponent,
-    SendGroupInvitationFormComponent,
-  ],
+    imports: [
+        CommonModule,
+        NzSpinModule,
+        NzCardModule,
+        NzButtonModule,
+        NzIconModule,
+        GroupMembersListComponent,
+        SendGroupInvitationFormComponent,
+    ],
   templateUrl: './group-members-page.component.html',
   styles: [
     `

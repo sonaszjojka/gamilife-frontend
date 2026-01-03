@@ -34,7 +34,6 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
     NzFormControlComponent,
     NzInputDirective,
     NzFormDirective,
-    NzIconDirective,
   ],
   standalone: true,
 })

@@ -70,8 +70,8 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   isSessionActive = false;
   isBreakActive = false;
 
-  private sessionDuration = 10;
-  private breakDuration = 10;
+  private sessionDuration = 25 * 60;
+  private breakDuration = 5 * 60;
 
   pageSize = 5;
 
