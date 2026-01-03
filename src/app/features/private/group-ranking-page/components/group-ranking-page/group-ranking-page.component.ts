@@ -11,6 +11,7 @@ import { GroupMember } from '../../../../shared/models/group/group-member.model'
 import { FullRankingComponent } from '../full-ranking/full-ranking.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BackButtonComponent } from '../../../shared/components/back-button/back-button-component';
 
 @Component({
   selector: 'app-group-ranking-page',
@@ -22,6 +23,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzButtonModule,
     NzIconModule,
     FullRankingComponent,
+    BackButtonComponent,
   ],
   templateUrl: './group-ranking-page.component.html',
   styleUrl: './group-ranking-page.component.css',
@@ -41,7 +43,7 @@ export class GroupRankingPageComponent implements OnInit {
   ngOnInit(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (!groupId) {
-      this.router.navigate(['/app/groups']);
+      this.router.navigate(['/app/community']);
       return;
     }
 
@@ -70,9 +72,9 @@ export class GroupRankingPageComponent implements OnInit {
   protected goBack(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`/app/groups/${groupId}`]);
+      this.router.navigate([`/app/community/groups/${groupId}`]);
     } else {
-      this.router.navigate(['/app/groups']);
+      this.router.navigate(['/app/community/groups']);
     }
   }
 }

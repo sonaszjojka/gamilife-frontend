@@ -50,7 +50,10 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      const userId = params['userId'];
+      const userId = params['userId']
+        ? params['userId']
+        : this.authService.userId();
+
       if (userId) {
         this.loadUserProfile(userId);
       }

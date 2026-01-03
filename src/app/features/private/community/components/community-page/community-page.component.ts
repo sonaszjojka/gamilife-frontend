@@ -11,6 +11,7 @@ import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-community-page',
@@ -22,6 +23,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     PaginationMoreComponent,
     NzGridModule,
     GroupListComponent,
+    NzEmptyModule,
   ],
   templateUrl: './community-page.component.html',
   styleUrl: './community-page.component.css',

@@ -20,6 +20,8 @@ import { CommonModule } from '@angular/common';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-add-group-form',
@@ -31,6 +33,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzInputModule,
     NzSelectModule,
     ReactiveFormsModule,
+    NzIconModule,
+    NzTooltipModule,
   ],
   templateUrl: './add-group-form.component.html',
   styleUrl: './add-group-form.component.css',

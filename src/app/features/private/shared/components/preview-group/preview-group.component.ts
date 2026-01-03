@@ -34,6 +34,7 @@ import { GroupTasksListComponent } from '../group-tasks-list/group-tasks-list.co
 import { GroupChatComponent } from '../group-chat/group-chat/group-chat.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GroupShopPageComponent } from '../../../group-shop-page/components/group-shop-page/group-shop-page.component';
 
 @Component({
   selector: 'app-preview-group',
@@ -55,6 +56,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     GroupTasksListComponent,
     EditGroupFormComponent,
     GroupChatComponent,
+    GroupShopPageComponent,
   ],
   templateUrl: './preview-group.component.html',
   styleUrls: ['./preview-group.component.css'],
@@ -66,6 +68,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
   protected loading = signal<boolean>(true);
   protected membersList = signal<GroupMember[]>([]);
   protected requestsList = signal<GroupRequest[]>([]);
+  protected showShop = signal<boolean>(false);
 
   protected GroupPreviewMode = GroupPreviewMode;
   protected router = inject(Router);
@@ -158,22 +161,29 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
   protected goToManageGroupMembersPage(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/members`]);
+      this.router.navigate([`app/community/groups/${groupId}/members`]);
     }
   }
 
   protected goToManageGroupRequestsPage(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/requests`]);
+      this.router.navigate([`app/community/groups/${groupId}/requests`]);
     }
   }
 
   protected goToRankingPage(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/ranking`]);
+      this.router.navigate([`app/community/groups/${groupId}/ranking`]);
     }
+  }
+
+  protected goToShop(): void {
+    this.showShop.set(true);
+  }
+  protected closeShop(): void {
+    this.showShop.set(false);
   }
 
   protected openEditModal(): void {
@@ -210,7 +220,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.notification.success('Group deleted successfully');
-          this.router.navigate(['app/groups']);
+          this.router.navigate(['app/community']);
         },
       });
   }

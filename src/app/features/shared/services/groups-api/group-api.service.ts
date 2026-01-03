@@ -44,9 +44,6 @@ export class GroupApiService {
   protected buildHttpParamsForGetGroups(params: GroupFilterParams) {
     let httpParams = new HttpParams();
 
-    if (params.joinCode) {
-      httpParams = httpParams.set('joinCode', params.joinCode);
-    }
     if (params.groupType !== undefined) {
       httpParams = httpParams.set('groupType', params.groupType.toString());
     }

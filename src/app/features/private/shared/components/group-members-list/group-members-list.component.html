@@ -63,6 +63,17 @@
         <button
           nz-button
           nzType="link"
+          nzSize="small"
+          (click)="showMemberInventory(member)"
+          [disabled]="!isAdmin()"
+          nz-tooltip
+          nzTooltipTitle="Show inventory"
+        >
+          <span nz-icon nzType="skin"></span>
+        </button>
+        <button
+          nz-button
+          nzType="link"
           nzDanger
           nzSize="small"
           (click)="confirmRemove(member)"
@@ -89,3 +100,11 @@
   [member]="selectedMember()"
   (memberUpdated)="onMemberUpdated()"
 ></app-edit-group-member-form>
+
+@if (selectedMember()) {
+  <app-group-member-inventory
+    [groupId]="groupId()"
+    [memberId]="selectedMember()!.groupMemberId"
+    [mode]="GroupPreviewMode.ADMIN"
+  ></app-group-member-inventory>
+}

@@ -17,10 +17,7 @@
       </li>
     } @else {
       <li nz-menu-item class="navbar-dropdown-item">
-        <button
-          nz-button
-          (click)="router.navigate([`/app/users/${this.authService.userId()}`])"
-        >
+        <button nz-button (click)="router.navigate(['/app/profile'])">
           My Profile
         </button>
       </li>

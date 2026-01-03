@@ -1,0 +1,72 @@
+::ng-deep .ant-drawer-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+::ng-deep .ant-drawer-title {
+  display: flex !important;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+::ng-deep .drawer-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+::ng-deep .drawer-header [nz-icon] {
+  font-size: 20px;
+}
+
+.inventory-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.filter-section {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.items-spinner {
+  flex: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.items-list {
+  flex: 1;
+  overflow: visible;
+  padding: 0 16px;
+}
+
+.pagination-section {
+  padding: 12px;
+  text-align: center;
+  border-top: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+:host ::ng-deep .ant-list-item {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 0 !important;
+}
+
+:host ::ng-deep .ant-spin-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+:host ::ng-deep .ant-list-empty-text {
+  padding: 32px 0;
+}

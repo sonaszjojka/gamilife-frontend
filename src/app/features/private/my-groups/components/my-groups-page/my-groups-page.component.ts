@@ -19,6 +19,7 @@ import { Group } from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { AddGroupFormComponent } from '../add-group-form/add-group-form.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-my-groups-page',
@@ -32,6 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     PaginationMoreComponent,
     GroupListComponent,
     AddGroupFormComponent,
+    NzEmptyModule,
   ],
   templateUrl: './my-groups-page.component.html',
   styleUrl: './my-groups-page.component.css',
@@ -50,10 +52,11 @@ export class MyGroupsPageComponent implements OnInit {
   @ViewChild(CommunityInputSearchComponent)
   inputSearch!: CommunityInputSearchComponent;
   ngOnInit() {
-    this.loadMyGroups(0, 0);
+    this.loadMyGroups(1, 0);
   }
 
   loadMyGroups(page: number, timeout: number) {
+    page--;
     const params: GroupFilterParams = {
       page: page,
       size: 12,
@@ -68,7 +71,7 @@ export class MyGroupsPageComponent implements OnInit {
         next: (response) => {
           setTimeout(() => {
             this.groups.set(response.content);
-            this.totalPages.set(response.totalPages - 1);
+            this.totalPages.set(response.totalPages);
             this.currentPage.set(page);
           }, timeout);
         },
@@ -83,7 +86,7 @@ export class MyGroupsPageComponent implements OnInit {
     this.groupName.set(undefined);
     this.groupTypeId.set(undefined);
     this.inputSearch.resetFilters();
-    this.loadMyGroups(0, 0);
+    this.loadMyGroups(1, 0);
   }
 
   onPageChange(page: number) {
@@ -92,11 +95,11 @@ export class MyGroupsPageComponent implements OnInit {
 
   onInputChange(inputValue: string) {
     this.groupName.set(inputValue);
-    this.loadMyGroups(0, 350);
+    this.loadMyGroups(1, 350);
   }
 
   onGroupTypeChange(groupTypeId: string | null) {
     this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
-    this.loadMyGroups(0, 350);
+    this.loadMyGroups(1, 350);
   }
 }

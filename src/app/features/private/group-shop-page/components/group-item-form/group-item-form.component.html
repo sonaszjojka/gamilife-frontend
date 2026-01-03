@@ -1,0 +1,47 @@
+<nz-modal
+  [nzTitle]="getTitle()"
+  [nzVisible]="isVisible"
+  nzOkText="Save"
+  nzCancelText="Cancel"
+  (nzOnOk)="handleSubmit()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="name">Item Name</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please input the item name (size from 1 to 30 characters)!"
+        >
+          <input
+            nz-input
+            id="name"
+            formControlName="name"
+            placeholder="Enter item name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="price">Price</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please input a valid price (from 1 to 9999)!"
+        >
+          <input
+            nz-input
+            id="price"
+            formControlName="price"
+            placeholder="Enter item price"
+            type="number"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzFor]="'isActive'">Is Item Active</nz-form-label>
+        <nz-form-control>
+          <span nz-checkbox formControlName="isActive" id="isActive"></span>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

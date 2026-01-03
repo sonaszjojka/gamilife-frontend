@@ -12,13 +12,15 @@ import { Router } from '@angular/router';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTooltipDirective, NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberFormComponent } from '../edit-group-member-form/edit-group-member-form.component';
 import { PaginationMoreComponent } from '../pagination-more/pagination-more.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GroupMemberInventoryComponent } from '../group-member-inventory/group-member-inventory.component';
+import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
 
 @Component({
   selector: 'app-group-members-list',
@@ -31,6 +33,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzToolTipModule,
     EditGroupMemberFormComponent,
     PaginationMoreComponent,
+    GroupMemberInventoryComponent,
+    NzTooltipDirective,
   ],
   templateUrl: './group-members-list.component.html',
   styleUrl: './group-members-list.component.css',
@@ -46,6 +50,9 @@ export class GroupMembersListComponent {
 
   @ViewChild(EditGroupMemberFormComponent)
   editForm!: EditGroupMemberFormComponent;
+
+  @ViewChild(GroupMemberInventoryComponent)
+  memberInventory!: GroupMemberInventoryComponent;
 
   selectedMember = signal<GroupMember | null>(null);
   currentPage = signal<number>(1);
@@ -73,7 +80,7 @@ export class GroupMembersListComponent {
   }
 
   viewProfile(member: GroupMember): void {
-    this.router.navigate(['/app/users', member.userId]);
+    this.router.navigate(['/app/community/users', member.userId]);
   }
 
   openEditModal(member: GroupMember): void {
@@ -107,4 +114,11 @@ export class GroupMembersListComponent {
   onMemberUpdated(): void {
     this.memberChanged.emit();
   }
+
+  showMemberInventory(member: GroupMember) {
+    this.selectedMember.set(member);
+    this.memberInventory.show();
+  }
+
+  protected readonly GroupPreviewMode = GroupPreviewMode;
 }

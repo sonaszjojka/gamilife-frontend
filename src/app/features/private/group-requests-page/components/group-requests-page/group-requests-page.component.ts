@@ -10,6 +10,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BackButtonComponent } from '../../../shared/components/back-button/back-button-component';
 
 @Component({
   selector: 'app-group-requests-page',
@@ -21,6 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     GroupRequestsListComponent,
     NzModalModule,
     NzIconModule,
+    BackButtonComponent,
   ],
   templateUrl: './group-requests-page.component.html',
   styles: [

@@ -68,6 +68,7 @@ export class TaskItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.isCompleted.set(this.activity.status == ActivityStatus.COMPLETED);
+    console.log(this.activity);
   }
 
   completeTask(event: MouseEvent): void {
