@@ -158,21 +158,21 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
   protected goToManageGroupMembersPage(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/members`]);
+      this.router.navigate([`app/community/groups/${groupId}/members`]);
     }
   }
 
   protected goToManageGroupRequestsPage(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/requests`]);
+      this.router.navigate([`app/community/groups/${groupId}/requests`]);
     }
   }
 
   protected goToRankingPage(): void {
     const groupId = this.route.snapshot.paramMap.get('groupId');
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/ranking`]);
+      this.router.navigate([`app/community/groups/${groupId}/ranking`]);
     }
   }
 
@@ -210,7 +210,7 @@ export class PreviewGroupComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.notification.success('Group deleted successfully');
-          this.router.navigate(['app/groups']);
+          this.router.navigate(['app/community']);
         },
       });
   }

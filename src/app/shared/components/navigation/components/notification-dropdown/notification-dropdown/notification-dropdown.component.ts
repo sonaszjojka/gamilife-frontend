@@ -92,7 +92,7 @@ export class NotificationDropdownComponent {
       return;
     }
 
-    const invitationLink = `/app/groups/${groupId}/group-invitations/${groupInvitationId}?token=${token}`;
+    const invitationLink = `/app/community/groups/${groupId}/group-invitations/${groupInvitationId}?token=${token}`;
     this.router.navigateByUrl(invitationLink);
 
     this.dropdownVisible = false;
@@ -112,7 +112,7 @@ export class NotificationDropdownComponent {
 
     const groupId = data['groupId'] as string;
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}/requests`]);
+      this.router.navigate([`app/community/groups/${groupId}/requests`]);
       this.dropdownVisible = false;
     }
   }
@@ -126,7 +126,7 @@ export class NotificationDropdownComponent {
 
     const groupId = data['groupId'] as string;
     if (groupId) {
-      this.router.navigate([`app/groups/${groupId}`]);
+      this.router.navigate([`app/community/groups/${groupId}`]);
       this.dropdownVisible = false;
     }
   }

@@ -27,6 +27,6 @@ export class GroupCardComponent {
   private router = inject(Router);
 
   goToPreview() {
-    this.router.navigate(['/app/groups/', this.group.groupId]);
+    this.router.navigate(['/app/community/groups/', this.group.groupId]);
   }
 }
