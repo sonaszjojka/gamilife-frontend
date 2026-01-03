@@ -38,6 +38,7 @@ export class GroupMemberInventoryComponent {
 
   groupId = input.required<string>();
   memberId = input.required<string>();
+
   mode = input.required<GroupPreviewMode>();
 
   currentPage = signal<number>(1);

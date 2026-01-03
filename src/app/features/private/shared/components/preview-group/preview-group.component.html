@@ -141,9 +141,8 @@
     }
     <div *ngIf="showShop() && group()" class="shop-view">
       <div class="shop-header">
-        <button nz-button nzType="default" nzSize="large" (click)="closeShop()">
+        <button nz-button nzType="link" nzSize="large" (click)="closeShop()">
           <span nz-icon nzType="arrow-left"></span>
-          Back to Group
         </button>
       </div>
       <app-group-shop-page
