@@ -1,13 +1,14 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzResultModule } from 'ng-zorro-antd/result';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { NzCardComponent } from 'ng-zorro-antd/card';
 
 @Component({
   selector: 'app-email-verification-result',
@@ -17,17 +18,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     RouterLink,
     CommonModule,
     NzSpinComponent,
+    NzCardComponent,
   ],
   templateUrl: './email-verification-result.component.html',
   styleUrl: './email-verification-result.component.css',
 })
 export class EmailVerificationResultComponent implements OnInit {
-  protected status: 'loading' | 'success' | 'error' = 'loading';
+  protected status: 'loading' | 'error' = 'loading';
 
-  private http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/auth/email-verifications/confirm`;
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notificationsService = inject(NotificationService);
   private destroyRef = inject(DestroyRef);
+  private authService = inject(AuthService);
+
   ngOnInit(): void {
     const code = this.route.snapshot.queryParamMap.get('code');
 
@@ -36,12 +40,15 @@ export class EmailVerificationResultComponent implements OnInit {
       return;
     }
 
-    this.http
-      .post(this.apiUrl, { code }, { withCredentials: true })
+    this.authService
+      .verfiyEmail(code)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.status = 'success';
+          this.router.navigate(['/app/dashboard']);
+          this.notificationsService.success(
+            'Email verified successfully! Enjoy your GamiLife experience.',
+          );
         },
         error: () => {
           this.status = 'error';
