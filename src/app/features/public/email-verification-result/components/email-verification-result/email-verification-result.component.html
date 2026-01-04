@@ -1,29 +1,18 @@
-@if (status === "success") {
-  <nz-result
-    nzStatus="success"
-    nzTitle="Email Verification Successful!"
-    nzSubTitle="Email has been verified. Welcome do Gamilife!"
-  >
-    <div nz-result-extra>
-      <button nz-button routerLink="/app/dashboard">
-        Start Using Gamilife
-      </button>
-    </div>
-  </nz-result>
-}
-
-@if (status === "error") {
-  <nz-result
-    nzStatus="error"
-    nzTitle="Email Verification Failed"
-    nzSubTitle="There was an error verifying your email. The verification link may be invalid or expired."
-  >
-    <div nz-result-extra>
-      <button nz-button routerLink="/login">Go Back to Login</button>
-    </div>
-  </nz-result>
-}
-
-@if (status === "loading") {
-  <nz-spin nzTip="Processing e-mail verification..."></nz-spin>
-}
+<div class="div-email-verification-result">
+  <nz-card class="card-email-verification-result">
+    @if (status === "loading") {
+      <nz-spin nzTip="Processing e-mail verification..."></nz-spin>
+    } @else {
+      <nz-result
+        nzStatus="error"
+        nzIcon="close-circle"
+        nzTitle="Email Verification Failed"
+        nzSubTitle="There was an error verifying your email. The verification link may be invalid or expired. Login again to request a new verification email."
+      >
+        <div nz-result-extra>
+          <button nz-button routerLink="/login">Go Back to Login</button>
+        </div>
+      </nz-result>
+    }
+  </nz-card>
+</div>
