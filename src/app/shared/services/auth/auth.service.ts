@@ -46,6 +46,7 @@ export class AuthService {
   requiredExperienceForNextLevel = signal<number | null>(
     this.storage.getRequiredExperienceForNextLevel(),
   );
+  statsVersion = signal<number | null>(this.storage.getStatsVersion());
   emailVerified = signal<boolean>(
     this.storage.getIsEmailVerified() !== null &&
       this.storage.getIsEmailVerified()!,
@@ -70,6 +71,7 @@ export class AuthService {
       this.requiredExperienceForNextLevel.set(
         this.storage.getRequiredExperienceForNextLevel(),
       );
+      this.statsVersion.set(this.storage.getStatsVersion());
     }
   }
 
@@ -196,12 +198,17 @@ export class AuthService {
   }
 
   public updateGamificationData(data: GamificationUserData): void {
+    if (this.statsVersion() && data.statsVersion <= this.statsVersion()!) {
+      return;
+    }
+
     this.level.set(data.level);
     this.experience.set(data.experience);
     this.money.set(data.money);
     this.requiredExperienceForNextLevel.set(
       data.requiredExperienceForNextLevel,
     );
+    this.statsVersion.set(data.statsVersion);
 
     this.storage.setLevel(data.level);
     this.storage.setExperience(data.experience);
@@ -209,6 +216,7 @@ export class AuthService {
     this.storage.setRequiredExperienceForNextLevel(
       data.requiredExperienceForNextLevel,
     );
+    this.storage.setStatsVersion(data.statsVersion);
   }
 
   completeUserOnboarding(): void {

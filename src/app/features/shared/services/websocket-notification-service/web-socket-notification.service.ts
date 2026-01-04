@@ -142,6 +142,7 @@ export class WebSocketNotificationService implements OnDestroy {
           requiredExperienceForNextLevel: notification.data[
             'requiredExperienceForNextLevel'
           ] as number | null,
+          statsVersion: notification.data['statsVersion'] as number,
         });
         return;
       }
