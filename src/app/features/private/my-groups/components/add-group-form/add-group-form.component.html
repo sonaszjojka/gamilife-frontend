@@ -35,16 +35,31 @@
             style="margin-left: 4px; color: #1890ff; cursor: pointer"
           ></span>
         </nz-form-label>
-        <nz-form-control
-          nzErrorTip="Please provide valid group currency symbol - exactly 1 character."
-        >
-          <input
-            nz-input
-            id="groupCurrencySymbol"
+        <nz-form-control nzErrorTip="Please choose a group currency symbol">
+          <nz-select
             formControlName="groupCurrencySymbol"
-            placeholder="e.g. $"
-            maxlength="1"
-          />
+            nzPlaceHolder="Select symbol"
+            nzAllowClear
+          >
+            <nz-option nzValue="$" nzLabel="$"></nz-option>
+            <nz-option nzValue="€" nzLabel="€"></nz-option>
+            <nz-option nzValue="£" nzLabel="£"></nz-option>
+            <nz-option nzValue="¥" nzLabel="¥"></nz-option>
+            <nz-option nzValue="₹" nzLabel="₹"></nz-option>
+            <nz-option nzValue="₩" nzLabel="₩"></nz-option>
+            <nz-option nzValue="₿" nzLabel="₿"></nz-option>
+            <nz-option nzValue="₺" nzLabel="₺"></nz-option>
+            <nz-option nzValue="₫" nzLabel="₫"></nz-option>
+            <nz-option nzValue="₴" nzLabel="₴"></nz-option>
+            <nz-option nzValue="₦" nzLabel="₦"></nz-option>
+            <nz-option nzValue="₲" nzLabel="₲"></nz-option>
+            <nz-option nzValue="₡" nzLabel="₡"></nz-option>
+            <nz-option nzValue="₵" nzLabel="₵"></nz-option>
+            <nz-option nzValue="₸" nzLabel="₸"></nz-option>
+            <nz-option nzValue="₺" nzLabel="₺"></nz-option>
+            <nz-option nzValue="₼" nzLabel="₼"></nz-option>
+            <nz-option nzValue="₾" nzLabel="₾"></nz-option>
+          </nz-select>
         </nz-form-control>
       </nz-form-item>
 
