@@ -70,14 +70,14 @@ export class StorePageComponent implements OnInit {
   }
   onInputChange(itemName: string) {
     this.itemName.set(itemName);
-    this.loadItems(0);
+    this.loadItems(1);
   }
   onItemSlotChange(itemSlotId: number[] | undefined) {
     this.itemSlot.set(itemSlotId);
-    this.loadItems(0);
+    this.loadItems(1);
   }
   onItemRarityChange(rarityId: number[] | undefined) {
     this.rarity.set(rarityId);
-    this.loadItems(0);
+    this.loadItems(1);
   }
 }
