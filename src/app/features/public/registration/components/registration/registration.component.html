@@ -9,15 +9,13 @@
     >
       <h2 class="registration-title">Register</h2>
 
-      <div
-        class="api-error-div"
-        *ngIf="validateForm.hasError('apiError')"
-        class="api-error"
-      >
-        <p class="api-error-p">
-          {{ validateForm.getError("apiError") }}
-        </p>
-      </div>
+      @if (validateForm.hasError("apiError")) {
+        <div class="api-error-div" class="api-error">
+          <p class="api-error-p">
+            {{ validateForm.getError("apiError") }}
+          </p>
+        </div>
+      }
 
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true" nzFor="firstName"
@@ -99,31 +97,21 @@
           >Password</nz-form-label
         >
         <nz-form-control [nzErrorTip]="passwordErrorTpl">
-          <nz-input-group [nzSuffix]="suffixVisibility">
-            <input
-              nz-input
-              id="password"
-              formControlName="password"
-              [type]="isPasswordVisible() ? 'text' : 'password'"
-              placeholder="Password"
-            />
-          </nz-input-group>
-          <ng-template #suffixVisibility>
-            <nz-icon
-              class="ant-input-password-icon"
-              [nzType]="isPasswordVisible() ? 'eye-invisible' : 'eye'"
-              (click)="changePasswordVisibility()"
-            ></nz-icon>
-          </ng-template>
+          <nz-input-password>
+            <nz-icon nzInputPrefix nzType="lock"></nz-icon>
+            <input nz-input formControlName="password" placeholder="Password" />
+          </nz-input-password>
         </nz-form-control>
         <ng-template #passwordErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input your password!
-          </ng-container>
-          <ng-container *ngIf="control.hasError('passwordStrength')">
-            Password must be 8–128 characters long and include at least one
-            letter, one digit, and one special character.
-          </ng-container>
+          @if (control.hasError("required")) {
+            <ng-container> Please input your password! </ng-container>
+          }
+          @if (control.hasError("passwordStrength")) {
+            <ng-container>
+              Password must be 8–128 characters long and include at least one
+              letter, one digit, and one special character.
+            </ng-container>
+          }
         </ng-template>
       </nz-form-item>
       <nz-form-item>
@@ -149,13 +137,16 @@
         [nzLoading]="isSubmitting()"
         [disabled]="isSubmitting()"
       >
-        <ng-container *ngIf="!isSubmitting()">
-          <nz-icon nzType="check" nzTheme="outline"></nz-icon>
-          <span>Register</span>
-        </ng-container>
-        <ng-container *ngIf="isSubmitting()">
-          <span>Processing...</span>
-        </ng-container>
+        @if (!isSubmitting()) {
+          <ng-container>
+            <nz-icon nzType="check" nzTheme="outline"></nz-icon>
+            <span>Register</span>
+          </ng-container>
+        } @else {
+          <ng-container>
+            <span>Processing...</span>
+          </ng-container>
+        }
       </button>
       <button
         nz-button

@@ -26,6 +26,7 @@ import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LoginCredentials } from '../../../../shared/models/auth/auth.model';
 
 @Component({
   selector: 'app-login',
@@ -61,7 +62,6 @@ export class LoginComponent implements OnInit {
   private oauth2Service = inject(OAuth2Service);
   private destroyRef = inject(DestroyRef);
 
-  isPasswordVisible = signal(false);
   isLoading = signal(false);
 
   validateForm = this.fb.group({
@@ -103,11 +103,11 @@ export class LoginComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      const formData = this.validateForm.value as {
-        email: string;
-        password: string;
+      const credentials: LoginCredentials = {
+        email: this.validateForm.value.email!,
+        password: this.validateForm.value.password!,
       };
-      this.handleStandardLogin(formData);
+      this.handleStandardLogin(credentials);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -118,10 +118,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private handleStandardLogin(credentials: {
-    email: string;
-    password: string;
-  }) {
+  private handleStandardLogin(credentials: LoginCredentials) {
     this.isLoading.set(true);
     this.authService
       .login(credentials)
@@ -150,10 +147,6 @@ export class LoginComponent implements OnInit {
 
   goToRegister() {
     this.router.navigate(['/register']);
-  }
-
-  changePasswordVisibility() {
-    this.isPasswordVisible.update((prev) => !prev);
   }
 
   loginWithGoogle(): void {

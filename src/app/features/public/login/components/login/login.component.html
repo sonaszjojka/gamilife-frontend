@@ -34,43 +34,34 @@
           nzFor="email"
           nzErrorTip="Please input valid e-mail!"
         >
-          <nz-input-group nzPrefixIcon="user">
+          <nz-input-wrapper>
+            <nz-icon nzInputPrefix nzType="user"></nz-icon>
             <input
               type="text"
               nz-input
               formControlName="email"
               placeholder="E-mail"
             />
-          </nz-input-group>
+          </nz-input-wrapper>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control [nzErrorTip]="passwordErrorTpl">
-          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixVisibility">
-            <input
-              type="password"
-              nz-input
-              formControlName="password"
-              placeholder="Password"
-              [type]="isPasswordVisible() ? 'text' : 'password'"
-            />
-          </nz-input-group>
-          <ng-template #suffixVisibility>
-            <nz-icon
-              class="ant-input-password-icon"
-              [nzType]="isPasswordVisible() ? 'eye-invisible' : 'eye'"
-              (click)="changePasswordVisibility()"
-            />
-          </ng-template>
+          <nz-input-password>
+            <nz-icon nzInputPrefix nzType="lock"></nz-icon>
+            <input nz-input formControlName="password" placeholder="Password" />
+          </nz-input-password>
         </nz-form-control>
 
         <ng-template #passwordErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input your password!
-          </ng-container>
-          <ng-container *ngIf="control.hasError('apiError')">
-            {{ control.getError("apiError") }}
-          </ng-container>
+          @if (control.hasError("required")) {
+            <ng-container> Please input your password! </ng-container>
+          }
+          @if (control.getError("apiError")) {
+            <ng-container>
+              {{ control.getError("apiError") }}
+            </ng-container>
+          }
         </ng-template>
       </nz-form-item>
 

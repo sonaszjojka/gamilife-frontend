@@ -45,6 +45,10 @@ export class StorageService {
     return value ? Number(value) : null;
   }
 
+  getIsEmailVerified(): boolean | null {
+    return localStorage.getItem('isEmailVerified') === 'true';
+  }
+
   getOAuth2CodeVerifier(): string | null {
     return sessionStorage.getItem('oauth2_code_verifier');
   }
@@ -83,6 +87,10 @@ export class StorageService {
     } else {
       localStorage.removeItem('requiredExperienceForNextLevel');
     }
+  }
+
+  setIsEmailVerified(value: boolean): void {
+    localStorage.setItem('isEmailVerified', String(value));
   }
 
   setOAuth2CodeVerifier(value: string): void {

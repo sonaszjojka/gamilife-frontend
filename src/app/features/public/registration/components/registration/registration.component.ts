@@ -22,12 +22,13 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
 import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RegistrationData } from '../../../../shared/models/auth/auth.model';
 import { VerifyEmailComponent } from '../../../login/components/verify-email/verify-email.component';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 @Component({
   selector: 'app-registration',
   standalone: true,
@@ -56,8 +57,9 @@ export class RegistrationComponent {
   private destroyRef = inject(DestroyRef);
   isSubmitting = signal(false);
   isPasswordVisible = signal(false);
-  private password = signal<string>('');
   private oauth2Service = inject(OAuth2Service);
+  private authService = inject(AuthService);
+
   @ViewChild(LinkOAuthAccountComponent)
   linkAccountModal!: LinkOAuthAccountComponent;
   @ViewChild(VerifyEmailComponent)
@@ -95,10 +97,19 @@ export class RegistrationComponent {
     if (this.validateForm.valid) {
       this.isSubmitting.update(() => true);
       const formData = this.validateForm.value;
-      const url = `${environment.apiUrl}/auth/register`;
+      const registrationData: RegistrationData = {
+        firstName: formData.firstName!,
+        lastName: formData.lastName!,
+        username: formData.username!,
+        email: formData.email!,
+        dateOfBirth: formData.dateOfBirth!,
+        password: formData.password!,
+        isPublicProfile: formData.isPublicProfile!,
+        isBudgetReports: formData.isBudgetReports!,
+      };
 
-      this.http
-        .post(url, formData)
+      this.authService
+        .register(registrationData)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {

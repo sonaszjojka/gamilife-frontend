@@ -26,7 +26,7 @@ export const routes: Routes = [
       import(
         './features/public/email-verification-result/components/email-verification-result/email-verification-result.component'
       ).then((m) => m.EmailVerificationResultComponent),
-    canActivate: [AuthGuard],
+    canActivate: [GuestGuard],
   },
   {
     path: 'reset-password',
