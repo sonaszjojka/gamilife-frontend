@@ -28,7 +28,7 @@ import { NotificationService } from '../../../../../shared/services/notification
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-task-item',
+  selector: 'app-activity-item',
   standalone: true,
   imports: [
     CommonModule,
@@ -40,10 +40,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     PomodoroTaskProgressComponent,
     DatePipe,
   ],
-  templateUrl: './task-item.component.html',
-  styleUrl: './task-item.component.css',
+  templateUrl: './activity-item.component.html',
+  styleUrl: './activity-item.component.css',
 })
-export class TaskItemComponent implements OnInit {
+export class ActivityItemComponent implements OnInit {
   protected readonly ActivityType = ActivityType;
   protected readonly ActivityStatus = ActivityStatus;
 

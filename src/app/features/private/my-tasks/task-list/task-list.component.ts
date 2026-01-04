@@ -11,7 +11,7 @@ import {
   untracked,
   ViewChild,
 } from '@angular/core';
-import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
+import { ActivityItemComponent } from '../../shared/components/tasks/task-item/activity-item.component';
 import { TaskFilterComponent } from '../../shared/components/tasks/task-filter/task-filter.component';
 import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -34,7 +34,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [
     CommonModule,
-    TaskItemComponent,
+    ActivityItemComponent,
     TaskFilterComponent,
     TaskFormComponent,
     NzButtonComponent,

@@ -1,4 +1,28 @@
 <div class="dashboard-container">
+
+  <div class="group-carousel">
+  <app-group-carousel-component
+
+  >
+  </app-group-carousel-component>
+  </div>
+
+  @if (activities.length>0)
+  {
+  @for (activity of activities;track activities)
+  {
+  <app-activity-item
+  [activity]="activity"
+  >
+  </app-activity-item>
+
+  }
+  }
+  @else {
+    <nz-list-empty>You have no activities for today</nz-list-empty>
+  }
+
+
   <app-onboarding-modal
     [visible]="showOnboarding()"
     [userId]="userId()"

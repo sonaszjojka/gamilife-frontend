@@ -54,12 +54,12 @@
 
             <div class="tasks-grid">
               @for (activity of groupedTasks[date]; track activity.id) {
-                <app-task-item
+                <app-activity-item
                   [activity]="activity"
                   (editTask)="onActivityEdit($event)"
                   (taskUpdated)="onActivityUpdated($event)"
                 >
-                </app-task-item>
+                </app-activity-item>
               }
             </div>
           </div>

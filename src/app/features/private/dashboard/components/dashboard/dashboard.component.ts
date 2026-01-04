@@ -1,25 +1,58 @@
-import { Component, OnInit, inject, signal, effect } from '@angular/core';
+import {Component, OnInit, inject, signal, effect, DestroyRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OnboardingModalComponent } from '../onboarding/onboarding-modal/onboarding-modal.component';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import {UserActivitiesApiService} from '../../../../shared/services/tasks/user-activities-api.service';
+import {GroupApiService} from '../../../../shared/services/groups-api/group-api.service';
+import {
+  UserAchievementsApiService
+} from '../../../../shared/services/user-achievements-api/user-achievements-api.service';
+import {Group, GroupFilterParams} from '../../../../shared/models/group/group.model';
+import {ActivityItemDetails} from '../../../../shared/models/task-models/activity.model';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
+import {GroupCarouselComponent} from '../group-carousel/group-carousel.component';
+import {ActivityItemComponent} from '../../../shared/components/tasks/task-item/activity-item.component';
+import {NzListEmptyComponent} from 'ng-zorro-antd/list';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, OnboardingModalComponent],
+  imports: [CommonModule, OnboardingModalComponent, GroupCarouselComponent, ActivityItemComponent, NzListEmptyComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef)
+  private readonly authService = inject(AuthService);
+  private readonly activityApi = inject(UserActivitiesApiService)
+  private readonly groupApi = inject(GroupApiService)
+  private readonly notificationService = inject(NotificationService)
+  // api od statystyk
+  //
+
+  groups: Group[] =[]
+
+   groupCurrentPage = signal<number>(0)
+   groupTotalPage = signal<number>(1)
+   groupParams:GroupFilterParams=
+    {
+      groupType:undefined,
+      groupName:undefined,
+      page:this.groupCurrentPage(),
+      size:5
+    }
+  activities: ActivityItemDetails[]=[]
+
 
   userId = signal<string | null>(null);
   showOnboarding = signal<boolean>(false);
 
+
+
   constructor() {
     effect(() => {
       const isTutorialCompleted = this.authService.isTutorialCompleted();
-
       if (!isTutorialCompleted && this.authService.loggedIn()) {
         this.showOnboarding.set(true);
       } else {
@@ -32,7 +65,43 @@ export class DashboardComponent implements OnInit {
     const id = this.authService.userId();
     this.userId.set(id);
     this.checkOnboardingStatus();
+    this.loadGroups(1)
+    this.loadActivities()
   }
+
+  loadGroups(page:number)
+  {
+    page --;
+    this.groupApi.getAllGroupsByUserIdWhereUserIsMember(this.groupParams)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(
+        {
+          next:(response)=>{
+              this.groups = response.content
+              this.groupCurrentPage.set(response.currentPage)
+              this.groupTotalPage.set(response.totalPages)
+          },
+          error: ()=>{
+            this.notificationService.error("Error occurred loading your groups")
+          }
+        }
+
+      )
+  }
+
+  loadActivities()
+  {
+    this.activityApi.getAllActivities(0,null,null,new Date (Date.now()).toISOString().slice(0,10),new Date(Date.now()).toISOString().slice(0,10),null,null,true,null)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({next:(response)=>{
+        this.activities = response.content
+        },
+      error:()=>{
+        this.notificationService.error("Error occurred loading your activities")
+      }
+      })
+  }
+
 
   private checkOnboardingStatus(): void {
     const isTutorialCompleted = this.authService.isTutorialCompleted();
