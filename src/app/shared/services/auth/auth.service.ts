@@ -33,9 +33,7 @@ export class AuthService {
   refreshInProgress = false;
 
   loggedIn = signal<boolean>(
-    this.storage.getUserId() !== null &&
-      this.storage.getIsEmailVerified !== null &&
-      this.storage.getIsEmailVerified()!,
+    this.storage.getUserId() !== null && !!this.storage.getIsEmailVerified(),
   );
   username = signal<string | null>(this.storage.getUsername());
   userId = signal<string | null>(this.storage.getUserId());
@@ -47,10 +45,7 @@ export class AuthService {
     this.storage.getRequiredExperienceForNextLevel(),
   );
   statsVersion = signal<number | null>(this.storage.getStatsVersion());
-  emailVerified = signal<boolean>(
-    this.storage.getIsEmailVerified() !== null &&
-      this.storage.getIsEmailVerified()!,
-  );
+  emailVerified = signal<boolean>(!!this.storage.getIsEmailVerified());
 
   constructor() {
     this.initializeFromStorage();
@@ -59,11 +54,13 @@ export class AuthService {
 
   private initializeFromStorage(): void {
     const userId = this.storage.getUserId();
+    const isEmailVerified = !!this.storage.getIsEmailVerified();
 
-    if (this.loggedIn()) {
+    if (userId && isEmailVerified) {
       this.userId.set(userId);
       this.username.set(this.storage.getUsername());
-      this.loggedIn.set(!!this.storage.getIsEmailVerified());
+      this.loggedIn.set(true);
+      this.emailVerified.set(true);
       this.isTutorialCompleted.set(this.storage.getIsTutorialCompleted());
       this.money.set(this.storage.getMoney());
       this.level.set(this.storage.getLevel());
@@ -72,6 +69,8 @@ export class AuthService {
         this.storage.getRequiredExperienceForNextLevel(),
       );
       this.statsVersion.set(this.storage.getStatsVersion());
+    } else {
+      this.loggedIn.set(false);
     }
   }
 
@@ -105,7 +104,7 @@ export class AuthService {
       .pipe(tap(this.processAfterLoginResponse.bind(this)));
   }
 
-  private processAfterLoginResponse(res: LoginResponse): void {
+  processAfterLoginResponse(res: LoginResponse): void {
     this.saveAuthDataToStorage(
       res.userId,
       res.username,

@@ -5,6 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../shared/services/auth/auth.service';
 import { WebSocketNotificationService } from '../websocket-notification-service/web-socket-notification.service';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
+import { LoginResponse } from '../../models/auth/auth.model';
 
 export interface OAuthCodeRequest {
   code: string;
@@ -17,15 +18,6 @@ export interface LinkOAuthAccountRequest {
   providerId?: string;
   userId?: number;
   password?: string;
-}
-
-export interface AfterLoginResponse {
-  userId: string;
-  email: string;
-  username: string;
-  isEmailVerified: boolean;
-  isTutorialCompleted: boolean;
-  money: number;
 }
 
 export interface OAuth2LinkResponse {
@@ -86,7 +78,7 @@ export class OAuth2Service {
 
   handleGoogleCode(
     code: string,
-  ): Observable<AfterLoginResponse | OAuth2LinkResponse> {
+  ): Observable<LoginResponse | OAuth2LinkResponse> {
     const codeVerifier = this.storage.getOAuth2CodeVerifier();
 
     if (!codeVerifier) {
@@ -100,14 +92,13 @@ export class OAuth2Service {
 
     return this.http
       .post<
-        AfterLoginResponse | OAuth2LinkResponse
+        LoginResponse | OAuth2LinkResponse
       >(`${this.apiUrl}/code/google`, request, { withCredentials: true })
       .pipe(
         tap((response) => {
           if ('isTutorialCompleted' in response) {
-            this.updateAuthServiceState(response);
+            this.authService.processAfterLoginResponse(response);
             this.notificationService.connect();
-            this.authService.loadGamificationData();
           }
         }),
       );
@@ -115,34 +106,20 @@ export class OAuth2Service {
 
   linkOAuthAccount(
     linkRequest: LinkOAuthAccountRequest,
-  ): Observable<AfterLoginResponse> {
+  ): Observable<LoginResponse> {
     return this.http
-      .post<AfterLoginResponse>(`${this.apiUrl}/link`, linkRequest, {
+      .post<LoginResponse>(`${this.apiUrl}/link`, linkRequest, {
         withCredentials: true,
       })
       .pipe(
         tap((response) => {
-          this.updateAuthServiceState(response);
+          this.authService.processAfterLoginResponse(response);
           this.notificationService.connect();
-          this.authService.loadGamificationData();
         }),
       );
   }
 
   clearOAuthData(): void {
     this.storage.removeOAuth2CodeVerifier();
-  }
-
-  private updateAuthServiceState(response: AfterLoginResponse): void {
-    this.authService.userId.set(response.userId);
-    this.authService.username.set(response.username);
-    this.authService.loggedIn.set(true);
-    this.authService.isTutorialCompleted.set(response.isTutorialCompleted);
-    this.authService.money.set(response.money);
-
-    this.storage.setUserId(response.userId);
-    this.storage.setUsername(response.username);
-    this.storage.setIsTutorialCompleted(response.isTutorialCompleted);
-    this.storage.setMoney(response.money);
   }
 }

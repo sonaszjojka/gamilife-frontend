@@ -5,12 +5,12 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import {
   OAuth2Service,
   OAuth2LinkResponse,
-  AfterLoginResponse,
 } from '../../../../shared/services/oauth2/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { StorageService } from '../../../../../shared/services/auth/storage.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LoginResponse } from '../../../../shared/models/auth/auth.model';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -68,7 +68,7 @@ export class OAuthCallbackComponent implements OnInit {
               },
             });
           } else {
-            const res = response as AfterLoginResponse;
+            const res = response as LoginResponse;
             this.storageService.setIsTutorialCompleted(res.isTutorialCompleted);
             this.storageService.setUserId(res.userId);
             this.authService.userId.set(res.userId);
