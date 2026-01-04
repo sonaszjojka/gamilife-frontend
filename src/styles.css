@@ -379,37 +379,6 @@ ol {
   padding: 0 var(--spacing-medium);
 }
 
-/* Messages css */
-.ant-message {
-  position: fixed;
-  /* NZ_CONFIG zarządza już top: 88px, ale zostawiamy opcjonalne ustawienie dla kompatybilności */
-  top: 88px !important;
-  /* Zmiana z prawej na lewą */
-  right: auto !important;
-  left: 24px !important;
-  z-index: 500 !important;
-  pointer-events: none;
-}
-
-.ant-message .ant-message-notice-wrapper {
-  z-index: 500 !important;
-}
-
-.ant-message .ant-message-notice {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  pointer-events: auto;
-}
-
-.ant-message .ant-message-notice:not(:last-child) {
-  margin-bottom: 8px;
-}
-
-.ant-message .ant-message-notice-content {
-  text-align: left;
-}
-
 @media (max-width: 768px) {
   :root {
     --font-size-base: 0.875rem;

@@ -192,33 +192,23 @@ export class WebSocketNotificationService implements OnDestroy {
   ): { title: string; message: string } {
     switch (type) {
       case NotificationType.ACHIEVEMENT_UNLOCKED: {
+        const additionalMessage = data?.['rewardedItemsAmount']
+          ? ` You have received ${data['rewardedItemsAmount']} item(s) as a reward.`
+          : '';
         return {
           title: 'Achievement Unlocked!',
-          message: `Congratulations! You unlocked: ${data?.['achievementName'] || ''}`,
+          message: `Congratulations! You unlocked: ${data?.['achievementName'] || ''}.${additionalMessage}`,
         };
       }
-      case NotificationType.ITEM_ACQUIRED: {
-        const itemNames = data?.['itemNames'] as string[];
-        let itemsList = 'a new item';
-
-        if (itemNames && itemNames.length > 0) {
-          if (itemNames.length === 1) {
-            itemsList = itemNames[0];
-          } else {
-            itemsList = `${itemNames[0]} and ${itemNames.length - 1} more`;
-          }
-        }
-
-        return {
-          title: 'Item Acquired',
-          message: `You received: ${itemsList}`,
-        };
-      }
-      case NotificationType.LEVEL_UP:
+      case NotificationType.LEVEL_UP: {
+        const additionalMessage = data?.['rewardedItemsAmount']
+          ? ` You have received ${data['rewardedItemsAmount']} item(s) as a reward.`
+          : '';
         return {
           title: 'Level Up!',
-          message: `Congratulations! You reached level ${data?.['level'] || ''}`,
+          message: `Congratulations! You reached level ${data?.['level'] || ''}.${additionalMessage}`,
         };
+      }
       case NotificationType.GROUP_INVITATION:
         return {
           title: 'Group Invitation',
@@ -277,13 +267,11 @@ export class WebSocketNotificationService implements OnDestroy {
     const notificationConfig = {
       nzDuration: 4500,
       nzPlacement: 'topRight' as const,
-      nzClass: 'custom-notification',
     };
 
     switch (notification.notificationType) {
       case NotificationType.GROUP_TASK_COMPLETED:
       case NotificationType.LEVEL_UP:
-      case NotificationType.ITEM_ACQUIRED:
       case NotificationType.ACHIEVEMENT_UNLOCKED:
         this.nzNotification.success(
           notification.title,
