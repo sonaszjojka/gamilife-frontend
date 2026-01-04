@@ -1,0 +1,27 @@
+.dashboard-container
+{
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: 10px;
+  gap: 10px;
+}
+
+.carousel-container
+{
+  text-align: center;
+ min-height:  20%;
+ max-height: 20%;
+}
+
+.activities-list
+{
+  justify-content: center;
+  overflow-y: auto;
+  min-width: 30%;
+  min-height: 30%;
+  max-height: 30%;
+  max-width: 30%;
+  border-radius: 10px;
+  border: 2px solid black;
+  align-content: center;
+}

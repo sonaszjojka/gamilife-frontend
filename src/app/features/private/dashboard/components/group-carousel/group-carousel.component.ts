@@ -1,42 +1,32 @@
-import { Component } from '@angular/core';
+import {Component, effect, input, OnChanges, OnInit, output, signal} from '@angular/core';
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import {Group} from '../../../../shared/models/group/group.model';
+import {NzFlexDirective} from 'ng-zorro-antd/flex';
+import {GroupCardComponent} from '../../../shared/components/group-card/group-card.component';
+import {NzListHeaderComponent} from 'ng-zorro-antd/list';
 
 @Component({
   selector: 'app-group-carousel-component',
-  imports: [NzCarouselModule],
-  template: `
-    <nz-carousel [nzEffect]="effect">
-      @for (index of array; track index) {
-        <div nz-carousel-content>
-          <h3>{{ index }}</h3>
-        </div>
-      }
-    </nz-carousel>
-  `,
+  imports: [NzCarouselModule, NzFlexDirective, GroupCardComponent, NzListHeaderComponent],
+  templateUrl:'group-carousel.component.html',
   standalone: true,
-  styles: [
-    `
-      [nz-carousel-content] {
-        text-align: center;
-        height: 160px;
-        line-height: 160px;
-        background: #364d79;
-        color: #fff;
-        overflow: hidden;
-      }
-
-      h3 {
-        color: #fff;
-        margin-bottom: 0;
-        user-select: none;
-      }
-    `
-  ]
+  styleUrl:'group-carousel.component.css'
 })
 export class GroupCarouselComponent {
 
+  groups = input<Group[]>([])
+  totalGroupPages= input<number>(1)
+  page=signal<number>(0)
+  slideChanged = output<number>()
 
-  array = [1, 2, 3, 4];
+
   effect = 'scrollx';
+
+  onSlideChange({ to }: { from: number; to: number }) {
+    this.slideChanged.emit(to)
+    this.page.set(to)
+  }
+
+  protected readonly Array = Array;
 }

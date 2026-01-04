@@ -1,0 +1,24 @@
+.slide-wrapper {
+  vertical-align: top;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.cards-container
+{
+  height: 100%;
+  width: 100%;
+  background-color: #9c27b0;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+
+h3 {
+  color: #fff;
+  margin-bottom: 0;
+  user-select: none;
+}

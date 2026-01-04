@@ -379,12 +379,10 @@ ol {
   padding: 0 var(--spacing-medium);
 }
 
-/* Messages css */
+
 .ant-message {
   position: fixed;
-  /* NZ_CONFIG zarządza już top: 88px, ale zostawiamy opcjonalne ustawienie dla kompatybilności */
   top: 88px !important;
-  /* Zmiana z prawej na lewą */
   right: auto !important;
   left: 24px !important;
   z-index: 500 !important;

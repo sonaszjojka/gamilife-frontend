@@ -1,5 +1,6 @@
 .group-card {
   margin-bottom: var(--spacing-medium);
+  width: 300px;
 }
 
 .card-title {

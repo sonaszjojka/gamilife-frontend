@@ -13,12 +13,17 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
 import {GroupCarouselComponent} from '../group-carousel/group-carousel.component';
 import {ActivityItemComponent} from '../../../shared/components/tasks/task-item/activity-item.component';
-import {NzListEmptyComponent} from 'ng-zorro-antd/list';
+import {NzListComponent, NzListEmptyComponent, NzListHeaderComponent} from 'ng-zorro-antd/list';
+import {NzFlexDirective} from 'ng-zorro-antd/flex';
+import {NzHeaderComponent} from 'ng-zorro-antd/layout';
+import {UserStatisticsModel} from '../../../../shared/models/user-profile/user-statistics.model';
+import {UserStatisticsService} from '../../../../shared/services/user-statistics-api/user-statistics.service';
+import {log} from 'ng-zorro-antd/core/logger';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, OnboardingModalComponent, GroupCarouselComponent, ActivityItemComponent, NzListEmptyComponent],
+  imports: [CommonModule, OnboardingModalComponent, GroupCarouselComponent, ActivityItemComponent, NzListEmptyComponent, NzFlexDirective, NzHeaderComponent, NzListComponent, NzListHeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -28,7 +33,7 @@ export class DashboardComponent implements OnInit {
   private readonly activityApi = inject(UserActivitiesApiService)
   private readonly groupApi = inject(GroupApiService)
   private readonly notificationService = inject(NotificationService)
-  // api od statystyk
+  private readonly userStatisticsApi = inject(UserStatisticsService)
   //
 
   groups: Group[] =[]
@@ -40,9 +45,10 @@ export class DashboardComponent implements OnInit {
       groupType:undefined,
       groupName:undefined,
       page:this.groupCurrentPage(),
-      size:5
+      size:1
     }
   activities: ActivityItemDetails[]=[]
+  statistics: UserStatisticsModel[]=[]
 
 
   userId = signal<string | null>(null);
@@ -65,13 +71,16 @@ export class DashboardComponent implements OnInit {
     const id = this.authService.userId();
     this.userId.set(id);
     this.checkOnboardingStatus();
-    this.loadGroups(1)
-    this.loadActivities()
+    this.loadGroups(0);
+    this.loadActivities();
+    this.loadStatistics();
+    console.log(this.statistics)
+
   }
 
   loadGroups(page:number)
   {
-    page --;
+    this.groupParams.page=page
     this.groupApi.getAllGroupsByUserIdWhereUserIsMember(this.groupParams)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
@@ -91,7 +100,15 @@ export class DashboardComponent implements OnInit {
 
   loadActivities()
   {
-    this.activityApi.getAllActivities(0,null,null,new Date (Date.now()).toISOString().slice(0,10),new Date(Date.now()).toISOString().slice(0,10),null,null,true,null)
+    this.activityApi.getAllActivities(0,
+      null,
+      null,
+      new Date (Date.now()).toISOString().slice(0,10),
+      new Date(Date.now()).toISOString().slice(0,10),
+      null,
+      null,
+      true,
+      null)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({next:(response)=>{
         this.activities = response.content
@@ -101,6 +118,24 @@ export class DashboardComponent implements OnInit {
       }
       })
   }
+
+  loadStatistics()
+  {
+    this.userStatisticsApi.getUserStatistics()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({next:(response)=>{
+        console.log(response)
+          this.statistics=response
+      },
+        error:()=>{
+      this.notificationService.error("Error occurred loading your statistics")
+      }
+        }
+
+        )
+  }
+
+
 
 
   private checkOnboardingStatus(): void {
@@ -115,4 +150,5 @@ export class DashboardComponent implements OnInit {
     this.showOnboarding.set(false);
     this.authService.completeUserOnboarding();
   }
+
 }

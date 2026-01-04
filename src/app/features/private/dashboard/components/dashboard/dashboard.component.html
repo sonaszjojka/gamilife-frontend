@@ -1,15 +1,22 @@
 <div class="dashboard-container">
+<nz-header >Welcome Back</nz-header>
 
-  <div class="group-carousel">
+<div class="carousel-container">
+  <h1><nz-list-header>My Groups</nz-list-header></h1>
   <app-group-carousel-component
-
+    [groups]="groups"
+    [totalGroupPages]="groupTotalPage()"
+    (slideChanged)="loadGroups($event)"
   >
   </app-group-carousel-component>
-  </div>
+</div>
 
+  <div class="activities-list" nz-flex>
+  <nz-list  nz-flex>
+   <h1> <nz-list-header>Activities for Today</nz-list-header></h1>
   @if (activities.length>0)
   {
-  @for (activity of activities;track activities)
+  @for (activity of activities;track activity.id)
   {
   <app-activity-item
   [activity]="activity"
@@ -21,6 +28,8 @@
   @else {
     <nz-list-empty>You have no activities for today</nz-list-empty>
   }
+  </nz-list>
+  </div>
 
 
   <app-onboarding-modal
@@ -29,6 +38,7 @@
     (completed)="onOnboardingCompleted()"
   ></app-onboarding-modal>
 
+  <button (click)="logStats()">Log</button>
   <div class="dashboard-content">
     <h1>Welcome to dashboard</h1>
   </div>
