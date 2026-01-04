@@ -1,21 +1,29 @@
-<nz-result
-  *ngIf="status === 'success'"
-  nzStatus="success"
-  nzTitle="Email Verification Successful!"
-  nzSubTitle="Email has been verified. Welcome do Gamilife!"
->
-  <div nz-result-extra>
-    <button nz-button routerLink="/login">Login</button>
-  </div>
-</nz-result>
+@if (status === "success") {
+  <nz-result
+    nzStatus="success"
+    nzTitle="Email Verification Successful!"
+    nzSubTitle="Email has been verified. Welcome do Gamilife!"
+  >
+    <div nz-result-extra>
+      <button nz-button routerLink="/app/dashboard">
+        Start Using Gamilife
+      </button>
+    </div>
+  </nz-result>
+}
 
-<nz-result
-  *ngIf="status === 'error'"
-  nzTitle="Email Verification Failed!"
-  nzStatus="error"
-  nzSubTitle="Please try again."
->
-</nz-result>
-<div *ngIf="status === 'loading'">
+@if (status === "error") {
+  <nz-result
+    nzStatus="error"
+    nzTitle="Email Verification Failed"
+    nzSubTitle="There was an error verifying your email. The verification link may be invalid or expired."
+  >
+    <div nz-result-extra>
+      <button nz-button routerLink="/login">Go Back to Login</button>
+    </div>
+  </nz-result>
+}
+
+@if (status === "loading") {
   <nz-spin nzTip="Processing e-mail verification..."></nz-spin>
-</div>
+}
