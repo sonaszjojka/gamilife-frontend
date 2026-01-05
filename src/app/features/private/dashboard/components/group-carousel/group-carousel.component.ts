@@ -2,20 +2,10 @@ import { Component, input, output, signal } from '@angular/core';
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { Group } from '../../../../shared/models/group/group.model';
-import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { GroupCardComponent } from '../../../shared/components/group-card/group-card.component';
-import { NzListHeaderComponent } from 'ng-zorro-antd/list';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
-
 @Component({
   selector: 'app-group-carousel-component',
-  imports: [
-    NzCarouselModule,
-    NzFlexDirective,
-    GroupCardComponent,
-    NzListHeaderComponent,
-    NzSpinComponent,
-  ],
+  imports: [NzCarouselModule, GroupCardComponent],
   templateUrl: 'group-carousel.component.html',
   standalone: true,
   styleUrl: 'group-carousel.component.css',

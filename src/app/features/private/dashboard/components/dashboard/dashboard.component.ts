@@ -20,20 +20,10 @@ import { ActivityItemDetails } from '../../../../shared/models/task-models/activ
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { GroupCarouselComponent } from '../group-carousel/group-carousel.component';
-import { ActivityItemComponent } from '../../../shared/components/tasks/task-item/activity-item.component';
-import {
-  NzListComponent,
-  NzListEmptyComponent,
-  NzListHeaderComponent,
-} from 'ng-zorro-antd/list';
-import { NzFlexDirective } from 'ng-zorro-antd/flex';
-import { NzHeaderComponent } from 'ng-zorro-antd/layout';
 import { UserStatisticsModel } from '../../../../shared/models/user-profile/user-statistics.model';
 import { UserStatisticsService } from '../../../../shared/services/user-statistics-api/user-statistics.service';
 import { UserStatisticsCardComponent } from '../user-statistics-card/user-statistics-card.component';
 import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-activities.component';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
-import { NzPageHeaderTitleDirective } from 'ng-zorro-antd/page-header';
 import { NzDividerComponent } from 'ng-zorro-antd/divider';
 
 @Component({
@@ -43,23 +33,15 @@ import { NzDividerComponent } from 'ng-zorro-antd/divider';
     CommonModule,
     OnboardingModalComponent,
     GroupCarouselComponent,
-    ActivityItemComponent,
-    NzListEmptyComponent,
-    NzFlexDirective,
-    NzHeaderComponent,
-    NzListComponent,
-    NzListHeaderComponent,
     UserStatisticsCardComponent,
     DashboardActivitiesComponent,
-    NzSpinComponent,
-    NzPageHeaderTitleDirective,
     NzDividerComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
   private readonly activityApi = inject(UserActivitiesApiService);
   private readonly groupApi = inject(GroupApiService);

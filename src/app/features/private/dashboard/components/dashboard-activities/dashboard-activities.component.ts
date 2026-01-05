@@ -8,7 +8,6 @@ import {
   NzListHeaderComponent,
 } from 'ng-zorro-antd/list';
 import { NzDividerComponent } from 'ng-zorro-antd/divider';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-dashboard-activities',
@@ -21,7 +20,6 @@ import { NzSpinComponent } from 'ng-zorro-antd/spin';
     NzListEmptyComponent,
     NzListHeaderComponent,
     NzDividerComponent,
-    NzSpinComponent,
   ],
   standalone: true,
 })
