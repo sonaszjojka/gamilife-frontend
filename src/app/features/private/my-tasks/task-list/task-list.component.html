@@ -66,10 +66,12 @@
         }
       }
     </div>
-    @if (editionMode() || creationMode()) {
+    @if (editionMode!() || creationMode!()) {
       <app-task-form
         [activity]="selectedActivity()"
         [viewMode]="viewMode()"
+        [editionMode]="editionMode!()"
+        [creationMode]="creationMode!()"
         (activityFormSubmitted)="onTaskSubmit()"
         (activityDeleted)="onTaskDelete()"
         (closeForm)="onFormClose()"

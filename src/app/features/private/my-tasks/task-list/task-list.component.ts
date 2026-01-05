@@ -51,8 +51,8 @@ export class TaskListComponent implements OnInit {
 
   protected readonly ActivityListView = ActivityListView;
 
-  editionMode = signal<boolean | null>(false);
-  creationMode = signal<boolean | null>(false);
+  editionMode = signal<boolean>(false);
+  creationMode = signal<boolean>(false);
   viewMode = signal<boolean>(true);
 
   title = signal<string | null>(null);
@@ -65,7 +65,7 @@ export class TaskListComponent implements OnInit {
   isAlive = signal<boolean>(true);
 
   refreshCalendar = output<void>();
-  selectedActivity = signal<ActivityItemDetails | undefined>(undefined);
+  selectedActivity = signal<ActivityItemDetails | null>(null);
   formType = signal<ActivityType>(ActivityType.TASK);
 
   currentPage = 0;
@@ -367,7 +367,7 @@ export class TaskListComponent implements OnInit {
   }
 
   onTaskCreation(): void {
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
     this.viewMode.set(false);
     this.formType.set(ActivityType.TASK);
     this.creationMode.set(true);
@@ -375,7 +375,7 @@ export class TaskListComponent implements OnInit {
   }
 
   onHabitCreation(): void {
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
     this.viewMode.set(false);
     this.formType.set(ActivityType.HABIT);
     this.creationMode.set(true);
@@ -392,7 +392,7 @@ export class TaskListComponent implements OnInit {
     this.load();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
     this.activityListType.set(ActivityListView.Activities);
   }
 
@@ -403,12 +403,12 @@ export class TaskListComponent implements OnInit {
     this.groupActivitiesByDate();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
   }
 
   onFormClose() {
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
   }
 }

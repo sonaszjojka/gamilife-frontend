@@ -62,9 +62,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class TaskFormComponent implements OnChanges {
   viewMode = input<boolean>(false);
   type = input.required<ActivityType>();
-  activity = input<ActivityItemDetails>();
-  creationMode? = input<boolean | null>();
-  editionMode? = input<boolean | null>();
+  activity = input<ActivityItemDetails|null>(null);
+  creationMode = input<boolean>();
+  editionMode= input<boolean>();
   activityFormSubmitted = output<void>();
   activityDeleted = output<void>();
   closeForm = output<void>();
@@ -177,6 +177,11 @@ export class TaskFormComponent implements OnChanges {
   }
 
   onSubmit() {
+    console.log(this.activity())
+    console.log(this.type())
+    console.log(this.creationMode!())
+    console.log(this.editionMode!())
+
     if (this.validActivityForm.invalid) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
         control.markAsDirty();
