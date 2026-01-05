@@ -1,0 +1,48 @@
+.dashboard-container {
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: 10px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.upper-part {
+  text-align: center;
+  height: 30%;
+  flex: 0 0 auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.main-part {
+  flex: 1;
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+  gap: 20px;
+  overflow: hidden;
+  align-content: center;
+  justify-content: center;
+  padding: 10px;
+}
+.header-part {
+  height: 5%;
+  text-align: center;
+  flex: 0 0 auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.header-part h1 {
+  font-size: 50px;
+}
+.card-container {
+  align-content: center;
+}
+
+app-dashboard-activities,
+app-user-statistic-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

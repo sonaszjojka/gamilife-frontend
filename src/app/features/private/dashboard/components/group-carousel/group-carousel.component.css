@@ -1,0 +1,22 @@
+nz-carousel {
+  height: 245px;
+}
+.slide-wrapper {
+  vertical-align: top;
+  height: 300px;
+  width: 100%;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.cards-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  align-content: center;
+  justify-content: center;
+}

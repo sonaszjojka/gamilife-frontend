@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
-import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
+import { ActivityItemComponent } from '../../shared/components/tasks/task-item/activity-item.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import {
   CdkDrag,
@@ -38,7 +38,7 @@ import { BackButtonComponent } from '../../shared/components/back-button/back-bu
 @Component({
   selector: 'app-pomodoro-session',
   imports: [
-    TaskItemComponent,
+    ActivityItemComponent,
     NzButtonComponent,
     CdkDrag,
     CdkDropList,
