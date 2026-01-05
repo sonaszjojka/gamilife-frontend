@@ -21,6 +21,7 @@
       <app-dashboard-activities
         [activities]="activities"
         [isLoading]="isActivityListLoading()"
+        (removeActivity)="onActivityFinished($event)"
       >
       </app-dashboard-activities>
 

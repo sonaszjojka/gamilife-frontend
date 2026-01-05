@@ -18,6 +18,7 @@
         <app-activity-item
           [activity]="activity"
           [isOnDashboard]="true"
+          (activityUpdated)="removeFromList($event)"
         >
         </app-activity-item>
 

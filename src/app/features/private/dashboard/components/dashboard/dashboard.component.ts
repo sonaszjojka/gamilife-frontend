@@ -167,4 +167,10 @@ export class DashboardComponent implements OnInit {
     this.authService.completeUserOnboarding();
   }
 
+  onActivityFinished(activityId:string)
+  {
+    this.activities = this.activities.filter((a)=>a.id!==activityId)
+
+  }
+
 }
