@@ -19,6 +19,7 @@ export interface GamificationUserData {
   experience: number;
   money: number;
   requiredExperienceForNextLevel: number | null;
+  statsVersion: number;
 }
 
 export interface RegistrationData {

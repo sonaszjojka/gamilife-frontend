@@ -50,11 +50,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           }
 
           return authService.refreshToken().pipe(
-            switchMap(() => next(cloned)),
             catchError((refreshError) => {
               authService.logoutLocal();
               return throwError(() => refreshError);
             }),
+            switchMap(() => next(cloned)),
           );
         }
 

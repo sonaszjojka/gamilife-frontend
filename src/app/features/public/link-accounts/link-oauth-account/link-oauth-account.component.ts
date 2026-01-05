@@ -11,10 +11,8 @@ import {
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
-import {
-  OAuth2Service,
-  LinkOAuthAccountRequest,
-} from '../../../shared/services/oauth2/oauth2.service';
+import { OAuth2Service } from '../../../shared/services/oauth2/oauth2.service';
+import { LinkOAuthAccountRequest } from '../../../shared/models/auth/oauth2.model';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -92,22 +90,11 @@ export class LinkOAuthAccountComponent {
         .linkOAuthAccount(linkRequest)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.linking.set(false);
             this.close();
-
             this.oauth2Service.clearOAuthData();
-
-            if (!response.isEmailVerified) {
-              this.router.navigateByUrl('/login', {
-                state: {
-                  showEmailVerification: true,
-                  email: response.email,
-                },
-              });
-            } else {
-              this.router.navigate(['/dashboard']);
-            }
+            this.router.navigate(['/dashboard']);
           },
           error: (err) => {
             this.linking.set(false);

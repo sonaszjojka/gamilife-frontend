@@ -56,7 +56,6 @@ export class NotificationDropdownComponent {
         this.handleGroupInvitation(notification.data);
         break;
       case NotificationType.ACHIEVEMENT_UNLOCKED:
-      case NotificationType.ITEM_ACQUIRED:
       case NotificationType.LEVEL_UP:
         this.handleRedirectToProfile();
         break;
@@ -152,7 +151,6 @@ export class NotificationDropdownComponent {
     switch (type) {
       case NotificationType.ACHIEVEMENT_UNLOCKED:
         return 'trophy';
-      case NotificationType.ITEM_ACQUIRED:
       case NotificationType.GROUP_ITEM_USED:
         return 'gift';
       case NotificationType.LEVEL_UP:
@@ -183,8 +181,6 @@ export class NotificationDropdownComponent {
       case NotificationType.LEVEL_UP:
       case NotificationType.GROUP_TASK_COMPLETED:
         return '#52c41a';
-      case NotificationType.ITEM_ACQUIRED:
-        return '#faad14';
       case NotificationType.GROUP_ITEM_USED:
         return '#722ed1';
       case NotificationType.GROUP_MEMBER_LEFT:
