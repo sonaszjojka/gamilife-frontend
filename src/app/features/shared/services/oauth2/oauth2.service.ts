@@ -3,28 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../shared/services/auth/auth.service';
-import { WebSocketNotificationService } from '../websocket-notification-service/web-socket-notification.service';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
 import { LoginResponse } from '../../models/auth/auth.model';
-
-export interface OAuthCodeRequest {
-  code: string;
-  codeVerifier: string;
-}
-
-export interface LinkOAuthAccountRequest {
-  shouldLink: boolean;
-  provider?: string;
-  providerId?: string;
-  userId?: number;
-  password?: string;
-}
-
-export interface OAuth2LinkResponse {
-  providerName: string;
-  providerId: string;
-  userId: number;
-}
+import {
+  OAuthCodeRequest,
+  LinkOAuthAccountRequest,
+  OAuth2LinkResponse,
+} from '../../models/auth/oauth2.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +17,6 @@ export interface OAuth2LinkResponse {
 export class OAuth2Service {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private notificationService = inject(WebSocketNotificationService);
   private storage = inject(StorageService);
   private readonly apiUrl = `${environment.apiUrl}/oauth2`;
 
@@ -98,7 +82,6 @@ export class OAuth2Service {
         tap((response) => {
           if ('isTutorialCompleted' in response) {
             this.authService.processAfterLoginResponse(response);
-            this.notificationService.connect();
           }
         }),
       );
@@ -114,7 +97,6 @@ export class OAuth2Service {
       .pipe(
         tap((response) => {
           this.authService.processAfterLoginResponse(response);
-          this.notificationService.connect();
         }),
       );
   }

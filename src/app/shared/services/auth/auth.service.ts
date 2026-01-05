@@ -49,7 +49,11 @@ export class AuthService {
 
   constructor() {
     this.initializeFromStorage();
-    this.initializeWebSocketOnStartup();
+
+    if (this.loggedIn()) {
+      this.notificationService.connect();
+      this.loadGamificationData();
+    }
   }
 
   private initializeFromStorage(): void {
@@ -71,15 +75,6 @@ export class AuthService {
       this.statsVersion.set(this.storage.getStatsVersion());
     } else {
       this.loggedIn.set(false);
-    }
-  }
-
-  private initializeWebSocketOnStartup(): void {
-    const isLoggedIn = this.loggedIn();
-
-    if (isLoggedIn) {
-      this.notificationService.connect();
-      this.loadGamificationData();
     }
   }
 
@@ -120,6 +115,7 @@ export class AuthService {
       res.money,
     );
     this.loadGamificationData();
+    this.notificationService.connect();
   }
 
   logout() {
@@ -135,7 +131,6 @@ export class AuthService {
   logoutLocal() {
     this.notificationService.disconnect();
     this.notificationService.clearAllNotifications();
-
     this.storage.clearAuthData();
 
     this.userId.set(null);
@@ -223,16 +218,6 @@ export class AuthService {
     this.storage.setIsTutorialCompleted(true);
   }
 
-  updateMoney(amount: number): void {
-    this.money.set(amount);
-    this.storage.setMoney(amount);
-  }
-
-  adjustMoney(delta: number): void {
-    const newAmount = this.money() + delta;
-    this.updateMoney(newAmount);
-  }
-
   getExperiencePercentage(): number {
     const required = this.requiredExperienceForNextLevel();
     if (!required || required === 0) return 0;
@@ -250,15 +235,6 @@ export class AuthService {
     );
     subscription.unsubscribe();
     return connected;
-  }
-
-  reconnectWebSocket(): void {
-    if (this.loggedIn()) {
-      this.notificationService.disconnect();
-      setTimeout(() => {
-        this.notificationService.connect();
-      }, 500);
-    }
   }
 
   private updateAuthState(
