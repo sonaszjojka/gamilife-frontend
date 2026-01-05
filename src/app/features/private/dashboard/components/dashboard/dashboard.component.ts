@@ -4,9 +4,7 @@ import { OnboardingModalComponent } from '../onboarding/onboarding-modal/onboard
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import {UserActivitiesApiService} from '../../../../shared/services/tasks/user-activities-api.service';
 import {GroupApiService} from '../../../../shared/services/groups-api/group-api.service';
-import {
-  UserAchievementsApiService
-} from '../../../../shared/services/user-achievements-api/user-achievements-api.service';
+
 import {Group, GroupFilterParams} from '../../../../shared/models/group/group.model';
 import {ActivityItemDetails} from '../../../../shared/models/task-models/activity.model';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -18,12 +16,20 @@ import {NzFlexDirective} from 'ng-zorro-antd/flex';
 import {NzHeaderComponent} from 'ng-zorro-antd/layout';
 import {UserStatisticsModel} from '../../../../shared/models/user-profile/user-statistics.model';
 import {UserStatisticsService} from '../../../../shared/services/user-statistics-api/user-statistics.service';
-import {log} from 'ng-zorro-antd/core/logger';
+import {
+  UserStatisticsCardComponent
+} from '../user-statistics-card/user-statistics-card.component';
+import {DashboardActivitiesComponent} from '../dashboard-activities/dashboard-activities.component';
+import {NzSpinComponent} from 'ng-zorro-antd/spin';
+import {NzPageHeaderTitleDirective} from 'ng-zorro-antd/page-header';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+
+
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, OnboardingModalComponent, GroupCarouselComponent, ActivityItemComponent, NzListEmptyComponent, NzFlexDirective, NzHeaderComponent, NzListComponent, NzListHeaderComponent],
+  imports: [CommonModule, OnboardingModalComponent, GroupCarouselComponent, ActivityItemComponent, NzListEmptyComponent, NzFlexDirective, NzHeaderComponent, NzListComponent, NzListHeaderComponent, UserStatisticsCardComponent, DashboardActivitiesComponent, NzSpinComponent, NzPageHeaderTitleDirective, NzDividerComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -34,7 +40,6 @@ export class DashboardComponent implements OnInit {
   private readonly groupApi = inject(GroupApiService)
   private readonly notificationService = inject(NotificationService)
   private readonly userStatisticsApi = inject(UserStatisticsService)
-  //
 
   groups: Group[] =[]
 
@@ -45,7 +50,7 @@ export class DashboardComponent implements OnInit {
       groupType:undefined,
       groupName:undefined,
       page:this.groupCurrentPage(),
-      size:1
+      size:5
     }
   activities: ActivityItemDetails[]=[]
   statistics: UserStatisticsModel[]=[]
@@ -53,7 +58,9 @@ export class DashboardComponent implements OnInit {
 
   userId = signal<string | null>(null);
   showOnboarding = signal<boolean>(false);
-
+  isActivityListLoading = signal<boolean>(true)
+  isGroupListLoading=signal<boolean>(true)
+  isStatisticsCardLoading =signal<boolean>(true)
 
 
   constructor() {
@@ -74,12 +81,12 @@ export class DashboardComponent implements OnInit {
     this.loadGroups(0);
     this.loadActivities();
     this.loadStatistics();
-    console.log(this.statistics)
 
   }
 
   loadGroups(page:number)
   {
+    this.isGroupListLoading.set(true)
     this.groupParams.page=page
     this.groupApi.getAllGroupsByUserIdWhereUserIsMember(this.groupParams)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -89,9 +96,11 @@ export class DashboardComponent implements OnInit {
               this.groups = response.content
               this.groupCurrentPage.set(response.currentPage)
               this.groupTotalPage.set(response.totalPages)
+              this.isGroupListLoading.set(false)
           },
           error: ()=>{
             this.notificationService.error("Error occurred loading your groups")
+            this.isGroupListLoading.set(false)
           }
         }
 
@@ -100,6 +109,8 @@ export class DashboardComponent implements OnInit {
 
   loadActivities()
   {
+    this.isActivityListLoading.set(true)
+
     this.activityApi.getAllActivities(0,
       null,
       null,
@@ -111,9 +122,11 @@ export class DashboardComponent implements OnInit {
       null)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({next:(response)=>{
-        this.activities = response.content
+          this.isActivityListLoading.set(false)
+          this.activities = response.content
         },
       error:()=>{
+        this.isActivityListLoading.set(false)
         this.notificationService.error("Error occurred loading your activities")
       }
       })
@@ -121,13 +134,16 @@ export class DashboardComponent implements OnInit {
 
   loadStatistics()
   {
+    this.isStatisticsCardLoading.set(true)
     this.userStatisticsApi.getUserStatistics()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({next:(response)=>{
+            this.isStatisticsCardLoading.set(false)
         console.log(response)
           this.statistics=response
       },
         error:()=>{
+          this.isStatisticsCardLoading.set(false)
       this.notificationService.error("Error occurred loading your statistics")
       }
         }

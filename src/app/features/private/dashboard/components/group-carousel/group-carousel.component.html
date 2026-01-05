@@ -1,5 +1,4 @@
-<nz-carousel [nzEffect]="effect" [nzEnableSwipe]="false" [nzArrows]="true" (nzBeforeChange)="onSlideChange($event)" >
-
+<nz-carousel [nzEffect]="effect" [nzDots]="true" [nzEnableSwipe]="false" [nzArrows]="true" (nzBeforeChange)="onSlideChange($event)" >
   @for (index of Array(totalGroupPages()) ; track $index) {
     <div nz-carousel-content
          class="slide-wrapper" >
@@ -17,3 +16,5 @@
     </div>
   }
 </nz-carousel>
+
+

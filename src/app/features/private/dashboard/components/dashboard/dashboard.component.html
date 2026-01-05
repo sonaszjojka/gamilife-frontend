@@ -1,45 +1,47 @@
-<div class="dashboard-container">
-<nz-header >Welcome Back</nz-header>
 
-<div class="carousel-container">
-  <h1><nz-list-header>My Groups</nz-list-header></h1>
-  <app-group-carousel-component
-    [groups]="groups"
-    [totalGroupPages]="groupTotalPage()"
-    (slideChanged)="loadGroups($event)"
-  >
-  </app-group-carousel-component>
+  <div class="dashboard-container">
+
+      <div class="header-part">
+        <h1 >Welcome Back</h1>
+      </div>
+
+    <div class="upper-part">
+      <h1>Your Groups</h1>
+      <nz-divider></nz-divider>
+      <app-group-carousel-component
+        [groups]="groups"
+        [totalGroupPages]="groupTotalPage()"
+        [isLoading] ="isGroupListLoading()"
+        (slideChanged)="loadGroups($event)"
+      >
+      </app-group-carousel-component>
+    </div>
+
+    <div class="main-part">
+      <app-dashboard-activities
+        [activities]="activities"
+        [isLoading]="isActivityListLoading()"
+      >
+      </app-dashboard-activities>
+
+
+      <app-onboarding-modal
+        [visible]="showOnboarding()"
+        [userId]="userId()"
+        (completed)="onOnboardingCompleted()"
+      ></app-onboarding-modal>
+<div class="card-container">
+      <app-user-statistic-card
+        [statistics]="statistics"
+        [isLoading] = "isStatisticsCardLoading()"
+      >
+      </app-user-statistic-card>
 </div>
+      </div>
 
-  <div class="activities-list" nz-flex>
-  <nz-list  nz-flex>
-   <h1> <nz-list-header>Activities for Today</nz-list-header></h1>
-  @if (activities.length>0)
-  {
-  @for (activity of activities;track activity.id)
-  {
-  <app-activity-item
-  [activity]="activity"
-  >
-  </app-activity-item>
-
-  }
-  }
-  @else {
-    <nz-list-empty>You have no activities for today</nz-list-empty>
-  }
-  </nz-list>
   </div>
 
 
-  <app-onboarding-modal
-    [visible]="showOnboarding()"
-    [userId]="userId()"
-    (completed)="onOnboardingCompleted()"
-  ></app-onboarding-modal>
 
-  <button (click)="logStats()">Log</button>
-  <div class="dashboard-content">
-    <h1>Welcome to dashboard</h1>
-  </div>
-</div>
+
+

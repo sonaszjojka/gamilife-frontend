@@ -1,0 +1,24 @@
+
+<nz-card style="width:300px;" [nzTitle]="titleTemplate"  [nzHoverable]="'true'" [style.box-shadow]="'0 2px 5px rgba(0, 0, 0, 0.1)'">
+  @if (isLoading())
+  {
+    <nz-spin></nz-spin>
+  } @else {
+    @for (statistic of statistics(); track statistic.id)
+    {
+      <div class="statistic-row">
+        <p class=>{{statistic.statisticType.type}} <nz-divider [nzType]="'vertical'"></nz-divider> {{statistic.count}}</p>
+        <nz-divider [nzVariant]="'solid'"></nz-divider>
+      </div>
+
+    }
+  }
+</nz-card>
+
+<ng-template #titleTemplate>
+  <div class="custom-title">
+    <span nz-icon nzType="bar-chart" nzTheme="outline" style="font-size: 30px;"></span>
+    <span style="margin-left: 8px; color: #1890ff;align-content: center; font-size: 30px">Your Progress</span>
+  </div>
+</ng-template>
+

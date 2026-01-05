@@ -5,10 +5,11 @@ import {Group} from '../../../../shared/models/group/group.model';
 import {NzFlexDirective} from 'ng-zorro-antd/flex';
 import {GroupCardComponent} from '../../../shared/components/group-card/group-card.component';
 import {NzListHeaderComponent} from 'ng-zorro-antd/list';
+import {NzSpinComponent} from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-group-carousel-component',
-  imports: [NzCarouselModule, NzFlexDirective, GroupCardComponent, NzListHeaderComponent],
+  imports: [NzCarouselModule, NzFlexDirective, GroupCardComponent, NzListHeaderComponent, NzSpinComponent],
   templateUrl:'group-carousel.component.html',
   standalone: true,
   styleUrl:'group-carousel.component.css'
@@ -19,6 +20,7 @@ export class GroupCarouselComponent {
   totalGroupPages= input<number>(1)
   page=signal<number>(0)
   slideChanged = output<number>()
+  isLoading = input.required<boolean>()
 
 
   effect = 'scrollx';
