@@ -1,9 +1,4 @@
-import {
-  Component,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { Group } from '../../../../shared/models/group/group.model';
