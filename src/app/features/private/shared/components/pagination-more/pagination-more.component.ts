@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import {Component, Input, signal, output} from '@angular/core';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 @Component({
@@ -19,7 +19,7 @@ export class PaginationMoreComponent {
     this.totalItems.set(value * this.pageSize);
   }
 
-  @Output() pageChange = new EventEmitter<number>();
+   pageChange = output<number>();
 
   readonly pageIndex = signal(1);
   readonly totalItems = signal(0);

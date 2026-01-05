@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -23,10 +23,10 @@ import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.componen
   standalone: true,
 })
 export class GroupCardComponent {
-  @Input({ required: true }) group!: Group;
+  group=input.required<Group>();
   private router = inject(Router);
 
   goToPreview() {
-    this.router.navigate(['/app/community/groups/', this.group.groupId]);
+    this.router.navigate(['/app/community/groups/', this.group().groupId]);
   }
 }

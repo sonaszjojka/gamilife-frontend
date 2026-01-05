@@ -1,13 +1,9 @@
 import {
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   input,
-  Input,
-  OnInit,
-  Output,
-  WritableSignal,
+  OnInit, output,
 } from '@angular/core';
 import {
   FormsModule,
@@ -44,9 +40,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class PomodoroFormComponent implements OnInit {
   activity = input.required<ActivityItemDetails>();
-  @Input() pomodoroCreation!: WritableSignal<boolean>;
-  @Input() pomodoroEdition!: WritableSignal<boolean>;
-  @Output() formChanged = new EventEmitter<PomodoroRequest>();
+  pomodoroCreation=input<boolean>();
+   pomodoroEdition= input<boolean>();
+  formChanged = output<PomodoroRequest>();
 
   private formBuilder = inject(NonNullableFormBuilder);
   private notificationService = inject(NotificationService);

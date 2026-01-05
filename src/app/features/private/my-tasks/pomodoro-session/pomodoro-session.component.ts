@@ -4,7 +4,7 @@ import {
   HostListener,
   inject,
   OnDestroy,
-  OnInit,
+  OnInit, signal,
   ViewChild,
 } from '@angular/core';
 import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
@@ -63,6 +63,8 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   loading = false;
   loadingMore = false;
 
+  selectedActivity :ActivityItemComponent
+
   currentSessionPomodoroTasks: ActivityItemDetails[] = [];
   usersPomodoroActivities: ActivityItemDetails[] = [];
   usersNotPomodoroTasks: ActivityItemDetails[] = [];
@@ -77,10 +79,10 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
 
   pageSize = 5;
 
-  currentPomodoroPage = 0;
+  currentPomodoroPage = signal<number>(0);
   totalPomodoroPages = 0;
 
-  currentNonPomodoroPage = 0;
+  currentNonPomodoroPage = signal<number>(0)
   totalNonPomodoroPages = 0;
 
   private readonly taskService = inject(UserTaskApiService);
@@ -100,7 +102,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      this.currentPomodoroPage + 1 < this.totalPomodoroPages
+      this.currentPomodoroPage() + 1 < this.totalPomodoroPages
     ) {
       this.loadMorePomodoroActivities();
     }
@@ -108,7 +110,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       position > height - threshold &&
       !this.loading &&
       !this.loadingMore &&
-      this.currentNonPomodoroPage + 1 < this.totalNonPomodoroPages
+      this.currentNonPomodoroPage() + 1 < this.totalNonPomodoroPages
     ) {
       this.loadMoreNonPomodoroActivities();
     }
@@ -117,7 +119,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activitiesService
       .getAllActivities(
-        this.currentPomodoroPage,
+        this.currentPomodoroPage(),
         this.pageSize,
         null,
         null,
@@ -132,7 +134,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         next: (response: Page<ActivityItemDetails>) => {
           this.usersPomodoroActivities = response.content;
           this.totalPomodoroPages = response.totalPages;
-          this.currentPomodoroPage = response.number;
+          this.currentPomodoroPage.set(response.number);
           this.loading = false;
         },
         error: () => {
@@ -145,7 +147,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
 
     this.activitiesService
       .getAllActivities(
-        this.currentPomodoroPage,
+        this.currentPomodoroPage(),
         this.pageSize,
         null,
         null,
@@ -160,7 +162,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
         next: (response: Page<ActivityItemDetails>) => {
           this.usersNotPomodoroTasks = response.content;
           this.totalNonPomodoroPages = response.totalPages;
-          this.currentNonPomodoroPage = response.number;
+          this.currentNonPomodoroPage.set(response.number);
           this.loading = false;
         },
         error: () => {
@@ -175,7 +177,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   loadMorePomodoroActivities(): void {
     if (this.loadingMore) return;
     this.loadingMore = true;
-    const nextPage = this.currentPomodoroPage + 1;
+    const nextPage = this.currentPomodoroPage() + 1;
     this.activitiesService
       .getAllActivities(
         nextPage,
@@ -196,7 +198,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
             ...response.content,
           ];
           this.totalPomodoroPages = response.totalPages;
-          this.currentPomodoroPage = response.number;
+          this.currentPomodoroPage.set(response.number);
           this.loadingMore = false;
         },
         error: () => {
@@ -211,7 +213,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   loadMoreNonPomodoroActivities(): void {
     if (this.loadingMore) return;
     this.loadingMore = true;
-    const nextPage = this.currentNonPomodoroPage + 1;
+    const nextPage = this.currentNonPomodoroPage() + 1;
     this.activitiesService
       .getAllActivities(
         nextPage,
@@ -232,7 +234,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
             ...response.content,
           ];
           this.totalNonPomodoroPages = response.totalPages;
-          this.currentNonPomodoroPage = response.number;
+          this.currentNonPomodoroPage.set(response.number);
           this.loadingMore = false;
         },
         error: () => {
@@ -350,6 +352,8 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   }
 
   addWorkCycleToTaskOnTop() {
+    this.selectedActivity
+
     this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted =
       this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted! + 1;
     const request: PomodoroRequest = {
@@ -378,8 +382,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       this.currentSessionPomodoroTasks[0].pomodoro!.cyclesCompleted ==
       this.currentSessionPomodoroTasks[0].pomodoro!.cyclesRequired
     ) {
-      this.pomodoroSessionAcceptTaskModal.activity =
-        this.currentSessionPomodoroTasks[0];
       this.pomodoroSessionAcceptTaskModal.showModal();
     }
   }
@@ -456,7 +458,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   moveTaskToCurrentSession(activity: ActivityItemDetails) {
     if (!activity) return;
     if (activity.pomodoro == undefined) {
-      this.pomodoroSessionFormModal.activity = activity;
       this.pomodoroSessionFormModal.showModal();
     }
 
@@ -464,7 +465,6 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       if (
         activity.pomodoro.cyclesCompleted! >= activity.pomodoro.cyclesRequired!
       ) {
-        this.pomodoroSessionFormModal.activity = activity;
         this.pomodoroSessionFormModal.showModal();
       } else {
         this.currentSessionPomodoroTasks.push(

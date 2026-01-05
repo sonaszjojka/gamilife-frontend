@@ -7,13 +7,13 @@
   <ng-template #cardTitle>
     <div class="card-title">
       <span nz-icon nzType="team" nzTheme="outline"></span>
-      <span class="group-name">{{ group.groupName }}</span>
+      <span class="group-name">{{ group().groupName }}</span>
     </div>
   </ng-template>
 
   <ng-template #extraTemplate>
     <app-group-type-tag
-      [typeTitle]="group.groupType.title"
+      [typeTitle]="group().groupType.title"
     ></app-group-type-tag>
   </ng-template>
 
@@ -22,14 +22,14 @@
       <span nz-icon nzType="user" nzTheme="outline"></span>
       <span class="label">Members:</span>
       <span class="value">
-        {{ group.membersCount }} / {{ group.membersLimit }}
+        {{ group().membersCount }} / {{ group().membersLimit }}
       </span>
     </div>
 
-    <div class="info-row" *ngIf="group.groupCurrencySymbol">
+    <div class="info-row" *ngIf="group().groupCurrencySymbol">
       <span nz-icon nzType="dollar" nzTheme="outline"></span>
       <span class="label">Currency:</span>
-      <span class="value">{{ group.groupCurrencySymbol }}</span>
+      <span class="value">{{ group().groupCurrencySymbol }}</span>
     </div>
   </div>
 

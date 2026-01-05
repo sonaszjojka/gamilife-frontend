@@ -343,7 +343,6 @@ export class TaskFormComponent implements OnChanges {
   }
 
   onPomodoroCreation() {
-    this.pomodoroModal.activity = this.activity()!;
     this.pomodoroModal.showModal();
   }
 }

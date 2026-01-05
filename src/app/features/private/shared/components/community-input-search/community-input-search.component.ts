@@ -1,10 +1,8 @@
 import {
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
-  OnInit,
-  Output,
+  OnInit, output,
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -106,8 +104,8 @@ export class CommunityInputSearchComponent implements OnInit {
   protected groupApiService = inject(GroupApiService);
   private destroyRef = inject(DestroyRef);
 
-  @Output() inputChange = new EventEmitter<string>();
-  @Output() groupTypeChange = new EventEmitter<string | null>();
+   inputChange = output<string>();
+  groupTypeChange = output<string | null>();
 
   ngOnInit(): void {
     this.loadGroupTypes();

@@ -1,9 +1,7 @@
 import {
   Component,
   DestroyRef,
-  EventEmitter,
-  inject,
-  Output,
+  inject, input, output,
   signal,
 } from '@angular/core';
 
@@ -33,9 +31,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       <ng-container *nzModalContent>
         <app-pomodoro-form
           (formChanged)="onPomodoroFormChange($event)"
-          [pomodoroEdition]="editionMode"
-          [pomodoroCreation]="creationMode"
-          [activity]="activity"
+          [pomodoroEdition]="editionMode()"
+          [pomodoroCreation]="creationMode()"
+          [activity]="activity()"
         >
         </app-pomodoro-form>
       </ng-container>
@@ -43,8 +41,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   `,
 })
 export class PomodoroSessionFormModal {
-  activity!: ActivityItemDetails;
-  @Output() moveToCurrentSession = new EventEmitter<ActivityItemDetails>();
+  activity= input.required<ActivityItemDetails>();
+   moveToCurrentSession = output<ActivityItemDetails>();
   editionMode = signal<boolean>(false);
   creationMode = signal<boolean>(false);
   title = '';
@@ -56,7 +54,7 @@ export class PomodoroSessionFormModal {
   isVisible = false;
 
   showModal(): void {
-    if (this.activity.pomodoro?.id) {
+    if (this.activity().pomodoro?.id) {
       this.editionMode.set(true);
       this.creationMode.set(false);
       console.log(this.activity);
@@ -72,11 +70,11 @@ export class PomodoroSessionFormModal {
 
   handleOk(): void {
     if (this.creationMode() && this.pomodoroRequest) {
-      if (this.activity.type == ActivityType.TASK) {
-        this.pomodoroRequest.taskId = this.activity.id;
+      if (this.activity().type == ActivityType.TASK) {
+        this.pomodoroRequest.taskId = this.activity().id;
         this.pomodoroRequest.habitId = undefined;
       } else {
-        this.pomodoroRequest.habitId = this.activity.id;
+        this.pomodoroRequest.habitId = this.activity().id;
         this.pomodoroRequest.taskId = undefined;
       }
       this.pomodoroApi
@@ -84,45 +82,45 @@ export class PomodoroSessionFormModal {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
-            this.activity.pomodoro = {
+            this.activity().pomodoro = {
               id: response.id,
               cyclesRequired: response.cyclesRequired,
               cyclesCompleted: response.cyclesCompleted,
             };
 
-            this.moveToCurrentSession.emit(this.activity);
+            this.moveToCurrentSession.emit(this.activity());
             this.isVisible = false;
             this.notificationService.success(
-              `Pomodoro created successfully for: ${this.activity.title}`,
+              `Pomodoro created successfully for: ${this.activity().title}`,
             );
           },
           error: () => {
             this.notificationService.error(
-              `There was an error creating Pomodoro for: ${this.activity.title}`,
+              `There was an error creating Pomodoro for: ${this.activity().title}`,
             );
           },
         });
     } else if (
       this.editionMode() &&
       this.pomodoroRequest != null &&
-      this.activity.pomodoro?.id
+      this.activity().pomodoro?.id
     ) {
       this.pomodoroApi
-        .editPomodoro(this.activity.pomodoro!.id, this.pomodoroRequest)
+        .editPomodoro(this.activity().pomodoro!.id, this.pomodoroRequest)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
-            this.activity.pomodoro!.cyclesRequired = response.cyclesRequired;
-            this.activity.pomodoro!.cyclesCompleted = response.cyclesCompleted;
-            this.moveToCurrentSession.emit(this.activity);
+            this.activity().pomodoro!.cyclesRequired = response.cyclesRequired;
+            this.activity().pomodoro!.cyclesCompleted = response.cyclesCompleted;
+            this.moveToCurrentSession.emit(this.activity());
             this.isVisible = false;
             this.notificationService.success(
-              `Pomodoro updated successfully for: ${this.activity.title}`,
+              `Pomodoro updated successfully for: ${this.activity().title}`,
             );
           },
           error: () => {
             this.notificationService.error(
-              `There was an error updating Pomodoro for: ${this.activity.title}`,
+              `There was an error updating Pomodoro for: ${this.activity().title}`,
             );
           },
         });

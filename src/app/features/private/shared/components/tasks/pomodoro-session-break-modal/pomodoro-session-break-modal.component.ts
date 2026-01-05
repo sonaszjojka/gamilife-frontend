@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {Component, output} from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
@@ -35,8 +35,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
   `,
 })
 export class PomodoroSessionBreakModalComponent {
-  @Output() continueSession = new EventEmitter<void>();
-  @Output() endSession = new EventEmitter<void>();
+  continueSession = output<void>();
+   endSession = output<void>();
 
   isVisible = false;
   isBreakEndModal = false;
