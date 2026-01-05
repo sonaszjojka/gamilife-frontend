@@ -15,9 +15,9 @@ import {
   providedIn: 'root',
 })
 export class OAuth2Service {
-  private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private storage = inject(StorageService);
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly storage = inject(StorageService);
   private readonly apiUrl = `${environment.apiUrl}/oauth2`;
 
   private generateCodeVerifier(): string {
@@ -57,7 +57,7 @@ export class OAuth2Service {
       prompt: 'consent',
     });
 
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+    globalThis.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   }
 
   handleGoogleCode(

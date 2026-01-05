@@ -1,5 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  inject,
+  Injectable,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import {
@@ -22,19 +28,16 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private router = inject(Router);
-  private http = inject(HttpClient);
-  private notificationService = inject(WebSocketNotificationService);
-  private storage = inject<StorageService>(StorageService);
-  private refreshSubject = new Subject<boolean>();
-  private destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+  private readonly notificationService = inject(WebSocketNotificationService);
+  private readonly storage = inject<StorageService>(StorageService);
+  private readonly refreshSubject = new Subject<boolean>();
+  private readonly destroyRef = inject(DestroyRef);
 
   refreshSubject$ = this.refreshSubject.asObservable();
   refreshInProgress = false;
 
-  loggedIn = signal<boolean>(
-    this.storage.getUserId() !== null && !!this.storage.getIsEmailVerified(),
-  );
   username = signal<string | null>(this.storage.getUsername());
   userId = signal<string | null>(this.storage.getUserId());
   isTutorialCompleted = signal<boolean>(this.storage.getIsTutorialCompleted());
@@ -46,6 +49,11 @@ export class AuthService {
   );
   statsVersion = signal<number | null>(this.storage.getStatsVersion());
   emailVerified = signal<boolean>(!!this.storage.getIsEmailVerified());
+  loggedIn = computed<boolean>(() => {
+    const userId = this.userId();
+    const isEmailVerified = this.emailVerified();
+    return userId !== null && isEmailVerified;
+  });
 
   constructor() {
     this.initializeFromStorage();
@@ -63,7 +71,6 @@ export class AuthService {
     if (userId && isEmailVerified) {
       this.userId.set(userId);
       this.username.set(this.storage.getUsername());
-      this.loggedIn.set(true);
       this.emailVerified.set(true);
       this.isTutorialCompleted.set(this.storage.getIsTutorialCompleted());
       this.money.set(this.storage.getMoney());
@@ -73,8 +80,6 @@ export class AuthService {
         this.storage.getRequiredExperienceForNextLevel(),
       );
       this.statsVersion.set(this.storage.getStatsVersion());
-    } else {
-      this.loggedIn.set(false);
     }
   }
 
@@ -135,7 +140,6 @@ export class AuthService {
 
     this.userId.set(null);
     this.username.set(null);
-    this.loggedIn.set(false);
     this.isTutorialCompleted.set(false);
     this.money.set(0);
     this.level.set(1);
@@ -246,9 +250,6 @@ export class AuthService {
   ): void {
     this.userId.set(userId);
     this.username.set(username);
-    this.loggedIn.set(
-      userId !== null && isEmailVerified !== null && isEmailVerified,
-    );
     this.isTutorialCompleted.set(isTutorialCompleted);
     this.emailVerified.set(isEmailVerified);
     this.money.set(money);

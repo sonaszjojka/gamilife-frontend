@@ -7,8 +7,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { StorageService } from '../../../../../shared/services/auth/storage.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LoginResponse } from '../../../../shared/models/auth/auth.model';
-import { OAuth2LinkResponse } from '../../../../shared/models/auth/oauth2.model';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -18,12 +16,12 @@ import { OAuth2LinkResponse } from '../../../../shared/models/auth/oauth2.model'
   standalone: true,
 })
 export class OAuthCallbackComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private oauth2Service = inject(OAuth2Service);
-  private authService = inject(AuthService);
-  private storageService = inject(StorageService);
-  private destroyRef = inject(DestroyRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly oauth2Service = inject(OAuth2Service);
+  private readonly authService = inject(AuthService);
+  private readonly storageService = inject(StorageService);
+  private readonly destroyRef = inject(DestroyRef);
   error: string | null = null;
 
   ngOnInit(): void {
@@ -56,23 +54,24 @@ export class OAuthCallbackComponent implements OnInit {
           this.oauth2Service.clearOAuthData();
 
           if ('providerName' in response) {
-            const linkResponse = response as OAuth2LinkResponse;
             this.router.navigateByUrl('/login', {
               state: {
                 linkAccount: true,
-                provider: linkResponse.providerName,
-                providerId: linkResponse.providerId,
-                userId: linkResponse.userId,
+                provider: response.providerName,
+                providerId: response.providerId,
+                userId: response.userId,
               },
             });
           } else {
-            const res = response as LoginResponse;
-            this.storageService.setIsTutorialCompleted(res.isTutorialCompleted);
-            this.storageService.setUserId(res.userId);
-            this.authService.userId.set(res.userId);
-            this.authService.username.set(res.username);
-            this.authService.loggedIn.set(true);
-            this.authService.isTutorialCompleted.set(res.isTutorialCompleted);
+            this.storageService.setIsTutorialCompleted(
+              response.isTutorialCompleted,
+            );
+            this.storageService.setUserId(response.userId);
+            this.authService.userId.set(response.userId);
+            this.authService.username.set(response.username);
+            this.authService.isTutorialCompleted.set(
+              response.isTutorialCompleted,
+            );
 
             this.router.navigate(['/app/dashboard']);
           }
