@@ -54,12 +54,12 @@
 
             <div class="tasks-grid">
               @for (activity of groupedTasks[date]; track activity.id) {
-                <app-task-item
+                <app-activity-item
                   [activity]="activity"
-                  (editTask)="onActivityEdit($event)"
-                  (taskUpdated)="onActivityUpdated($event)"
+                  (editActivity)="onActivityEdit($event)"
+                  (activityUpdated)="onActivityUpdated($event)"
                 >
-                </app-task-item>
+                </app-activity-item>
               }
             </div>
           </div>
@@ -69,11 +69,10 @@
     @if (editionMode() || creationMode()) {
       <app-task-form
         [activity]="selectedActivity()"
-        [editionMode]="editionMode"
-        [creationMode]="creationMode"
         [viewMode]="viewMode()"
         (activityFormSubmitted)="onTaskSubmit()"
         (activityDeleted)="onTaskDelete()"
+        (closeForm)="onFormClose()"
         [type]="formType()"
       >
       </app-task-form>

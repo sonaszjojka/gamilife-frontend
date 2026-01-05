@@ -1,11 +1,39 @@
 <div class="dashboard-container">
-  <app-onboarding-modal
-    [visible]="showOnboarding()"
-    [userId]="userId()"
-    (completed)="onOnboardingCompleted()"
-  ></app-onboarding-modal>
+  <div class="header-part">
+    <h1>Welcome Back</h1>
+  </div>
 
-  <div class="dashboard-content">
-    <h1>Welcome to dashboard</h1>
+  <div class="upper-part">
+    <h1>Your Groups</h1>
+    <nz-divider></nz-divider>
+    <app-group-carousel-component
+      [groups]="groups"
+      [totalGroupPages]="groupTotalPage()"
+      [isLoading]="isGroupListLoading()"
+      (slideChanged)="loadGroups($event)"
+    >
+    </app-group-carousel-component>
+  </div>
+
+  <div class="main-part">
+    <app-dashboard-activities
+      [activities]="activities"
+      [isLoading]="isActivityListLoading()"
+      (removeActivity)="onActivityFinished($event)"
+    >
+    </app-dashboard-activities>
+
+    <app-onboarding-modal
+      [visible]="showOnboarding()"
+      [userId]="userId()"
+      (completed)="onOnboardingCompleted()"
+    ></app-onboarding-modal>
+    <div class="card-container">
+      <app-user-statistic-card
+        [statistics]="statistics"
+        [isLoading]="isStatisticsCardLoading()"
+      >
+      </app-user-statistic-card>
+    </div>
   </div>
 </div>
