@@ -1,12 +1,9 @@
 import {
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   input,
-  Input,
-  OnInit,
-  Output,
+  OnInit, output,
   signal,
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -47,19 +44,20 @@ export class ActivityItemComponent implements OnInit {
   protected readonly ActivityType = ActivityType;
   protected readonly ActivityStatus = ActivityStatus;
 
-  @Input() activity!: ActivityItemDetails;
+   activity= input.required<ActivityItemDetails>();
   isCompleted = signal(false);
+  isOnDashboard = input<boolean>(false)
 
-  @Output() taskUpdated = new EventEmitter<string>();
-  @Output() editTask = new EventEmitter<{
+   activityUpdated = output<string>()
+   editActivity = output<{
     activity: ActivityItemDetails;
     viewMode: boolean;
   }>();
 
   isInSession = input<boolean>(false);
   inPomodoroList = input<boolean>(false);
-  @Output() moveToCurrentSession = new EventEmitter<ActivityItemDetails>();
-  @Output() removeFromCurrentSession = new EventEmitter<ActivityItemDetails>();
+  moveToCurrentSession = output<ActivityItemDetails>();
+  removeFromCurrentSession = output<ActivityItemDetails>();
 
   private taskService = inject(UserTaskApiService);
   private habitService = inject(UserHabitApiService);
@@ -67,37 +65,37 @@ export class ActivityItemComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    this.isCompleted.set(this.activity.status == ActivityStatus.COMPLETED);
-    console.log(this.activity);
+    this.isCompleted.set(this.activity().status == ActivityStatus.COMPLETED);
+    console.log(this.activity());
   }
 
   completeTask(event: MouseEvent): void {
     event.stopPropagation();
     this.isCompleted.set(true);
     const request: TaskRequest = {
-      title: this.activity.title,
-      deadlineDate: this.activity.deadlineDate,
-      deadlineTime: this.activity.deadlineTime,
-      categoryId: this.activity.categoryId,
-      difficultyId: this.activity.difficultyId,
+      title: this.activity().title,
+      deadlineDate: this.activity().deadlineDate,
+      deadlineTime: this.activity().deadlineTime,
+      categoryId: this.activity().categoryId,
+      difficultyId: this.activity().difficultyId,
       completed: true,
-      description: this.activity.description,
+      description: this.activity().description,
     };
     this.taskService
-      .editTask(this.activity.id, request)
+      .editTask(this.activity().id, request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.activity.completedAt = response.completedAt;
-          this.activity.status = ActivityStatus.COMPLETED;
-          this.taskUpdated.emit(this.activity.id);
+          this.activity().completedAt = response.completedAt;
+          this.activity().status = ActivityStatus.COMPLETED;
+          this.activityUpdated.emit(this.activity().id);
           this.notificationService.success(
-            `You have successfully completed the task: ${this.activity.title}`,
+            `You have successfully completed the task: ${this.activity().title}`,
           );
         },
         error: () => {
           this.notificationService.error(
-            `There was an error completing the task: ${this.activity.title}`,
+            `There was an error completing the task: ${this.activity().title}`,
           );
           this.isCompleted.set(false);
         },
@@ -106,47 +104,47 @@ export class ActivityItemComponent implements OnInit {
 
   completeHabitCycle(event: MouseEvent): void {
     event.stopPropagation();
-    if (this.activity.type == ActivityType.HABIT) {
+    if (this.activity().type == ActivityType.HABIT) {
       const request: HabitRequest = {
         iterationCompleted: true,
       };
       this.habitService
-        .editHabit(this.activity.id, request)
+        .editHabit(this.activity().id, request)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
-            this.activity.deadlineDate = response.deadlineDate;
-            this.activity.currentStreak = response.currentStreak;
-            this.activity.longestStreak = response.longestStreak;
-            this.activity.canBeWorkedOn = response.workable;
-            this.taskUpdated.emit(this.activity.id);
+            this.activity().deadlineDate = response.deadlineDate;
+            this.activity().currentStreak = response.currentStreak;
+            this.activity().longestStreak = response.longestStreak;
+            this.activity().canBeWorkedOn = response.workable;
+            this.activityUpdated.emit(this.activity().id);
             this.notificationService.success(
-              `You have successfully completed a cycle for the habit: ${this.activity.title}`,
+              `You have successfully completed a cycle for the habit: ${this.activity().title}`,
             );
           },
           error: () => {
             this.notificationService.error(
-              `There was an error completing a cycle for the habit: ${this.activity.title}`,
+              `There was an error completing a cycle for the habit: ${this.activity().title}`,
             );
           },
         });
     }
   }
-  onTaskEdit(event: MouseEvent) {
+  onActivityEdit(event: MouseEvent) {
     event.stopPropagation();
-    this.editTask.emit({ activity: this.activity, viewMode: false });
+    this.editActivity.emit({ activity: this.activity(), viewMode: false });
   }
-  onTaskView(event: MouseEvent) {
+  onActivityView(event: MouseEvent) {
     event.stopPropagation();
-    this.editTask.emit({ activity: this.activity, viewMode: true });
+    this.editActivity.emit({ activity: this.activity(), viewMode: true });
   }
 
-  addTaskToPomodoroSession() {
-    this.moveToCurrentSession.emit(this.activity);
+  addActivityToPomodoroSession() {
+    this.moveToCurrentSession.emit(this.activity());
   }
 
-  removeTaskFromPomodoroSession() {
-    this.removeFromCurrentSession.emit(this.activity);
+  removeActivityFromPomodoroSession() {
+    this.removeFromCurrentSession.emit(this.activity());
   }
 
   restoreTask($event: MouseEvent) {
@@ -155,13 +153,13 @@ export class ActivityItemComponent implements OnInit {
       completed: false,
     };
     this.taskService
-      .editTask(this.activity.id, request)
+      .editTask(this.activity().id, request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.activity.completedAt = undefined;
-          this.activity.status = ActivityStatus.INCOMPLETE;
-          this.taskUpdated.emit(this.activity.id);
+          this.activity().completedAt = undefined;
+          this.activity().status = ActivityStatus.INCOMPLETE;
+          this.activityUpdated.emit(this.activity().id);
         },
       });
   }
@@ -172,21 +170,21 @@ export class ActivityItemComponent implements OnInit {
       resurrect: true,
     };
     this.habitService
-      .editHabit(this.activity.id, request)
+      .editHabit(this.activity().id, request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.activity.status = ActivityStatus.ALIVE;
-          this.activity.deadlineDate = response.deadlineDate;
-          this.activity.canBeWorkedOn = response.workable;
-          this.taskUpdated.emit(this.activity.id);
+          this.activity().status = ActivityStatus.ALIVE;
+          this.activity().deadlineDate = response.deadlineDate;
+          this.activity().canBeWorkedOn = response.workable;
+          this.activityUpdated.emit(this.activity().id);
           this.notificationService.success(
-            `You have successfully restored the habit: ${this.activity.title}`,
+            `You have successfully restored the habit: ${this.activity().title}`,
           );
         },
         error: () => {
           this.notificationService.error(
-            `There was an error restoring the habit: ${this.activity.title}`,
+            `There was an error restoring the habit: ${this.activity().title}`,
           );
         },
       });

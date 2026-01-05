@@ -405,4 +405,10 @@ export class TaskListComponent implements OnInit {
     this.creationMode.set(false);
     this.selectedActivity.set(undefined);
   }
+
+  onFormClose() {
+    this.editionMode.set(false);
+    this.creationMode.set(false);
+    this.selectedActivity.set(undefined);
+  }
 }

@@ -1,14 +1,10 @@
 import {
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
-  Input,
   input,
-  OnChanges,
-  Output,
+  OnChanges, output,
   ViewChild,
-  WritableSignal,
 } from '@angular/core';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import {
@@ -66,10 +62,11 @@ export class TaskFormComponent implements OnChanges {
   viewMode = input<boolean>(false);
   type = input.required<ActivityType>();
   activity = input<ActivityItemDetails>();
-  @Input() creationMode?: WritableSignal<boolean | null>;
-  @Input() editionMode?: WritableSignal<boolean | null>;
-  @Output() activityFormSubmitted = new EventEmitter<void>();
-  @Output() activityDeleted = new EventEmitter<void>();
+   creationMode?= input<boolean | null>();
+   editionMode?= input<boolean | null>();
+   activityFormSubmitted = output<void>();
+   activityDeleted = output<void>();
+   close= output<void>();
 
   private formBuilder = inject(NonNullableFormBuilder);
   private taskApi = inject(UserTaskApiService);
@@ -174,8 +171,7 @@ export class TaskFormComponent implements OnChanges {
   }
 
   onClose() {
-    this.editionMode?.set(false);
-    this.creationMode?.set(false);
+    this.close.emit()
     this.validActivityForm.reset();
   }
 
