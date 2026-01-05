@@ -1,11 +1,13 @@
 <div class="dashboard-container">
   <div class="header-part">
-    <h1>Welcome Back</h1>
+    <h1>Welcome Back, {{ username }}!</h1>
   </div>
+
+  <nz-divider></nz-divider>
 
   <div class="upper-part">
     <h1>Your Groups</h1>
-    <nz-divider></nz-divider>
+
     <app-group-carousel-component
       [groups]="groups"
       [totalGroupPages]="groupTotalPage()"

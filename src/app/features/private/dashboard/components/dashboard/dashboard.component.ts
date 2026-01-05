@@ -49,14 +49,14 @@ export class DashboardComponent implements OnInit {
   private readonly userStatisticsApi = inject(UserStatisticsService);
 
   groups: Group[] = [];
-
+  username = this.authService.username();
   groupCurrentPage = signal<number>(0);
   groupTotalPage = signal<number>(1);
   groupParams: GroupFilterParams = {
     groupType: undefined,
     groupName: undefined,
     page: this.groupCurrentPage(),
-    size: 5,
+    size: 4,
   };
   activities: ActivityItemDetails[] = [];
   statistics: UserStatisticsModel[] = [];
