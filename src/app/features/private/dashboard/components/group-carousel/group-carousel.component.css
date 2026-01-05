@@ -1,6 +1,4 @@
-
-nz-carousel
-{
+nz-carousel {
   height: 245px;
 }
 .slide-wrapper {
@@ -11,8 +9,7 @@ nz-carousel
   overflow: hidden;
 }
 
-.cards-container
-{
+.cards-container {
   height: 100%;
   width: 100%;
   display: flex;
@@ -23,7 +20,3 @@ nz-carousel
   align-content: center;
   justify-content: center;
 }
-
-
-
-

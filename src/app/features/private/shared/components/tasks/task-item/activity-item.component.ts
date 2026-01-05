@@ -3,7 +3,8 @@ import {
   DestroyRef,
   inject,
   input,
-  OnInit, output,
+  OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -44,12 +45,12 @@ export class ActivityItemComponent implements OnInit {
   protected readonly ActivityType = ActivityType;
   protected readonly ActivityStatus = ActivityStatus;
 
-   activity= input.required<ActivityItemDetails>();
+  activity = input.required<ActivityItemDetails>();
   isCompleted = signal(false);
-  isOnDashboard = input<boolean>(false)
+  isOnDashboard = input<boolean>(false);
 
-   activityUpdated = output<string>()
-   editActivity = output<{
+  activityUpdated = output<string>();
+  editActivity = output<{
     activity: ActivityItemDetails;
     viewMode: boolean;
   }>();

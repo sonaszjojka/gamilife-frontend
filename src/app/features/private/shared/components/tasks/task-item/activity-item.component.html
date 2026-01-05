@@ -1,7 +1,11 @@
 <nz-card class="task-card" (click)="onActivityView($event)">
   @if (inPomodoroList()) {
     @if (!isInSession()) {
-      <button nz-button nzShape="circle" (click)="addActivityToPomodoroSession()">
+      <button
+        nz-button
+        nzShape="circle"
+        (click)="addActivityToPomodoroSession()"
+      >
         @if (this.activity().pomodoro) {
           <nz-icon nzType="arrow-left"></nz-icon>
         } @else {
@@ -18,7 +22,7 @@
       </button>
     }
   }
-  @if (!inPomodoroList()&&!isOnDashboard()) {
+  @if (!inPomodoroList() && !isOnDashboard()) {
     <div class="task-header-controls">
       <button nz-button nzShape="circle" (click)="onActivityEdit($event)">
         <nz-icon nzType="setting"></nz-icon>

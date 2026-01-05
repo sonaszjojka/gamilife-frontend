@@ -1,67 +1,89 @@
-import {Component, OnInit, inject, signal, effect, DestroyRef} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  effect,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OnboardingModalComponent } from '../onboarding/onboarding-modal/onboarding-modal.component';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
-import {UserActivitiesApiService} from '../../../../shared/services/tasks/user-activities-api.service';
-import {GroupApiService} from '../../../../shared/services/groups-api/group-api.service';
+import { UserActivitiesApiService } from '../../../../shared/services/tasks/user-activities-api.service';
+import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 
-import {Group, GroupFilterParams} from '../../../../shared/models/group/group.model';
-import {ActivityItemDetails} from '../../../../shared/models/task-models/activity.model';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {NotificationService} from '../../../../shared/services/notification-service/notification.service';
-import {GroupCarouselComponent} from '../group-carousel/group-carousel.component';
-import {ActivityItemComponent} from '../../../shared/components/tasks/task-item/activity-item.component';
-import {NzListComponent, NzListEmptyComponent, NzListHeaderComponent} from 'ng-zorro-antd/list';
-import {NzFlexDirective} from 'ng-zorro-antd/flex';
-import {NzHeaderComponent} from 'ng-zorro-antd/layout';
-import {UserStatisticsModel} from '../../../../shared/models/user-profile/user-statistics.model';
-import {UserStatisticsService} from '../../../../shared/services/user-statistics-api/user-statistics.service';
 import {
-  UserStatisticsCardComponent
-} from '../user-statistics-card/user-statistics-card.component';
-import {DashboardActivitiesComponent} from '../dashboard-activities/dashboard-activities.component';
-import {NzSpinComponent} from 'ng-zorro-antd/spin';
-import {NzPageHeaderTitleDirective} from 'ng-zorro-antd/page-header';
-import {NzDividerComponent} from 'ng-zorro-antd/divider';
-
-
+  Group,
+  GroupFilterParams,
+} from '../../../../shared/models/group/group.model';
+import { ActivityItemDetails } from '../../../../shared/models/task-models/activity.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { GroupCarouselComponent } from '../group-carousel/group-carousel.component';
+import { ActivityItemComponent } from '../../../shared/components/tasks/task-item/activity-item.component';
+import {
+  NzListComponent,
+  NzListEmptyComponent,
+  NzListHeaderComponent,
+} from 'ng-zorro-antd/list';
+import { NzFlexDirective } from 'ng-zorro-antd/flex';
+import { NzHeaderComponent } from 'ng-zorro-antd/layout';
+import { UserStatisticsModel } from '../../../../shared/models/user-profile/user-statistics.model';
+import { UserStatisticsService } from '../../../../shared/services/user-statistics-api/user-statistics.service';
+import { UserStatisticsCardComponent } from '../user-statistics-card/user-statistics-card.component';
+import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-activities.component';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NzPageHeaderTitleDirective } from 'ng-zorro-antd/page-header';
+import { NzDividerComponent } from 'ng-zorro-antd/divider';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, OnboardingModalComponent, GroupCarouselComponent, ActivityItemComponent, NzListEmptyComponent, NzFlexDirective, NzHeaderComponent, NzListComponent, NzListHeaderComponent, UserStatisticsCardComponent, DashboardActivitiesComponent, NzSpinComponent, NzPageHeaderTitleDirective, NzDividerComponent],
+  imports: [
+    CommonModule,
+    OnboardingModalComponent,
+    GroupCarouselComponent,
+    ActivityItemComponent,
+    NzListEmptyComponent,
+    NzFlexDirective,
+    NzHeaderComponent,
+    NzListComponent,
+    NzListHeaderComponent,
+    UserStatisticsCardComponent,
+    DashboardActivitiesComponent,
+    NzSpinComponent,
+    NzPageHeaderTitleDirective,
+    NzDividerComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  private destroyRef = inject(DestroyRef)
+  private destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
-  private readonly activityApi = inject(UserActivitiesApiService)
-  private readonly groupApi = inject(GroupApiService)
-  private readonly notificationService = inject(NotificationService)
-  private readonly userStatisticsApi = inject(UserStatisticsService)
+  private readonly activityApi = inject(UserActivitiesApiService);
+  private readonly groupApi = inject(GroupApiService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly userStatisticsApi = inject(UserStatisticsService);
 
-  groups: Group[] =[]
+  groups: Group[] = [];
 
-   groupCurrentPage = signal<number>(0)
-   groupTotalPage = signal<number>(1)
-   groupParams:GroupFilterParams=
-    {
-      groupType:undefined,
-      groupName:undefined,
-      page:this.groupCurrentPage(),
-      size:5
-    }
-  activities: ActivityItemDetails[]=[]
-  statistics: UserStatisticsModel[]=[]
-
+  groupCurrentPage = signal<number>(0);
+  groupTotalPage = signal<number>(1);
+  groupParams: GroupFilterParams = {
+    groupType: undefined,
+    groupName: undefined,
+    page: this.groupCurrentPage(),
+    size: 5,
+  };
+  activities: ActivityItemDetails[] = [];
+  statistics: UserStatisticsModel[] = [];
 
   userId = signal<string | null>(null);
   showOnboarding = signal<boolean>(false);
-  isActivityListLoading = signal<boolean>(true)
-  isGroupListLoading=signal<boolean>(true)
-  isStatisticsCardLoading =signal<boolean>(true)
-
+  isActivityListLoading = signal<boolean>(true);
+  isGroupListLoading = signal<boolean>(true);
+  isStatisticsCardLoading = signal<boolean>(true);
 
   constructor() {
     effect(() => {
@@ -81,78 +103,77 @@ export class DashboardComponent implements OnInit {
     this.loadGroups(0);
     this.loadActivities();
     this.loadStatistics();
-
   }
 
-  loadGroups(page:number)
-  {
-    this.isGroupListLoading.set(true)
-    this.groupParams.page=page
-    this.groupApi.getAllGroupsByUserIdWhereUserIsMember(this.groupParams)
+  loadGroups(page: number) {
+    this.isGroupListLoading.set(true);
+    this.groupParams.page = page;
+    this.groupApi
+      .getAllGroupsByUserIdWhereUserIsMember(this.groupParams)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(
-        {
-          next:(response)=>{
-              this.groups = response.content
-              this.groupCurrentPage.set(response.currentPage)
-              this.groupTotalPage.set(response.totalPages)
-              this.isGroupListLoading.set(false)
-          },
-          error: ()=>{
-            this.notificationService.error("Error occurred loading your groups")
-            this.isGroupListLoading.set(false)
-          }
-        }
-
-      )
-  }
-
-  loadActivities()
-  {
-    this.isActivityListLoading.set(true)
-
-    this.activityApi.getAllActivities(0,
-      null,
-      null,
-      new Date (Date.now()).toISOString().slice(0,10),
-      new Date(Date.now()).toISOString().slice(0,10),
-      null,
-      null,
-      true,
-      null)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({next:(response)=>{
-          this.isActivityListLoading.set(false)
-          this.activities = response.content
+      .subscribe({
+        next: (response) => {
+          this.groups = response.content;
+          this.groupCurrentPage.set(response.currentPage);
+          this.groupTotalPage.set(response.totalPages);
+          this.isGroupListLoading.set(false);
         },
-      error:()=>{
-        this.isActivityListLoading.set(false)
-        this.notificationService.error("Error occurred loading your activities")
-      }
-      })
+        error: () => {
+          this.notificationService.error('Error occurred loading your groups');
+          this.isGroupListLoading.set(false);
+        },
+      });
   }
 
-  loadStatistics()
-  {
-    this.isStatisticsCardLoading.set(true)
-    this.userStatisticsApi.getUserStatistics()
+  loadActivities() {
+    this.isActivityListLoading.set(true);
+
+    this.activityApi
+      .getAllActivities(
+        0,
+        null,
+        null,
+        new Date(Date.now()).toISOString().slice(0, 10),
+        new Date(Date.now()).toISOString().slice(0, 10),
+        null,
+        null,
+        true,
+        null,
+      )
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({next:(response)=>{
-            this.isStatisticsCardLoading.set(false)
-        console.log(response)
-          this.statistics=response
-      },
-        error:()=>{
-          this.isStatisticsCardLoading.set(false)
-      this.notificationService.error("Error occurred loading your statistics")
-      }
-        }
-
-        )
+      .subscribe({
+        next: (response) => {
+          this.isActivityListLoading.set(false);
+          this.activities = response.content;
+        },
+        error: () => {
+          this.isActivityListLoading.set(false);
+          this.notificationService.error(
+            'Error occurred loading your activities',
+          );
+        },
+      });
   }
 
-
-
+  loadStatistics() {
+    this.isStatisticsCardLoading.set(true);
+    this.userStatisticsApi
+      .getUserStatistics()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.isStatisticsCardLoading.set(false);
+          console.log(response);
+          this.statistics = response;
+        },
+        error: () => {
+          this.isStatisticsCardLoading.set(false);
+          this.notificationService.error(
+            'Error occurred loading your statistics',
+          );
+        },
+      });
+  }
 
   private checkOnboardingStatus(): void {
     const isTutorialCompleted = this.authService.isTutorialCompleted();
@@ -167,10 +188,7 @@ export class DashboardComponent implements OnInit {
     this.authService.completeUserOnboarding();
   }
 
-  onActivityFinished(activityId:string)
-  {
-    this.activities = this.activities.filter((a)=>a.id!==activityId)
-
+  onActivityFinished(activityId: string) {
+    this.activities = this.activities.filter((a) => a.id !== activityId);
   }
-
 }

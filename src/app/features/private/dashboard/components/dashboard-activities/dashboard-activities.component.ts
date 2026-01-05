@@ -1,10 +1,14 @@
-import {Component, input, output} from '@angular/core';
-import {ActivityItemDetails} from '../../../../shared/models/task-models/activity.model';
-import {ActivityItemComponent} from '../../../shared/components/tasks/task-item/activity-item.component';
-import {NzFlexDirective} from 'ng-zorro-antd/flex';
-import {NzListComponent, NzListEmptyComponent, NzListHeaderComponent} from 'ng-zorro-antd/list';
-import {NzDividerComponent} from 'ng-zorro-antd/divider';
-import {NzSpinComponent} from 'ng-zorro-antd/spin';
+import { Component, input, output } from '@angular/core';
+import { ActivityItemDetails } from '../../../../shared/models/task-models/activity.model';
+import { ActivityItemComponent } from '../../../shared/components/tasks/task-item/activity-item.component';
+import { NzFlexDirective } from 'ng-zorro-antd/flex';
+import {
+  NzListComponent,
+  NzListEmptyComponent,
+  NzListHeaderComponent,
+} from 'ng-zorro-antd/list';
+import { NzDividerComponent } from 'ng-zorro-antd/divider';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-dashboard-activities',
@@ -17,18 +21,16 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
     NzListEmptyComponent,
     NzListHeaderComponent,
     NzDividerComponent,
-    NzSpinComponent
+    NzSpinComponent,
   ],
-  standalone: true
+  standalone: true,
 })
+export class DashboardActivitiesComponent {
+  activities = input<ActivityItemDetails[]>([]);
+  isLoading = input.required<boolean>();
+  removeActivity = output<string>();
 
-export class DashboardActivitiesComponent
-{
-  activities=input<ActivityItemDetails[]>([])
-  isLoading = input.required<boolean>()
-  removeActivity = output<string>()
-
-  removeFromList(activityId:string) {
-    this.removeActivity.emit(activityId)
+  removeFromList(activityId: string) {
+    this.removeActivity.emit(activityId);
   }
 }
