@@ -42,12 +42,18 @@
     flex: 1;
   }
 }
+h3
+{
+  text-align: center;
+}
+
 
 .group-tasks-list {
   flex: 1;
   overflow-y: auto;
   padding: 16px 16px 16px;
   min-height: 0;
+  align-content: center;
 }
 
 .bottom-tasks-list-panel {

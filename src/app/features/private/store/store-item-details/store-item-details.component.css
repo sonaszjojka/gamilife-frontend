@@ -15,6 +15,7 @@
   grid-template-areas:
     "image attributes"
     "description description";
+  width: 1000px;
 }
 
 .image-section {
@@ -74,3 +75,4 @@
   color: #eb2f96;
   font-weight: bold;
 }
+

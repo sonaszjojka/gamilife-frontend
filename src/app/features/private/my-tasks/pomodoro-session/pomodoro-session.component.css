@@ -28,6 +28,11 @@ app-back-button {
   flex: 0 0 30%;
 }
 
+h3
+{
+  text-align: center;
+  padding-top: 10px;
+}
 .pomodoro-session-table > div {
   position: relative;
   padding: 0 10px;
