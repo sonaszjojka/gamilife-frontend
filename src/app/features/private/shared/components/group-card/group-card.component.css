@@ -35,11 +35,6 @@
   font-weight: var(--font-weight-medium);
 }
 
-.join-code {
-  padding: var(--spacing-xs) var(--spacing-small);
-  border-radius: var(--border-radius);
-}
-
 .card-actions {
   margin-top: var(--spacing-medium);
 }

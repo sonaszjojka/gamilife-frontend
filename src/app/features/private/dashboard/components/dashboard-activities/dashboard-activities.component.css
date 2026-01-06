@@ -2,19 +2,13 @@
   display: flex;
   flex: 1;
   justify-content: center;
-  border-radius: 10px;
-  border: 2px solid black;
   height: 100%;
   flex-direction: column;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.title {
-  text-align: center;
-}
-.list-content {
-  flex: 1;
   overflow-y: auto;
+  border: 2px solid var(--fifth-color);
+  border-radius: var(--border-radius-md);
 }
+
 nz-list {
   display: flex;
   flex: 1;
@@ -22,10 +16,10 @@ nz-list {
   align-items: center;
   width: 100%;
   gap: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
 }
+
 app-activity-item {
   display: block;
-  width: 1000px;
+  width: 100%;
 }

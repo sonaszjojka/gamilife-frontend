@@ -24,7 +24,6 @@ import { UserStatisticsModel } from '../../../../shared/models/user-profile/user
 import { UserStatisticsService } from '../../../../shared/services/user-statistics-api/user-statistics.service';
 import { UserStatisticsCardComponent } from '../user-statistics-card/user-statistics-card.component';
 import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-activities.component';
-import { NzDividerComponent } from 'ng-zorro-antd/divider';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +34,6 @@ import { NzDividerComponent } from 'ng-zorro-antd/divider';
     GroupCarouselComponent,
     UserStatisticsCardComponent,
     DashboardActivitiesComponent,
-    NzDividerComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -56,7 +54,7 @@ export class DashboardComponent implements OnInit {
     groupType: undefined,
     groupName: undefined,
     page: this.groupCurrentPage(),
-    size: 4,
+    size: 3,
   };
   activities: ActivityItemDetails[] = [];
   statistics: UserStatisticsModel[] = [];

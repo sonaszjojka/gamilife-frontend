@@ -3,39 +3,44 @@
     <h1>Welcome Back, {{ username }}!</h1>
   </div>
 
-  <nz-divider></nz-divider>
+  <div class="dashboard-content">
+    <div class="left-column">
+      <div class="groups-section">
+        <h1>Your Groups</h1>
 
-  <div class="upper-part">
-    <h1>Your Groups</h1>
+        <app-group-carousel-component
+          [groups]="groups"
+          [totalGroupPages]="groupTotalPage()"
+          [isLoading]="isGroupListLoading()"
+          (slideChanged)="loadGroups($event)"
+        >
+        </app-group-carousel-component>
+      </div>
+      <div class="activities-section">
+        <h1>Today's Activities</h1>
+        <app-dashboard-activities
+          [activities]="activities"
+          [isLoading]="isActivityListLoading()"
+          (removeActivity)="onActivityFinished($event)"
+        >
+        </app-dashboard-activities>
+      </div>
+    </div>
 
-    <app-group-carousel-component
-      [groups]="groups"
-      [totalGroupPages]="groupTotalPage()"
-      [isLoading]="isGroupListLoading()"
-      (slideChanged)="loadGroups($event)"
-    >
-    </app-group-carousel-component>
-  </div>
-
-  <div class="main-part">
-    <app-dashboard-activities
-      [activities]="activities"
-      [isLoading]="isActivityListLoading()"
-      (removeActivity)="onActivityFinished($event)"
-    >
-    </app-dashboard-activities>
-
-    <app-onboarding-modal
-      [visible]="showOnboarding()"
-      [userId]="userId()"
-      (completed)="onOnboardingCompleted()"
-    ></app-onboarding-modal>
-    <div class="card-container">
-      <app-user-statistic-card
-        [statistics]="statistics"
-        [isLoading]="isStatisticsCardLoading()"
-      >
-      </app-user-statistic-card>
+    <div class="right-column">
+      <div class="card-container">
+        <app-user-statistic-card
+          [statistics]="statistics"
+          [isLoading]="isStatisticsCardLoading()"
+        >
+        </app-user-statistic-card>
+      </div>
     </div>
   </div>
+
+  <app-onboarding-modal
+    [visible]="showOnboarding()"
+    [userId]="userId()"
+    (completed)="onOnboardingCompleted()"
+  ></app-onboarding-modal>
 </div>
