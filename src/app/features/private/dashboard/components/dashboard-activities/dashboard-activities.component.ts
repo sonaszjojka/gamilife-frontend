@@ -3,6 +3,9 @@ import { ActivityItemDetails } from '../../../../shared/models/task-models/activ
 import { ActivityItemComponent } from '../../../shared/components/tasks/task-item/activity-item.component';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzListComponent, NzListEmptyComponent } from 'ng-zorro-antd/list';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-activities',
@@ -13,6 +16,9 @@ import { NzListComponent, NzListEmptyComponent } from 'ng-zorro-antd/list';
     NzFlexDirective,
     NzListComponent,
     NzListEmptyComponent,
+    NzButtonModule,
+    NzIconModule,
+    RouterLink,
   ],
   standalone: true,
 })

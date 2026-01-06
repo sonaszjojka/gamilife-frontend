@@ -31,3 +31,10 @@ app-activity-item {
   display: block;
   width: 100%;
 }
+
+.empty-text {
+  font-family: var(--main-font);
+  font-size: 1.2rem;
+  color: var(--text-primary-color);
+  margin-bottom: 5px;
+}

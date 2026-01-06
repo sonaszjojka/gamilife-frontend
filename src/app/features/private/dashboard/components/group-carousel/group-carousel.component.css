@@ -1,5 +1,5 @@
 nz-carousel {
-  height: 260px;
+  height: 230px;
 }
 
 :host ::ng-deep .ant-carousel .slick-prev,
@@ -28,7 +28,6 @@ nz-carousel {
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 30px;
   align-content: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }

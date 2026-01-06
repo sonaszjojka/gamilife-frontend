@@ -12,8 +12,15 @@
           </app-activity-item>
         }
       } @else {
-        <nz-list-empty>You have no activities for today</nz-list-empty>
+        <nz-list-empty [nzNoResult]="titleTemplate"> </nz-list-empty>
       }
     }
   </nz-list>
 </div>
+
+<ng-template #titleTemplate>
+  <div class="empty-text">No activities for today!</div>
+  <button nz-button nzType="primary" routerLink="/app/tasks">
+    View All Activities
+  </button>
+</ng-template>
