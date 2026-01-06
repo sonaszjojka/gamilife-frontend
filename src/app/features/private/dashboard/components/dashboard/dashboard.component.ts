@@ -25,6 +25,7 @@ import { UserStatisticsService } from '../../../../shared/services/user-statisti
 import { UserStatisticsCardComponent } from '../user-statistics-card/user-statistics-card.component';
 import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-activities.component';
 import { DashboardInputSearchComponent } from '../../../shared/components/dashboard-input-search/dashboard-input-search.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,6 +48,7 @@ export class DashboardComponent implements OnInit {
   private readonly groupApi = inject(GroupApiService);
   private readonly notificationService = inject(NotificationService);
   private readonly userStatisticsApi = inject(UserStatisticsService);
+  private readonly breakpointObserver = inject(BreakpointObserver);
 
   groups: Group[] = [];
   username = this.authService.username();
@@ -76,6 +78,24 @@ export class DashboardComponent implements OnInit {
         this.showOnboarding.set(false);
       }
     });
+
+    this.breakpointObserver
+      .observe(['(min-width: 1600px)', '(min-width: 1100px)'])
+      .pipe(takeUntilDestroyed())
+      .subscribe((result) => {
+        let newSize = 1;
+
+        if (result.breakpoints['(min-width: 1600px)']) {
+          newSize = 3;
+        } else if (result.breakpoints['(min-width: 1100px)']) {
+          newSize = 2;
+        }
+
+        if (this.groupParams.size !== newSize) {
+          this.groupParams.size = newSize;
+          this.loadGroups(0);
+        }
+      });
   }
 
   ngOnInit(): void {

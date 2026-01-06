@@ -8,19 +8,21 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
   imports: [GroupCardComponent, CommonModule, NzGridModule],
   template: `
     <div nz-row class="div-groups-list-container" [nzGutter]="[16, 16]">
-      <div
-        nz-col
-        *ngFor="let group of groups()"
-        [nzXs]="24"
-        [nzSm]="24"
-        [nzMd]="12"
-        [nzLg]="8"
-        [nzXl]="6"
-      >
-        <app-group-card [group]="group">
-          <ng-content></ng-content>
-        </app-group-card>
-      </div>
+      @for (group of groups(); track group.groupId) {
+        <div
+          nz-col
+          [nzXs]="24"
+          [nzSm]="24"
+          [nzMd]="12"
+          [nzLg]="8"
+          [nzXl]="6"
+          [nzXXl]="3"
+        >
+          <app-group-card [group]="group">
+            <ng-content></ng-content>
+          </app-group-card>
+        </div>
+      }
     </div>
   `,
   styles: `

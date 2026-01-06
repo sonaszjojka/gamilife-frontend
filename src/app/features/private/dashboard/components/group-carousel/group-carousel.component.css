@@ -28,6 +28,12 @@ nz-carousel {
   width: 100%;
   display: flex;
   flex-direction: row;
+  gap: 30px;
   align-content: center;
   justify-content: space-evenly;
+}
+
+.cards-container app-group-card {
+  width: 300px;
+  flex: 0 0 auto;
 }
