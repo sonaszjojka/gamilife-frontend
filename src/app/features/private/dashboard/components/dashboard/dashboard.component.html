@@ -6,7 +6,9 @@
   <div class="dashboard-content">
     <div class="left-column">
       <div class="activities-section">
-        <h1>Today's Activities</h1>
+        <div class="section-header">
+          <h1>Today's Activities</h1>
+        </div>
         <div class="activities-card-container">
           <app-dashboard-activities
             [activities]="activities"
@@ -18,7 +20,13 @@
       </div>
 
       <div class="groups-section">
-        <h1>Your Groups</h1>
+        <div class="section-header">
+          <h1>Your Groups</h1>
+          <app-dashboard-input-search
+            placeholder="Browse your groups"
+            (inputChange)="onGroupSearch($event)"
+          ></app-dashboard-input-search>
+        </div>
         <div class="group-card-container">
           <app-group-carousel-component
             [groups]="groups"

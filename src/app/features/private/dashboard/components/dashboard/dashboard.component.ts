@@ -24,6 +24,7 @@ import { UserStatisticsModel } from '../../../../shared/models/user-profile/user
 import { UserStatisticsService } from '../../../../shared/services/user-statistics-api/user-statistics.service';
 import { UserStatisticsCardComponent } from '../user-statistics-card/user-statistics-card.component';
 import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-activities.component';
+import { DashboardInputSearchComponent } from '../../../shared/components/dashboard-input-search/dashboard-input-search.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,6 +35,7 @@ import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-
     GroupCarouselComponent,
     UserStatisticsCardComponent,
     DashboardActivitiesComponent,
+    DashboardInputSearchComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -103,6 +105,11 @@ export class DashboardComponent implements OnInit {
           this.isGroupListLoading.set(false);
         },
       });
+  }
+
+  onGroupSearch(searchTerm: string) {
+    this.groupParams.groupName = searchTerm;
+    this.loadGroups(0);
   }
 
   loadActivities() {
