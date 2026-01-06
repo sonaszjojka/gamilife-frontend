@@ -14,6 +14,7 @@ export interface Group {
   loggedUserMembershipDto: GroupMember | null;
   membersSortedDescByTotalEarnedMoney: GroupMember[];
   adminUsername: string | null;
+  timeZone?:string|undefined;
 }
 
 export interface CreateGroupDto {
