@@ -1,11 +1,26 @@
 <div class="search-container">
   <div class="search-bar-container">
+    <nz-page-header
+      nzTitle="Community"
+      nzSubtitle="Join groups and compete with others!"
+    ></nz-page-header>
     <div class="search-bar">
       <app-community-input-search
         (inputChange)="onInputChange($event)"
         (groupTypeChange)="onGroupTypeChange($event)"
       >
       </app-community-input-search>
+    </div>
+    <div class="create-group-btn">
+      <button
+        nz-button
+        nzType="primary"
+        nzSize="large"
+        (click)="openAddGroupModal()"
+      >
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+        Create Group
+      </button>
     </div>
   </div>
 
@@ -30,3 +45,5 @@
     </nz-empty>
   }
 </div>
+
+<app-add-group-form (groupCreated)="onGroupCreated()"></app-add-group-form>
