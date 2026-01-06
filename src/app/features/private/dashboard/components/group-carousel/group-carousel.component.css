@@ -1,8 +1,18 @@
 nz-carousel {
   height: 260px;
-  background-color: var(--main-color);
-  border-radius: 25px;
-  box-shadow: var(--box-shadow);
+}
+
+:host ::ng-deep .ant-carousel .slick-prev,
+:host ::ng-deep .ant-carousel .slick-next {
+  color: var(--fourth-color);
+}
+
+:host ::ng-deep .ant-carousel .slick-dots li button {
+  background: var(--third-color);
+}
+
+:host ::ng-deep .ant-carousel .slick-dots li.slick-active button {
+  background: var(--fourth-color);
 }
 
 .slide-wrapper {

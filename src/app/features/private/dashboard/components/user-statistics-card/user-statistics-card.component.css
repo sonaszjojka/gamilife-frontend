@@ -1,3 +1,66 @@
-nz-card {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+:host {
+  box-shadow: var(--box-shadow-md);
+  border-radius: var(--border-radius-xl);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon {
+  font-size: 24px;
+  color: var(--third-color);
+}
+
+.header-title {
+  font-family: var(--main-font);
+  font-size: 1.5rem;
+  color: var(--text-primary-color);
+  letter-spacing: 2px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 12px 16px;
+  background-color: rgba(5, 217, 232, 0.05);
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid var(--third-color);
+  transition: all 0.3s ease;
+}
+
+.stat-row:hover {
+  background-color: rgba(5, 217, 232, 0.15);
+  transform: translateX(5px);
+}
+
+.stat-label {
+  font-family: var(--primary-font);
+  font-size: 1rem;
+  color: var(--text-primary-color);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: var(--main-font);
+  font-size: 1.5rem;
+  color: var(--third-color);
+  font-weight: 700;
 }

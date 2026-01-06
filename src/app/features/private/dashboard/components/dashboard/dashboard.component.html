@@ -8,22 +8,26 @@
       <div class="groups-section">
         <h1>Your Groups</h1>
 
-        <app-group-carousel-component
-          [groups]="groups"
-          [totalGroupPages]="groupTotalPage()"
-          [isLoading]="isGroupListLoading()"
-          (slideChanged)="loadGroups($event)"
-        >
-        </app-group-carousel-component>
+        <div class="group-card-container">
+          <app-group-carousel-component
+            [groups]="groups"
+            [totalGroupPages]="groupTotalPage()"
+            [isLoading]="isGroupListLoading()"
+            (slideChanged)="loadGroups($event)"
+          >
+          </app-group-carousel-component>
+        </div>
       </div>
       <div class="activities-section">
         <h1>Today's Activities</h1>
-        <app-dashboard-activities
-          [activities]="activities"
-          [isLoading]="isActivityListLoading()"
-          (removeActivity)="onActivityFinished($event)"
-        >
-        </app-dashboard-activities>
+        <div class="activities-card-container">
+          <app-dashboard-activities
+            [activities]="activities"
+            [isLoading]="isActivityListLoading()"
+            (removeActivity)="onActivityFinished($event)"
+          >
+          </app-dashboard-activities>
+        </div>
       </div>
     </div>
 

@@ -5,8 +5,16 @@
   height: 100%;
   flex-direction: column;
   overflow-y: auto;
-  border: 2px solid var(--fifth-color);
-  border-radius: var(--border-radius-md);
+}
+
+::-webkit-scrollbar {
+  background: transparent;
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fourth-color);
+  border-radius: 36px;
 }
 
 nz-list {
