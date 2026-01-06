@@ -66,36 +66,66 @@
       <nz-form-item>
         <nz-form-label nzRequired nzFor="groupType">Group type</nz-form-label>
         <nz-form-control nzErrorTip="Please choose group type.">
+          @if(groupTypes().length>0)
+          {
           <nz-select
-            *ngIf="groupTypes().length > 0"
             formControlName="groupTypeId"
             nzPlaceHolder="Choose group type"
             id="groupType"
           >
+            @for (type of groupTypes(); track type.id)
+            {
             <nz-option
-              *ngFor="let type of groupTypes()"
               [nzValue]="type.id"
               [nzLabel]="type.title"
             ></nz-option>
+            }
           </nz-select>
+          }
         </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="groupTimeZone">Time Zone</nz-form-label>
+        <nz-form-control nzErrorTip="Please provide time zone for your group."></nz-form-control>
+        @if (timeZones().length>0)
+        {
+          <nz-select
+          formControlName="groupTimeZone"
+          nzPlaceHolder="Chose time zone"
+          id="groupTimeZone"
+          >
+            @for (timeZone of timeZones();track timeZone.value)
+            {
+              <nz-option
+              [nzValue]="timeZone.value"
+              [nzLabel]="timeZone.label"
+              ></nz-option>
+            }
+          </nz-select>
+            }
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzRequired nzFor="adminId">Admin</nz-form-label>
         <nz-form-control nzErrorTip="Please choose an admin.">
+          @if (members().length>0)
+          {
           <nz-select
-            *ngIf="members().length > 0"
+
             formControlName="adminId"
             nzPlaceHolder="Choose admin"
             id="adminId"
           >
+            @for (member of members();track member.userId)
+            {
             <nz-option
-              *ngFor="let member of members()"
               [nzValue]="member.userId"
               [nzLabel]="member.username"
             ></nz-option>
+            }
           </nz-select>
+          }
         </nz-form-control>
       </nz-form-item>
 

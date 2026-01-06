@@ -14,6 +14,7 @@
 .list-content {
   flex: 1;
   overflow-y: auto;
+  align-content: center;
 }
 nz-list {
   display: flex;

@@ -6,6 +6,7 @@
   <div class="list-content">
     <nz-list nz-flex>
       @if (isLoading()) {
+        <nz-spin></nz-spin>
       } @else {
         @if (this.activities().length) {
           @for (activity of activities(); track activity.id) {
@@ -17,7 +18,8 @@
             </app-activity-item>
           }
         } @else {
-          <nz-list-empty>You have no activities for today</nz-list-empty>
+          <h3>You have no activities for today</h3>
+          <nz-list-empty></nz-list-empty>
         }
       }
     </nz-list>
