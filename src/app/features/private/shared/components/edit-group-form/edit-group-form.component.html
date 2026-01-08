@@ -87,10 +87,11 @@
 
       <nz-form-item>
         <nz-form-label nzRequired nzFor="groupTimeZone">Time Zone</nz-form-label>
-        <nz-form-control nzErrorTip="Please provide time zone for your group."></nz-form-control>
+        <nz-form-control nzErrorTip="Please provide time zone for your group.">
         @if (timeZones().length>0)
         {
           <nz-select
+            nzShowSearch nzAllowClear
           formControlName="groupTimeZone"
           nzPlaceHolder="Chose time zone"
           id="groupTimeZone"
@@ -104,7 +105,7 @@
             }
           </nz-select>
             }
-      </nz-form-item>
+        </nz-form-control></nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzRequired nzFor="adminId">Admin</nz-form-label>
