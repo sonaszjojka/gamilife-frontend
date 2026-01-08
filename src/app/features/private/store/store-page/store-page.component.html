@@ -1,9 +1,15 @@
 <div class="search-container">
-  <div class="search-bar-container">
-    <div class="search-bar">
-      <app-store-input-search (inputChange)="onInputChange($event)">
-      </app-store-input-search>
-    </div>
+  <div class="store-header">
+    <nz-page-header
+      nzTitle="Store"
+      nzSubtitle="Purchase new items to upgrade your avatar!"
+    ></nz-page-header>
+
+    <app-dashboard-input-search
+      placeholder="Search items..."
+      width="300px"
+      (inputChange)="onInputChange($event)"
+    />
   </div>
 
   <div class="content-body">
