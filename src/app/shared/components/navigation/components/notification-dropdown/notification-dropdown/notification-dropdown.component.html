@@ -10,7 +10,6 @@
     [nzPlacement]="'bottomRight'"
     [(nzVisible)]="dropdownVisible"
     (nzVisibleChange)="onDropdownVisibleChange($event)"
-    tabindex="0"
   >
     <nz-badge [nzCount]="(unreadCount$ | async) ?? 0" [nzOverflowCount]="99">
       <nz-icon
