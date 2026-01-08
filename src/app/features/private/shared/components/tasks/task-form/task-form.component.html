@@ -119,7 +119,7 @@
     }
     @if (!viewMode()) {
       <button nz-button nzShape="round" (click)="onSubmit()">Save</button>
-      @if (this.editionMode?.()) {
+      @if (this.editionMode()) {
         @if (activity()?.pomodoro === undefined) {
           <button nz-button nzShape="round" (click)="onPomodoroCreation()">
             Make Activity Pomodoro

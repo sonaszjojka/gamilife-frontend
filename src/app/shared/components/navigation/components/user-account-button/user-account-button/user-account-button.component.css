@@ -1,13 +1,19 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .user-menu {
+  height: 100%;
   display: flex;
   align-items: center;
   gap: var(--spacing-small);
-  padding: var(--spacing-small) var(--spacing-medium);
+  padding: 0 var(--spacing-medium);
   cursor: pointer;
   color: var(--text-secondary-color);
   font-size: var(--font-size-medium);
   font-family: var(--main-font);
-  border-radius: var(--border-radius);
+  border-radius: 0;
   border-bottom: 2px solid transparent;
   background-color: transparent;
   transition: all var(--transition-speed);
@@ -15,15 +21,15 @@
   white-space: nowrap;
 }
 
-.user-menu:hover {
+.user-menu:hover,
+.user-menu.active {
   background-color: var(--bg-hover);
   color: var(--fifth-color);
   border-bottom-color: var(--fifth-color);
-  transform: translateY(-1px);
 }
 
 .user-menu:active {
-  transform: translateY(0);
+  background-color: var(--bg-hover);
 }
 
 .user-menu nz-icon {
@@ -56,7 +62,7 @@
 
 ::ng-deep .navbar-dropdown-ul {
   background-color: var(--main-color) !important;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-lg);
   padding: 4px 0 !important;
 }
 
@@ -72,7 +78,14 @@
 ::ng-deep .navbar-dropdown-item:hover {
   color: var(--fifth-color);
   background-color: var(--bg-hover);
-  padding-left: 20px !important;
+}
+
+::ng-deep .navbar-dropdown-item > * {
+  transition: transform var(--transition-speed);
+}
+
+::ng-deep .navbar-dropdown-item:hover > * {
+  transform: translateX(4px);
 }
 
 ::ng-deep .navbar-dropdown-item button {
@@ -113,10 +126,6 @@
   ::ng-deep .navbar-dropdown-item {
     padding: 10px 12px !important;
   }
-
-  ::ng-deep .navbar-dropdown-item:hover {
-    padding-left: 14px !important;
-  }
 }
 
 @media (max-width: 576px) {
@@ -130,9 +139,5 @@
 
   ::ng-deep .navbar-dropdown-item {
     padding: 8px 10px !important;
-  }
-
-  ::ng-deep .navbar-dropdown-item:hover {
-    padding-left: 12px !important;
   }
 }
