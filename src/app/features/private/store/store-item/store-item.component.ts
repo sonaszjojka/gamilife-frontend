@@ -34,8 +34,8 @@ export class StoreItemComponent {
 
   private readonly storeApi = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
-  private modal = inject(NzModalService);
-  private destroyRef = inject(DestroyRef);
+  private readonly modal = inject(NzModalService);
+  private readonly destroyRef = inject(DestroyRef);
 
   get borderColor() {
     return RARITY_COLORS[this.item().rarity.id as RarityEnum];

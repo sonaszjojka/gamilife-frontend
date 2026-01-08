@@ -5,11 +5,13 @@
       nzSubtitle="Purchase new items to upgrade your avatar!"
     ></nz-page-header>
 
-    <app-dashboard-input-search
-      placeholder="Search items..."
-      width="300px"
-      (inputChange)="onInputChange($event)"
-    />
+    <div class="search-bar">
+      <app-dashboard-input-search
+        placeholder="Search items..."
+        width="300px"
+        (inputChange)="onInputChange($event)"
+      />
+    </div>
   </div>
 
   <div class="content-body">

@@ -8,15 +8,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 var(--spacing-medium);
+  padding: 0 32px;
   margin-bottom: var(--spacing-medium);
   height: 100px;
+}
+
+.search-bar {
+  padding: 16px;
 }
 
 .content-body {
   display: flex;
   flex: 1;
-  padding: 0 32px;
+  padding: 0 48px;
 }
 
 .filter-panel {

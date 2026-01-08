@@ -1,11 +1,20 @@
 nz-card {
   display: flex;
   flex-direction: column;
+  height: 100%;
   max-width: 500px;
   padding: 0;
-  border: 3px solid;
+  border: 1px solid #d4d4d4;
   border-radius: 8px;
   overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px var(--rarity-color);
+  transform: translateY(0);
+}
+
+nz-card:hover {
+  box-shadow: 0 0 20px var(--rarity-color);
+  transform: translateY(-5px);
 }
 
 .item-image {
