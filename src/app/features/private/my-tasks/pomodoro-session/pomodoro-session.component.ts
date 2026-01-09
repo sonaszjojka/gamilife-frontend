@@ -34,7 +34,7 @@ import { NotificationService } from '../../../shared/services/notification-servi
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BackButtonComponent } from '../../shared/components/back-button/back-button-component';
-import {NzListEmptyComponent} from 'ng-zorro-antd/list';
+import { NzListEmptyComponent } from 'ng-zorro-antd/list';
 
 @Component({
   selector: 'app-pomodoro-session',

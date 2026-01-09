@@ -27,8 +27,8 @@ import {
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
-import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-edit-group-form',
@@ -69,9 +69,7 @@ export class EditGroupFormComponent implements OnInit {
       Validators.minLength(1),
       Validators.maxLength(1),
     ]),
-    groupTimeZone:this.fb.control('',[
-      Validators.required
-    ]),
+    groupTimeZone: this.fb.control('', [Validators.required]),
     groupTypeId: this.fb.control<number | null>(null, [Validators.required]),
     adminId: this.fb.control('', [Validators.required]),
     membersLimit: this.fb.control<number | null>(null, [
@@ -96,7 +94,7 @@ export class EditGroupFormComponent implements OnInit {
             groupTypeId: currentGroup.groupType.id,
             adminId: currentGroup.adminId,
             membersLimit: currentGroup.membersLimit,
-            groupTimeZone: currentGroup.groupTimeZone
+            groupTimeZone: currentGroup.groupTimeZone,
           });
         }, 0);
       }
@@ -105,8 +103,7 @@ export class EditGroupFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadGroupTypes();
-    this.timeZones.set(this.getTimezoneList())
-
+    this.timeZones.set(this.getTimezoneList());
   }
 
   private loadGroupTypes(): void {
@@ -138,9 +135,9 @@ export class EditGroupFormComponent implements OnInit {
         membersLimit: Number(
           formValue.membersLimit ?? this.group().membersLimit ?? 1,
         ),
-        groupTimeZoneId:String(
-          formValue.groupTimeZone ?? this.group().groupTimeZone
-        )
+        groupTimeZoneId: String(
+          formValue.groupTimeZone ?? this.group().groupTimeZone,
+        ),
       };
 
       this.groupApiService
@@ -172,19 +169,21 @@ export class EditGroupFormComponent implements OnInit {
     this.validateForm.reset();
   }
 
-   getTimezoneList = () => {
-    return Intl.supportedValuesOf('timeZone').map(zone => {
+  getTimezoneList = () => {
+    return Intl.supportedValuesOf('timeZone')
+      .map((zone) => {
         const formatter = new Intl.DateTimeFormat('en-US', {
           timeZone: zone,
           timeZoneName: 'shortOffset',
         });
         const parts = formatter.formatToParts(new Date());
-        const offset = parts.find(p => p.type === 'timeZoneName')!.value;
+        const offset = parts.find((p) => p.type === 'timeZoneName')!.value;
         return {
           value: zone,
-          label: `(${offset}) ${zone.replace(/_/g, ' ')}`
+          label: `(${offset}) ${zone.replace(/_/g, ' ')}`,
         };
-    }).filter(Boolean).sort((a, b) => a!.label.localeCompare(b!.label));
+      })
+      .filter(Boolean)
+      .sort((a, b) => a!.label.localeCompare(b!.label));
   };
-
 }

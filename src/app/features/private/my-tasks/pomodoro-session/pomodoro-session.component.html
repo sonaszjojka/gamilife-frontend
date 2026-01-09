@@ -9,8 +9,7 @@
         <h2>Your Activities</h2>
       </div>
 
-      @if (usersNotPomodoroTasks.length===0)
-      {
+      @if (usersNotPomodoroTasks.length === 0) {
         <h3>You have no activities!</h3>
         <nz-list-empty></nz-list-empty>
       } @else {
@@ -21,9 +20,7 @@
             (moveToCurrentSession)="moveTaskToCurrentSession($event)"
           ></app-activity-item>
         }
-
       }
-
     </div>
 
     <div
@@ -54,8 +51,7 @@
           Start Session
         </button>
       }
-      @if (currentSessionPomodoroTasks.length===0)
-      {
+      @if (currentSessionPomodoroTasks.length === 0) {
         <nz-list-empty></nz-list-empty>
       } @else {
         @for (activity of currentSessionPomodoroTasks; track activity.id) {
@@ -68,7 +64,6 @@
           ></app-activity-item>
         }
       }
-
     </div>
 
     <div class="pomodoro-column">
@@ -76,8 +71,7 @@
         <h2>Your Pomodoro Activities</h2>
       </div>
 
-      @if (usersPomodoroActivities.length===0)
-      {
+      @if (usersPomodoroActivities.length === 0) {
         <h3>You have no pomodoro activities!</h3>
         <nz-list-empty></nz-list-empty>
       } @else {
@@ -89,9 +83,7 @@
             (moveToCurrentSession)="moveTaskToCurrentSession($event)"
           ></app-activity-item>
         }
-
       }
-
     </div>
     <app-pomdoro-form-modal
       (moveToCurrentSession)="moveModalPomodoroToSession($event)"

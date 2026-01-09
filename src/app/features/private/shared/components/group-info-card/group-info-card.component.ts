@@ -60,9 +60,7 @@ import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-
             <span nz-icon nzType="field-time" class="info-icon"></span>
             <div class="info-content">
               <span class="info-label">Time Zone</span>
-              <span class="info-value">{{
-                  group().groupTimeZone
-                }}</span>
+              <span class="info-value">{{ group().groupTimeZone }}</span>
             </div>
           </div>
         </div>

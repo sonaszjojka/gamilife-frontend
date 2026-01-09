@@ -14,7 +14,6 @@ h1 {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-
 }
 
 h1 {
@@ -109,8 +108,7 @@ app-task-form {
   overflow-y: auto;
   display: block;
 }
-.empty-state
-{
+.empty-state {
   align-content: center;
   align-items: center;
   justify-content: center;

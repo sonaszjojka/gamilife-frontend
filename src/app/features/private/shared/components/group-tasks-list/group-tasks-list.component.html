@@ -6,11 +6,10 @@
   </div>
   <div class="group-tasks-list" (scroll)="onListScroll($event)">
     <nz-spin [nzSpinning]="loading()" nzSize="large">
-      @if (tasksList().length===0)
-      {
+      @if (tasksList().length === 0) {
         <div class="empty-state">
-        <h3>There are no tasks in your group yet!</h3>
-        <nz-list-empty></nz-list-empty>
+          <h3>There are no tasks in your group yet!</h3>
+          <nz-list-empty></nz-list-empty>
         </div>
       } @else {
         @for (task of tasksList(); track task.taskDto.id) {
