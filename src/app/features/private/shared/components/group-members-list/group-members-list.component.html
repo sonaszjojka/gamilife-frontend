@@ -104,7 +104,7 @@
 @if (selectedMember()) {
   <app-group-member-inventory
     [groupId]="groupId()"
-    [memberId]="selectedMember()!.groupMemberId"
+    [member]="selectedMember()!"
     [mode]="GroupPreviewMode.ADMIN"
   ></app-group-member-inventory>
 }
