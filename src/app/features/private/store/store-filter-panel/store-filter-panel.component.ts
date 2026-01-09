@@ -13,9 +13,12 @@ import {
 } from '../../../shared/models/store/store.model';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzDividerComponent } from 'ng-zorro-antd/divider';
+
 interface SelectableItemSlotDto extends ItemSlotDto {
   selected?: boolean;
 }
+
 interface SelectableRarityDto extends RarityDto {
   selected?: boolean;
 }
@@ -25,7 +28,7 @@ interface SelectableRarityDto extends RarityDto {
   styleUrl: 'store-filter-panel.component.css',
   templateUrl: 'store-filter-panel.component.html',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NzDividerComponent],
 })
 export class StoreFilterPanelComponent implements OnInit {
   itemSlots = signal<SelectableItemSlotDto[]>([]);
@@ -34,8 +37,8 @@ export class StoreFilterPanelComponent implements OnInit {
   public itemSlotChange = output<number[] | undefined>();
   public itemRarityChange = output<number[] | undefined>();
 
-  private storeApi = inject(StoreApiService);
-  private destroyRef = inject(DestroyRef);
+  private readonly storeApi = inject(StoreApiService);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.loadItemSlots();

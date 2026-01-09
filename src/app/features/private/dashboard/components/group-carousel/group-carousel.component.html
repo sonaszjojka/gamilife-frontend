@@ -1,17 +1,19 @@
-<nz-carousel
-  [nzEffect]="effect"
-  [nzDots]="true"
-  [nzEnableSwipe]="false"
-  [nzArrows]="true"
-  (nzBeforeChange)="onSlideChange($event)"
->
-  @for (index of Array(totalGroupPages()); track $index) {
-    <div nz-carousel-content class="slide-wrapper">
-      <div class="cards-container">
-        @for (group of groups(); track group.groupId) {
-          <app-group-card [group]="group"> </app-group-card>
-        }
+<nz-spin [nzSpinning]="isLoading()">
+  <nz-carousel
+    [nzEffect]="effect"
+    [nzDots]="true"
+    [nzEnableSwipe]="true"
+    [nzArrows]="true"
+    (nzBeforeChange)="onSlideChange($event)"
+  >
+    @for (index of Array(totalGroupPages()); track $index) {
+      <div nz-carousel-content class="slide-wrapper">
+        <div class="cards-container">
+          @for (group of groups(); track group.groupId) {
+            <app-group-card [group]="group"> </app-group-card>
+          }
+        </div>
       </div>
-    </div>
-  }
-</nz-carousel>
+    }
+  </nz-carousel>
+</nz-spin>

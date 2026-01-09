@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -6,12 +13,17 @@ import { CommunityInputSearchComponent } from '../../../shared/components/commun
 import { CommonModule } from '@angular/common';
 import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { GroupFilterParams } from '../../../../shared/models/group/group.model';
-import { Group } from '../../../../shared/models/group/group.model';
+import {
+  GroupFilterParams,
+  Group,
+} from '../../../../shared/models/group/group.model';
 import { GroupListComponent } from '../../../shared/components/group-list/group-list.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { AddGroupFormComponent } from '../../../my-groups/components/add-group-form/add-group-form.component';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 
 @Component({
   selector: 'app-community-page',
@@ -24,15 +36,18 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NzGridModule,
     GroupListComponent,
     NzEmptyModule,
+    NzButtonModule,
+    AddGroupFormComponent,
+    NzPageHeaderModule,
   ],
   templateUrl: './community-page.component.html',
   styleUrl: './community-page.component.css',
   standalone: true,
 })
 export class CommunityPageComponent implements OnInit {
-  private groupApiService = inject(GroupApiService);
-  private notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly groupApiService = inject(GroupApiService);
+  private readonly notification = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly value = signal('');
   groups = signal<Group[]>([]);
@@ -41,11 +56,15 @@ export class CommunityPageComponent implements OnInit {
   groupName = signal<string | undefined>(undefined);
   groupTypeId = signal<number | undefined>(undefined);
 
+  @ViewChild(AddGroupFormComponent) addGroupForm!: AddGroupFormComponent;
+  @ViewChild(CommunityInputSearchComponent)
+  inputSearch!: CommunityInputSearchComponent;
+
   ngOnInit() {
-    this.loadGroups(0, 0);
+    this.loadGroups(0);
   }
 
-  loadGroups(page: number, timeout: number) {
+  loadGroups(page: number) {
     const params: GroupFilterParams = {
       page: page,
       size: 12,
@@ -58,11 +77,9 @@ export class CommunityPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          setTimeout(() => {
-            this.groups.set(response.content);
-            this.totalPages.set(response.totalPages - 1);
-            this.currentPage.set(page);
-          }, timeout);
+          this.groups.set(response.content);
+          this.totalPages.set(response.totalPages - 1);
+          this.currentPage.set(page);
         },
         error: (err) => {
           this.notification.handleApiError(err, 'Failed to load groups');
@@ -71,16 +88,29 @@ export class CommunityPageComponent implements OnInit {
   }
 
   onPageChange(page: number) {
-    this.loadGroups(page, 350);
+    this.loadGroups(page);
   }
 
   onInputChange(inputValue: string) {
     this.groupName.set(inputValue);
-    this.loadGroups(0, 350);
+    this.loadGroups(0);
   }
 
   onGroupTypeChange(groupTypeId: string | null) {
     this.groupTypeId.set(groupTypeId != null ? Number(groupTypeId) : undefined);
-    this.loadGroups(0, 350);
+    this.loadGroups(0);
+  }
+
+  openAddGroupModal(): void {
+    this.addGroupForm.open();
+  }
+
+  onGroupCreated() {
+    this.groupName.set(undefined);
+    this.groupTypeId.set(undefined);
+    if (this.inputSearch) {
+      this.inputSearch.resetFilters();
+    }
+    this.loadGroups(0);
   }
 }

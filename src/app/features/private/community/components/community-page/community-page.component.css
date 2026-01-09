@@ -4,8 +4,29 @@
   flex-direction: column;
 }
 
+.search-bar-container {
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 800px) 1fr;
+  align-items: center;
+  margin-bottom: var(--spacing-medium);
+  padding: 0 32px;
+  gap: var(--spacing-medium);
+}
+
+.search-bar {
+  grid-column: 2;
+  width: 100%;
+}
+
+.create-group-btn {
+  grid-column: 3;
+  justify-self: end;
+  padding: 16px;
+}
+
 .search-result-container {
   flex: 1;
+  padding: 0 var(--spacing-medium);
 }
 
 .paging-div {

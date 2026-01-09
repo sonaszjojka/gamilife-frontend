@@ -2,7 +2,8 @@ import { Component, DestroyRef, inject, input, ViewChild } from '@angular/core';
 import { StoreItemDto } from '../../../shared/models/store/store.model';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { NgOptimizedImage, NgStyle } from '@angular/common';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NgOptimizedImage } from '@angular/common';
 import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 import {
   RARITY_COLORS,
@@ -20,8 +21,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [
     NzCardComponent,
     NzButtonComponent,
+    NzIconModule,
     NgOptimizedImage,
-    NgStyle,
     StoreItemDetailsComponent,
   ],
   standalone: true,
@@ -34,8 +35,8 @@ export class StoreItemComponent {
 
   private readonly storeApi = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
-  private modal = inject(NzModalService);
-  private destroyRef = inject(DestroyRef);
+  private readonly modal = inject(NzModalService);
+  private readonly destroyRef = inject(DestroyRef);
 
   get borderColor() {
     return RARITY_COLORS[this.item().rarity.id as RarityEnum];

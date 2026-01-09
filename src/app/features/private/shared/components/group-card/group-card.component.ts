@@ -24,7 +24,7 @@ import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.componen
 })
 export class GroupCardComponent {
   @Input({ required: true }) group!: Group;
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   goToPreview() {
     this.router.navigate(['/app/community/groups/', this.group.groupId]);

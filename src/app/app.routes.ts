@@ -152,13 +152,6 @@ export const routes: Routes = [
         ],
       },
       {
-        path: 'my-groups',
-        loadComponent: () =>
-          import(
-            './features/private/my-groups/components/my-groups-page/my-groups-page.component'
-          ).then((m) => m.MyGroupsPageComponent),
-      },
-      {
         path: 'store',
         loadComponent: () =>
           import(

@@ -6,10 +6,9 @@ import {
   OnInit,
   Output,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
@@ -17,6 +16,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DashboardInputSearchComponent } from '../dashboard-input-search/dashboard-input-search.component';
 
 @Component({
   selector: 'app-community-input-search',
@@ -24,35 +24,31 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [
     CommonModule,
     FormsModule,
-    NzInputModule,
-    NzIconModule,
     NzButtonModule,
     NzSelectModule,
+    DashboardInputSearchComponent,
   ],
   template: `
     <div class="input-search-container">
-      <nz-input-group nzSearch>
-        <input
-          nz-input
-          [value]="value()"
-          (input)="onInputChange($event)"
-          placeholder="Enter group name"
-        />
-      </nz-input-group>
-
-      <nz-select
-        *ngIf="groupTypes().length > 0"
-        [(ngModel)]="selectedGroupTypeId"
-        nzAllowClear
-        nzPlaceHolder="Filter by group type"
-        (ngModelChange)="onGroupTypeChange($event)"
+      <app-dashboard-input-search
+        placeholder="Enter group name"
+        width="300px"
+        (inputChange)="onInputChange($event)"
       >
-        <nz-option
-          *ngFor="let type of groupTypes()"
-          [nzValue]="type.id"
-          [nzLabel]="type.title"
-        ></nz-option>
-      </nz-select>
+      </app-dashboard-input-search>
+
+      @if (groupTypes().length > 0) {
+        <nz-select
+          [(ngModel)]="selectedGroupTypeId"
+          nzAllowClear
+          nzPlaceHolder="Group type"
+          (ngModelChange)="onGroupTypeChange($event)"
+        >
+          @for (type of groupTypes(); track type.id) {
+            <nz-option [nzValue]="type.id" [nzLabel]="type.title"></nz-option>
+          }
+        </nz-select>
+      }
     </div>
   `,
   styles: [
@@ -66,32 +62,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         gap: var(--spacing-medium);
       }
 
-      nz-input-group {
-        width: 400px;
-      }
       nz-select {
-        width: 200px;
-      }
-      @media (max-width: 768px) {
-        .input-search-container {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          gap: 16px;
-          height: 100px;
-          flex-wrap: wrap;
-        }
-
-        nz-input-group {
-          width: 400px;
-          max-width: 100%;
-        }
-
-        nz-select {
-          width: 200px;
-          max-width: 100%;
-        }
+        width: 140px;
       }
     `,
   ],
@@ -101,10 +73,11 @@ export class CommunityInputSearchComponent implements OnInit {
 
   selectedGroupTypeId?: number;
 
-  readonly value = signal('');
+  @ViewChild(DashboardInputSearchComponent)
+  inputSearch!: DashboardInputSearchComponent;
 
-  protected groupApiService = inject(GroupApiService);
-  private destroyRef = inject(DestroyRef);
+  private readonly groupApiService = inject(GroupApiService);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Output() inputChange = new EventEmitter<string>();
   @Output() groupTypeChange = new EventEmitter<string | null>();
@@ -119,10 +92,8 @@ export class CommunityInputSearchComponent implements OnInit {
     this.groupApiService.getGroups(params);
   }
 
-  onInputChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.value.set(input.value);
-    this.inputChange.emit(this.value());
+  onInputChange(value: string): void {
+    this.inputChange.emit(value);
   }
 
   onGroupTypeChange(newTypeId: string | null) {
@@ -139,7 +110,6 @@ export class CommunityInputSearchComponent implements OnInit {
   }
 
   resetFilters(): void {
-    this.value.set('');
     this.selectedGroupTypeId = undefined;
     this.inputChange.emit('');
     this.groupTypeChange.emit(null);

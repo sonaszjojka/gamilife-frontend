@@ -24,7 +24,8 @@ import { UserStatisticsModel } from '../../../../shared/models/user-profile/user
 import { UserStatisticsService } from '../../../../shared/services/user-statistics-api/user-statistics.service';
 import { UserStatisticsCardComponent } from '../user-statistics-card/user-statistics-card.component';
 import { DashboardActivitiesComponent } from '../dashboard-activities/dashboard-activities.component';
-import { NzDividerComponent } from 'ng-zorro-antd/divider';
+import { DashboardInputSearchComponent } from '../../../shared/components/dashboard-input-search/dashboard-input-search.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +36,7 @@ import { NzDividerComponent } from 'ng-zorro-antd/divider';
     GroupCarouselComponent,
     UserStatisticsCardComponent,
     DashboardActivitiesComponent,
-    NzDividerComponent,
+    DashboardInputSearchComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -47,16 +48,17 @@ export class DashboardComponent implements OnInit {
   private readonly groupApi = inject(GroupApiService);
   private readonly notificationService = inject(NotificationService);
   private readonly userStatisticsApi = inject(UserStatisticsService);
+  private readonly breakpointObserver = inject(BreakpointObserver);
 
   groups: Group[] = [];
-
+  username = this.authService.username();
   groupCurrentPage = signal<number>(0);
   groupTotalPage = signal<number>(1);
   groupParams: GroupFilterParams = {
     groupType: undefined,
     groupName: undefined,
     page: this.groupCurrentPage(),
-    size: 5,
+    size: 3,
   };
   activities: ActivityItemDetails[] = [];
   statistics: UserStatisticsModel[] = [];
@@ -76,6 +78,24 @@ export class DashboardComponent implements OnInit {
         this.showOnboarding.set(false);
       }
     });
+
+    this.breakpointObserver
+      .observe(['(min-width: 1600px)', '(min-width: 1100px)'])
+      .pipe(takeUntilDestroyed())
+      .subscribe((result) => {
+        let newSize = 1;
+
+        if (result.breakpoints['(min-width: 1600px)']) {
+          newSize = 3;
+        } else if (result.breakpoints['(min-width: 1100px)']) {
+          newSize = 2;
+        }
+
+        if (this.groupParams.size !== newSize) {
+          this.groupParams.size = newSize;
+          this.loadGroups(0);
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -105,6 +125,11 @@ export class DashboardComponent implements OnInit {
           this.isGroupListLoading.set(false);
         },
       });
+  }
+
+  onGroupSearch(searchTerm: string) {
+    this.groupParams.groupName = searchTerm;
+    this.loadGroups(0);
   }
 
   loadActivities() {

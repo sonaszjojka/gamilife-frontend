@@ -8,20 +8,23 @@ import { StoreItemComponent } from '../store-item/store-item.component';
   standalone: true,
   imports: [CommonModule, NzGridModule, StoreItemComponent],
   template: `
-    <div nz-row [nzGutter]="[16, 16]">
-      <div
-        nz-col
-        *ngFor="let item of items()"
-        [nzXs]="24"
-        [nzSm]="24"
-        [nzMd]="12"
-        [nzLg]="8"
-        [nzXl]="6"
-      >
-        <app-store-item [item]="item">
-          <ng-content></ng-content>
-        </app-store-item>
-      </div>
+    <div nz-row [nzGutter]="[16, 16]" nzJustify="start">
+      @for (item of items(); track item.id) {
+        <div
+          nz-col
+          [nzXs]="24"
+          [nzSm]="24"
+          [nzMd]="12"
+          [nzLg]="8"
+          [nzXl]="6"
+          [nzXXl]="4"
+          class="store-col"
+        >
+          <app-store-item [item]="item">
+            <ng-content></ng-content>
+          </app-store-item>
+        </div>
+      }
     </div>
   `,
 })

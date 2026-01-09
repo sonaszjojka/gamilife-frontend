@@ -1,6 +1,8 @@
 .group-card {
   margin-bottom: var(--spacing-medium);
-  width: 300px;
+  width: 100%;
+  border-radius: var(--border-radius-xl);
+  height: 100%;
 }
 
 .card-title {
@@ -35,17 +37,6 @@
   font-weight: var(--font-weight-medium);
 }
 
-.join-code {
-  padding: var(--spacing-xs) var(--spacing-small);
-  border-radius: var(--border-radius);
-}
-
 .card-actions {
   margin-top: var(--spacing-medium);
-}
-
-@media (max-width: 768px) {
-  .group-card {
-    min-width: 80vw;
-  }
 }

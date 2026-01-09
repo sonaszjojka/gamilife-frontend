@@ -4,22 +4,24 @@ import {
   StoreFiltersModel,
   StoreItemDto,
 } from '../../../shared/models/store/store.model';
-import { StoreInputSearchComponent } from '../store-input-search/store-input-search.component';
 import { PaginationMoreComponent } from '../../shared/components/pagination-more/pagination-more.component';
 import { StoreItemListComponent } from '../store-item-list/store-item-list.component';
 import { StoreFilterPanelComponent } from '../store-filter-panel/store-filter-panel.component';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzPageHeaderComponent } from 'ng-zorro-antd/page-header';
+import { DashboardInputSearchComponent } from '../../shared/components/dashboard-input-search/dashboard-input-search.component';
 
 @Component({
   selector: 'app-store-page',
   templateUrl: 'store-page.component.html',
   styleUrl: 'store-page.component.css',
   imports: [
-    StoreInputSearchComponent,
     PaginationMoreComponent,
     StoreItemListComponent,
     StoreFilterPanelComponent,
+    NzPageHeaderComponent,
+    DashboardInputSearchComponent,
   ],
 
   standalone: true,
@@ -34,7 +36,7 @@ export class StorePageComponent implements OnInit {
 
   private readonly storeApi = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.loadItems(1);
@@ -68,14 +70,17 @@ export class StorePageComponent implements OnInit {
   onPageChange(page: number) {
     this.loadItems(page);
   }
+
   onInputChange(itemName: string) {
     this.itemName.set(itemName);
     this.loadItems(1);
   }
+
   onItemSlotChange(itemSlotId: number[] | undefined) {
     this.itemSlot.set(itemSlotId);
     this.loadItems(1);
   }
+
   onItemRarityChange(rarityId: number[] | undefined) {
     this.rarity.set(rarityId);
     this.loadItems(1);

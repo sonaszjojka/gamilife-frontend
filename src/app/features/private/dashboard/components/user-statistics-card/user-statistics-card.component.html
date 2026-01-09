@@ -1,40 +1,32 @@
-<nz-card
-  style="width: 300px"
-  [nzTitle]="titleTemplate"
-  [nzHoverable]="'true'"
-  [style.box-shadow]="'0 2px 5px rgba(0, 0, 0, 0.1)'"
->
+<nz-card class="stats-card" [nzBordered]="false" [nzTitle]="titleTemplate">
   @if (isLoading()) {
-    <nz-spin></nz-spin>
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
   } @else {
-    @for (statistic of statistics(); track statistic.id) {
-      <div class="statistic-row">
-        <p class="">
-          {{ statistic.statisticType.type }}
-          <nz-divider [nzType]="'vertical'"></nz-divider> {{ statistic.count }}
-        </p>
-        <nz-divider [nzVariant]="'solid'"></nz-divider>
-      </div>
-    }
+    <div class="stats-container">
+      @for (statistic of statistics(); track statistic.id) {
+        <div class="stat-row">
+          <div class="stat-label">
+            {{ statistic.statisticType.type }}
+          </div>
+          <div class="stat-value-container">
+            <span class="stat-value">{{ statistic.count }}</span>
+          </div>
+        </div>
+      }
+    </div>
   }
 </nz-card>
 
 <ng-template #titleTemplate>
-  <div class="custom-title">
+  <div class="card-header">
     <span
       nz-icon
       nzType="bar-chart"
       nzTheme="outline"
-      style="font-size: 30px"
+      class="header-icon"
     ></span>
-    <span
-      style="
-        margin-left: 8px;
-        color: #1890ff;
-        align-content: center;
-        font-size: 30px;
-      "
-      >Your Progress</span
-    >
+    <span class="header-title">STATISTICS</span>
   </div>
 </ng-template>
