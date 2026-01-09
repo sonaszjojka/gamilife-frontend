@@ -4,84 +4,140 @@ nz-card {
   height: 100%;
   max-width: 500px;
   padding: 0;
-  border: 1px solid #d4d4d4;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px var(--rarity-color);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateY(0);
+  background-color: #fff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 nz-card:hover {
-  box-shadow: 0 0 20px var(--rarity-color);
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .item-image {
-  background-color: #d4d4f0;
+  border-radius: var(--border-radius-lg);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  min-height: 120px;
+  padding: 24px;
+  min-height: 160px;
+  background-color: #f8fafc;
+  box-shadow: 0 0 10px var(--rarity-color);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1rem;
+}
+
+nz-card:hover .item-image {
+  box-shadow: 0 0 15px var(--rarity-color);
 }
 
 .item-image img {
-  width: 200px;
-  height: 200px;
+  padding: 5px;
   object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
 .name-panel {
-  background-color: #b8b8c8;
-  padding: 8px 12px;
+  padding: 12px;
   text-align: center;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .name-panel h1 {
   margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #000;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.025em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .info-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  background-color: #e2e8f0;
   gap: 1px;
-  background-color: #999;
 }
 
-.info-panel span {
-  background-color: #e8e8e8;
-  padding: 8px 12px;
-  text-align: center;
-  font-size: 12px;
-  color: #000;
+.info-item {
+  background-color: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.info-item .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.info-item .value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.price-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #059669;
+}
+
+.price-value nz-icon {
+  font-size: 16px;
+}
+
+.price-value .value {
+  color: #059669;
+  font-weight: 700;
 }
 
 .button-panel {
   display: flex;
-  gap: 8px;
-  padding: 12px;
+  gap: 12px;
+  padding: 16px;
   background-color: #fff;
+  border-radius: 0 0 12px 12px;
+  margin-top: auto;
 }
 
 .button-panel button {
   flex: 1;
-  border-radius: 4px;
   font-weight: 600;
-  height: 36px;
+  height: 40px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-.button-panel button:first-child {
-  background-color: #fff;
-  border: 1px solid #d4d4d4;
-  color: #000;
+.button-panel button[nzType="default"] {
+  border: 1px solid #e2e8f0;
+  color: #475569;
 }
 
-.button-panel button:last-child {
-  background-color: #2563eb;
+.button-panel button[nzType="default"]:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.button-panel button[nzType="primary"] {
+  background-color: var(--fourth-color);
   border: none;
-  color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .button-panel button[nzType="primary"]:hover {
+  transform: scale(1.02);
 }

@@ -2,21 +2,30 @@
   <div class="item-image">
     <img
       ngSrc="../../../../../assets/placeholder.png"
-      height="100"
-      width="100"
-      [alt]="this.item().name"
+      height="150"
+      width="150"
+      [alt]="this.item().name + ' icon'"
     />
   </div>
   <div class="name-panel">
     <h1>{{ this.item().name }}</h1>
   </div>
   <div class="info-panel">
-    <span>{{ this.item().itemSlot.name }}</span>
-    <span>{{ this.item().price }}</span>
+    <div class="info-item slot-info">
+      <span class="label">Slot</span>
+      <span class="value">{{ this.item().itemSlot.name }}</span>
+    </div>
+    <div class="info-item price-info">
+      <span class="label">Price</span>
+      <div class="price-value">
+        <nz-icon nzType="dollar" nzTheme="outline"></nz-icon>
+        <span class="value">{{ this.item().price }}</span>
+      </div>
+    </div>
   </div>
   <div class="button-panel">
-    <button nz-button (click)="onDetails()">Details</button>
-    <button nz-button (click)="confirmPurchase()">Buy</button>
+    <button nz-button nzType="default" (click)="onDetails()">Details</button>
+    <button nz-button nzType="primary" (click)="confirmPurchase()">Buy</button>
   </div>
 </nz-card>
-<app-store-item-details [itemId]="this.item().id"> </app-store-item-details>
+<app-store-item-details [itemId]="this.item().id"></app-store-item-details>
