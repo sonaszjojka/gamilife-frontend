@@ -80,14 +80,14 @@ export class DashboardComponent implements OnInit {
     });
 
     this.breakpointObserver
-      .observe(['(min-width: 1600px)', '(min-width: 1100px)'])
+      .observe(['(min-width: 1600px)', '(min-width: 1250px)'])
       .pipe(takeUntilDestroyed())
       .subscribe((result) => {
         let newSize = 1;
 
         if (result.breakpoints['(min-width: 1600px)']) {
           newSize = 3;
-        } else if (result.breakpoints['(min-width: 1100px)']) {
+        } else if (result.breakpoints['(min-width: 1250px)']) {
           newSize = 2;
         }
 
