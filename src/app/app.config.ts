@@ -9,6 +9,7 @@ import {
   provideRouter,
   withPreloading,
   PreloadAllModules,
+  withComponentInputBinding,
 } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -51,7 +52,11 @@ const ngZorroConfig: NzConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules),
+      withComponentInputBinding(),
+    ),
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),

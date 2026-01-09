@@ -1,6 +1,6 @@
-import { Component, inject, computed, OnInit } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { AuthService } from '../../../../services/auth/auth.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -11,6 +11,8 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { FormsModule } from '@angular/forms';
 import { UserAccountButtonComponent } from '../user-account-button/user-account-button/user-account-button.component';
 import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown/notification-dropdown.component';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
 
 @Component({
   selector: 'app-navigation',
@@ -27,13 +29,14 @@ import { NotificationDropdownComponent } from '../notification-dropdown/notifica
     FormsModule,
     UserAccountButtonComponent,
     NotificationDropdownComponent,
+    NzLayoutModule,
+    NzAffixModule,
   ],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent {
   public authService = inject(AuthService);
-  private router = inject(Router);
 
   userMoney = this.authService.money;
   isLoggedIn = this.authService.loggedIn;
@@ -44,10 +47,4 @@ export class NavigationComponent implements OnInit {
   experiencePercentage = computed(() => {
     return this.authService.getExperiencePercentage();
   });
-
-  ngOnInit(): void {
-    if (this.isLoggedIn() && this.authService.userId()) {
-      this.authService.loadGamificationData();
-    }
-  }
 }

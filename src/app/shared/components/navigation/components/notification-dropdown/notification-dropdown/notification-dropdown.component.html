@@ -1,14 +1,16 @@
-<div class="notification-container">
-  <button
-    nz-button
+<div class="notification-container" nz-flex nzAlign="center" nzJustify="center">
+  <div
+    nz-flex
+    nzAlign="center"
+    nzJustify="center"
     class="notification-button"
+    [class.active]="dropdownVisible"
     nz-dropdown
     [nzDropdownMenu]="notificationMenu"
     [nzPlacement]="'bottomRight'"
     [(nzVisible)]="dropdownVisible"
     (nzVisibleChange)="onDropdownVisibleChange($event)"
   >
-    Notifications
     <nz-badge [nzCount]="(unreadCount$ | async) ?? 0" [nzOverflowCount]="99">
       <nz-icon
         nzType="bell"
@@ -16,7 +18,7 @@
         class="notification-icon"
       ></nz-icon>
     </nz-badge>
-  </button>
+  </div>
 
   <nz-dropdown-menu #notificationMenu="nzDropdownMenu">
     <div class="notification-dropdown" nz-menu>

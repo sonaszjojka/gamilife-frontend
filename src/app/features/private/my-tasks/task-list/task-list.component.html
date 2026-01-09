@@ -33,15 +33,18 @@
         @if (activityListType() === ActivityListView.Habits) {
           <div class="empty-state">
             <h3>You have no habits yet!</h3>
+            <nz-list-empty></nz-list-empty>
           </div>
         } @else {
           @if (activityListType() === ActivityListView.Activities) {
             <div class="empty-state">
               <h3>You have no activities yet!</h3>
+              <nz-list-empty></nz-list-empty>
             </div>
           } @else {
             <div class="empty-state">
               <h3>You have no tasks yet!</h3>
+              <nz-list-empty></nz-list-empty>
             </div>
           }
         }
@@ -54,26 +57,27 @@
 
             <div class="tasks-grid">
               @for (activity of groupedTasks[date]; track activity.id) {
-                <app-task-item
+                <app-activity-item
                   [activity]="activity"
-                  (editTask)="onActivityEdit($event)"
-                  (taskUpdated)="onActivityUpdated($event)"
+                  (editActivity)="onActivityEdit($event)"
+                  (activityUpdated)="onActivityUpdated($event)"
                 >
-                </app-task-item>
+                </app-activity-item>
               }
             </div>
           </div>
         }
       }
     </div>
-    @if (editionMode() || creationMode()) {
+    @if (editionMode!() || creationMode!()) {
       <app-task-form
         [activity]="selectedActivity()"
-        [editionMode]="editionMode"
-        [creationMode]="creationMode"
         [viewMode]="viewMode()"
+        [editionMode]="editionMode!()"
+        [creationMode]="creationMode!()"
         (activityFormSubmitted)="onTaskSubmit()"
         (activityDeleted)="onTaskDelete()"
+        (closeForm)="onFormClose()"
         [type]="formType()"
       >
       </app-task-form>

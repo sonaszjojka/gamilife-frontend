@@ -13,6 +13,7 @@ import { NzPaginationComponent } from 'ng-zorro-antd/pagination';
 import { GroupMemberInventoryItemComponent } from '../group-member-inventory-item/group-member-inventory-item.component';
 import { CommonModule } from '@angular/common';
 import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
+import { GroupMember } from '../../../../shared/models/group/group-member.model';
 
 @Component({
   selector: 'app-group-member-inventory',
@@ -37,7 +38,7 @@ export class GroupMemberInventoryComponent {
   isUsedUp = signal<boolean>(false);
 
   groupId = input.required<string>();
-  memberId = input.required<string>();
+  member = input.required<GroupMember>();
 
   mode = input.required<GroupPreviewMode>();
 
@@ -50,6 +51,7 @@ export class GroupMemberInventoryComponent {
   private readonly groupMemberInventoryApi = inject(
     GroupMemberInventoryApiService,
   );
+
   private readonly notificationService = inject(NotificationService);
   private destroyRef = inject(DestroyRef);
 
@@ -69,7 +71,7 @@ export class GroupMemberInventoryComponent {
     this.groupMemberInventoryApi
       .getMemberInventory(
         this.groupId(),
-        this.memberId(),
+        this.member().groupMemberId,
         this.isUsedUp(),
         page,
         10,

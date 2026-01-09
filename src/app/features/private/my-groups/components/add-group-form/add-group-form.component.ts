@@ -2,9 +2,9 @@ import {
   Component,
   inject,
   signal,
-  OnInit,
   output,
   DestroyRef,
+  input,
 } from '@angular/core';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -39,11 +39,12 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
   templateUrl: './add-group-form.component.html',
   styleUrl: './add-group-form.component.css',
 })
-export class AddGroupFormComponent implements OnInit {
-  private fb = inject(NonNullableFormBuilder);
-  protected groupApiService = inject(GroupApiService);
-  private notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+export class AddGroupFormComponent {
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly groupApiService = inject(GroupApiService);
+  private readonly notification = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
+
   groupCreated = output<void>();
 
   protected validateForm = this.fb.group({
@@ -66,24 +67,8 @@ export class AddGroupFormComponent implements OnInit {
   });
 
   isVisible = signal(false);
-  readonly groupTypes = signal<GroupType[]>([]);
+  groupTypes = input.required<GroupType[]>();
   isLoading = signal(false);
-
-  ngOnInit(): void {
-    this.loadGroupTypes();
-  }
-
-  private loadGroupTypes(): void {
-    this.groupApiService
-      .getGroupTypes()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (types) => this.groupTypes.set(types),
-        error: (err) => {
-          this.notification.handleApiError(err, 'Failed to load group types');
-        },
-      });
-  }
 
   open(): void {
     this.isVisible.set(true);

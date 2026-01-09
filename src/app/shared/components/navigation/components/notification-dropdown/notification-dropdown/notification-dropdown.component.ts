@@ -4,6 +4,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -24,6 +25,7 @@ import { NotificationType } from '../../../../../../features/shared/models/notif
     NzDropDownModule,
     NzIconModule,
     NzButtonModule,
+    NzFlexModule,
     NzListModule,
     NzEmptyModule,
     NzDividerModule,
@@ -32,8 +34,8 @@ import { NotificationType } from '../../../../../../features/shared/models/notif
   styleUrls: ['./notification-dropdown.component.css'],
 })
 export class NotificationDropdownComponent {
-  private notificationService = inject(WebSocketNotificationService);
-  private router = inject(Router);
+  private readonly notificationService = inject(WebSocketNotificationService);
+  private readonly router = inject(Router);
 
   unreadCount$: Observable<number> = this.notificationService.unreadCount$;
   notifications$: Observable<NotificationDto[]> =
@@ -56,7 +58,6 @@ export class NotificationDropdownComponent {
         this.handleGroupInvitation(notification.data);
         break;
       case NotificationType.ACHIEVEMENT_UNLOCKED:
-      case NotificationType.ITEM_ACQUIRED:
       case NotificationType.LEVEL_UP:
         this.handleRedirectToProfile();
         break;
@@ -152,7 +153,6 @@ export class NotificationDropdownComponent {
     switch (type) {
       case NotificationType.ACHIEVEMENT_UNLOCKED:
         return 'trophy';
-      case NotificationType.ITEM_ACQUIRED:
       case NotificationType.GROUP_ITEM_USED:
         return 'gift';
       case NotificationType.LEVEL_UP:
@@ -183,8 +183,6 @@ export class NotificationDropdownComponent {
       case NotificationType.LEVEL_UP:
       case NotificationType.GROUP_TASK_COMPLETED:
         return '#52c41a';
-      case NotificationType.ITEM_ACQUIRED:
-        return '#faad14';
       case NotificationType.GROUP_ITEM_USED:
         return '#722ed1';
       case NotificationType.GROUP_MEMBER_LEFT:

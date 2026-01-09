@@ -1,18 +1,20 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .notification-container {
-  display: flex;
-  align-items: center;
+  height: 100%;
 }
 
 .notification-button {
+  height: 64px;
+  padding: 0 var(--spacing-medium);
   display: flex;
   align-items: center;
-  gap: var(--spacing-small);
-  padding: var(--spacing-small) var(--spacing-medium);
+  justify-content: center;
   cursor: pointer;
   color: var(--text-secondary-color);
-  font-size: var(--font-size-medium);
-  font-family: var(--main-font);
-  border-radius: var(--border-radius);
   border-bottom: 2px solid transparent;
   border-top: none;
   border-left: none;
@@ -22,10 +24,10 @@
     color var(--transition-speed),
     background-color var(--transition-speed-fast),
     border-bottom-color var(--transition-speed);
-  height: auto;
 }
 
-.notification-button:hover {
+.notification-button:hover,
+.notification-button.active {
   background-color: var(--bg-hover);
   color: var(--fifth-color);
   border-bottom-color: var(--fifth-color);
@@ -37,7 +39,7 @@
 
 .notification-icon {
   color: var(--text-secondary-color);
-  font-size: var(--font-size-medium);
+  font-size: 20px;
   transition: color var(--transition-speed);
 }
 
@@ -48,18 +50,19 @@
 ::ng-deep .notification-button .ant-badge-count {
   background-color: var(--fifth-color);
   box-shadow: 0 0 0 1px var(--main-color);
+  top: -2px;
+  right: -2px;
 }
 
 ::ng-deep .ant-dropdown-menu {
-  border-radius: var(--border-radius);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.notification-dropdown {
+::ng-deep .notification-dropdown {
   width: 400px;
   max-height: 600px;
   background-color: var(--main-color);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-lg);
   padding: 4px 0;
 }
 
@@ -189,8 +192,8 @@
 
 @media (max-width: 768px) {
   .notification-button {
-    padding: 6px 12px;
-    gap: 4px;
+    height: 56px;
+    padding: 0 12px;
   }
 
   .notification-icon {
@@ -201,59 +204,15 @@
     width: 320px;
     max-height: 500px;
   }
-
-  .notification-header {
-    padding: 10px 12px 6px 12px;
-  }
-
-  .notification-header h3 {
-    font-size: var(--font-size-medium);
-  }
-
-  .notification-list-container {
-    max-height: 400px;
-  }
-
-  .notification-item {
-    padding: 10px 12px;
-  }
-
-  .notification-item:hover {
-    padding-left: 14px;
-  }
-
-  .notification-type-icon {
-    font-size: 20px;
-  }
 }
 
 @media (max-width: 576px) {
   .notification-button {
-    padding: 4px 8px;
+    height: 52px;
+    padding: 0 8px;
   }
 
   .notification-icon {
     font-size: 16px;
-  }
-
-  .notification-dropdown {
-    width: 280px;
-    max-height: 450px;
-  }
-
-  .notification-header {
-    padding: 8px 10px 4px 10px;
-  }
-
-  .notification-list-container {
-    max-height: 350px;
-  }
-
-  .notification-item {
-    padding: 8px 10px;
-  }
-
-  .notification-item:hover {
-    padding-left: 12px;
   }
 }

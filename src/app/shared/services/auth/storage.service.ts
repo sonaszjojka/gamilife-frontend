@@ -45,6 +45,15 @@ export class StorageService {
     return value ? Number(value) : null;
   }
 
+  getStatsVersion(): number | null {
+    const value = localStorage.getItem('statsVersion');
+    return value ? Number(value) : null;
+  }
+
+  getIsEmailVerified(): boolean | null {
+    return localStorage.getItem('isEmailVerified') === 'true';
+  }
+
   getOAuth2CodeVerifier(): string | null {
     return sessionStorage.getItem('oauth2_code_verifier');
   }
@@ -83,6 +92,14 @@ export class StorageService {
     } else {
       localStorage.removeItem('requiredExperienceForNextLevel');
     }
+  }
+
+  setStatsVersion(value: number): void {
+    localStorage.setItem('statsVersion', String(value));
+  }
+
+  setIsEmailVerified(value: boolean): void {
+    localStorage.setItem('isEmailVerified', String(value));
   }
 
   setOAuth2CodeVerifier(value: string): void {
@@ -129,6 +146,14 @@ export class StorageService {
     localStorage.removeItem('user_notifications');
   }
 
+  removeIsEmailVerified(): void {
+    localStorage.removeItem('isEmailVerified');
+  }
+
+  removeStatsVersion(): void {
+    localStorage.removeItem('statsVersion');
+  }
+
   clearAuthData(): void {
     this.removeUserId();
     this.removeUsername();
@@ -137,6 +162,9 @@ export class StorageService {
     this.removeLevel();
     this.removeExperience();
     this.removeRequiredExperienceForNextLevel();
+    this.removeStatsVersion();
+    this.removeIsEmailVerified();
+    this.removeNotifications();
   }
 
   clearAllData(): void {

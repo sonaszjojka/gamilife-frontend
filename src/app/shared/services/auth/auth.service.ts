@@ -1,5 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  inject,
+  Injectable,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import {
@@ -13,43 +19,25 @@ import {
 import { WebSocketNotificationService } from '../../../features/shared/services/websocket-notification-service/web-socket-notification.service';
 import { StorageService } from './storage.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  userId: string;
-  email: string;
-  username: string;
-  isEmailVerified: boolean;
-  isTutorialCompleted: boolean;
-  money: number;
-}
-
-export interface GamificationUserData {
-  userId: string;
-  username: string;
-  level: number;
-  experience: number;
-  money: number;
-  requiredExperienceForNextLevel: number | null;
-}
+import {
+  LoginCredentials,
+  GamificationUserData,
+  LoginResponse,
+  RegistrationData,
+} from '../../../features/shared/models/auth/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private router = inject(Router);
-  private http = inject(HttpClient);
-  private notificationService = inject(WebSocketNotificationService);
-  private storage = inject<StorageService>(StorageService);
-  private refreshSubject = new Subject<boolean>();
-  private destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+  private readonly notificationService = inject(WebSocketNotificationService);
+  private readonly storage = inject<StorageService>(StorageService);
+  private readonly refreshSubject = new Subject<boolean>();
+  private readonly destroyRef = inject(DestroyRef);
 
   refreshSubject$ = this.refreshSubject.asObservable();
   refreshInProgress = false;
 
-  loggedIn = signal<boolean>(!!this.storage.getUserId());
   username = signal<string | null>(this.storage.getUsername());
   userId = signal<string | null>(this.storage.getUserId());
   isTutorialCompleted = signal<boolean>(this.storage.getIsTutorialCompleted());
@@ -59,19 +47,31 @@ export class AuthService {
   requiredExperienceForNextLevel = signal<number | null>(
     this.storage.getRequiredExperienceForNextLevel(),
   );
+  statsVersion = signal<number | null>(this.storage.getStatsVersion());
+  emailVerified = signal<boolean>(!!this.storage.getIsEmailVerified());
+  loggedIn = computed<boolean>(() => {
+    const userId = this.userId();
+    const isEmailVerified = this.emailVerified();
+    return userId !== null && isEmailVerified;
+  });
 
   constructor() {
     this.initializeFromStorage();
-    this.initializeWebSocketOnStartup();
+
+    if (this.loggedIn()) {
+      this.notificationService.connect();
+      this.loadGamificationData();
+    }
   }
 
   private initializeFromStorage(): void {
     const userId = this.storage.getUserId();
+    const isEmailVerified = !!this.storage.getIsEmailVerified();
 
-    if (userId) {
+    if (userId && isEmailVerified) {
       this.userId.set(userId);
       this.username.set(this.storage.getUsername());
-      this.loggedIn.set(true);
+      this.emailVerified.set(true);
       this.isTutorialCompleted.set(this.storage.getIsTutorialCompleted());
       this.money.set(this.storage.getMoney());
       this.level.set(this.storage.getLevel());
@@ -79,15 +79,7 @@ export class AuthService {
       this.requiredExperienceForNextLevel.set(
         this.storage.getRequiredExperienceForNextLevel(),
       );
-    }
-  }
-
-  private initializeWebSocketOnStartup(): void {
-    const isLoggedIn = this.loggedIn();
-
-    if (isLoggedIn) {
-      this.notificationService.connect();
-      this.loadGamificationData();
+      this.statsVersion.set(this.storage.getStatsVersion());
     }
   }
 
@@ -95,23 +87,40 @@ export class AuthService {
     const url = `${environment.apiUrl}/auth/login`;
     return this.http
       .post<LoginResponse>(url, credentials, { withCredentials: true })
-      .pipe(
-        tap((res) => {
-          this.saveAuthDataToStorage(
-            res.userId,
-            res.username,
-            res.isTutorialCompleted,
-            res.money,
-          );
-          this.updateAuthState(
-            res.userId,
-            res.username,
-            res.isTutorialCompleted,
-            res.money,
-          );
-          this.loadGamificationData();
-        }),
-      );
+      .pipe(tap(this.processAfterLoginResponse.bind(this)));
+  }
+
+  verfiyEmail(code: string): Observable<LoginResponse> {
+    const url = `${environment.apiUrl}/auth/email-verifications/confirm`;
+    return this.http
+      .post<LoginResponse>(url, { code }, { withCredentials: true })
+      .pipe(tap(this.processAfterLoginResponse.bind(this)));
+  }
+
+  register(registrationData: RegistrationData): Observable<LoginResponse> {
+    const url = `${environment.apiUrl}/auth/register`;
+    return this.http
+      .post<LoginResponse>(url, registrationData, { withCredentials: true })
+      .pipe(tap(this.processAfterLoginResponse.bind(this)));
+  }
+
+  processAfterLoginResponse(res: LoginResponse): void {
+    this.saveAuthDataToStorage(
+      res.userId,
+      res.username,
+      res.isTutorialCompleted,
+      res.isEmailVerified,
+      res.money,
+    );
+    this.updateAuthState(
+      res.userId,
+      res.username,
+      res.isTutorialCompleted,
+      res.isEmailVerified,
+      res.money,
+    );
+    this.loadGamificationData();
+    this.notificationService.connect();
   }
 
   logout() {
@@ -127,12 +136,10 @@ export class AuthService {
   logoutLocal() {
     this.notificationService.disconnect();
     this.notificationService.clearAllNotifications();
-
     this.storage.clearAuthData();
 
     this.userId.set(null);
     this.username.set(null);
-    this.loggedIn.set(false);
     this.isTutorialCompleted.set(false);
     this.money.set(0);
     this.level.set(1);
@@ -189,12 +196,17 @@ export class AuthService {
   }
 
   public updateGamificationData(data: GamificationUserData): void {
+    if (this.statsVersion() && data.statsVersion <= this.statsVersion()!) {
+      return;
+    }
+
     this.level.set(data.level);
     this.experience.set(data.experience);
     this.money.set(data.money);
     this.requiredExperienceForNextLevel.set(
       data.requiredExperienceForNextLevel,
     );
+    this.statsVersion.set(data.statsVersion);
 
     this.storage.setLevel(data.level);
     this.storage.setExperience(data.experience);
@@ -202,21 +214,12 @@ export class AuthService {
     this.storage.setRequiredExperienceForNextLevel(
       data.requiredExperienceForNextLevel,
     );
+    this.storage.setStatsVersion(data.statsVersion);
   }
 
   completeUserOnboarding(): void {
     this.isTutorialCompleted.set(true);
     this.storage.setIsTutorialCompleted(true);
-  }
-
-  updateMoney(amount: number): void {
-    this.money.set(amount);
-    this.storage.setMoney(amount);
-  }
-
-  adjustMoney(delta: number): void {
-    const newAmount = this.money() + delta;
-    this.updateMoney(newAmount);
   }
 
   getExperiencePercentage(): number {
@@ -238,25 +241,17 @@ export class AuthService {
     return connected;
   }
 
-  reconnectWebSocket(): void {
-    if (this.loggedIn()) {
-      this.notificationService.disconnect();
-      setTimeout(() => {
-        this.notificationService.connect();
-      }, 500);
-    }
-  }
-
   private updateAuthState(
     userId: string,
     username: string,
     isTutorialCompleted: boolean,
+    isEmailVerified: boolean,
     money: number,
   ): void {
     this.userId.set(userId);
     this.username.set(username);
-    this.loggedIn.set(true);
     this.isTutorialCompleted.set(isTutorialCompleted);
+    this.emailVerified.set(isEmailVerified);
     this.money.set(money);
   }
 
@@ -264,11 +259,13 @@ export class AuthService {
     userId: string,
     username: string,
     isTutorialCompleted: boolean,
+    isEmailVerified: boolean,
     money: number,
   ) {
     this.storage.setUserId(userId);
     this.storage.setUsername(username);
     this.storage.setIsTutorialCompleted(isTutorialCompleted);
+    this.storage.setIsEmailVerified(isEmailVerified);
     this.storage.setMoney(money);
   }
 }

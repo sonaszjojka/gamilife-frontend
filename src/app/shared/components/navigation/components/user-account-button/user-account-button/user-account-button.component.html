@@ -1,4 +1,13 @@
-<a nz-dropdown [nzDropdownMenu]="menu" [nzClickHide]="true" class="user-menu">
+<a
+  nz-dropdown
+  nz-flex
+  nzAlign="center"
+  nzJustify="center"
+  [nzDropdownMenu]="menu"
+  [(nzVisible)]="dropdownVisible"
+  [class.active]="dropdownVisible"
+  class="user-menu"
+>
   <span class="user-menu-text">
     {{ authService.loggedIn() ? authService.username() : "Sign in" }}
   </span>
@@ -10,10 +19,10 @@
   <ul nz-menu class="navbar-dropdown-ul">
     @if (!authService.loggedIn()) {
       <li nz-menu-item routerLink="/login" class="navbar-dropdown-item">
-        Login
+        <span>Login</span>
       </li>
       <li nz-menu-item routerLink="/register" class="navbar-dropdown-item">
-        Register
+        <span>Register</span>
       </li>
     } @else {
       <li nz-menu-item class="navbar-dropdown-item">

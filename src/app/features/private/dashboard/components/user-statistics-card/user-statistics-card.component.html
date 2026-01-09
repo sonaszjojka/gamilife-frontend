@@ -1,0 +1,32 @@
+<nz-card class="stats-card" [nzBordered]="false" [nzTitle]="titleTemplate">
+  @if (isLoading()) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+  } @else {
+    <div class="stats-container">
+      @for (statistic of statistics(); track statistic.id) {
+        <div class="stat-row">
+          <div class="stat-label">
+            {{ statistic.statisticType.type }}
+          </div>
+          <div class="stat-value-container">
+            <span class="stat-value">{{ statistic.count }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</nz-card>
+
+<ng-template #titleTemplate>
+  <div class="card-header">
+    <span
+      nz-icon
+      nzType="bar-chart"
+      nzTheme="outline"
+      class="header-icon"
+    ></span>
+    <span class="header-title">STATISTICS</span>
+  </div>
+</ng-template>

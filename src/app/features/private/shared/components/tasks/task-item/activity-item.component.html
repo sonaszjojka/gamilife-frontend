@@ -1,8 +1,12 @@
-<nz-card class="task-card" (click)="onTaskView($event)">
+<nz-card class="task-card" (click)="onActivityView($event)">
   @if (inPomodoroList()) {
     @if (!isInSession()) {
-      <button nz-button nzShape="circle" (click)="addTaskToPomodoroSession()">
-        @if (this.activity.pomodoro) {
+      <button
+        nz-button
+        nzShape="circle"
+        (click)="addActivityToPomodoroSession()"
+      >
+        @if (this.activity().pomodoro) {
           <nz-icon nzType="arrow-left"></nz-icon>
         } @else {
           <nz-icon nzType="arrow-right"></nz-icon>
@@ -12,27 +16,27 @@
       <button
         nz-button
         nzShape="circle"
-        (click)="removeTaskFromPomodoroSession()"
+        (click)="removeActivityFromPomodoroSession()"
       >
         <nz-icon nzType="arrow-right"></nz-icon>
       </button>
     }
   }
-  @if (!inPomodoroList()) {
+  @if (!inPomodoroList() && !isOnDashboard()) {
     <div class="task-header-controls">
-      <button nz-button nzShape="circle" (click)="onTaskEdit($event)">
+      <button nz-button nzShape="circle" (click)="onActivityEdit($event)">
         <nz-icon nzType="setting"></nz-icon>
       </button>
     </div>
   }
   <div class="task-content">
     <div class="task-header">
-      <h1 class="task-title">{{ activity.title }}</h1>
+      <h1 class="task-title">{{ activity().title }}</h1>
 
-      @if (activity.pomodoro !== null && activity.pomodoro !== undefined) {
+      @if (activity().pomodoro !== null && activity().pomodoro !== undefined) {
         <app-pomodoro-task-progress
-          [cyclesCompleted]="activity.pomodoro.cyclesCompleted"
-          [cyclesRequired]="activity.pomodoro.cyclesRequired"
+          [cyclesCompleted]="activity().pomodoro!.cyclesCompleted"
+          [cyclesRequired]="activity().pomodoro!.cyclesRequired"
         >
         </app-pomodoro-task-progress>
       }
@@ -43,7 +47,7 @@
         <nz-icon nzType="file-text" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Description</div>
-          <div class="info-value">{{ activity.description }}</div>
+          <div class="info-value">{{ activity().description }}</div>
         </div>
       </div>
 
@@ -52,9 +56,9 @@
         <div class="info-content">
           <div class="info-label">Difficulty / Category</div>
           <div class="info-value">
-            {{ activity.difficultyName }}
+            {{ activity().difficultyName }}
             <span class="limit">/</span>
-            {{ activity.categoryName }}
+            {{ activity().categoryName }}
           </div>
         </div>
       </div>
@@ -64,21 +68,21 @@
         <div class="info-content">
           <div class="info-label">Deadline</div>
           <div class="info-value">
-            {{ activity.deadlineDate }}
-            @if (activity.deadlineTime) {
-              - {{ activity.deadlineTime }}
+            {{ activity().deadlineDate }}
+            @if (activity().deadlineTime) {
+              - {{ activity().deadlineTime }}
             }
           </div>
         </div>
       </div>
 
-      @if (activity.status === ActivityStatus.COMPLETED) {
+      @if (activity().status === ActivityStatus.COMPLETED) {
         <div class="info-item">
           <nz-icon nzType="calendar" class="info-icon"></nz-icon>
           <div class="info-content">
             <div class="info-label">Completed At</div>
             <div class="info-value">
-              {{ activity.completedAt | date: "dd.MM.yyyy HH:mm" }}
+              {{ activity().completedAt | date: "dd.MM.yyyy HH:mm" }}
             </div>
           </div>
         </div>
@@ -88,19 +92,19 @@
         <nz-icon nzType="info" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Type</div>
-          <div class="info-value">{{ activity.type }}</div>
+          <div class="info-value">{{ activity().type }}</div>
         </div>
       </div>
     </div>
 
-    @if (activity.type === ActivityType.HABIT) {
+    @if (activity().type === ActivityType.HABIT) {
       <div class="info-item participants-list">
         <nz-icon nzType="fire" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Longest Streak</div>
           <div class="info-value count-container">
             <span class="highlighted-item">
-              {{ activity.longestStreak }}
+              {{ activity().longestStreak }}
             </span>
           </div>
         </div>
@@ -112,20 +116,20 @@
           <div class="info-label">Current Streak</div>
           <div class="info-value count-container">
             <span class="highlighted-item">
-              {{ activity.currentStreak }}
+              {{ activity().currentStreak }}
             </span>
           </div>
         </div>
       </div>
     }
-    @if (activity.pomodoro !== undefined && activity.pomodoro !== null) {
+    @if (activity().pomodoro !== undefined && activity().pomodoro !== null) {
       <div class="info-item">
         <nz-icon nzType="clock-circle" class="info-icon"></nz-icon>
         <div class="info-label">Pomodoro Progress</div>
         <div class="info-value">
           <span class="highlighted-item">
-            {{ activity.pomodoro.cyclesCompleted }}/{{
-              activity.pomodoro.cyclesRequired
+            {{ activity().pomodoro!.cyclesCompleted }}/{{
+              activity().pomodoro!.cyclesRequired
             }}
           </span>
         </div>
@@ -134,10 +138,10 @@
   </div>
 
   <div class="task-actions-footer">
-    @if (!inPomodoroList() && !this.activity.pomodoro) {
+    @if (!inPomodoroList() && !this.activity().pomodoro) {
       <div class="action-right">
-        @if (this.activity.type === ActivityType.TASK) {
-          @if (this.activity.status !== ActivityStatus.COMPLETED) {
+        @if (this.activity().type === ActivityType.TASK) {
+          @if (this.activity().status !== ActivityStatus.COMPLETED) {
             <button nz-button nzShape="circle" (click)="completeTask($event)">
               <nz-icon nzType="check-circle"></nz-icon>
             </button>
@@ -147,12 +151,12 @@
             </button>
           }
         } @else {
-          @if (activity.status === ActivityStatus.DEAD) {
+          @if (activity().status === ActivityStatus.DEAD) {
             <button nz-button nzShape="circle" (click)="restoreHabit($event)">
               <nz-icon nzType="reload"></nz-icon>
             </button>
           } @else {
-            @if (activity.canBeWorkedOn === false) {
+            @if (activity().canBeWorkedOn === false) {
               <button nz-button nzShape="circle" disabled>
                 <nz-icon nzType="check-circle"></nz-icon>
               </button>

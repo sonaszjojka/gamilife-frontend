@@ -26,53 +26,103 @@
       <nz-form-item>
         <nz-form-label nzRequired nzFor="groupCurrencySymbol">
           Group currency symbol
+          <span
+            nz-icon
+            nzType="info-circle"
+            nzTheme="outline"
+            nz-tooltip
+            nzTooltipTitle="This will be the currency symbol displayed throughout your group (e.g. $, €, ¥, ₿)"
+            style="margin-left: 4px; color: #1890ff; cursor: pointer"
+          ></span>
         </nz-form-label>
-        <nz-form-control
-          nzErrorTip="Please provide valid group currency symbol - exactly 1 character."
-        >
-          <input
-            nz-input
-            id="groupCurrencySymbol"
+        <nz-form-control nzErrorTip="Please choose a group currency symbol">
+          <nz-select
             formControlName="groupCurrencySymbol"
-            placeholder="e.g. $"
-            maxlength="1"
-          />
+            nzPlaceHolder="Select symbol"
+            nzAllowClear
+          >
+            <nz-option nzValue="$" nzLabel="$"></nz-option>
+            <nz-option nzValue="€" nzLabel="€"></nz-option>
+            <nz-option nzValue="£" nzLabel="£"></nz-option>
+            <nz-option nzValue="¥" nzLabel="¥"></nz-option>
+            <nz-option nzValue="₹" nzLabel="₹"></nz-option>
+            <nz-option nzValue="₩" nzLabel="₩"></nz-option>
+            <nz-option nzValue="₿" nzLabel="₿"></nz-option>
+            <nz-option nzValue="₺" nzLabel="₺"></nz-option>
+            <nz-option nzValue="₫" nzLabel="₫"></nz-option>
+            <nz-option nzValue="₴" nzLabel="₴"></nz-option>
+            <nz-option nzValue="₦" nzLabel="₦"></nz-option>
+            <nz-option nzValue="₲" nzLabel="₲"></nz-option>
+            <nz-option nzValue="₡" nzLabel="₡"></nz-option>
+            <nz-option nzValue="₵" nzLabel="₵"></nz-option>
+            <nz-option nzValue="₸" nzLabel="₸"></nz-option>
+            <nz-option nzValue="₺" nzLabel="₺"></nz-option>
+            <nz-option nzValue="₼" nzLabel="₼"></nz-option>
+            <nz-option nzValue="₾" nzLabel="₾"></nz-option>
+          </nz-select>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzRequired nzFor="groupType">Group type</nz-form-label>
         <nz-form-control nzErrorTip="Please choose group type.">
-          <nz-select
-            *ngIf="groupTypes().length > 0"
-            formControlName="groupTypeId"
-            nzPlaceHolder="Choose group type"
-            id="groupType"
-          >
-            <nz-option
-              *ngFor="let type of groupTypes()"
-              [nzValue]="type.id"
-              [nzLabel]="type.title"
-            ></nz-option>
-          </nz-select>
+          @if (groupTypes().length > 0) {
+            <nz-select
+              formControlName="groupTypeId"
+              nzPlaceHolder="Choose group type"
+              id="groupType"
+            >
+              @for (type of groupTypes(); track type.id) {
+                <nz-option
+                  [nzValue]="type.id"
+                  [nzLabel]="type.title"
+                ></nz-option>
+              }
+            </nz-select>
+          }
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
+        <nz-form-label nzRequired nzFor="groupTimeZone"
+          >Time Zone</nz-form-label
+        >
+        <nz-form-control nzErrorTip="Please provide time zone for your group.">
+          @if (timeZones().length > 0) {
+            <nz-select
+              nzShowSearch
+              nzAllowClear
+              formControlName="groupTimeZone"
+              nzPlaceHolder="Chose time zone"
+              id="groupTimeZone"
+            >
+              @for (timeZone of timeZones(); track timeZone.value) {
+                <nz-option
+                  [nzValue]="timeZone.value"
+                  [nzLabel]="timeZone.label"
+                ></nz-option>
+              }
+            </nz-select>
+          }</nz-form-control
+      ></nz-form-item>
+
+      <nz-form-item>
         <nz-form-label nzRequired nzFor="adminId">Admin</nz-form-label>
         <nz-form-control nzErrorTip="Please choose an admin.">
-          <nz-select
-            *ngIf="members().length > 0"
-            formControlName="adminId"
-            nzPlaceHolder="Choose admin"
-            id="adminId"
-          >
-            <nz-option
-              *ngFor="let member of members()"
-              [nzValue]="member.userId"
-              [nzLabel]="member.username"
-            ></nz-option>
-          </nz-select>
+          @if (members().length > 0) {
+            <nz-select
+              formControlName="adminId"
+              nzPlaceHolder="Choose admin"
+              id="adminId"
+            >
+              @for (member of members(); track member.userId) {
+                <nz-option
+                  [nzValue]="member.userId"
+                  [nzLabel]="member.username"
+                ></nz-option>
+              }
+            </nz-select>
+          }
         </nz-form-control>
       </nz-form-item>
 

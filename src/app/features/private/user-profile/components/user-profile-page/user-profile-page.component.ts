@@ -102,6 +102,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
 
   onUserDetailsChanged(updatedUser: UserDetails): void {
     this.userDetails = updatedUser;
+    this.authService.username.set(updatedUser.username);
 
     if (this.viewMode !== ProfileViewMode.OWNER) {
       this.determineViewMode(updatedUser.id);

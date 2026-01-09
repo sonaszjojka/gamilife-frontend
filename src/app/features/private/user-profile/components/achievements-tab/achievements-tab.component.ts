@@ -22,7 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './achievements-tab.component.html',
   styleUrl: './achievements-tab.component.css',
-  standalone: true
+  standalone: true,
 })
 export class AchievementsTabComponent implements OnInit {
   @Input() userId!: string;

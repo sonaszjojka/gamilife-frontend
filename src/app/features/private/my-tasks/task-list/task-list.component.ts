@@ -11,7 +11,7 @@ import {
   untracked,
   ViewChild,
 } from '@angular/core';
-import { TaskItemComponent } from '../../shared/components/tasks/task-item/task-item.component';
+import { ActivityItemComponent } from '../../shared/components/tasks/task-item/activity-item.component';
 import { TaskFilterComponent } from '../../shared/components/tasks/task-filter/task-filter.component';
 import { TaskFormComponent } from '../../shared/components/tasks/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -28,17 +28,19 @@ import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-a
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzListEmptyComponent } from 'ng-zorro-antd/list';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
   imports: [
     CommonModule,
-    TaskItemComponent,
+    ActivityItemComponent,
     TaskFilterComponent,
     TaskFormComponent,
     NzButtonComponent,
     TaskCalendarComponent,
+    NzListEmptyComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
@@ -51,8 +53,8 @@ export class TaskListComponent implements OnInit {
 
   protected readonly ActivityListView = ActivityListView;
 
-  editionMode = signal<boolean | null>(false);
-  creationMode = signal<boolean | null>(false);
+  editionMode = signal<boolean>(false);
+  creationMode = signal<boolean>(false);
   viewMode = signal<boolean>(true);
 
   title = signal<string | null>(null);
@@ -65,7 +67,7 @@ export class TaskListComponent implements OnInit {
   isAlive = signal<boolean>(true);
 
   refreshCalendar = output<void>();
-  selectedActivity = signal<ActivityItemDetails | undefined>(undefined);
+  selectedActivity = signal<ActivityItemDetails | null>(null);
   formType = signal<ActivityType>(ActivityType.TASK);
 
   currentPage = 0;
@@ -367,7 +369,7 @@ export class TaskListComponent implements OnInit {
   }
 
   onTaskCreation(): void {
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
     this.viewMode.set(false);
     this.formType.set(ActivityType.TASK);
     this.creationMode.set(true);
@@ -375,7 +377,7 @@ export class TaskListComponent implements OnInit {
   }
 
   onHabitCreation(): void {
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
     this.viewMode.set(false);
     this.formType.set(ActivityType.HABIT);
     this.creationMode.set(true);
@@ -392,7 +394,7 @@ export class TaskListComponent implements OnInit {
     this.load();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
     this.activityListType.set(ActivityListView.Activities);
   }
 
@@ -403,6 +405,12 @@ export class TaskListComponent implements OnInit {
     this.groupActivitiesByDate();
     this.editionMode.set(false);
     this.creationMode.set(false);
-    this.selectedActivity.set(undefined);
+    this.selectedActivity.set(null);
+  }
+
+  onFormClose() {
+    this.editionMode.set(false);
+    this.creationMode.set(false);
+    this.selectedActivity.set(null);
   }
 }

@@ -1,0 +1,26 @@
+<div class="activities-list" nz-flex>
+  <nz-list nz-flex>
+    @if (isLoading()) {
+    } @else {
+      @if (this.activities().length) {
+        @for (activity of activities(); track activity.id) {
+          <app-activity-item
+            [activity]="activity"
+            [isOnDashboard]="true"
+            (activityUpdated)="removeFromList($event)"
+          >
+          </app-activity-item>
+        }
+      } @else {
+        <nz-list-empty [nzNoResult]="titleTemplate"> </nz-list-empty>
+      }
+    }
+  </nz-list>
+</div>
+
+<ng-template #titleTemplate>
+  <div class="empty-text">No activities for today!</div>
+  <button nz-button nzType="primary" routerLink="/app/tasks">
+    View All Activities
+  </button>
+</ng-template>

@@ -6,30 +6,34 @@
         nzTitle="{{ itemDetails.name }}"
         (nzOnCancel)="handleCancel()"
         (nzOnOk)="handleOk()"
-        nzWidth="500"
+        nzWidth="700"
         nzCentered
         nzWrapClassName="centered-title-modal"
       >
         <ng-container *nzModalContent>
-          <div class="item-details-container">
+          <div
+            class="item-details-container"
+            [style.--rarity-color]="rarityColor"
+          >
             <div class="image-section">
-              <img
-                ngSrc="../../../../../assets/placeholder.png"
-                [alt]="itemDetails.name"
-                class="item-image"
-                width="100"
-                height="100"
-              />
+              <div class="image-wrapper">
+                <img
+                  ngSrc="../../../../../assets/placeholder.png"
+                  [alt]="itemDetails.name"
+                  class="item-image"
+                  width="250"
+                  height="250"
+                />
+              </div>
             </div>
 
             <div class="attributes-section">
-              <p class="attribute-row">
-                <strong>Status:</strong>
+              <div class="attribute-row">
+                <span class="label">Status</span>
                 <span
                   [class]="
-                    itemDetails.isAlreadyOwned
-                      ? 'owned-status'
-                      : 'not-owned-status'
+                    'value status-tag ' +
+                    (itemDetails.isAlreadyOwned ? 'owned' : 'available')
                   "
                 >
                   {{
@@ -38,24 +42,27 @@
                       : "Available in store"
                   }}
                 </span>
-              </p>
+              </div>
 
-              <p class="attribute-row">
-                <strong>Rarity:</strong>
-                <span class="rarity" [ngStyle]="{ color: rarityColor }">
+              <div class="attribute-row">
+                <span class="label">Rarity</span>
+                <span class="value rarity-text" [style.color]="rarityColor">
                   {{ itemDetails.rarity.name }}
                 </span>
-              </p>
+              </div>
 
-              <p class="attribute-row">
-                <strong>Slot:</strong>
-                <span>{{ itemDetails.itemSlot.name }}</span>
-              </p>
+              <div class="attribute-row">
+                <span class="label">Slot</span>
+                <span class="value">{{ itemDetails.itemSlot.name }}</span>
+              </div>
 
-              <p class="attribute-row price-row">
-                <strong>Price:</strong>
-                <span class="price-value">{{ itemDetails.price }}</span>
-              </p>
+              <div class="attribute-row price-row">
+                <span class="label">Price</span>
+                <div class="price-value">
+                  <nz-icon nzType="dollar" nzTheme="outline"></nz-icon>
+                  <span class="value">{{ itemDetails.price }}</span>
+                </div>
+              </div>
             </div>
 
             <div class="description-section">

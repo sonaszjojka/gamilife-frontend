@@ -1,4 +1,5 @@
-@import "@fontsource/pixelify-sans";
+@import "@fontsource/audiowide";
+@import "@fontsource/montserrat";
 @import "normalize.css";
 
 :root {
@@ -24,8 +25,8 @@
   --border-color-light: #e8e8e8;
   --border-color-dark: #bfbfbf;
 
-  --main-font: "Pixelify Sans", sans-serif;
-  --secondary-font: "Space Grotesk", sans-serif;
+  --main-font: "Audiowide", sans-serif;
+  --secondary-font: "Montserrat", sans-serif;
 
   --font-size-xs: 0.75rem;
   --font-size-small: 0.875rem;
@@ -377,37 +378,6 @@ ol {
 .container-fluid {
   width: 100%;
   padding: 0 var(--spacing-medium);
-}
-
-/* Messages css */
-.ant-message {
-  position: fixed;
-  /* NZ_CONFIG zarządza już top: 88px, ale zostawiamy opcjonalne ustawienie dla kompatybilności */
-  top: 88px !important;
-  /* Zmiana z prawej na lewą */
-  right: auto !important;
-  left: 24px !important;
-  z-index: 500 !important;
-  pointer-events: none;
-}
-
-.ant-message .ant-message-notice-wrapper {
-  z-index: 500 !important;
-}
-
-.ant-message .ant-message-notice {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  pointer-events: auto;
-}
-
-.ant-message .ant-message-notice:not(:last-child) {
-  margin-bottom: 8px;
-}
-
-.ant-message .ant-message-notice-content {
-  text-align: left;
 }
 
 @media (max-width: 768px) {

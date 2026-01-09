@@ -6,15 +6,22 @@
   </div>
   <div class="group-tasks-list" (scroll)="onListScroll($event)">
     <nz-spin [nzSpinning]="loading()" nzSize="large">
-      @for (task of tasksList(); track task.taskDto.id) {
-        <app-group-task
-          [task]="task"
-          [group]="group()!"
-          [mode]="mode()"
-          [membersList]="groupMembersList()"
-          (taskUpdated)="onTaskListUpdate()"
-          (rewardGiven)="onGroupRefresh()"
-        ></app-group-task>
+      @if (tasksList().length === 0) {
+        <div class="empty-state">
+          <h3>There are no tasks in your group yet!</h3>
+          <nz-list-empty></nz-list-empty>
+        </div>
+      } @else {
+        @for (task of tasksList(); track task.taskDto.id) {
+          <app-group-task
+            [task]="task"
+            [group]="group()!"
+            [mode]="mode()"
+            [membersList]="groupMembersList()"
+            (taskUpdated)="onTaskListUpdate()"
+            (rewardGiven)="onGroupRefresh()"
+          ></app-group-task>
+        }
       }
     </nz-spin>
   </div>

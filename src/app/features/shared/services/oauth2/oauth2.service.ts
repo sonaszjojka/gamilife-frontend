@@ -3,45 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../shared/services/auth/auth.service';
-import { WebSocketNotificationService } from '../websocket-notification-service/web-socket-notification.service';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
-
-export interface OAuthCodeRequest {
-  code: string;
-  codeVerifier: string;
-}
-
-export interface LinkOAuthAccountRequest {
-  shouldLink: boolean;
-  provider?: string;
-  providerId?: string;
-  userId?: number;
-  password?: string;
-}
-
-export interface AfterLoginResponse {
-  userId: string;
-  email: string;
-  username: string;
-  isEmailVerified: boolean;
-  isTutorialCompleted: boolean;
-  money: number;
-}
-
-export interface OAuth2LinkResponse {
-  providerName: string;
-  providerId: string;
-  userId: number;
-}
+import { LoginResponse } from '../../models/auth/auth.model';
+import {
+  OAuthCodeRequest,
+  LinkOAuthAccountRequest,
+  OAuth2LinkResponse,
+} from '../../models/auth/oauth2.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OAuth2Service {
-  private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private notificationService = inject(WebSocketNotificationService);
-  private storage = inject(StorageService);
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly storage = inject(StorageService);
   private readonly apiUrl = `${environment.apiUrl}/oauth2`;
 
   private generateCodeVerifier(): string {
@@ -81,12 +57,12 @@ export class OAuth2Service {
       prompt: 'consent',
     });
 
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+    globalThis.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   }
 
   handleGoogleCode(
     code: string,
-  ): Observable<AfterLoginResponse | OAuth2LinkResponse> {
+  ): Observable<LoginResponse | OAuth2LinkResponse> {
     const codeVerifier = this.storage.getOAuth2CodeVerifier();
 
     if (!codeVerifier) {
@@ -100,14 +76,12 @@ export class OAuth2Service {
 
     return this.http
       .post<
-        AfterLoginResponse | OAuth2LinkResponse
+        LoginResponse | OAuth2LinkResponse
       >(`${this.apiUrl}/code/google`, request, { withCredentials: true })
       .pipe(
         tap((response) => {
           if ('isTutorialCompleted' in response) {
-            this.updateAuthServiceState(response);
-            this.notificationService.connect();
-            this.authService.loadGamificationData();
+            this.authService.processAfterLoginResponse(response);
           }
         }),
       );
@@ -115,34 +89,19 @@ export class OAuth2Service {
 
   linkOAuthAccount(
     linkRequest: LinkOAuthAccountRequest,
-  ): Observable<AfterLoginResponse> {
+  ): Observable<LoginResponse> {
     return this.http
-      .post<AfterLoginResponse>(`${this.apiUrl}/link`, linkRequest, {
+      .post<LoginResponse>(`${this.apiUrl}/link`, linkRequest, {
         withCredentials: true,
       })
       .pipe(
         tap((response) => {
-          this.updateAuthServiceState(response);
-          this.notificationService.connect();
-          this.authService.loadGamificationData();
+          this.authService.processAfterLoginResponse(response);
         }),
       );
   }
 
   clearOAuthData(): void {
     this.storage.removeOAuth2CodeVerifier();
-  }
-
-  private updateAuthServiceState(response: AfterLoginResponse): void {
-    this.authService.userId.set(response.userId);
-    this.authService.username.set(response.username);
-    this.authService.loggedIn.set(true);
-    this.authService.isTutorialCompleted.set(response.isTutorialCompleted);
-    this.authService.money.set(response.money);
-
-    this.storage.setUserId(response.userId);
-    this.storage.setUsername(response.username);
-    this.storage.setIsTutorialCompleted(response.isTutorialCompleted);
-    this.storage.setMoney(response.money);
   }
 }

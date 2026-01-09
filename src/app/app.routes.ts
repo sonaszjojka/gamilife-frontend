@@ -26,7 +26,7 @@ export const routes: Routes = [
       import(
         './features/public/email-verification-result/components/email-verification-result/email-verification-result.component'
       ).then((m) => m.EmailVerificationResultComponent),
-    canActivate: [AuthGuard],
+    canActivate: [GuestGuard],
   },
   {
     path: 'reset-password',
@@ -150,13 +150,6 @@ export const routes: Routes = [
               ).then((m) => m.UserProfilePageComponent),
           },
         ],
-      },
-      {
-        path: 'my-groups',
-        loadComponent: () =>
-          import(
-            './features/private/my-groups/components/my-groups-page/my-groups-page.component'
-          ).then((m) => m.MyGroupsPageComponent),
       },
       {
         path: 'store',
