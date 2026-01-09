@@ -6,6 +6,7 @@
     ></nz-page-header>
     <div class="search-bar">
       <app-community-input-search
+        [groupTypes]="groupTypes()"
         (inputChange)="onInputChange($event)"
         (groupTypeChange)="onGroupTypeChange($event)"
       >
@@ -46,4 +47,7 @@
   }
 </div>
 
-<app-add-group-form (groupCreated)="onGroupCreated()"></app-add-group-form>
+<app-add-group-form
+  [groupTypes]="groupTypes()"
+  (groupCreated)="onGroupCreated()"
+></app-add-group-form>

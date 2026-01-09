@@ -1,21 +1,15 @@
 import {
   Component,
-  DestroyRef,
   EventEmitter,
-  inject,
-  OnInit,
+  input,
   Output,
-  signal,
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
-import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { GroupFilterParams } from '../../../../shared/models/group/group.model';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DashboardInputSearchComponent } from '../dashboard-input-search/dashboard-input-search.component';
 
 @Component({
@@ -68,29 +62,16 @@ import { DashboardInputSearchComponent } from '../dashboard-input-search/dashboa
     `,
   ],
 })
-export class CommunityInputSearchComponent implements OnInit {
-  readonly groupTypes = signal<GroupType[]>([]);
+export class CommunityInputSearchComponent {
+  groupTypes = input.required<GroupType[]>();
 
   selectedGroupTypeId?: number;
 
   @ViewChild(DashboardInputSearchComponent)
   inputSearch!: DashboardInputSearchComponent;
 
-  private readonly groupApiService = inject(GroupApiService);
-  private readonly destroyRef = inject(DestroyRef);
-
   @Output() inputChange = new EventEmitter<string>();
   @Output() groupTypeChange = new EventEmitter<string | null>();
-
-  ngOnInit(): void {
-    this.loadGroupTypes();
-    const params: GroupFilterParams = {
-      page: 0,
-      size: 9,
-    };
-
-    this.groupApiService.getGroups(params);
-  }
 
   onInputChange(value: string): void {
     this.inputChange.emit(value);
@@ -98,15 +79,6 @@ export class CommunityInputSearchComponent implements OnInit {
 
   onGroupTypeChange(newTypeId: string | null) {
     this.groupTypeChange.emit(newTypeId);
-  }
-
-  private loadGroupTypes(): void {
-    this.groupApiService
-      .getGroupTypes()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (types) => this.groupTypes.set(types),
-      });
   }
 
   resetFilters(): void {
