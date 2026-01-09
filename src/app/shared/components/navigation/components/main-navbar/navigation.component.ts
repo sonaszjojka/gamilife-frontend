@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { UserAccountButtonComponent } from '../user-account-button/user-account-button/user-account-button.component';
 import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown/notification-dropdown.component';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzAffixModule } from 'ng-zorro-antd/affix';
 
 @Component({
   selector: 'app-navigation',
@@ -30,7 +29,6 @@ import { NzAffixModule } from 'ng-zorro-antd/affix';
     UserAccountButtonComponent,
     NotificationDropdownComponent,
     NzLayoutModule,
-    NzAffixModule,
   ],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
