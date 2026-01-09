@@ -76,6 +76,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
 
   private sessionDuration = 25 * 60;
   private breakDuration = 5 * 60;
+  private endTime = 0;
 
   pageSize = 5;
 
@@ -263,13 +264,18 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       if (this.remainingTime === 0) {
         this.remainingTime = this.sessionDuration;
       }
+      this.endTime = Date.now() + this.remainingTime * 1000;
       this.isSessionActive = true;
       this.startCountdown();
     }
   }
 
   private startCountdown(): void {
+    const now = Date.now();
+    const timeLeft = this.endTime - now;
+    this.remainingTime = Math.ceil(timeLeft / 1000);
     if (this.remainingTime <= 0) {
+      this.remainingTime = 0;
       if (this.isBreakActive) {
         this.handleBreakEnd();
         return;
@@ -295,8 +301,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.remainingTime--;
-    this.timer = setTimeout(() => this.startCountdown(), 1000);
+    this.timer = setTimeout(() => this.startCountdown(), 200);
   }
 
   private startBreak(): void {
@@ -305,6 +310,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
     this.remainingTime = this.breakDuration;
     this.pomodoroSessionBreakModal.showBreakStartModal();
     this.isSessionActive = true;
+    this.endTime = Date.now() + this.breakDuration * 1000;
     this.startCountdown();
   }
 
@@ -318,6 +324,7 @@ export class PomodoroSessionComponent implements OnInit, OnDestroy {
   continueSession(): void {
     this.remainingTime = this.sessionDuration;
     this.isSessionActive = true;
+    this.endTime = Date.now() + this.sessionDuration * 1000;
     this.startCountdown();
   }
 
