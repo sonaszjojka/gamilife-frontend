@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class UserAccountButtonComponent {
   public authService = inject(AuthService);
   protected router = inject(Router);
-  
+
   dropdownVisible = false;
 
   logout() {

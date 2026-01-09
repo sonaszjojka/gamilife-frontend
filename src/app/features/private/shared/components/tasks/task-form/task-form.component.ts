@@ -62,18 +62,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class TaskFormComponent implements OnChanges {
   viewMode = input<boolean>(false);
   type = input.required<ActivityType>();
-  activity = input<ActivityItemDetails|null>(null);
+  activity = input<ActivityItemDetails | null>(null);
   creationMode = input<boolean>();
-  editionMode= input<boolean>();
+  editionMode = input<boolean>();
   activityFormSubmitted = output<void>();
   activityDeleted = output<void>();
   closeForm = output<void>();
 
-  private formBuilder = inject(NonNullableFormBuilder);
-  private taskApi = inject(UserTaskApiService);
-  private habitApi = inject(UserHabitApiService);
-  private notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly taskApi = inject(UserTaskApiService);
+  private readonly habitApi = inject(UserHabitApiService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly ActivityType = ActivityType;
 
   @ViewChild(PomodoroSessionFormModal)
@@ -177,10 +177,10 @@ export class TaskFormComponent implements OnChanges {
   }
 
   onSubmit() {
-    console.log(this.activity())
-    console.log(this.type())
-    console.log(this.creationMode!())
-    console.log(this.editionMode!())
+    console.log(this.activity());
+    console.log(this.type());
+    console.log(this.creationMode!());
+    console.log(this.editionMode!());
 
     if (this.validActivityForm.invalid) {
       Object.values(this.validActivityForm.controls).forEach((control) => {

@@ -1,4 +1,12 @@
-import { Component, DestroyRef, inject, input, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -66,7 +74,7 @@ export class DashboardInputSearchComponent implements OnInit {
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((value) => {
         this.inputChange.emit(value);
