@@ -24,6 +24,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { AddGroupFormComponent } from '../../../my-groups/components/add-group-form/add-group-form.component';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { GroupType } from '../../../../shared/models/group/group-type.model';
 
 @Component({
   selector: 'app-community-page',
@@ -51,6 +52,7 @@ export class CommunityPageComponent implements OnInit {
 
   readonly value = signal('');
   groups = signal<Group[]>([]);
+  groupTypes = signal<GroupType[]>([]);
   totalPages = signal<number>(0);
   currentPage = signal<number>(0);
   groupName = signal<string | undefined>(undefined);
@@ -62,9 +64,10 @@ export class CommunityPageComponent implements OnInit {
 
   ngOnInit() {
     this.loadGroups(0);
+    this.loadGroupTypes();
   }
 
-  loadGroups(page: number) {
+  private loadGroups(page: number) {
     const params: GroupFilterParams = {
       page: page,
       size: 12,
@@ -84,6 +87,15 @@ export class CommunityPageComponent implements OnInit {
         error: (err) => {
           this.notification.handleApiError(err, 'Failed to load groups');
         },
+      });
+  }
+
+  private loadGroupTypes(): void {
+    this.groupApiService
+      .getGroupTypes()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (types) => this.groupTypes.set(types),
       });
   }
 
