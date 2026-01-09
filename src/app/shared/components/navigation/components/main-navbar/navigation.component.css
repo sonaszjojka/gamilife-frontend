@@ -1,3 +1,11 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: block;
+  width: 100%;
+}
+
 .navbar {
   display: flex;
   align-items: stretch;
@@ -8,9 +16,6 @@
   box-shadow: var(--box-shadow-md);
   font-family: var(--main-font);
   font-size: var(--font-size-medium);
-  position: sticky;
-  top: 0;
-  z-index: var(--z-sticky);
 }
 
 .navbar .logo {
@@ -212,186 +217,4 @@
 ::ng-deep .navbar-dropdown-item:hover {
   color: var(--fifth-color);
   background-color: var(--bg-hover);
-}
-
-@media (max-width: 992px) {
-  .stats-item {
-    padding: 6px 12px;
-    gap: 8px;
-  }
-
-  .stats-icon {
-    font-size: 18px;
-  }
-
-  .stats-label {
-    font-size: 9px;
-  }
-
-  .stats-value {
-    font-size: 13px;
-  }
-
-  .money-display .stats-value {
-    font-size: 14px;
-  }
-
-  .level-display .stats-value {
-    font-size: 9px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 8px;
-    height: 56px;
-  }
-
-  .navbar .logo img {
-    height: 60px;
-    padding: 0 4px;
-  }
-
-  .nav-menu {
-    padding-left: 0;
-  }
-
-  .nav-menu > li {
-    padding: 0 8px;
-    font-size: var(--font-size-small);
-  }
-
-  .navbar-actions {
-    gap: 6px;
-  }
-
-  .stats-item {
-    padding: 5px 10px;
-    gap: 6px;
-  }
-
-  .stats-icon {
-    font-size: 16px;
-  }
-
-  .stats-content {
-    gap: 1px;
-  }
-
-  .stats-label {
-    font-size: 8px;
-  }
-
-  .stats-value {
-    font-size: 12px;
-  }
-
-  .money-display .stats-value {
-    font-size: 13px;
-  }
-
-  .level-display .stats-value {
-    font-size: 8px;
-  }
-
-  .progress-bar {
-    height: 3px;
-  }
-
-  .user-menu {
-    padding: 4px;
-    gap: 2px;
-  }
-
-  .user-menu-text {
-    display: none;
-  }
-
-  .nav-switch-mode {
-    padding: 0 4px;
-  }
-
-  ::ng-deep .ant-switch {
-    transform: scale(0.85);
-  }
-
-  .user-menu nz-icon[nzType="down"] {
-    display: none;
-  }
-}
-
-@media (max-width: 576px) {
-  .navbar {
-    padding: 0 4px;
-    height: 52px;
-  }
-
-  .navbar .logo img {
-    height: 50px;
-    padding: 0 2px;
-  }
-
-  .nav-menu > li {
-    padding: 0 4px;
-    font-size: var(--font-size-xs);
-  }
-
-  .navbar-actions {
-    gap: 4px;
-  }
-
-  .stats-item {
-    padding: 4px 8px;
-    gap: 4px;
-  }
-
-  .stats-icon {
-    font-size: 14px;
-  }
-
-  .stats-label {
-    font-size: 7px;
-  }
-
-  .stats-value {
-    font-size: 11px;
-  }
-
-  .money-display .stats-value {
-    font-size: 12px;
-  }
-
-  .level-display .stats-value {
-    font-size: 7px;
-  }
-
-  .progress-bar {
-    height: 2px;
-  }
-
-  .user-menu {
-    padding: 2px;
-  }
-
-  .nav-switch-mode {
-    padding: 0 2px;
-  }
-
-  ::ng-deep .ant-switch {
-    transform: scale(0.75);
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-label {
-    display: none;
-  }
-
-  .stats-content {
-    justify-content: center;
-  }
-
-  .level-display .stats-value {
-    font-size: 9px;
-  }
 }
