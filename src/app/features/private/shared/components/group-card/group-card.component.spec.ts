@@ -30,6 +30,7 @@ describe('GroupCardComponent', () => {
       loggedUserMembershipDto: null,
       membersSortedDescByTotalEarnedMoney: [],
       adminUsername: 'adminUser',
+      groupTimeZone: 'Europe/Warsaw',
     };
 
     fixture.detectChanges();

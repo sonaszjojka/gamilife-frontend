@@ -1,23 +1,20 @@
-::ng-deep .ant-drawer-header {
-  padding: 16px 24px;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fff;
-}
-
-::ng-deep .ant-drawer-title {
-  display: flex !important;
+.custom-drawer-title {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  font-size: 16px;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.85);
+  width: 100%;
 }
 
-::ng-deep .drawer-header {
+.title-left {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 18px;
   font-weight: 600;
+}
+
+.title-right {
+  font-weight: normal;
+  font-size: 14px;
 }
 
 ::ng-deep .drawer-header [nz-icon] {

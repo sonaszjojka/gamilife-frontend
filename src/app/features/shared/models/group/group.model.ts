@@ -14,6 +14,7 @@ export interface Group {
   loggedUserMembershipDto: GroupMember | null;
   membersSortedDescByTotalEarnedMoney: GroupMember[];
   adminUsername: string | null;
+  groupTimeZone: string;
 }
 
 export interface CreateGroupDto {
@@ -29,6 +30,7 @@ export interface EditGroupDto {
   groupCurrencySymbol: string;
   groupTypeId: number;
   membersLimit: number;
+  groupTimeZoneId: string;
 }
 
 export interface GroupFilterParams {

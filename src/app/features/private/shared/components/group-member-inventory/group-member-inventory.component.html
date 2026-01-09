@@ -1,4 +1,4 @@
-@if (memberId()) {
+@if (member()) {
   <nz-drawer
     [nzVisible]="visible()"
     nzPlacement="right"
@@ -7,14 +7,26 @@
     (nzOnClose)="close()"
   >
     <ng-template #drawerTitle>
-      <div class="drawer-header">
-        <span nz-icon nzType="skin" nzTheme="outline"></span>
-        <span>Owned Items</span>
+      <div class="custom-drawer-title">
+        <div class="title-left">
+          <span nz-icon nzType="skin" nzTheme="outline"></span>
+          <span>Inventory</span>
+        </div>
+        <div class="title-right">
+          <span class
+            >{{ member().groupMoney }}
+            <nz-icon
+              nzTheme="twotone"
+              [nzTwotoneColor]="'#faad14'"
+              nzType="gold"
+            ></nz-icon
+          ></span>
+        </div>
       </div>
     </ng-template>
 
     <ng-container *nzDrawerContent>
-      @defer (when memberId()!==null) {
+      @defer (when member()!==null) {
         <div class="inventory-container">
           <div class="filter-section">
             <button nz-button (click)="toggleUsedUpItems()">
@@ -35,7 +47,7 @@
                   <app-group-member-inventory-item
                     [item]="item"
                     [groupId]="groupId()"
-                    [memberId]="memberId()"
+                    [memberId]="member().groupMemberId"
                     [mode]="mode()"
                     (actionPerformed)="load(currentPage() + 1)"
                   ></app-group-member-inventory-item>

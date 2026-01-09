@@ -28,6 +28,7 @@ import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-a
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzListEmptyComponent } from 'ng-zorro-antd/list';
 
 @Component({
   selector: 'app-task-list',
@@ -39,6 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TaskFormComponent,
     NzButtonComponent,
     TaskCalendarComponent,
+    NzListEmptyComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',

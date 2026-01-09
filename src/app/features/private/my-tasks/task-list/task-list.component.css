@@ -67,6 +67,7 @@ h1 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   height: 100%;
   min-height: 80vh;
+  align-content: center;
 }
 
 .task-group {
@@ -106,6 +107,11 @@ app-task-form {
   max-height: calc(100vh - 40px);
   overflow-y: auto;
   display: block;
+}
+.empty-state {
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {

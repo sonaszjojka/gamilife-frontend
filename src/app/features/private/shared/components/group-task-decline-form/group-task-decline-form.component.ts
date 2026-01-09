@@ -49,9 +49,9 @@ export class GroupTaskDeclineFormComponent {
   isVisible = false;
 
   protected validateForm = this.fb.group({
-    declineMessage: this.fb.control<string>('', {
-      validators: [Validators.required, Validators.maxLength(300)],
-    }),
+    declineMessage: this.fb.control<string | null>('', [
+      Validators.maxLength(300),
+    ]),
   });
 
   openForm(): void {

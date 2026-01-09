@@ -33,15 +33,18 @@
         @if (activityListType() === ActivityListView.Habits) {
           <div class="empty-state">
             <h3>You have no habits yet!</h3>
+            <nz-list-empty></nz-list-empty>
           </div>
         } @else {
           @if (activityListType() === ActivityListView.Activities) {
             <div class="empty-state">
               <h3>You have no activities yet!</h3>
+              <nz-list-empty></nz-list-empty>
             </div>
           } @else {
             <div class="empty-state">
               <h3>You have no tasks yet!</h3>
+              <nz-list-empty></nz-list-empty>
             </div>
           }
         }

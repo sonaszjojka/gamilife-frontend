@@ -6,15 +6,20 @@
   <div class="pomodoro-session-table">
     <div class="not-pomodoro-column">
       <div class="session-column-title">
-        <h2>Your Tasks</h2>
+        <h2>Your Activities</h2>
       </div>
 
-      @for (activity of usersNotPomodoroTasks; track activity.id) {
-        <app-activity-item
-          [activity]="activity"
-          [inPomodoroList]="true"
-          (moveToCurrentSession)="moveTaskToCurrentSession($event)"
-        ></app-activity-item>
+      @if (usersNotPomodoroTasks.length === 0) {
+        <h3>You have no activities!</h3>
+        <nz-list-empty></nz-list-empty>
+      } @else {
+        @for (activity of usersNotPomodoroTasks; track activity.id) {
+          <app-activity-item
+            [activity]="activity"
+            [inPomodoroList]="true"
+            (moveToCurrentSession)="moveTaskToCurrentSession($event)"
+          ></app-activity-item>
+        }
       }
     </div>
 
@@ -46,29 +51,38 @@
           Start Session
         </button>
       }
-      @for (activity of currentSessionPomodoroTasks; track activity.id) {
-        <app-activity-item
-          [activity]="activity"
-          [inPomodoroList]="true"
-          [isInSession]="true"
-          (removeFromCurrentSession)="removeFromCurrentSession($event)"
-          cdkDrag
-        ></app-activity-item>
+      @if (currentSessionPomodoroTasks.length === 0) {
+        <nz-list-empty></nz-list-empty>
+      } @else {
+        @for (activity of currentSessionPomodoroTasks; track activity.id) {
+          <app-activity-item
+            [activity]="activity"
+            [inPomodoroList]="true"
+            [isInSession]="true"
+            (removeFromCurrentSession)="removeFromCurrentSession($event)"
+            cdkDrag
+          ></app-activity-item>
+        }
       }
     </div>
 
     <div class="pomodoro-column">
       <div class="session-column-title">
-        <h2>Your Pomodoro Tasks</h2>
+        <h2>Your Pomodoro Activities</h2>
       </div>
 
-      @for (activity of usersPomodoroActivities; track activity.id) {
-        <app-activity-item
-          [activity]="activity"
-          [inPomodoroList]="true"
-          [isInSession]="false"
-          (moveToCurrentSession)="moveTaskToCurrentSession($event)"
-        ></app-activity-item>
+      @if (usersPomodoroActivities.length === 0) {
+        <h3>You have no pomodoro activities!</h3>
+        <nz-list-empty></nz-list-empty>
+      } @else {
+        @for (activity of usersPomodoroActivities; track activity.id) {
+          <app-activity-item
+            [activity]="activity"
+            [inPomodoroList]="true"
+            [isInSession]="false"
+            (moveToCurrentSession)="moveTaskToCurrentSession($event)"
+          ></app-activity-item>
+        }
       }
     </div>
     <app-pomdoro-form-modal
