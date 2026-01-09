@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, input, signal } from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { StoreApiService } from '../../../shared/services/store-api/store-api.service';
 import { StoreItemDetailsDto } from '../../../shared/models/store/store.model';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
@@ -9,7 +10,7 @@ import {
   RARITY_COLORS,
   RarityEnum,
 } from '../../../shared/models/gamification/rarity.enum';
-import { NgOptimizedImage, NgStyle } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -18,8 +19,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [
     NzButtonModule,
     NzModalModule,
+    NzIconModule,
     NzSpinComponent,
-    NgStyle,
     NgOptimizedImage,
   ],
   standalone: true,
@@ -36,7 +37,7 @@ export class StoreItemDetailsComponent {
 
   private readonly storeService = inject(StoreApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   handleOk(): void {
     this.loading.set(true);
