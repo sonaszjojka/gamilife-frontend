@@ -10,7 +10,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { GroupType } from '../../../../shared/models/group/group-type.model';
-import { DashboardInputSearchComponent } from '../../../dashboard/components/dashboard-input-search/dashboard-input-search.component';
+import {DashboardInputSearchComponent} from '../../../shared/components/dashboard-input-search/dashboard-input-search.component';
 
 @Component({
   selector: 'app-community-input-search',
@@ -20,6 +20,7 @@ import { DashboardInputSearchComponent } from '../../../dashboard/components/das
     FormsModule,
     NzButtonModule,
     NzSelectModule,
+
     DashboardInputSearchComponent,
   ],
   template: `

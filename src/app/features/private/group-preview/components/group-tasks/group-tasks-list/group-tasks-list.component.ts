@@ -30,7 +30,7 @@ import { NotificationService } from '../../../../../shared/services/notification
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-group-my-activities',
+  selector: 'app-group-task-list',
   standalone: true,
   templateUrl: 'group-tasks-list.component.html',
   styleUrl: 'group-tasks-list.component.css',

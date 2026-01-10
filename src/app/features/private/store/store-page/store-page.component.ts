@@ -10,7 +10,7 @@ import { StoreFilterPanelComponent } from '../components/store-filter-panel/stor
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzPageHeaderComponent } from 'ng-zorro-antd/page-header';
-import { DashboardInputSearchComponent } from '../../dashboard/components/dashboard-input-search/dashboard-input-search.component';
+import { DashboardInputSearchComponent } from '../../shared/components/dashboard-input-search/dashboard-input-search.component';
 
 @Component({
   selector: 'app-store-page',

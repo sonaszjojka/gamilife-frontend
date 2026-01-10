@@ -10,12 +10,12 @@
           <h1>Today's Activities</h1>
         </div>
         <div class="activities-card-container">
-          <app-dashboard-activities
+          <app-dashboard-page-activities
             [activities]="activities"
             [isLoading]="isActivityListLoading()"
             (removeActivity)="onActivityFinished($event)"
           >
-          </app-dashboard-activities>
+          </app-dashboard-page-activities>
         </div>
       </div>
 

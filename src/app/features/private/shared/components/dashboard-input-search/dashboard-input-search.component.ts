@@ -15,7 +15,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-dashboard-page-input-search',
+  selector: 'app-dashboard-input-search',
   standalone: true,
   imports: [CommonModule, FormsModule, NzInputModule, NzIconModule],
   template: `
