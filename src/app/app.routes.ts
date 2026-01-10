@@ -70,13 +70,13 @@ export const routes: Routes = [
     path: 'app',
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard-page', pathMatch: 'full' },
       {
-        path: 'dashboard',
+        path: 'dashboard-page',
         loadComponent: () =>
           import(
-            './features/private/dashboard/components/dashboard/dashboard.component'
-          ).then((m) => m.DashboardComponent),
+            './features/private/dashboard/dashboard-page/dashboard-page.component'
+          ).then((m) => m.DashboardPageComponent),
       },
       {
         path: 'tasks',
@@ -85,15 +85,15 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import(
-                './features/private/my-tasks/task-list/task-list.component'
-              ).then((m) => m.TaskListComponent),
+                './features/private/my-activities/my-activities-page/my-activities-page.component'
+              ).then((m) => m.MyActivitiesPageComponent),
           },
           {
             path: 'pomodoro-session',
             loadComponent: () =>
               import(
-                './features/private/my-tasks/pomodoro-session/pomodoro-session.component'
-              ).then((m) => m.PomodoroSessionComponent),
+                './features/private/pomodoro-session/pomodoro-session-page/pomodoro-session-page.component'
+              ).then((m) => m.PomodoroSessionPageComponent),
           },
         ],
       },
@@ -104,15 +104,15 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import(
-                './features/private/community/components/community-page/community-page.component'
+                './features/private/community/community-page/community-page.component'
               ).then((m) => m.CommunityPageComponent),
           },
           {
             path: 'groups/:groupId',
             loadComponent: () =>
               import(
-                './features/private/shared/components/preview-group/preview-group.component'
-              ).then((m) => m.PreviewGroupComponent),
+                './features/private/group-preview/group-preview-page/group-preview-page.component'
+              ).then((m) => m.GroupPreviewPageComponent),
           },
           {
             path: 'groups/:groupId/members',
@@ -132,8 +132,8 @@ export const routes: Routes = [
             path: 'groups/:groupId/group-invitations/:groupInvitationId',
             loadComponent: () =>
               import(
-                './features/private/my-groups/components/group-invitation-response/group-invitation-response.component'
-              ).then((m) => m.GroupInvitationResponseComponent),
+                './features/private/group-invitation-response/group-invitation-response-page/group-invitation-response-page.component'
+              ).then((m) => m.GroupInvitationResponsePageComponent),
           },
           {
             path: 'groups/:groupId/ranking',
@@ -146,7 +146,7 @@ export const routes: Routes = [
             path: 'users/:userId',
             loadComponent: () =>
               import(
-                './features/private/user-profile/components/user-profile-page/user-profile-page.component'
+                './features/private/user-profile/user-profile-page/user-profile-page.component'
               ).then((m) => m.UserProfilePageComponent),
           },
         ],
@@ -162,7 +162,7 @@ export const routes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import(
-            './features/private/user-profile/components/user-profile-page/user-profile-page.component'
+            './features/private/user-profile/user-profile-page/user-profile-page.component'
           ).then((m) => m.UserProfilePageComponent),
       },
     ],
