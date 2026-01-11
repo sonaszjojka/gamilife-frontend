@@ -10,13 +10,13 @@ import {
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { PomodoroFormComponent } from '../pomodoro-form/pomodoro-form.component';
-import { UserPomodoroApiService } from '../../../../shared/services/tasks/user-pomodoro-api.service';
-import { PomodoroRequest } from '../../../../shared/models/task-models/pomodoro-request';
+import { UserPomodoroApiService } from '../../../shared/services/tasks/user-pomodoro-api.service';
+import { PomodoroRequest } from '../../../shared/models/task-models/pomodoro-request';
 import {
   ActivityItemDetails,
   ActivityType,
-} from '../../../../shared/models/task-models/activity.model';
-import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+} from '../../../shared/models/task-models/activity.model';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({

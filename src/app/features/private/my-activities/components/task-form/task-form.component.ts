@@ -32,7 +32,7 @@ import {
 } from '../../../../shared/models/task-models/activity.model';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { HabitRequest } from '../../../../shared/models/task-models/habit-request.model';
-import { PomodoroSessionFormModal } from '../../../shared/components/pomodoro-form-modal/pomodoro-session-form-modal';
+import { PomodoroSessionFormModal } from '../../../shared/pomodoro-form-modal/pomodoro-session-form-modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

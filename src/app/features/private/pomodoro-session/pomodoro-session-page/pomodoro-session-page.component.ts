@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
-import { ActivityItemComponent } from '../../shared/components/task-item/activity-item.component';
+import { ActivityItemComponent } from '../../shared/task-item/activity-item.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import {
   CdkDrag,
@@ -16,7 +16,7 @@ import {
   CdkDropList,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { PomodoroSessionFormModal } from '../../shared/components/pomodoro-form-modal/pomodoro-session-form-modal';
+import { PomodoroSessionFormModal } from '../../shared/pomodoro-form-modal/pomodoro-session-form-modal';
 import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
 import { PomodoroSessionAcceptTaskModalComponent } from '../components/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
 import { UserPomodoroApiService } from '../../../shared/services/tasks/user-pomodoro-api.service';
@@ -33,7 +33,7 @@ import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-a
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BackButtonComponent } from '../../shared/components/back-button/back-button-component';
+import { BackButtonComponent } from '../../shared/back-button/back-button-component';
 import { NzListEmptyComponent } from 'ng-zorro-antd/list';
 
 @Component({

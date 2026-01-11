@@ -17,7 +17,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { GroupMember } from '../../../../shared/models/group/group-member.model';
 import { GroupMemberApiService } from '../../../../shared/services/group-member-api/group-member-api.service';
 import { EditGroupMemberFormComponent } from '../edit-group-member-form/edit-group-member-form.component';
-import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
+import { PaginationMoreComponent } from '../../../shared/pagination-more/pagination-more.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GroupMemberInventoryComponent } from '../../../group-preview/components/member-inventory/group-member-inventory/group-member-inventory.component';
 import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';

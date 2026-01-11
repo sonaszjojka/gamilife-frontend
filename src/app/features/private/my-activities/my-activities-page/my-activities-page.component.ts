@@ -11,7 +11,7 @@ import {
   untracked,
   ViewChild,
 } from '@angular/core';
-import { ActivityItemComponent } from '../../shared/components/task-item/activity-item.component';
+import { ActivityItemComponent } from '../../shared/task-item/activity-item.component';
 import { TaskFilterComponent } from '../components/task-filter/task-filter.component';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';

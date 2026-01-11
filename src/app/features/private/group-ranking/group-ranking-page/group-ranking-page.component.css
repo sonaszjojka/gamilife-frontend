@@ -36,7 +36,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-xxlarge) var(--spacing-large);
+  padding:  var(--spacing-large);
   color: var(--text-secondary-color);
 }
 

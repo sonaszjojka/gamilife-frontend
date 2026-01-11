@@ -11,7 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CommunityInputSearchComponent } from '../components/community-input-search/community-input-search.component';
 import { CommonModule } from '@angular/common';
-import { PaginationMoreComponent } from '../../shared/components/pagination-more/pagination-more.component';
+import { PaginationMoreComponent } from '../../shared/pagination-more/pagination-more.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import {
   GroupFilterParams,

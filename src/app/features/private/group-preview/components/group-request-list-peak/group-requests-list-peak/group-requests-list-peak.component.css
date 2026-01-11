@@ -75,7 +75,7 @@
 
 .status-badge {
   padding: var(--spacing-xs) var(--spacing-small);
-  border-radius: var(--border-radius-small);
+  border-radius: var(--border-radius);
   font-size: var(--font-size-small);
   font-weight: var(--font-weight-medium);
   text-transform: capitalize;

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Group } from '../../../../shared/models/group/group.model';
-import { GroupTypeTagComponent } from '../../../shared/components/group-type-tag/group-type-tag.component';
+import { GroupTypeTagComponent } from '../../../shared/group-type-tag/group-type-tag.component';
 import { GroupPreviewMode } from '../../../../shared/models/group/group-preview-mode';
 
 @Component({

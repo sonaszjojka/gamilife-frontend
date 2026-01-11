@@ -23,7 +23,7 @@ import { UserStatisticsModel } from '../../../shared/models/user-profile/user-st
 import { UserStatisticsService } from '../../../shared/services/user-statistics-api/user-statistics.service';
 import { UserStatisticsCardComponent } from '../components/user-statistics-card/user-statistics-card.component';
 import { DashboardActivitiesComponent } from '../components/dashboard-activities/dashboard-activities.component';
-import { DashboardInputSearchComponent } from '../../shared/components/dashboard-input-search/dashboard-input-search.component';
+import { DashboardInputSearchComponent } from '../../shared/dashboard-input-search/dashboard-input-search.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({

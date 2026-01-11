@@ -14,7 +14,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { GroupRequest } from '../../../../shared/models/group/group-request.model';
 import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
-import { PaginationMoreComponent } from '../../../shared/components/pagination-more/pagination-more.component';
+import { PaginationMoreComponent } from '../../../shared/pagination-more/pagination-more.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

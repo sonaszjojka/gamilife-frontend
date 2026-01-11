@@ -9,20 +9,20 @@ import {
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { UserTaskApiService } from '../../../../shared/services/tasks/user-task-api.service';
+import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { TaskRequest } from '../../../../shared/models/task-models/task-request';
+import { TaskRequest } from '../../../shared/models/task-models/task-request';
 import { PomodoroTaskProgressComponent } from '../pomodoro-task-progress/pomodoro-task-progress.component';
-import { UserHabitApiService } from '../../../../shared/services/tasks/user-habit-api.service';
+import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import {
   ActivityItemDetails,
   ActivityStatus,
   ActivityType,
-} from '../../../../shared/models/task-models/activity.model';
-import { HabitRequest } from '../../../../shared/models/task-models/habit-request.model';
-import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+} from '../../../shared/models/task-models/activity.model';
+import { HabitRequest } from '../../../shared/models/task-models/habit-request.model';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({

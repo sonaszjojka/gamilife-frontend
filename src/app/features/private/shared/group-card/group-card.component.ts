@@ -4,7 +4,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Group } from '../../../../shared/models/group/group.model';
+import { Group } from '../../../shared/models/group/group.model';
 import { Router } from '@angular/router';
 import { GroupTypeTagComponent } from '../group-type-tag/group-type-tag.component';
 
