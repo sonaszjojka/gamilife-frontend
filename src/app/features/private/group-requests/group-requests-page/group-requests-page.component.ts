@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { GroupRequestApiService } from '../../../../shared/services/group-request-api/group-request-api.service';
-import { GroupRequest } from '../../../../shared/models/group/group-request.model';
-import { GroupRequestsListComponent } from '../group-requests-list/group-requests-list.component';
+import { GroupRequestApiService } from '../../../shared/services/group-request-api/group-request-api.service';
+import { GroupRequest } from '../../../shared/models/group/group-request.model';
+import { GroupRequestsListComponent } from '../components/group-requests-list/group-requests-list.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BackButtonComponent } from '../../../shared/components/back-button/back-button-component';
+import { BackButtonComponent } from '../../shared/components/back-button/back-button-component';
 
 @Component({
-  selector: 'app-group-requests-page',
+  selector: 'app-group-requests',
   standalone: true,
   imports: [
     CommonModule,

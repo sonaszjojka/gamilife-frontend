@@ -8,32 +8,32 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { Group } from '../../../../../../shared/models/group/group.model';
-import { GroupItemModel } from '../../../../../../shared/models/group/group-item.model';
-import { GroupShopApiService } from '../../../../../../shared/services/group-shop-api/group-shop-api.service';
-import { PaginationMoreComponent } from '../../../../../shared/components/pagination-more/pagination-more.component';
-import { GroupPreviewMode } from '../../../../../../shared/models/group/group-preview-mode';
+import { Group } from '../../../../../shared/models/group/group.model';
+import { GroupItemModel } from '../../../../../shared/models/group/group-item.model';
+import { GroupShopApiService } from '../../../../../shared/services/group-shop-api/group-shop-api.service';
+import { PaginationMoreComponent } from '../../../../shared/components/pagination-more/pagination-more.component';
+import { GroupPreviewMode } from '../../../../../shared/models/group/group-preview-mode';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { GroupItemComponent } from '../group-item/group-item.component';
-import { NotificationService } from '../../../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 import { GroupItemFormComponent } from '../group-item-form/group-item-form.component';
 import {
   GroupShopModel,
   GroupShopRequestModel,
-} from '../../../../../../shared/models/group/group-shop.model';
+} from '../../../../../shared/models/group/group-shop.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzFloatButtonComponent } from 'ng-zorro-antd/float-button';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { GroupShopFormComponent } from '../group-shop-form/group-shop-form.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { GroupMemberInventoryComponent } from '../../../member-inventory/group-member-inventory/group-member-inventory.component';
-import { GroupItemApiService } from '../../../../../../shared/services/group-item-api/group-item-api.service';
+import { GroupMemberInventoryComponent } from '../../member-inventory/group-member-inventory/group-member-inventory.component';
+import { GroupItemApiService } from '../../../../../shared/services/group-item-api/group-item-api.service';
 
 @Component({
-  selector: 'app-group-shop-page',
-  templateUrl: './group-shop-page.component.html',
-  styleUrls: ['./group-shop-page.component.css'],
+  selector: 'app-group-shop',
+  templateUrl: './group-shop.component.html',
+  styleUrls: ['./group-shop.component.css'],
   standalone: true,
   imports: [
     PaginationMoreComponent,
@@ -47,7 +47,7 @@ import { GroupItemApiService } from '../../../../../../shared/services/group-ite
     GroupMemberInventoryComponent,
   ],
 })
-export class GroupShopPageComponent implements OnInit {
+export class GroupShopComponent implements OnInit {
   group = input.required<Group>();
   viewMode = input.required<GroupPreviewMode>();
 

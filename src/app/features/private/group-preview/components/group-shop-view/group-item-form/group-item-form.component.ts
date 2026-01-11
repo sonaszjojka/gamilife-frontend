@@ -17,9 +17,9 @@ import { CommonModule } from '@angular/common';
 import {
   GroupItemModel,
   GroupItemRequestModel,
-} from '../../../../../../shared/models/group/group-item.model';
-import { GroupItemApiService } from '../../../../../../shared/services/group-item-api/group-item-api.service';
-import { NotificationService } from '../../../../../../shared/services/notification-service/notification.service';
+} from '../../../../../shared/models/group/group-item.model';
+import { GroupItemApiService } from '../../../../../shared/services/group-item-api/group-item-api.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @Component({

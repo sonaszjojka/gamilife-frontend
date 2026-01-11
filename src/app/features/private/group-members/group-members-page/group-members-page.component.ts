@@ -10,18 +10,18 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
-import { GroupMember } from '../../../../shared/models/group/group-member.model';
-import { GroupMembersListComponent } from '../group-members-list/group-members-list.component';
-import { SendGroupInvitationFormComponent } from '../send-group-invitation-form/send-group-invitation-form.component';
+import { GroupApiService } from '../../../shared/services/groups-api/group-api.service';
+import { GroupMember } from '../../../shared/models/group/group-member.model';
+import { GroupMembersListComponent } from '../components/group-members-list/group-members-list.component';
+import { SendGroupInvitationFormComponent } from '../components/send-group-invitation-form/send-group-invitation-form.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BackButtonComponent } from '../../../shared/components/back-button/back-button-component';
+import { BackButtonComponent } from '../../shared/components/back-button/back-button-component';
 
 @Component({
-  selector: 'app-group-members-page',
+  selector: 'app-group-members',
   standalone: true,
   imports: [
     CommonModule,

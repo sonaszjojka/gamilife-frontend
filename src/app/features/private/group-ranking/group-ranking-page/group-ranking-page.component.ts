@@ -6,15 +6,15 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
-import { GroupApiService } from '../../../../shared/services/groups-api/group-api.service';
-import { GroupMember } from '../../../../shared/models/group/group-member.model';
-import { FullRankingComponent } from '../full-ranking/full-ranking.component';
-import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { GroupApiService } from '../../../shared/services/groups-api/group-api.service';
+import { GroupMember } from '../../../shared/models/group/group-member.model';
+import { FullRankingComponent } from '../components/full-ranking/full-ranking.component';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BackButtonComponent } from '../../../shared/components/back-button/back-button-component';
+import { BackButtonComponent } from '../../shared/components/back-button/back-button-component';
 
 @Component({
-  selector: 'app-group-ranking-page',
+  selector: 'app-group-ranking',
   standalone: true,
   imports: [
     CommonModule,

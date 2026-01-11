@@ -14,12 +14,12 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzInputDirective } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../../../../../shared/services/notification-service/notification.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 import {
   GroupShopModel,
   GroupShopRequestModel,
-} from '../../../../../../shared/models/group/group-shop.model';
-import { GroupShopApiService } from '../../../../../../shared/services/group-shop-api/group-shop-api.service';
+} from '../../../../../shared/models/group/group-shop.model';
+import { GroupShopApiService } from '../../../../../shared/services/group-shop-api/group-shop-api.service';
 @Component({
   selector: 'app-group-shop-form',
   templateUrl: './group-shop-form.component.html',

@@ -28,13 +28,13 @@ import { GroupInfoCardComponent } from '../components/group-info-card/group-info
 import { GroupActionsComponent } from '../components/group-actions/group-actions.component';
 import { MembersListPeakComponent } from '../components/members-list-peak/members-list-peak.component';
 import { RankingListPeakComponent } from '../components/ranking-list-peak/ranking-list-peak.component';
-import { GroupRequestsListPeakComponent } from '../../shared/components/group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
+import { GroupRequestsListPeakComponent } from '../components/group-request-list-peak/group-requests-list-peak/group-requests-list-peak.component';
 import { EditGroupFormComponent } from '../components/edit-group-form/edit-group-form.component';
 import { GroupTasksListComponent } from '../components/group-tasks/group-tasks-list/group-tasks-list.component';
 import { GroupChatComponent } from '../components/group-chat/group-chat.component';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { GroupShopPageComponent } from '../components/group-shop-page/components/group-shop-page/group-shop-page.component';
+import { GroupShopComponent } from '../components/group-shop-view/group-shop/group-shop.component';
 
 @Component({
   selector: 'app-group-preview-page',
@@ -56,7 +56,7 @@ import { GroupShopPageComponent } from '../components/group-shop-page/components
     GroupTasksListComponent,
     EditGroupFormComponent,
     GroupChatComponent,
-    GroupShopPageComponent,
+    GroupShopComponent,
   ],
   templateUrl: './group-preview-page.component.html',
   styleUrls: ['./group-preview-page.component.css'],

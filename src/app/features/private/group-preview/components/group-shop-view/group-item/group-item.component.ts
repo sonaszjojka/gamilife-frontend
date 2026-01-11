@@ -6,16 +6,16 @@ import {
   output,
   ViewChild,
 } from '@angular/core';
-import { GroupItemModel } from '../../../../../../shared/models/group/group-item.model';
-import { GroupPreviewMode } from '../../../../../../shared/models/group/group-preview-mode';
+import { GroupItemModel } from '../../../../../shared/models/group/group-item.model';
+import { GroupPreviewMode } from '../../../../../shared/models/group/group-preview-mode';
 import { GroupItemFormComponent } from '../group-item-form/group-item-form.component';
-import { GroupItemApiService } from '../../../../../../shared/services/group-item-api/group-item-api.service';
-import { NotificationService } from '../../../../../../shared/services/notification-service/notification.service';
-import { Group } from '../../../../../../shared/models/group/group.model';
-import { GroupShopModel } from '../../../../../../shared/models/group/group-shop.model';
+import { GroupItemApiService } from '../../../../../shared/services/group-item-api/group-item-api.service';
+import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
+import { Group } from '../../../../../shared/models/group/group.model';
+import { GroupShopModel } from '../../../../../shared/models/group/group-shop.model';
 import { NzCardComponent } from 'ng-zorro-antd/card';
-import { GroupMemberInventoryApiService } from '../../../../../../shared/services/group-member-inventory-api/group-member-inventory-api.service';
-import { OwnedGroupItemRequestModel } from '../../../../../../shared/models/group/owned-group-item.model';
+import { GroupMemberInventoryApiService } from '../../../../../shared/services/group-member-inventory-api/group-member-inventory-api.service';
+import { OwnedGroupItemRequestModel } from '../../../../../shared/models/group/owned-group-item.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzTagComponent } from 'ng-zorro-antd/tag';

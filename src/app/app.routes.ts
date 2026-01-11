@@ -70,9 +70,9 @@ export const routes: Routes = [
     path: 'app',
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard-page', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
-        path: 'dashboard-page',
+        path: 'dashboard',
         loadComponent: () =>
           import(
             './features/private/dashboard/dashboard-page/dashboard-page.component'
@@ -118,14 +118,14 @@ export const routes: Routes = [
             path: 'groups/:groupId/members',
             loadComponent: () =>
               import(
-                './features/private/group-members-page/components/group-members-page/group-members-page.component'
+                './features/private/group-members/group-members-page/group-members-page.component'
               ).then((m) => m.GroupMembersPageComponent),
           },
           {
             path: 'groups/:groupId/requests',
             loadComponent: () =>
               import(
-                './features/private/group-requests-page/components/group-requests-page/group-requests-page.component'
+                './features/private/group-requests/group-requests-page/group-requests-page.component'
               ).then((m) => m.GroupRequestsPageComponent),
           },
           {
@@ -139,7 +139,7 @@ export const routes: Routes = [
             path: 'groups/:groupId/ranking',
             loadComponent: () =>
               import(
-                './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component'
+                './features/private/group-ranking/group-ranking-page/group-ranking-page.component'
               ).then((m) => m.GroupRankingPageComponent),
           },
           {
