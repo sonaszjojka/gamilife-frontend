@@ -23,14 +23,14 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { CommonModule } from '@angular/common';
-import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
-import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
+import { LinkOAuthAccountComponent } from '../../link-accounts/link-oauth-account/link-oauth-account.component';
+import { OAuth2Service } from '../../../shared/services/oauth2/oauth2.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RegistrationData } from '../../../../shared/models/auth/auth.model';
-import { VerifyEmailComponent } from '../../../login/components/verify-email/verify-email.component';
-import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { RegistrationData } from '../../../shared/models/auth/auth.model';
+import { VerifyEmailComponent } from '../../login/components/verify-email/verify-email.component';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 @Component({
-  selector: 'app-registration',
+  selector: 'app-registration-page',
   standalone: true,
   imports: [
     NzCardModule,
@@ -47,10 +47,10 @@ import { AuthService } from '../../../../../shared/services/auth/auth.service';
     LinkOAuthAccountComponent,
     VerifyEmailComponent,
   ],
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css'],
+  templateUrl: './registration-page.component.html',
+  styleUrls: ['./registration-page.component.css'],
 })
-export class RegistrationComponent {
+export class RegistrationPageComponent {
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);

@@ -8,8 +8,8 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import(
-        './features/public/guest-home/components/guest-home/guest-home.component'
-      ).then((m) => m.GuestHomeComponent),
+        './features/public/guest-home/guest-home-page/guest-home-page.component'
+      ).then((m) => m.GuestHomePageComponent),
     canActivate: [GuestGuard],
   },
   {
@@ -24,22 +24,22 @@ export const routes: Routes = [
     path: 'verify-email',
     loadComponent: () =>
       import(
-        './features/public/email-verification-result/components/email-verification-result/email-verification-result.component'
-      ).then((m) => m.EmailVerificationResultComponent),
+        './features/public/email-verification-result/email-verification-result-page/email-verification-result-page.component'
+      ).then((m) => m.EmailVerificationResultPageComponent),
     canActivate: [GuestGuard],
   },
   {
-    path: 'reset-password',
+    path: 'reset-password-page',
     loadComponent: () =>
       import(
-        './features/public/reset-password/components/reset-password/reset-password.component'
-      ).then((m) => m.ResetPasswordComponent),
+        './features/public/reset-password/reset-password-page/reset-password-page.component'
+      ).then((m) => m.ResetPasswordPageComponent),
   },
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/public/login/components/login/login.component').then(
-        (m) => m.LoginComponent,
+      import('./features/public/login/login-page/login-page.component').then(
+        (m) => m.LoginPageComponent,
       ),
     canActivate: [GuestGuard],
   },
@@ -47,15 +47,15 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () =>
       import(
-        './features/public/registration/components/registration/registration.component'
-      ).then((m) => m.RegistrationComponent),
+        './features/public/registration/registration-page/registration-page.component'
+      ).then((m) => m.RegistrationPageComponent),
     canActivate: [GuestGuard],
   },
   {
-    path: 'forgot-password',
+    path: 'forgot-password-page',
     loadComponent: () =>
       import(
-        './features/public/forgot-password/components/forgot-password/forgot-password.component'
+        './features/public/login/components/forgot-password/forgot-password.component'
       ).then((m) => m.ForgotPasswordComponent),
     canActivate: [GuestGuard],
   },
@@ -63,7 +63,7 @@ export const routes: Routes = [
     path: `${environment.callbackUri}`,
     loadComponent: () =>
       import(
-        './features/public/oauth2/components/oauth-callback/oauth-callback.component'
+        './features/public/oauth2/oauth-callback/oauth-callback.component'
       ).then((m) => m.OAuthCallbackComponent),
   },
   {

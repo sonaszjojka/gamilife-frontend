@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 @Component({
-  selector: 'app-guest-home',
+  selector: 'app-guest-home-page',
   imports: [NzCardModule, NzIconModule],
-  templateUrl: './guest-home.component.html',
-  styleUrl: './guest-home.component.css',
+  templateUrl: './guest-home-page.component.html',
+  styleUrl: './guest-home-page.component.css',
 })
-export class GuestHomeComponent {
+export class GuestHomePageComponent {
   private router = inject(Router);
 
   goToRegister() {

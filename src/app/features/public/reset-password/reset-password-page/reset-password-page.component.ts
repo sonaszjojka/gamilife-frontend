@@ -15,11 +15,11 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-reset-password',
+  selector: 'app-reset-password-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,10 +32,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzResultModule,
     NzSpinModule,
   ],
-  templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css'],
+  templateUrl: './reset-password-page.component.html',
+  styleUrls: ['./reset-password-page.component.css'],
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordPageComponent implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);

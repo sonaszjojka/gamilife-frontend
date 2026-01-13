@@ -20,16 +20,16 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { CommonModule } from '@angular/common';
-import { VerifyEmailComponent } from '../verify-email/verify-email.component';
-import { ForgotPasswordComponent } from '../../../forgot-password/components/forgot-password/forgot-password.component';
-import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
-import { LinkOAuthAccountComponent } from '../../../link-accounts/link-oauth-account/link-oauth-account.component';
-import { AuthService } from '../../../../../shared/services/auth/auth.service';
+import { VerifyEmailComponent } from '../components/verify-email/verify-email.component';
+import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
+import { OAuth2Service } from '../../../shared/services/oauth2/oauth2.service';
+import { LinkOAuthAccountComponent } from '../../link-accounts/link-oauth-account/link-oauth-account.component';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LoginCredentials } from '../../../../shared/models/auth/auth.model';
+import { LoginCredentials } from '../../../shared/models/auth/auth.model';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-login-page',
   imports: [
     NzCardModule,
     NzIconModule,
@@ -45,10 +45,11 @@ import { LoginCredentials } from '../../../../shared/models/auth/auth.model';
     ForgotPasswordComponent,
     LinkOAuthAccountComponent,
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: './login-page.component.html',
+  styleUrl: './login-page.component.css',
+  standalone: true
 })
-export class LoginComponent implements OnInit {
+export class LoginPageComponent implements OnInit {
   @ViewChild(VerifyEmailComponent)
   verificationModal!: VerifyEmailComponent;
   @ViewChild(ForgotPasswordComponent)

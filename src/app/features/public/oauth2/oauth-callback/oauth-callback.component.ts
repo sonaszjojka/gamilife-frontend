@@ -2,10 +2,10 @@ import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { OAuth2Service } from '../../../../shared/services/oauth2/oauth2.service';
+import { OAuth2Service } from '../../../shared/services/oauth2/oauth2.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from '../../../../../shared/services/auth/auth.service';
-import { StorageService } from '../../../../../shared/services/auth/storage.service';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
+import { StorageService } from '../../../../shared/services/auth/storage.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({

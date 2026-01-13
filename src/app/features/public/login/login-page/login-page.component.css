@@ -1,7 +1,7 @@
 .div-login-page {
   width: 100%;
   min-height: calc(100vh - 64px);
-  background: url("/assets/background_guest_page.png") center center / cover
+  background: url("/src/assets/background_guest_page.png") center center / cover
     no-repeat;
   display: flex;
   justify-content: center;

@@ -6,12 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthService } from '../../../../../shared/services/auth/auth.service';
-import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 
 @Component({
-  selector: 'app-email-verification-result',
+  selector: 'app-email-verification-result-page',
   imports: [
     NzButtonModule,
     NzResultModule,
@@ -20,10 +20,10 @@ import { NzCardComponent } from 'ng-zorro-antd/card';
     NzSpinComponent,
     NzCardComponent,
   ],
-  templateUrl: './email-verification-result.component.html',
-  styleUrl: './email-verification-result.component.css',
+  templateUrl: './email-verification-result-page.component.html',
+  styleUrl: './email-verification-result-page.component.css',
 })
-export class EmailVerificationResultComponent implements OnInit {
+export class EmailVerificationResultPageComponent implements OnInit {
   protected status: 'loading' | 'error' = 'loading';
 
   private route = inject(ActivatedRoute);

@@ -1,6 +1,6 @@
 .div-email-verification-result {
   display: flex;
-  background: url("/assets/background_guest_page.png") center center / cover
+  background: url("/src/assets/background_guest_page.png") center center / cover
     no-repeat;
   justify-content: center;
   align-items: center;
