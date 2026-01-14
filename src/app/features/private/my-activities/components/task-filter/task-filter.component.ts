@@ -3,7 +3,7 @@ import { Component, inject, Input, WritableSignal } from '@angular/core';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { Router } from '@angular/router';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { ActivityListView } from '../../../../shared/models/task-models/activity-list-view.model';
+import { ActivityListView } from '../../../../shared/models/task/activity-list-view.model';
 
 @Component({
   selector: 'app-task-filter',

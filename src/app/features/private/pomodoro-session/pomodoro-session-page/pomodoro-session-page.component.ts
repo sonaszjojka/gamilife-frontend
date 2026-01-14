@@ -20,15 +20,15 @@ import { PomodoroSessionFormModal } from '../../shared/pomodoro-form-modal/pomod
 import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
 import { PomodoroSessionAcceptTaskModalComponent } from '../components/pomodoro-session-accept-task-modal/pomodoro-session-accept-task-modal.component';
 import { UserPomodoroApiService } from '../../../shared/services/tasks/user-pomodoro-api.service';
-import { TaskRequest } from '../../../shared/models/task-models/task-request';
+import { TaskRequest } from '../../../shared/models/task/task-request';
 import { PomodoroSessionBreakModalComponent } from '../components/pomodoro-session-break-modal/pomodoro-session-break-modal.component';
 import {
   ActivityItemDetails,
   ActivityType,
-} from '../../../shared/models/task-models/activity.model';
+} from '../../../shared/models/task/activity.model';
 import { Page } from '../../../shared/models/util/page.model';
-import { PomodoroRequest } from '../../../shared/models/task-models/pomodoro-request';
-import { HabitRequest } from '../../../shared/models/task-models/habit-request.model';
+import { PomodoroRequest } from '../../../shared/models/task/pomodoro-request';
+import { HabitRequest } from '../../../shared/models/task/habit-request.model';
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';

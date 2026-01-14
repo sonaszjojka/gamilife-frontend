@@ -13,7 +13,7 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
 import {
   ActivityItemDetails,
   ActivityTypeColors,
-} from '../../../../shared/models/task-models/activity.model';
+} from '../../../../shared/models/task/activity.model';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserActivitiesApiService } from '../../../../shared/services/tasks/user-activities-api.service';

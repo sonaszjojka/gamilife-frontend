@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ActivityItemDetails } from '../../../../shared/models/task-models/activity.model';
+import { ActivityItemDetails } from '../../../../shared/models/task/activity.model';
 import { ActivityItemComponent } from '../../../shared/task-item/activity-item.component';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzListComponent, NzListEmptyComponent } from 'ng-zorro-antd/list';

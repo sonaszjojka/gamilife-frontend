@@ -22,8 +22,8 @@ import {
   ActivityItemDetails,
   ActivityStatus,
   ActivityType,
-} from '../../../shared/models/task-models/activity.model';
-import { ActivityListView } from '../../../shared/models/task-models/activity-list-view.model';
+} from '../../../shared/models/task/activity.model';
+import { ActivityListView } from '../../../shared/models/task/activity-list-view.model';
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';

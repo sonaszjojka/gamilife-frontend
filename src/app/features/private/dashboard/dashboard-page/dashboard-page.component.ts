@@ -15,7 +15,7 @@ import {
   Group,
   GroupFilterParams,
 } from '../../../shared/models/group/group.model';
-import { ActivityItemDetails } from '../../../shared/models/task-models/activity.model';
+import { ActivityItemDetails } from '../../../shared/models/task/activity.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { GroupCarouselComponent } from '../components/group-carousel/group-carousel.component';

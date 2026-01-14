@@ -22,8 +22,8 @@ import {
 } from 'ng-zorro-antd/form';
 import { NzColDirective } from 'ng-zorro-antd/grid';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { PomodoroRequest } from '../../../shared/models/task-models/pomodoro-request';
-import { ActivityItemDetails } from '../../../shared/models/task-models/activity.model';
+import { PomodoroRequest } from '../../../shared/models/task/pomodoro-request';
+import { ActivityItemDetails } from '../../../shared/models/task/activity.model';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

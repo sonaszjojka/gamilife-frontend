@@ -29,9 +29,9 @@ import { UserHabitApiService } from '../../../../shared/services/tasks/user-habi
 import {
   ActivityItemDetails,
   ActivityType,
-} from '../../../../shared/models/task-models/activity.model';
+} from '../../../../shared/models/task/activity.model';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { HabitRequest } from '../../../../shared/models/task-models/habit-request.model';
+import { HabitRequest } from '../../../../shared/models/task/habit-request.model';
 import { PomodoroSessionFormModal } from '../../../shared/pomodoro-form-modal/pomodoro-session-form-modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

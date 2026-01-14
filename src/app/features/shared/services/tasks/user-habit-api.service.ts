@@ -2,10 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HabitRequest } from '../../models/task-models/habit-request.model';
-import { HabitResponseModel } from '../../models/task-models/habit-response.model';
+import { HabitRequest } from '../../models/task/habit-request.model';
+import { HabitResponseModel } from '../../models/task/habit-response.model';
 import { Page } from '../../models/util/page.model';
-import { ActivityItemDetails } from '../../models/task-models/activity.model';
+import { ActivityItemDetails } from '../../models/task/activity.model';
 
 @Injectable({
   providedIn: 'root',
