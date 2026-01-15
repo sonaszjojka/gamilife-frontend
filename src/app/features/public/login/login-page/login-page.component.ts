@@ -47,7 +47,7 @@ import { LoginCredentials } from '../../../shared/models/auth/auth.model';
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css',
-  standalone: true
+  standalone: true,
 })
 export class LoginPageComponent implements OnInit {
   @ViewChild(VerifyEmailComponent)
