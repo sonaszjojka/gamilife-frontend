@@ -2,11 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
-import { CreateTaskResponse } from '../../models/task-models/create-task-response';
-import { EditTaskResponse } from '../../models/task-models/edit-task-response';
-import { TaskRequest } from '../../models/task-models/task-request';
+import { CreateTaskResponse } from '../../models/task/create-task-response';
+import { EditTaskResponse } from '../../models/task/edit-task-response';
+import { TaskRequest } from '../../models/task/task-request';
 import { Page } from '../../models/util/page.model';
-import { ActivityItemDetails } from '../../models/task-models/activity.model';
+import { ActivityItemDetails } from '../../models/task/activity.model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Page } from '../../models/util/page.model';
-import { ActivityItemDetails } from '../../models/task-models/activity.model';
+import { ActivityItemDetails } from '../../models/task/activity.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 

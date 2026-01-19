@@ -14,7 +14,6 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -27,11 +26,11 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { UserDetails } from '../../../../shared/models/group/user.model';
-import { environment } from '../../../../../../environments/environment';
 import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangePasswordPageComponent } from '../../../change-password/change-password-page/change-password-page.component';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -50,6 +49,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzDescriptionsModule,
     NzTagModule,
     NzIconModule,
+    ChangePasswordPageComponent,
   ],
   templateUrl: './profile-settings-tab.component.html',
   styleUrl: './profile-settings-tab.component.css',
@@ -62,12 +62,11 @@ export class ProfileSettingsTabComponent implements OnInit {
   saving = false;
   sendingResetEmail = false;
 
-  private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
-  private notificationService = inject(NotificationService);
-  private userApi = inject(UserApiService);
-  protected authService = inject(AuthService);
-  private destroyRef = inject(DestroyRef);
+  private readonly fb = inject(FormBuilder);
+  private readonly notificationService = inject(NotificationService);
+  private readonly userApi = inject(UserApiService);
+  protected readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.initForm();
@@ -145,32 +144,5 @@ export class ProfileSettingsTabComponent implements OnInit {
       isProfilePublic: this.userDetails.isProfilePublic,
       sendBudgetReports: this.userDetails.sendBudgetReports,
     });
-  }
-
-  onResetPassword(): void {
-    this.sendingResetEmail = true;
-
-    this.http
-      .post(
-        `${environment.apiUrl}/auth/forgot-password`,
-        { email: this.userDetails.email },
-        { withCredentials: true },
-      )
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.sendingResetEmail = false;
-          this.notificationService.success(
-            'Password reset email sent! Please check your inbox.',
-          );
-        },
-        error: (error) => {
-          this.sendingResetEmail = false;
-          this.notificationService.handleApiError(
-            error,
-            'Failed to send reset email',
-          );
-        },
-      });
   }
 }

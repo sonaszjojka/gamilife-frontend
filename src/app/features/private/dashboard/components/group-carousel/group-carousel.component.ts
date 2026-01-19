@@ -2,7 +2,7 @@ import { Component, input, output, signal } from '@angular/core';
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { Group } from '../../../../shared/models/group/group.model';
-import { GroupCardComponent } from '../../../shared/components/group-card/group-card.component';
+import { GroupCardComponent } from '../../../shared/group-card/group-card.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({

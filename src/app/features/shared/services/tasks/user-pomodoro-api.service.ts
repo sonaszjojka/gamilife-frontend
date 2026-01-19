@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreatePomodoroResponse } from '../../models/task-models/create-pomodoro-response';
-import { PomodoroRequest } from '../../models/task-models/pomodoro-request';
-import { EditPomodoroResponse } from '../../models/task-models/edit-pomodoro-response';
+import { CreatePomodoroResponse } from '../../models/task/create-pomodoro-response';
+import { PomodoroRequest } from '../../models/task/pomodoro-request';
+import { EditPomodoroResponse } from '../../models/task/edit-pomodoro-response';
 
 @Injectable({
   providedIn: 'root',

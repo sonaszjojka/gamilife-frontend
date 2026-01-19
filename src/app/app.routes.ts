@@ -8,8 +8,8 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import(
-        './features/public/guest-home/components/guest-home/guest-home.component'
-      ).then((m) => m.GuestHomeComponent),
+        './features/public/guest-home/guest-home-page/guest-home-page.component'
+      ).then((m) => m.GuestHomePageComponent),
     canActivate: [GuestGuard],
   },
   {
@@ -24,22 +24,22 @@ export const routes: Routes = [
     path: 'verify-email',
     loadComponent: () =>
       import(
-        './features/public/email-verification-result/components/email-verification-result/email-verification-result.component'
-      ).then((m) => m.EmailVerificationResultComponent),
+        './features/public/email-verification-result/email-verification-result-page/email-verification-result-page.component'
+      ).then((m) => m.EmailVerificationResultPageComponent),
     canActivate: [GuestGuard],
   },
   {
     path: 'reset-password',
     loadComponent: () =>
       import(
-        './features/public/reset-password/components/reset-password/reset-password.component'
-      ).then((m) => m.ResetPasswordComponent),
+        './features/public/reset-password/reset-password-page/reset-password-page.component'
+      ).then((m) => m.ResetPasswordPageComponent),
   },
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/public/login/components/login/login.component').then(
-        (m) => m.LoginComponent,
+      import('./features/public/login/login-page/login-page.component').then(
+        (m) => m.LoginPageComponent,
       ),
     canActivate: [GuestGuard],
   },
@@ -47,15 +47,15 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () =>
       import(
-        './features/public/registration/components/registration/registration.component'
-      ).then((m) => m.RegistrationComponent),
+        './features/public/registration/registration-page/registration-page.component'
+      ).then((m) => m.RegistrationPageComponent),
     canActivate: [GuestGuard],
   },
   {
     path: 'forgot-password',
     loadComponent: () =>
       import(
-        './features/public/forgot-password/components/forgot-password/forgot-password.component'
+        './features/public/login/components/forgot-password/forgot-password.component'
       ).then((m) => m.ForgotPasswordComponent),
     canActivate: [GuestGuard],
   },
@@ -63,7 +63,7 @@ export const routes: Routes = [
     path: `${environment.callbackUri}`,
     loadComponent: () =>
       import(
-        './features/public/oauth2/components/oauth-callback/oauth-callback.component'
+        './features/public/oauth2/oauth-callback/oauth-callback.component'
       ).then((m) => m.OAuthCallbackComponent),
   },
   {
@@ -75,8 +75,8 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import(
-            './features/private/dashboard/components/dashboard/dashboard.component'
-          ).then((m) => m.DashboardComponent),
+            './features/private/dashboard/dashboard-page/dashboard-page.component'
+          ).then((m) => m.DashboardPageComponent),
       },
       {
         path: 'tasks',
@@ -85,15 +85,15 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import(
-                './features/private/my-tasks/task-list/task-list.component'
-              ).then((m) => m.TaskListComponent),
+                './features/private/my-activities/my-activities-page/my-activities-page.component'
+              ).then((m) => m.MyActivitiesPageComponent),
           },
           {
             path: 'pomodoro-session',
             loadComponent: () =>
               import(
-                './features/private/my-tasks/pomodoro-session/pomodoro-session.component'
-              ).then((m) => m.PomodoroSessionComponent),
+                './features/private/pomodoro-session/pomodoro-session-page/pomodoro-session-page.component'
+              ).then((m) => m.PomodoroSessionPageComponent),
           },
         ],
       },
@@ -104,49 +104,49 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import(
-                './features/private/community/components/community-page/community-page.component'
+                './features/private/community/community-page/community-page.component'
               ).then((m) => m.CommunityPageComponent),
           },
           {
             path: 'groups/:groupId',
             loadComponent: () =>
               import(
-                './features/private/shared/components/preview-group/preview-group.component'
-              ).then((m) => m.PreviewGroupComponent),
+                './features/private/group-preview/group-preview-page/group-preview-page.component'
+              ).then((m) => m.GroupPreviewPageComponent),
           },
           {
             path: 'groups/:groupId/members',
             loadComponent: () =>
               import(
-                './features/private/group-members-page/components/group-members-page/group-members-page.component'
+                './features/private/group-members/group-members-page/group-members-page.component'
               ).then((m) => m.GroupMembersPageComponent),
           },
           {
             path: 'groups/:groupId/requests',
             loadComponent: () =>
               import(
-                './features/private/group-requests-page/components/group-requests-page/group-requests-page.component'
+                './features/private/group-requests/group-requests-page/group-requests-page.component'
               ).then((m) => m.GroupRequestsPageComponent),
           },
           {
             path: 'groups/:groupId/group-invitations/:groupInvitationId',
             loadComponent: () =>
               import(
-                './features/private/my-groups/components/group-invitation-response/group-invitation-response.component'
-              ).then((m) => m.GroupInvitationResponseComponent),
+                './features/private/group-invitation-response/group-invitation-response-page/group-invitation-response-page.component'
+              ).then((m) => m.GroupInvitationResponsePageComponent),
           },
           {
             path: 'groups/:groupId/ranking',
             loadComponent: () =>
               import(
-                './features/private/group-ranking-page/components/group-ranking-page/group-ranking-page.component'
+                './features/private/group-ranking/group-ranking-page/group-ranking-page.component'
               ).then((m) => m.GroupRankingPageComponent),
           },
           {
             path: 'users/:userId',
             loadComponent: () =>
               import(
-                './features/private/user-profile/components/user-profile-page/user-profile-page.component'
+                './features/private/user-profile/user-profile-page/user-profile-page.component'
               ).then((m) => m.UserProfilePageComponent),
           },
         ],
@@ -162,7 +162,7 @@ export const routes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import(
-            './features/private/user-profile/components/user-profile-page/user-profile-page.component'
+            './features/private/user-profile/user-profile-page/user-profile-page.component'
           ).then((m) => m.UserProfilePageComponent),
       },
     ],

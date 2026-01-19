@@ -140,25 +140,12 @@
     </form>
   </nz-card>
 
-  <nz-card [nzTitle]="'Security'" [nzBordered]="true" style="margin-top: 24px">
-    <nz-alert
-      nzType="info"
-      nzMessage="Password Reset"
-      nzDescription="For security reasons, password changes must be done through email verification. We'll send you a link to reset your password."
-      nzShowIcon
-      style="margin-bottom: 16px"
-    >
-    </nz-alert>
-    <button
-      nz-button
-      nzType="default"
-      (click)="onResetPassword()"
-      [nzLoading]="sendingResetEmail"
-      [disabled]="sendingResetEmail"
-    >
-      <i nz-icon nzType="lock"></i>
-      Send Reset Email
-    </button>
+  <nz-card
+    [nzTitle]="'Change Password'"
+    [nzBordered]="true"
+    style="margin-top: 24px"
+  >
+    <app-change-password-page />
   </nz-card>
 
   <nz-card
