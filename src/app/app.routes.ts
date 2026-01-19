@@ -160,10 +160,22 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () =>
-          import(
-            './features/private/user-profile/user-profile-page/user-profile-page.component'
-          ).then((m) => m.UserProfilePageComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import(
+                './features/private/user-profile/user-profile-page/user-profile-page.component'
+              ).then((m) => m.UserProfilePageComponent),
+          },
+          {
+            path: 'change-password',
+            loadComponent: () =>
+              import(
+                './features/private/change password/change-password-page/change-password-page.component'
+              ).then((m) => m.ChangePasswordPageComponent),
+          },
+        ],
       },
     ],
   },

@@ -177,11 +177,6 @@ export class TaskFormComponent implements OnChanges {
   }
 
   onSubmit() {
-    console.log(this.activity());
-    console.log(this.type());
-    console.log(this.creationMode!());
-    console.log(this.editionMode!());
-
     if (this.validActivityForm.invalid) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
         control.markAsDirty();

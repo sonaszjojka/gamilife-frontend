@@ -13,6 +13,7 @@ import {
   PagedResponse,
 } from '../../models/user-profile/user-profile.models';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
+import { ChangePasswordRequest } from '../../models/auth/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -69,5 +70,11 @@ export class UserApiService {
       request,
       { withCredentials: true },
     );
+  }
+
+  changePassword(request: ChangePasswordRequest): Observable<void> {
+    return this.http.patch<void>(`/api/v1/auth/change-password`, request, {
+      withCredentials: true,
+    });
   }
 }

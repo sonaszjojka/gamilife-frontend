@@ -32,3 +32,8 @@ export interface RegistrationData {
   isPublicProfile: boolean;
   isBudgetReports: boolean;
 }
+
+export interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+}

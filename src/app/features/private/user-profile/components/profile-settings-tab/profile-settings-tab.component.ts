@@ -32,6 +32,7 @@ import { AuthService } from '../../../../../shared/services/auth/auth.service';
 import { UserApiService } from '../../../../shared/services/user-api/user-api.service';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -68,6 +69,7 @@ export class ProfileSettingsTabComponent implements OnInit {
   private userApi = inject(UserApiService);
   protected authService = inject(AuthService);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.initForm();
@@ -149,28 +151,6 @@ export class ProfileSettingsTabComponent implements OnInit {
 
   onResetPassword(): void {
     this.sendingResetEmail = true;
-
-    this.http
-      .post(
-        `${environment.apiUrl}/auth/forgot-password`,
-        { email: this.userDetails.email },
-        { withCredentials: true },
-      )
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.sendingResetEmail = false;
-          this.notificationService.success(
-            'Password reset email sent! Please check your inbox.',
-          );
-        },
-        error: (error) => {
-          this.sendingResetEmail = false;
-          this.notificationService.handleApiError(
-            error,
-            'Failed to send reset email',
-          );
-        },
-      });
+    this.router.navigate([`${environment.apiUrl}/profile/change-password`]);
   }
 }
