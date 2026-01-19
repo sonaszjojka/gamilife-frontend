@@ -13,14 +13,15 @@ import {
   PagedResponse,
 } from '../../models/user-profile/user-profile.models';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
+import { ChangePasswordRequest } from '../../models/auth/auth.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserApiService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
-  private storageService = inject(StorageService);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+  private readonly storageService = inject(StorageService);
 
   getUsers(params: UserFilterParams): Observable<PagedResponse<User>> {
     let httpParams = new HttpParams()
@@ -69,5 +70,11 @@ export class UserApiService {
       request,
       { withCredentials: true },
     );
+  }
+
+  changePassword(request: ChangePasswordRequest): Observable<void> {
+    return this.http.post<void>(`/api/v1/auth/change-password`, request, {
+      withCredentials: true,
+    });
   }
 }

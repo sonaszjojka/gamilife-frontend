@@ -1,0 +1,77 @@
+@if (isVisible()) {
+  <nz-spin [nzSpinning]="loading()">
+    @if (!loading()) {
+      <nz-modal
+        [(nzVisible)]="isVisible"
+        nzTitle="{{ itemDetails.name }}"
+        (nzOnCancel)="handleCancel()"
+        (nzOnOk)="handleOk()"
+        nzWidth="700"
+        nzCentered
+        nzWrapClassName="centered-title-modal"
+      >
+        <ng-container *nzModalContent>
+          <div
+            class="item-details-container"
+            [style.--rarity-color]="rarityColor"
+          >
+            <div class="image-section">
+              <div class="image-wrapper">
+                <img
+                  ngSrc="../../../../../../assets/placeholder.png"
+                  [alt]="itemDetails.name"
+                  class="item-image"
+                  width="250"
+                  height="250"
+                />
+              </div>
+            </div>
+
+            <div class="attributes-section">
+              <div class="attribute-row">
+                <span class="label">Status</span>
+                <span
+                  [class]="
+                    'value status-tag ' +
+                    (itemDetails.isAlreadyOwned ? 'owned' : 'available')
+                  "
+                >
+                  {{
+                    itemDetails.isAlreadyOwned
+                      ? "Already Owned"
+                      : "Available in store"
+                  }}
+                </span>
+              </div>
+
+              <div class="attribute-row">
+                <span class="label">Rarity</span>
+                <span class="value rarity-text" [style.color]="rarityColor">
+                  {{ itemDetails.rarity.name }}
+                </span>
+              </div>
+
+              <div class="attribute-row">
+                <span class="label">Slot</span>
+                <span class="value">{{ itemDetails.itemSlot.name }}</span>
+              </div>
+
+              <div class="attribute-row price-row">
+                <span class="label">Price</span>
+                <div class="price-value">
+                  <nz-icon nzType="dollar" nzTheme="outline"></nz-icon>
+                  <span class="value">{{ itemDetails.price }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="description-section">
+              <h3>Description</h3>
+              <p>{{ itemDetails.description }}</p>
+            </div>
+          </div>
+        </ng-container>
+      </nz-modal>
+    }
+  </nz-spin>
+}

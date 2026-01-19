@@ -1,0 +1,67 @@
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-large);
+  font-family: var(--main-font);
+}
+
+.page-header {
+  margin-bottom: var(--spacing-large);
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary-color);
+  margin: var(--spacing-medium) 0 var(--spacing-xs) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+}
+
+.group-name {
+  font-size: var(--font-size-medium);
+  color: var(--text-secondary-color);
+  margin: 0;
+}
+
+.ranking-card {
+  box-shadow: var(--box-shadow-md);
+  border-radius: var(--border-radius-xl);
+  background-color: var(--bg-primary);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-large);
+  color: var(--text-secondary-color);
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: var(--spacing-medium);
+  opacity: 0.3;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: var(--font-size-large);
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: var(--spacing-medium);
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+}
+
+::ng-deep .ranking-card .ant-card-body {
+  padding: var(--spacing-large);
+}

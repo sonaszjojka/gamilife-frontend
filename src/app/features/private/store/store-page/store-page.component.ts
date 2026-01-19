@@ -4,13 +4,13 @@ import {
   StoreFiltersModel,
   StoreItemDto,
 } from '../../../shared/models/store/store.model';
-import { PaginationMoreComponent } from '../../shared/components/pagination-more/pagination-more.component';
-import { StoreItemListComponent } from '../store-item-list/store-item-list.component';
-import { StoreFilterPanelComponent } from '../store-filter-panel/store-filter-panel.component';
+import { PaginationMoreComponent } from '../../shared/pagination-more/pagination-more.component';
+import { StoreItemListComponent } from '../components/store-item-list/store-item-list.component';
+import { StoreFilterPanelComponent } from '../components/store-filter-panel/store-filter-panel.component';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzPageHeaderComponent } from 'ng-zorro-antd/page-header';
-import { DashboardInputSearchComponent } from '../../shared/components/dashboard-input-search/dashboard-input-search.component';
+import { DashboardInputSearchComponent } from '../../shared/dashboard-input-search/dashboard-input-search.component';
 
 @Component({
   selector: 'app-store-page',
