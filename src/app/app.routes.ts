@@ -29,7 +29,7 @@ export const routes: Routes = [
     canActivate: [GuestGuard],
   },
   {
-    path: 'reset-password-page',
+    path: 'reset-password',
     loadComponent: () =>
       import(
         './features/public/reset-password/reset-password-page/reset-password-page.component'
@@ -52,7 +52,7 @@ export const routes: Routes = [
     canActivate: [GuestGuard],
   },
   {
-    path: 'forgot-password-page',
+    path: 'forgot-password',
     loadComponent: () =>
       import(
         './features/public/login/components/forgot-password/forgot-password.component'
@@ -160,22 +160,10 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import(
-                './features/private/user-profile/user-profile-page/user-profile-page.component'
-              ).then((m) => m.UserProfilePageComponent),
-          },
-          {
-            path: 'change-password',
-            loadComponent: () =>
-              import(
-                './features/private/change password/change-password-page/change-password-page.component'
-              ).then((m) => m.ChangePasswordPageComponent),
-          },
-        ],
+        loadComponent: () =>
+          import(
+            './features/private/user-profile/user-profile-page/user-profile-page.component'
+          ).then((m) => m.UserProfilePageComponent),
       },
     ],
   },

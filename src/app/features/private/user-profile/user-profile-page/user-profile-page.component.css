@@ -20,7 +20,7 @@
 
 .profile-sidebar-container {
   position: sticky;
-  top: var(--spacing-large);
+  top: 100px;
   height: fit-content;
 }
 

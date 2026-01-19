@@ -19,9 +19,9 @@ import { ChangePasswordRequest } from '../../models/auth/auth.model';
   providedIn: 'root',
 })
 export class UserApiService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
-  private storageService = inject(StorageService);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+  private readonly storageService = inject(StorageService);
 
   getUsers(params: UserFilterParams): Observable<PagedResponse<User>> {
     let httpParams = new HttpParams()
@@ -73,7 +73,7 @@ export class UserApiService {
   }
 
   changePassword(request: ChangePasswordRequest): Observable<void> {
-    return this.http.patch<void>(`/api/v1/auth/change-password`, request, {
+    return this.http.post<void>(`/api/v1/auth/change-password`, request, {
       withCredentials: true,
     });
   }
