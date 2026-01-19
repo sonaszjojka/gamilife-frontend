@@ -73,8 +73,12 @@ export class UserApiService {
   }
 
   changePassword(request: ChangePasswordRequest): Observable<void> {
-    return this.http.post<void>(`/api/v1/auth/change-password`, request, {
-      withCredentials: true,
-    });
+    return this.http.post<void>(
+      `${this.apiUrl}/auth/change-password`,
+      request,
+      {
+        withCredentials: true,
+      },
+    );
   }
 }
