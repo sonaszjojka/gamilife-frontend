@@ -13,7 +13,6 @@ import {
   PagedResponse,
 } from '../../models/user-profile/user-profile.models';
 import { StorageService } from '../../../../shared/services/auth/storage.service';
-import { ChangePasswordRequest } from '../../models/auth/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -69,16 +68,6 @@ export class UserApiService {
       `${this.apiUrl}/users/${userId}`,
       request,
       { withCredentials: true },
-    );
-  }
-
-  changePassword(request: ChangePasswordRequest): Observable<void> {
-    return this.http.post<void>(
-      `${this.apiUrl}/auth/change-password`,
-      request,
-      {
-        withCredentials: true,
-      },
     );
   }
 }

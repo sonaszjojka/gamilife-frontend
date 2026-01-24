@@ -24,6 +24,8 @@ import {
   GamificationUserData,
   LoginResponse,
   RegistrationData,
+  ChangePasswordRequest,
+  ResetPasswordRequest,
 } from '../../../features/shared/models/auth/auth.model';
 
 @Injectable({ providedIn: 'root' })
@@ -215,6 +217,23 @@ export class AuthService {
       data.requiredExperienceForNextLevel,
     );
     this.storage.setStatsVersion(data.statsVersion);
+  }
+
+  public changePassword(request: ChangePasswordRequest): Observable<void> {
+    return this.http.post<void>(
+      `${environment.apiUrl}/auth/change-password`,
+      request,
+      {
+        withCredentials: true,
+      },
+    );
+  }
+
+  public resetPassword(request: ResetPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/reset-password`, {
+      code: request.code,
+      newPassword: request.newPassword,
+    });
   }
 
   completeUserOnboarding(): void {
