@@ -33,7 +33,6 @@
 
 .group-tasks-filter {
   display: flex;
-  gap: 8px;
   padding: 16px;
   border-bottom: 1px solid #f0f0f0;
   flex-shrink: 0;
@@ -52,6 +51,28 @@ h3 {
   padding: 16px 16px 16px;
   min-height: 0;
   align-content: center;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loading-more-container {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-medium);
+}
+
+.empty-state {
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: var(--font-size-base);
 }
 
 .bottom-tasks-list-panel {
