@@ -119,7 +119,6 @@
             nz-button
             nzType="primary"
             type="submit"
-            [nzLoading]="saving"
             [disabled]="!settingsForm.valid || !settingsForm.dirty"
           >
             <i nz-icon nzType="save"></i>
@@ -141,11 +140,19 @@
   </nz-card>
 
   <nz-card
-    [nzTitle]="'Change Password'"
+    [nzTitle]="
+      userDetails.hasLocalPassword
+        ? 'Change Your Password'
+        : 'Set Up Your Password'
+    "
     [nzBordered]="true"
     style="margin-top: 24px"
   >
-    <app-change-password-page />
+    @if (userDetails.hasLocalPassword) {
+      <app-change-password-page />
+    } @else {
+      <app-setup-password [email]="userDetails.email!" />
+    }
   </nz-card>
 
   <nz-card
@@ -159,20 +166,15 @@
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Email">
         {{ userDetails.email }}
-        <nz-tag
-          *ngIf="userDetails.isEmailVerified"
-          nzColor="success"
-          style="margin-left: 8px"
-        >
-          <i nz-icon nzType="check-circle"></i> Verified
-        </nz-tag>
-        <nz-tag
-          *ngIf="!userDetails.isEmailVerified"
-          nzColor="warning"
-          style="margin-left: 8px"
-        >
-          <i nz-icon nzType="exclamation-circle"></i> Not Verified
-        </nz-tag>
+        @if (userDetails.isEmailVerified) {
+          <nz-tag nzColor="success" style="margin-left: 8px">
+            <i nz-icon nzType="check-circle"></i> Verified
+          </nz-tag>
+        } @else {
+          <nz-tag nzColor="warning" style="margin-left: 8px">
+            <i nz-icon nzType="exclamation-circle"></i> Not Verified
+          </nz-tag>
+        }
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Experience Points">
         {{ userDetails.experience }}

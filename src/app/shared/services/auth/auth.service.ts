@@ -219,6 +219,12 @@ export class AuthService {
     this.storage.setStatsVersion(data.statsVersion);
   }
 
+  public forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/forgot-password`, {
+      email,
+    });
+  }
+
   public changePassword(request: ChangePasswordRequest): Observable<void> {
     return this.http.post<void>(
       `${environment.apiUrl}/auth/change-password`,
