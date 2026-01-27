@@ -29,4 +29,5 @@ export interface UserDetails {
   sendBudgetReports: boolean | null;
   isEmailVerified: boolean | null;
   isTutorialCompleted: boolean | null;
+  hasLocalPassword: boolean | null;
 }

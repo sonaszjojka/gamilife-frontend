@@ -169,7 +169,6 @@ export class DashboardPageComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.isStatisticsCardLoading.set(false);
-          console.log(response);
           this.statistics = response;
         },
         error: () => {

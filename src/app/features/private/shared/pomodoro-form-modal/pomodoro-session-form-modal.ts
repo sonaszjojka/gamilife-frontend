@@ -49,9 +49,9 @@ export class PomodoroSessionFormModal {
   creationMode = signal<boolean>(false);
   title = '';
 
-  private pomodoroApi = inject(UserPomodoroApiService);
-  private notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly pomodoroApi = inject(UserPomodoroApiService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
   pomodoroRequest?: PomodoroRequest;
   isVisible = false;
 
@@ -59,7 +59,6 @@ export class PomodoroSessionFormModal {
     if (this.activity.pomodoro?.id) {
       this.editionMode.set(true);
       this.creationMode.set(false);
-      console.log(this.activity);
       this.title = 'Edit Pomodoro Task';
     } else {
       this.creationMode.set(true);
@@ -108,7 +107,7 @@ export class PomodoroSessionFormModal {
       this.activity.pomodoro?.id
     ) {
       this.pomodoroApi
-        .editPomodoro(this.activity.pomodoro!.id, this.pomodoroRequest)
+        .editPomodoro(this.activity.pomodoro.id, this.pomodoroRequest)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {

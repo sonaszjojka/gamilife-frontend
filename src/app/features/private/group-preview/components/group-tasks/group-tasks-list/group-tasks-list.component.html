@@ -1,15 +1,30 @@
-<nz-card class="group-tasks-card" nzTitle="GroupTasks">
-  <div class="group-tasks-filter">
-    <button nz-button (click)="onActiveTasks()">Active Tasks</button>
-    <button nz-button (click)="onAcceptedTasks()">Accepted Tasks</button>
-    <button nz-button (click)="onDeclinedTasks()">Declined Tasks</button>
-  </div>
+<nz-card class="group-tasks-card" nzTitle="Group Tasks">
+  <nz-radio-group
+    class="group-tasks-filter"
+    [(ngModel)]="selectedFilter"
+    (ngModelChange)="onFilterChange($event)"
+    nzSize="large"
+  >
+    <button nz-radio-button nzValue="active">Active Tasks</button>
+    <button nz-radio-button nzValue="accepted">Accepted Tasks</button>
+    <button nz-radio-button nzValue="declined">Declined Tasks</button>
+  </nz-radio-group>
   <div class="group-tasks-list" (scroll)="onListScroll($event)">
-    <nz-spin [nzSpinning]="loading()" nzSize="large">
+    @if (loading()) {
+      <div class="loading-container">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+      </div>
+    } @else {
       @if (tasksList().length === 0) {
         <div class="empty-state">
-          <h3>There are no tasks in your group yet!</h3>
-          <nz-list-empty></nz-list-empty>
+          <nz-empty [nzNotFoundContent]="contentTpl"></nz-empty>
+          <ng-template #contentTpl>
+            <span class="empty-text">
+              {{ getEmptyStateTitle() }}
+              <br />
+              <small>{{ getEmptyStateSubTitle() }}</small>
+            </span>
+          </ng-template>
         </div>
       } @else {
         @for (task of tasksList(); track task.taskDto.id) {
@@ -22,8 +37,14 @@
             (rewardGiven)="onGroupRefresh()"
           ></app-group-task>
         }
+
+        @if (loadingMore()) {
+          <div class="loading-more-container">
+            <nz-spin nzSimple></nz-spin>
+          </div>
+        }
       }
-    </nz-spin>
+    }
   </div>
 
   <div class="bottom-tasks-list-panel">

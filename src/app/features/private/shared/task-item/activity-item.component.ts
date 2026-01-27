@@ -60,27 +60,20 @@ export class ActivityItemComponent implements OnInit {
   moveToCurrentSession = output<ActivityItemDetails>();
   removeFromCurrentSession = output<ActivityItemDetails>();
 
-  private taskService = inject(UserTaskApiService);
-  private habitService = inject(UserHabitApiService);
-  private notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly taskService = inject(UserTaskApiService);
+  private readonly habitService = inject(UserHabitApiService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.isCompleted.set(this.activity().status == ActivityStatus.COMPLETED);
-    console.log(this.activity());
   }
 
   completeTask(event: MouseEvent): void {
     event.stopPropagation();
     this.isCompleted.set(true);
     const request: TaskRequest = {
-      title: this.activity().title,
-      deadlineDate: this.activity().deadlineDate,
-      deadlineTime: this.activity().deadlineTime,
-      categoryId: this.activity().categoryId,
-      difficultyId: this.activity().difficultyId,
       completed: true,
-      description: this.activity().description,
     };
     this.taskService
       .editTask(this.activity().id, request)

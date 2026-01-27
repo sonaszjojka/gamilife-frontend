@@ -1,6 +1,5 @@
 import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import {
   AbstractControl,
   NonNullableFormBuilder,
@@ -15,8 +14,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { environment } from '../../../../../environments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NotificationService } from '../../../shared/services/notification-service/notification.service';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -36,23 +36,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./reset-password-page.component.css'],
 })
 export class ResetPasswordPageComponent implements OnInit {
-  private fb = inject(NonNullableFormBuilder);
-  private http = inject(HttpClient);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private destroyRef = inject(DestroyRef);
-
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly notificationService = inject(NotificationService);
+  private readonly authService = inject(AuthService);
   isSubmitting = signal(false);
   isPasswordVisible = signal(false);
-  status = signal<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   code: string | null = null;
 
   validateForm = this.fb.group({
     password: this.fb.control('', [
       Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(128),
       this.isPasswordValidator.bind(this),
     ]),
   });
@@ -61,7 +58,10 @@ export class ResetPasswordPageComponent implements OnInit {
     this.code = this.route.snapshot.queryParamMap.get('code');
 
     if (!this.code) {
-      this.status.set('error');
+      this.router.navigate(['/login']);
+      this.notificationService.error(
+        'Invalid password reset link. Please request a new one.',
+      );
     }
   }
 
@@ -93,40 +93,36 @@ export class ResetPasswordPageComponent implements OnInit {
       return;
     }
 
-    this.status.set('sending');
     this.isSubmitting.set(true);
 
     const newPassword = this.validateForm.value.password!;
     const code = this.code;
 
-    this.http
-      .post(
-        `${environment.apiUrl}/auth/reset-password`,
-        {
-          code,
-          newPassword,
-        },
-        { withCredentials: true },
-      )
+    this.authService
+      .resetPassword({ code, newPassword })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.status.set('success');
           this.isSubmitting.set(false);
-          setTimeout(() => this.goToLogin(), 2000);
+          this.notificationService.success(
+            'Password has been reset successfully. You can now log in with your new password.',
+          );
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           this.isSubmitting.set(false);
-          this.status.set('error');
-          const detail = err.error?.detail;
-          if (detail) {
-            this.validateForm.get('password')?.setErrors({ apiError: detail });
+          if (err?.error?.code === '2005') {
+            this.notificationService.error(
+              'New password is same as the old password. Just try logging with it!',
+            );
+          } else {
+            this.notificationService.error(
+              'Failed to reset password. Try requesting a new link.',
+            );
           }
+
+          this.router.navigate(['/login']);
         },
       });
-  }
-
-  goToLogin(): void {
-    this.router.navigate(['/login']);
   }
 }

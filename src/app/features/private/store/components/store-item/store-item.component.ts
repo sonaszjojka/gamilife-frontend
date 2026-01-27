@@ -13,6 +13,10 @@ import { StoreItemDetailsComponent } from '../store-item-details/store-item-deta
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  ITEM_SLOT_NAMES,
+  ItemSlotEnum,
+} from '../../../../shared/models/gamification/item-slot.enum';
 
 @Component({
   selector: 'app-store-item',
@@ -71,5 +75,11 @@ export class StoreItemComponent {
 
   onDetails() {
     this.storeItemDetails.show();
+  }
+
+  protected getImagePath(): string {
+    const itemSlot: ItemSlotEnum = this.item().itemSlot.id;
+    const fileName = ITEM_SLOT_NAMES[itemSlot].toLocaleLowerCase();
+    return `assets/${fileName}.png`;
   }
 }

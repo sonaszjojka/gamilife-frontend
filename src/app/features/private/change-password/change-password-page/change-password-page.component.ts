@@ -15,10 +15,10 @@ import {
 import { NzInputDirective, NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
-import { UserApiService } from '../../../shared/services/user-api/user-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { ChangePasswordRequest } from '../../../shared/models/auth/auth.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-change-password-page',
@@ -40,7 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ChangePasswordPageComponent {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly userApi = inject(UserApiService);
+  private readonly authService = inject(AuthService);
   private readonly notificationApi = inject(NotificationService);
 
   isSubmitting = signal(false);
@@ -106,7 +106,7 @@ export class ChangePasswordPageComponent {
       newPassword: this.validateForm.value.newPassword!,
     };
 
-    this.userApi
+    this.authService
       .changePassword(request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

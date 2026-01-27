@@ -28,6 +28,9 @@ import { GroupMember } from '../../../../../shared/models/group/group-member.mod
 import { Page } from '../../../../../shared/models/util/page.model';
 import { NotificationService } from '../../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-group-task-list',
@@ -44,6 +47,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzModalModule,
     GroupTaskComponent,
     GroupTaskFormComponent,
+    NzRadioModule,
+    FormsModule,
+    NzEmptyComponent,
   ],
 })
 export class GroupTasksListComponent implements OnInit {
@@ -65,11 +71,12 @@ export class GroupTasksListComponent implements OnInit {
     page: 0,
     size: 5,
   };
+  selectedFilter = 'active';
 
   private readonly groupTaskApi = inject(GroupTaskApiService);
   private readonly notification = inject(NotificationService);
   protected readonly GroupPreviewMode = GroupPreviewMode;
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   @ViewChild(GroupTaskFormComponent)
   groupTaskForm!: GroupTaskFormComponent;
@@ -81,6 +88,8 @@ export class GroupTasksListComponent implements OnInit {
   private loadGroupTasks(): void {
     const groupId = this.groupId();
     if (!groupId) return;
+
+    this.loading.set(true);
 
     this.groupTaskApi
       .getGroupTasks(groupId, this.tasksRequestParams)
@@ -165,24 +174,46 @@ export class GroupTasksListComponent implements OnInit {
     }
   }
 
-  protected onActiveTasks(): void {
+  protected onFilterChange(value: string): void {
     this.tasksRequestParams.page = 0;
-    this.tasksRequestParams.isAccepted = false;
-    this.tasksRequestParams.isDeclined = false;
+
+    switch (value) {
+      case 'active':
+        this.tasksRequestParams.isAccepted = false;
+        this.tasksRequestParams.isDeclined = false;
+        break;
+      case 'accepted':
+        this.tasksRequestParams.isAccepted = true;
+        this.tasksRequestParams.isDeclined = false;
+        break;
+      case 'declined':
+        this.tasksRequestParams.isAccepted = false;
+        this.tasksRequestParams.isDeclined = true;
+        break;
+    }
+
     this.loadGroupTasks();
   }
 
-  protected onAcceptedTasks(): void {
-    this.tasksRequestParams.page = 0;
-    this.tasksRequestParams.isAccepted = true;
-    this.tasksRequestParams.isDeclined = false;
-    this.loadGroupTasks();
+  protected getEmptyStateTitle(): string {
+    switch (this.selectedFilter) {
+      case 'accepted':
+        return 'No accepted tasks';
+      case 'declined':
+        return 'No declined tasks';
+      default:
+        return 'No active tasks';
+    }
   }
 
-  protected onDeclinedTasks(): void {
-    this.tasksRequestParams.page = 0;
-    this.tasksRequestParams.isAccepted = false;
-    this.tasksRequestParams.isDeclined = true;
-    this.loadGroupTasks();
+  protected getEmptyStateSubTitle(): string {
+    switch (this.selectedFilter) {
+      case 'accepted':
+        return 'Tasks accepted by the admin will appear here.';
+      case 'declined':
+        return 'Tasks that were declined will be listed here.';
+      default:
+        return 'There are no active tasks in this group yet.';
+    }
   }
 }
