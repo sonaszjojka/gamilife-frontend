@@ -58,7 +58,6 @@ export class GroupItemApiService {
     if (isActive !== null) {
       httpParams = httpParams.set('isActive', isActive.toString());
     }
-    console.log(httpParams);
     return this.http.get<Page<GroupItemModel>>(
       `${this.apiUrl}/groups/${groupId}/shop/items`,
       {

@@ -438,8 +438,7 @@ export class PomodoroSessionPageComponent implements OnInit, OnDestroy {
               'Successfully finished habit cycle',
             );
           },
-          error: (err) => {
-            console.log(err);
+          error: () => {
             this.notificationService.error(
               'Error occurred while finishing habit cycle',
             );
