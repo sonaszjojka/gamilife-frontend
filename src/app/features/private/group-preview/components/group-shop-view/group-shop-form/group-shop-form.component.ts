@@ -75,14 +75,12 @@ export class GroupShopFormComponent {
         name: this.validateForm.value.name,
         description: this.validateForm.value.description,
       };
-      console.log(request);
       this.groupShopApi.editGroupShop(this.groupId(), request).subscribe({
         next: () => {
           this.notification.success('Shop data updated successfully');
           this.formSubmitted.emit();
         },
         error: (error) => {
-          console.log(error);
           this.notification.handleApiError(error, 'Failed to update Shop data');
         },
       });

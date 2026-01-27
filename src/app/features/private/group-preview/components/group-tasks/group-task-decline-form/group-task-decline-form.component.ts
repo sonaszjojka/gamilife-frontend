@@ -39,10 +39,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class GroupTaskDeclineFormComponent {
   formSubmitted = output<void>();
 
-  private fb = inject(NonNullableFormBuilder);
-  private groupTaskApi = inject(GroupTaskApiService);
-  private notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly groupTaskApi = inject(GroupTaskApiService);
+  private readonly notification = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   task = input.required<GroupTask>();
   groupId = input.required<string>();
@@ -81,21 +81,13 @@ export class GroupTaskDeclineFormComponent {
       const formValue = this.validateForm.getRawValue();
 
       const editGroupTaskRequest: EditGroupTaskDto = {
-        title: this.task().taskDto.title,
-        description: this.task().taskDto.description,
-        deadlineDate: this.task().taskDto.deadlineDate,
-        deadlineTime: this.task().taskDto.deadlineTime,
-        categoryId: this.task().taskDto.category.id,
-        difficultyId: this.task().taskDto.difficulty.id,
-        completedAt: null,
         isAccepted: false,
-        reward: this.task().reward,
         declineMessage: formValue.declineMessage,
       };
       this.groupTaskApi
         .editGroupTask(
           this.groupId(),
-          this.task()!.groupTaskId,
+          this.task().groupTaskId,
           editGroupTaskRequest,
         )
         .pipe(takeUntilDestroyed(this.destroyRef))

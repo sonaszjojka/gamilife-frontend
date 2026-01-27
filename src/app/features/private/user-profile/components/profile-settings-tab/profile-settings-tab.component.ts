@@ -31,6 +31,7 @@ import { UserApiService } from '../../../../shared/services/user-api/user-api.se
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChangePasswordPageComponent } from '../../../change-password/change-password-page/change-password-page.component';
+import { SetupPasswordComponent } from '../setup-password/setup-password';
 
 @Component({
   selector: 'app-profile-settings-tab',
@@ -50,6 +51,7 @@ import { ChangePasswordPageComponent } from '../../../change-password/change-pas
     NzTagModule,
     NzIconModule,
     ChangePasswordPageComponent,
+    SetupPasswordComponent,
   ],
   templateUrl: './profile-settings-tab.component.html',
   styleUrl: './profile-settings-tab.component.css',
@@ -59,8 +61,6 @@ export class ProfileSettingsTabComponent implements OnInit {
   @Output() settingsUpdated = new EventEmitter<UserDetails>();
 
   settingsForm!: FormGroup;
-  saving = false;
-  sendingResetEmail = false;
 
   private readonly fb = inject(FormBuilder);
   private readonly notificationService = inject(NotificationService);
@@ -90,7 +90,6 @@ export class ProfileSettingsTabComponent implements OnInit {
 
   onSubmit(): void {
     if (this.settingsForm.valid) {
-      this.saving = true;
       const formValue = this.settingsForm.value;
 
       const request = {
@@ -107,7 +106,6 @@ export class ProfileSettingsTabComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (response) => {
-            this.saving = false;
             this.settingsForm.markAsPristine();
             this.notificationService.success('Profile updated successfully!');
 
@@ -123,7 +121,6 @@ export class ProfileSettingsTabComponent implements OnInit {
             this.settingsUpdated.emit(updatedUser);
           },
           error: (error) => {
-            this.saving = false;
             this.notificationService.handleApiError(
               error,
               'Failed to update profile',

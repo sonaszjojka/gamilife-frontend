@@ -22,7 +22,7 @@ export class BadgeItemComponent {
   }
 
   getImagePath(): string {
-    const path = 'assets/placeholder.png';
+    const path = 'assets/badge.png';
     return path;
   }
 }

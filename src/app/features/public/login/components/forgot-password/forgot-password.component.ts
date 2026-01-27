@@ -1,6 +1,4 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -13,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -34,9 +33,9 @@ export class ForgotPasswordComponent {
   sending = signal(false);
   sentSuccessfully = signal(false);
   errorMessage = signal<string | null>(null);
-  private http = inject(HttpClient);
-  private fb = inject(NonNullableFormBuilder);
-  private destroyRef = inject(DestroyRef);
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
 
   validateForm = this.fb.group({
     email: this.fb.control('', [Validators.email, Validators.required]),
@@ -63,11 +62,10 @@ export class ForgotPasswordComponent {
       this.sending.set(true);
       this.sentSuccessfully.set(false);
       this.errorMessage.set(null);
-      const url = `${environment.apiUrl}/auth/forgot-password`;
       const formData = this.validateForm.value;
 
-      this.http
-        .post(url, formData, { withCredentials: true })
+      this.authService
+        .forgotPassword(formData.email!)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {

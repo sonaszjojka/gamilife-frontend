@@ -18,7 +18,7 @@
             <div class="image-section">
               <div class="image-wrapper">
                 <img
-                  ngSrc="../../../../../../assets/placeholder.png"
+                  [ngSrc]="getImagePath()"
                   [alt]="itemDetails.name"
                   class="item-image"
                   width="250"
