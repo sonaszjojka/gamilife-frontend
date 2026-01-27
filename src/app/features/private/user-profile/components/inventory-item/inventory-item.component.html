@@ -5,11 +5,7 @@
   (click)="onItemClick()"
 >
   <div class="item-image-container" [style.border-color]="getRarityColor()">
-    <img
-      [src]="'assets/placeholder.png'"
-      [alt]="item.item.name"
-      class="item-image"
-    />
+    <img [src]="getImagePath()" [alt]="item.item.name" class="item-image" />
     <nz-tag class="rarity-tag" [nzColor]="getRarityColor()">
       {{ item.item.rarity.name }}
     </nz-tag>

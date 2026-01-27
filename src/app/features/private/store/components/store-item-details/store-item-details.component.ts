@@ -13,6 +13,10 @@ import {
 import { NgOptimizedImage } from '@angular/common';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  ITEM_SLOT_NAMES,
+  ItemSlotEnum,
+} from '../../../../shared/models/gamification/item-slot.enum';
 
 @Component({
   selector: 'app-store-item-details',
@@ -73,5 +77,11 @@ export class StoreItemDetailsComponent {
           );
         },
       });
+  }
+
+  protected getImagePath(): string {
+    const itemSlot: ItemSlotEnum = this.itemDetails.itemSlot.id;
+    const fileName = ITEM_SLOT_NAMES[itemSlot].toLocaleLowerCase();
+    return `assets/${fileName}.png`;
   }
 }

@@ -13,6 +13,7 @@ import { ItemSlotFilterComponent } from '../item-slot-filter/item-slot-filter.co
 import { InventoryItemComponent } from '../inventory-item/inventory-item.component';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzAlertComponent } from 'ng-zorro-antd/alert';
 
 @Component({
   selector: 'app-avatar-customization-tab',
@@ -27,6 +28,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NzIconModule,
     ItemSlotFilterComponent,
     InventoryItemComponent,
+    NzAlertComponent,
   ],
   templateUrl: './avatar-customization-tab.component.html',
   styleUrl: './avatar-customization-tab.component.css',

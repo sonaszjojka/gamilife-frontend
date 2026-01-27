@@ -5,6 +5,10 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { RARITY_COLORS } from '../../../../shared/models/gamification/rarity.enum';
 import { CommonModule } from '@angular/common';
+import {
+  ITEM_SLOT_NAMES,
+  ItemSlotEnum,
+} from '../../../../shared/models/gamification/item-slot.enum';
 
 @Component({
   selector: 'app-inventory-item',
@@ -24,5 +28,11 @@ export class InventoryItemComponent {
 
   onItemClick(): void {
     this.itemClick.emit(this.item);
+  }
+
+  protected getImagePath(): string {
+    const itemSlot: ItemSlotEnum = this.item.item.itemSlot.id;
+    const fileName = ITEM_SLOT_NAMES[itemSlot].toLocaleLowerCase();
+    return `assets/${fileName}.png`;
   }
 }
