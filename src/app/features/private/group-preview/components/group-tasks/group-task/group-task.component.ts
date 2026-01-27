@@ -66,7 +66,7 @@ export class GroupTaskComponent implements OnInit {
   private readonly groupTaskMemberApi = inject(GroupTaskMemberApiService);
   private readonly modal = inject(NzModalService);
   private readonly notification = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.checkUserIsParticipant();
@@ -183,14 +183,6 @@ export class GroupTaskComponent implements OnInit {
 
   protected acceptTask(): void {
     const request: EditGroupTaskDto = {
-      title: this.task().taskDto.title,
-      description: this.task().taskDto.description,
-      deadlineDate: this.task().taskDto.deadlineDate,
-      deadlineTime: this.task().taskDto.deadlineTime,
-      categoryId: this.task().taskDto.category.id,
-      difficultyId: this.task().taskDto.difficulty.id,
-      completedAt: this.task().taskDto.completedAt,
-      reward: this.task().reward,
       isAccepted: true,
       declineMessage: null,
     };

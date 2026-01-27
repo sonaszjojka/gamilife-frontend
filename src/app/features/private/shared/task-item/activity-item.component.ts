@@ -73,13 +73,7 @@ export class ActivityItemComponent implements OnInit {
     event.stopPropagation();
     this.isCompleted.set(true);
     const request: TaskRequest = {
-      title: this.activity().title,
-      deadlineDate: this.activity().deadlineDate,
-      deadlineTime: this.activity().deadlineTime,
-      categoryId: this.activity().categoryId,
-      difficultyId: this.activity().difficultyId,
       completed: true,
-      description: this.activity().description,
     };
     this.taskService
       .editTask(this.activity().id, request)
