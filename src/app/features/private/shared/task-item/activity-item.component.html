@@ -47,7 +47,9 @@
         <nz-icon nzType="file-text" class="info-icon"></nz-icon>
         <div class="info-content">
           <div class="info-label">Description</div>
-          <div class="info-value">{{ activity().description }}</div>
+          <div class="info-value">
+            {{ activity().description ? activity().description : "-" }}
+          </div>
         </div>
       </div>
 
@@ -138,35 +140,35 @@
   </div>
 
   <div class="task-actions-footer">
-    @if (!inPomodoroList() && !this.activity().pomodoro) {
+    @if (!inPomodoroList()) {
       <div class="action-right">
         @if (this.activity().type === ActivityType.TASK) {
           @if (this.activity().status !== ActivityStatus.COMPLETED) {
-            <button nz-button nzShape="circle" (click)="completeTask($event)">
-              <nz-icon nzType="check-circle"></nz-icon>
+            <button nz-button nzShape="round" (click)="completeTask($event)">
+              <nz-icon nzType="check-circle"></nz-icon> Complete
             </button>
           } @else {
-            <button nz-button nzShape="circle" (click)="restoreTask($event)">
-              <nz-icon nzType="reload"></nz-icon>
+            <button nz-button nzShape="round" (click)="restoreTask($event)">
+              <nz-icon nzType="reload"></nz-icon> Restore
             </button>
           }
         } @else {
           @if (activity().status === ActivityStatus.DEAD) {
-            <button nz-button nzShape="circle" (click)="restoreHabit($event)">
-              <nz-icon nzType="reload"></nz-icon>
+            <button nz-button nzShape="round" (click)="restoreHabit($event)">
+              <nz-icon nzType="reload"></nz-icon> Resurrect
             </button>
           } @else {
             @if (activity().canBeWorkedOn === false) {
-              <button nz-button nzShape="circle" disabled>
-                <nz-icon nzType="check-circle"></nz-icon>
+              <button nz-button nzShape="round" disabled>
+                <nz-icon nzType="check-circle"></nz-icon> Complete
               </button>
             } @else {
               <button
                 nz-button
-                nzShape="circle"
+                nzShape="round"
                 (click)="completeHabitCycle($event)"
               >
-                <nz-icon nzType="check-circle"></nz-icon>
+                <nz-icon nzType="check-circle"></nz-icon> Complete
               </button>
             }
           }

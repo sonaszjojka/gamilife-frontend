@@ -1,6 +1,5 @@
 .task-card {
   margin: 60px auto;
-  width: 70%;
   box-shadow: var(--box-shadow-md);
   border-radius: var(--border-radius-xl);
   overflow: hidden;
@@ -8,7 +7,7 @@
 }
 
 .task-card:hover {
-  transform: scale(1.1);
+  transform: scale(1.01);
 }
 
 :host ::ng-deep .task-card .ant-card-body {
