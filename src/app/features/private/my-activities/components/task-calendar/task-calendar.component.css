@@ -53,7 +53,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background-color: #757575;
+  background-color: var(--fourth-color);
   border-bottom: 1px solid #f0f0f0;
   border-radius: 10px;
 }
@@ -63,4 +63,5 @@
   font-size: 1.2rem;
   text-transform: capitalize;
   border-radius: 10px;
+  color: #ffffff;
 }

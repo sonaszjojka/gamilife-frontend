@@ -78,11 +78,34 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
   border-radius: var(--border-radius-xl);
   box-shadow: var(--box-shadow-md);
   background-color: #ffffff;
   margin: 15px;
+}
+
+.activities-card-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fourth-color) transparent;
+}
+
+.activities-card-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activities-card-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.activities-card-container::-webkit-scrollbar-thumb {
+  background-color: var(--fourth-color);
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.activities-card-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--fourth-color);
 }
 
 .right-column {
@@ -92,7 +115,7 @@
   padding-top: 50px;
 }
 
-app-dashboard-activities {
+app-dashboard-page-activities {
   display: flex;
   flex-direction: column;
   overflow: hidden;

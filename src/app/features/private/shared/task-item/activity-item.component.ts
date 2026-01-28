@@ -14,7 +14,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TaskRequest } from '../../../shared/models/task/task-request';
-import { PomodoroTaskProgressComponent } from '../pomodoro-task-progress/pomodoro-task-progress.component';
 import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-api.service';
 import {
   ActivityItemDetails,
@@ -35,7 +34,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ReactiveFormsModule,
     NzIconDirective,
     NzButtonComponent,
-    PomodoroTaskProgressComponent,
     DatePipe,
   ],
   templateUrl: './activity-item.component.html',
@@ -154,6 +152,14 @@ export class ActivityItemComponent implements OnInit {
           this.activity().completedAt = undefined;
           this.activity().status = ActivityStatus.INCOMPLETE;
           this.activityUpdated.emit(this.activity().id);
+          this.notificationService.success(
+            `You have successfully restored the task: ${this.activity().title}`,
+          );
+        },
+        error: () => {
+          this.notificationService.error(
+            `There was an error restoring the task: ${this.activity().title}`,
+          );
         },
       });
   }

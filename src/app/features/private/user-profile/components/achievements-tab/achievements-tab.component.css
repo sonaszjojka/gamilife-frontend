@@ -60,8 +60,16 @@
 
 .achievement-progress {
   margin-top: var(--spacing-small);
+  max-width: 250px;
 }
 
 .unlocked-tag {
   margin-top: var(--spacing-small);
+}
+
+@media (max-width: 1400px) {
+  .achievement-progress {
+    margin-top: var(--spacing-small);
+    max-width: 150px;
+  }
 }

@@ -41,7 +41,7 @@ export class TaskCalendarComponent implements OnInit {
   currentlySelectedDate = signal<Date | null>(null);
   private readonly activityService = inject(UserActivitiesApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
   ngOnInit() {
     this.loadActivities();
   }
