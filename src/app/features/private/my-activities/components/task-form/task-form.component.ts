@@ -31,10 +31,11 @@ import {
   ActivityType,
 } from '../../../../shared/models/task/activity.model';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { HabitRequest } from '../../../../shared/models/task/habit-request.model';
+import { TaskRequest } from '../../../../shared/models/task/task-request';
 import { PomodoroSessionFormModal } from '../../../shared/pomodoro-form-modal/pomodoro-session-form-modal';
 import { NotificationService } from '../../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HabitRequest } from '../../../../shared/models/task/habit-request.model';
 
 @Component({
   selector: 'app-task-form',
@@ -177,6 +178,11 @@ export class TaskFormComponent implements OnChanges {
   }
 
   onSubmit() {
+    if (this.editionMode?.() && this.validActivityForm.pristine) {
+      this.onClose();
+      return;
+    }
+
     if (this.validActivityForm.invalid) {
       Object.values(this.validActivityForm.controls).forEach((control) => {
         control.markAsDirty();
@@ -208,14 +214,19 @@ export class TaskFormComponent implements OnChanges {
     }
 
     const formValue = this.validActivityForm.getRawValue();
+    const controls = this.validActivityForm.controls;
 
     if (this.type() == ActivityType.TASK) {
-      let request;
-      if (formValue.deadlineHour != undefined) {
+      let request: Partial<TaskRequest>;
+
+      if (this.creationMode?.()) {
         const date = formValue.deadlineHour;
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const deadlineTime = `${hours}:${minutes}:00`;
+        let deadlineTime = null;
+        if (date) {
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          deadlineTime = `${hours}:${minutes}:00`;
+        }
 
         request = {
           title: formValue.title,
@@ -226,19 +237,33 @@ export class TaskFormComponent implements OnChanges {
           description: formValue.description,
         };
       } else {
-        request = {
-          title: formValue.title,
-          deadlineDate: formValue.deadlineDate!.toISOString().slice(0, 10),
-          deadlineTime: null,
-          categoryId: formValue.categoryId,
-          difficultyId: formValue.difficultyId,
-          description: formValue.description,
-        };
+        request = {};
+        if (controls.title.dirty) request.title = formValue.title;
+        if (controls.categoryId.dirty)
+          request.categoryId = formValue.categoryId;
+        if (controls.difficultyId.dirty)
+          request.difficultyId = formValue.difficultyId;
+        if (controls.description.dirty)
+          request.description = formValue.description;
+        if (controls.deadlineDate.dirty)
+          request.deadlineDate = formValue
+            .deadlineDate!.toISOString()
+            .slice(0, 10);
+        if (controls.deadlineHour.dirty) {
+          if (formValue.deadlineHour) {
+            const date = formValue.deadlineHour;
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            request.deadlineTime = `${hours}:${minutes}:00`;
+          } else {
+            request.deadlineTime = null;
+          }
+        }
       }
 
       if (this.creationMode?.()) {
         this.taskApi
-          .createTask(request)
+          .createTask(request as TaskRequest)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: () => {
@@ -257,7 +282,7 @@ export class TaskFormComponent implements OnChanges {
           return;
         }
         this.taskApi
-          .editTask(this.activity()!.id, request)
+          .editTask(this.activity()!.id, request as TaskRequest)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: () => {
@@ -272,17 +297,32 @@ export class TaskFormComponent implements OnChanges {
           });
       }
     } else if (this.type() == ActivityType.HABIT) {
-      const request: HabitRequest = {
-        title: formValue.title,
-        cycleLength: formValue.cycleLength,
-        categoryId: formValue.categoryId,
-        difficultyId: formValue.difficultyId,
-        description: formValue.description,
-      };
+      let request: Partial<HabitRequest>;
 
-      if (this.creationMode!()) {
+      if (this.creationMode?.()) {
+        request = {
+          title: formValue.title,
+          cycleLength: formValue.cycleLength,
+          categoryId: formValue.categoryId,
+          difficultyId: formValue.difficultyId,
+          description: formValue.description,
+        };
+      } else {
+        request = {};
+        if (controls.title.dirty) request.title = formValue.title;
+        if (controls.categoryId.dirty)
+          request.categoryId = formValue.categoryId;
+        if (controls.difficultyId.dirty)
+          request.difficultyId = formValue.difficultyId;
+        if (controls.description.dirty)
+          request.description = formValue.description;
+        if (controls.cycleLength.dirty)
+          request.cycleLength = formValue.cycleLength;
+      }
+
+      if (this.creationMode()) {
         this.habitApi
-          .createHabit(request)
+          .createHabit(request as HabitRequest)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: () => {
@@ -295,7 +335,7 @@ export class TaskFormComponent implements OnChanges {
           });
       } else {
         this.habitApi
-          .editHabit(this.activity()!.id, request)
+          .editHabit(this.activity()!.id, request as HabitRequest)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: () => {

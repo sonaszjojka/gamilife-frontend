@@ -1,60 +1,89 @@
 <nz-card class="task-card" (click)="onActivityView($event)">
-  @if (inPomodoroList()) {
-    @if (!isInSession()) {
-      <button
-        nz-button
-        nzShape="circle"
-        (click)="addActivityToPomodoroSession()"
-      >
-        @if (this.activity().pomodoro) {
-          <nz-icon nzType="arrow-left"></nz-icon>
-        } @else {
-          <nz-icon nzType="arrow-right"></nz-icon>
-        }
-      </button>
-    } @else {
-      <button
-        nz-button
-        nzShape="circle"
-        (click)="removeActivityFromPomodoroSession()"
-      >
-        <nz-icon nzType="arrow-right"></nz-icon>
-      </button>
-    }
-  }
-  @if (!inPomodoroList() && !isOnDashboard()) {
-    <div class="task-header-controls">
-      <button nz-button nzShape="circle" (click)="onActivityEdit($event)">
-        <nz-icon nzType="setting"></nz-icon>
-      </button>
+  @if (activity().status === ActivityStatus.COMPLETED) {
+    <div class="completed-banner">
+      <nz-icon nzType="check-circle"></nz-icon>
+      Completed At: {{ activity().completedAt | date: "dd.MM.yyyy HH:mm" }}
     </div>
   }
   <div class="task-content">
     <div class="task-header">
       <h1 class="task-title">{{ activity().title }}</h1>
-
-      @if (activity().pomodoro !== null && activity().pomodoro !== undefined) {
-        <app-pomodoro-task-progress
-          [cyclesCompleted]="activity().pomodoro!.cyclesCompleted"
-          [cyclesRequired]="activity().pomodoro!.cyclesRequired"
-        >
-        </app-pomodoro-task-progress>
-      }
+      <div class="task-description">
+        {{ activity().description ? activity().description : "-" }}
+      </div>
     </div>
 
     <div class="info-container">
       <div class="info-item">
-        <nz-icon nzType="file-text" class="info-icon"></nz-icon>
+        <nz-icon
+          nzType="info"
+          class="info-icon"
+          [ngClass]="{
+            'task-icon': activity().type === ActivityType.TASK,
+            'habit-icon': activity().type === ActivityType.HABIT,
+          }"
+        ></nz-icon>
         <div class="info-content">
-          <div class="info-label">Description</div>
-          <div class="info-value">
-            {{ activity().description ? activity().description : "-" }}
-          </div>
+          <div class="info-label">Type</div>
+          <div class="info-value">{{ activity().type }}</div>
         </div>
       </div>
 
       <div class="info-item">
-        <nz-icon nzType="tag" class="info-icon"></nz-icon>
+        <nz-icon
+          nzType="calendar"
+          class="info-icon"
+          [ngClass]="{
+            'task-icon': activity().type === ActivityType.TASK,
+            'habit-icon': activity().type === ActivityType.HABIT,
+          }"
+        ></nz-icon>
+        <div class="info-content">
+          <div class="info-label">Deadline</div>
+          <div class="info-value">
+            {{ activity().deadlineDate }}
+            @if (activity().deadlineTime) {
+              - {{ activity().deadlineTime.slice(0, 5) }}
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (activity().type === ActivityType.HABIT) {
+        <div class="info-item">
+          <nz-icon nzType="thunderbolt" class="info-icon habit-icon"></nz-icon>
+          <div class="info-content">
+            <div class="info-label">Current Streak</div>
+            <div class="info-value count-container">
+              <span class="highlighted-item">
+                {{ activity().currentStreak }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <nz-icon nzType="fire" class="info-icon habit-icon"></nz-icon>
+          <div class="info-content">
+            <div class="info-label">Longest Streak</div>
+            <div class="info-value count-container">
+              <span class="highlighted-item">
+                {{ activity().longestStreak }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="info-item">
+        <nz-icon
+          nzType="tag"
+          class="info-icon"
+          [ngClass]="{
+            'task-icon': activity().type === ActivityType.TASK,
+            'habit-icon': activity().type === ActivityType.HABIT,
+          }"
+        ></nz-icon>
         <div class="info-content">
           <div class="info-label">Difficulty / Category</div>
           <div class="info-value">
@@ -65,83 +94,56 @@
         </div>
       </div>
 
-      <div class="info-item">
-        <nz-icon nzType="calendar" class="info-icon"></nz-icon>
-        <div class="info-content">
-          <div class="info-label">Deadline</div>
-          <div class="info-value">
-            {{ activity().deadlineDate }}
-            @if (activity().deadlineTime) {
-              - {{ activity().deadlineTime }}
-            }
-          </div>
-        </div>
-      </div>
-
-      @if (activity().status === ActivityStatus.COMPLETED) {
+      @if (activity().pomodoro !== undefined && activity().pomodoro !== null) {
         <div class="info-item">
-          <nz-icon nzType="calendar" class="info-icon"></nz-icon>
+          <nz-icon
+            nzType="clock-circle"
+            class="info-icon"
+            [ngClass]="{
+              'task-icon': activity().type === ActivityType.TASK,
+              'habit-icon': activity().type === ActivityType.HABIT,
+            }"
+          ></nz-icon>
           <div class="info-content">
-            <div class="info-label">Completed At</div>
-            <div class="info-value">
-              {{ activity().completedAt | date: "dd.MM.yyyy HH:mm" }}
+            <div class="info-label">Pomodoro Progress</div>
+            <div class="info-value count-container">
+              <span class="highlighted-item">
+                {{
+                  `${activity().pomodoro!.cyclesCompleted}/${activity().pomodoro!.cyclesRequired}`
+                }}
+              </span>
             </div>
           </div>
         </div>
       }
-
-      <div class="info-item">
-        <nz-icon nzType="info" class="info-icon"></nz-icon>
-        <div class="info-content">
-          <div class="info-label">Type</div>
-          <div class="info-value">{{ activity().type }}</div>
-        </div>
-      </div>
     </div>
-
-    @if (activity().type === ActivityType.HABIT) {
-      <div class="info-item participants-list">
-        <nz-icon nzType="fire" class="info-icon"></nz-icon>
-        <div class="info-content">
-          <div class="info-label">Longest Streak</div>
-          <div class="info-value count-container">
-            <span class="highlighted-item">
-              {{ activity().longestStreak }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-item current-streak">
-        <nz-icon nzType="thunderbolt" class="info-icon"></nz-icon>
-        <div class="info-content">
-          <div class="info-label">Current Streak</div>
-          <div class="info-value count-container">
-            <span class="highlighted-item">
-              {{ activity().currentStreak }}
-            </span>
-          </div>
-        </div>
-      </div>
-    }
-    @if (activity().pomodoro !== undefined && activity().pomodoro !== null) {
-      <div class="info-item">
-        <nz-icon nzType="clock-circle" class="info-icon"></nz-icon>
-        <div class="info-label">Pomodoro Progress</div>
-        <div class="info-value">
-          <span class="highlighted-item">
-            {{ activity().pomodoro!.cyclesCompleted }}/{{
-              activity().pomodoro!.cyclesRequired
-            }}
-          </span>
-        </div>
-      </div>
-    }
   </div>
 
   <div class="task-actions-footer">
-    @if (!inPomodoroList()) {
-      <div class="action-right">
+    @if (inPomodoroList()) {
+      @if (!isInSession()) {
+        <button
+          nz-button
+          nzShape="circle"
+          (click)="addActivityToPomodoroSession()"
+        >
+          @if (this.activity().pomodoro) {
+            <nz-icon nzType="arrow-left"></nz-icon>
+          } @else {
+            <nz-icon nzType="arrow-right"></nz-icon>
+          }
+        </button>
+      } @else {
+        <button
+          nz-button
+          nzShape="circle"
+          (click)="removeActivityFromPomodoroSession()"
+        >
+          <nz-icon nzType="arrow-right"></nz-icon>
+        </button>
+      }
+    } @else {
+      <div class="action-left">
         @if (this.activity().type === ActivityType.TASK) {
           @if (this.activity().status !== ActivityStatus.COMPLETED) {
             <button nz-button nzShape="round" (click)="completeTask($event)">
@@ -174,6 +176,14 @@
           }
         }
       </div>
+
+      @if (!isOnDashboard()) {
+        <div class="action-right">
+          <button nz-button nzShape="round" (click)="onActivityEdit($event)">
+            <nz-icon nzType="edit"></nz-icon> Edit
+          </button>
+        </div>
+      }
     }
   </div>
 </nz-card>

@@ -14,7 +14,6 @@ import {
 import { ActivityItemComponent } from '../../shared/task-item/activity-item.component';
 import { TaskFilterComponent } from '../components/task-filter/task-filter.component';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
-import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TaskCalendarComponent } from '../components/task-calendar/task-calendar.component';
 import { UserTaskApiService } from '../../../shared/services/tasks/user-task-api.service';
 import { Page } from '../../../shared/models/util/page.model';
@@ -28,7 +27,9 @@ import { UserHabitApiService } from '../../../shared/services/tasks/user-habit-a
 import { UserActivitiesApiService } from '../../../shared/services/tasks/user-activities-api.service';
 import { NotificationService } from '../../../shared/services/notification-service/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NzListEmptyComponent } from 'ng-zorro-antd/list';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-my-activities',
@@ -38,9 +39,10 @@ import { NzListEmptyComponent } from 'ng-zorro-antd/list';
     ActivityItemComponent,
     TaskFilterComponent,
     TaskFormComponent,
-    NzButtonComponent,
     TaskCalendarComponent,
-    NzListEmptyComponent,
+    NzIconModule,
+    NzPageHeaderModule,
+    NzEmptyComponent,
   ],
   templateUrl: './my-activities-page.component.html',
   styleUrl: './my-activities-page.component.css',
@@ -78,7 +80,7 @@ export class MyActivitiesPageComponent implements OnInit {
   private readonly habitService = inject(UserHabitApiService);
   private readonly activityService = inject(UserActivitiesApiService);
   private readonly notificationService = inject(NotificationService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   @ViewChild('calendarComponent')
   calendarComponent?: TaskCalendarComponent;
@@ -88,7 +90,7 @@ export class MyActivitiesPageComponent implements OnInit {
     this.load();
   }
 
-  private filterEffect = effect(() => {
+  private readonly filterEffect = effect(() => {
     this.title();
     this.startDate();
     this.endDate();
