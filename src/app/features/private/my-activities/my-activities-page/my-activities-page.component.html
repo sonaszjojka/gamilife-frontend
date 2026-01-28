@@ -1,24 +1,18 @@
 <div class="task-panel">
-  <h1>
-    @if (activityListType() === ActivityListView.Habits) {
-      My Habits
-    } @else {
-      @if (activityListType() === ActivityListView.Activities) {
-        My Activities
-      } @else {
-        My Tasks
-      }
-    }
-
-    <div class="creation-panel">
+  <div class="top-bar-container">
+    <nz-page-header
+      nzTitle="Activities"
+      nzSubtitle="Your activities overview"
+    ></nz-page-header>
+    <div class="create-group-btn">
       <button class="task-create" nz-button (click)="onTaskCreation()">
-        Create New Task
+        Create Task
       </button>
       <button class="habit-create" nz-button (click)="onHabitCreation()">
-        Create New Habit
+        Create Habit
       </button>
     </div>
-  </h1>
+  </div>
 
   <div class="task-layout">
     <app-task-filter
@@ -28,46 +22,53 @@
       [isAlive]="isAlive"
     ></app-task-filter>
 
-    <div class="task-list">
-      @if (!loading && activities.length === 0) {
-        @if (activityListType() === ActivityListView.Habits) {
+    <div class="task-content-container">
+      <div class="task-list">
+        @if (!loading && activities.length === 0) {
           <div class="empty-state">
-            <h3>You have no habits yet!</h3>
-            <nz-list-empty></nz-list-empty>
+            <nz-empty
+              [nzNotFoundContent]="contentTpl"
+              [nzNotFoundImage]="'simple'"
+            >
+              <ng-template #contentTpl>
+                <h3>
+                  @switch (activityListType()) {
+                    @case (ActivityListView.Habits) {
+                      No habits yet
+                    }
+                    @case (ActivityListView.Tasks) {
+                      No tasks yet
+                    }
+                    @default {
+                      No activities yet
+                    }
+                  }
+                </h3>
+                <p>Ready for a new challenge? Create one above!</p>
+              </ng-template>
+            </nz-empty>
           </div>
-        } @else {
-          @if (activityListType() === ActivityListView.Activities) {
-            <div class="empty-state">
-              <h3>You have no activities yet!</h3>
-              <nz-list-empty></nz-list-empty>
-            </div>
-          } @else {
-            <div class="empty-state">
-              <h3>You have no tasks yet!</h3>
-              <nz-list-empty></nz-list-empty>
+        }
+
+        @if (!loading && activities.length > 0) {
+          @for (date of getGroupKeys(); track getGroupKeys().keys()) {
+            <div class="task-group">
+              <h3 class="task-group-title">{{ date }}</h3>
+
+              <div class="tasks-grid">
+                @for (activity of groupedTasks[date]; track activity.id) {
+                  <app-activity-item
+                    [activity]="activity"
+                    (editActivity)="onActivityEdit($event)"
+                    (activityUpdated)="onActivityUpdated($event)"
+                  >
+                  </app-activity-item>
+                }
+              </div>
             </div>
           }
         }
-      }
-
-      @if (!loading && activities.length > 0) {
-        @for (date of getGroupKeys(); track getGroupKeys().keys()) {
-          <div class="task-group">
-            <h3 class="task-group-title">{{ date }}</h3>
-
-            <div class="tasks-grid">
-              @for (activity of groupedTasks[date]; track activity.id) {
-                <app-activity-item
-                  [activity]="activity"
-                  (editActivity)="onActivityEdit($event)"
-                  (activityUpdated)="onActivityUpdated($event)"
-                >
-                </app-activity-item>
-              }
-            </div>
-          </div>
-        }
-      }
+      </div>
     </div>
     @if (editionMode!() || creationMode!()) {
       <app-task-form
